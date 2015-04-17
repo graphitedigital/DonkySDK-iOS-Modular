@@ -33,17 +33,13 @@ Only add this to your Pod File if this is the only part of the SDk you are going
 <li>iOS 7.1+</li>
 <li>Arc must be enabled.</li>
 <li>Core Analytics</li>
-<li>Any third party dependencies will be imported automatically when using cocoapods, otherwise see below:</li>
-<ul>
-	<li>[AFNetworking](https://github.com/AFNetworking/AFNetworking)</li>
-</ul>
+<li>Automation</li>
 </ul>
 
 
+#Third Party Depdencies
 
-
-
-
+[AFNetworking](https://github.com/AFNetworking/AFNetworking)
 
 ## Installation
 
