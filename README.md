@@ -2,19 +2,19 @@
 
 The Modular Donky SDK. Inside this repository are the following Donky Network SDK elements:
 
-1) Donky Core SDK (Requried for all implementations of the Donky SDK. If using Cocoapods, each module pod spec has a dependency on Core.)
+<ul>
+<li>Donky Core SDK (Requried for all implementations of the Donky SDK. If using Cocoapods, each module pod spec has a dependency on Core.)</li>
+</ul>
+
 
 #Modules
 
-1) Simple Push Module (Logic + UI).
-2) Rich Messaging (Logic + Pop-UP).
-3) Core Analytics.
-4) Automation
-
-
-
-
-
+<ul>
+<li>Simple Push Module (Logic + UI).</li>
+<li>Rich Messaging (Logic + Pop-UP).</li>
+<li>Core Analytics..</li>
+<li>Automation.</li>
+</ul>
 
 # Donky-Core-SDK
 
