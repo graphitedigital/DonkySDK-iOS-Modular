@@ -6,15 +6,27 @@ The Modular Donky SDK. Inside this repository are the following Donky Network SD
 <li>Donky Core SDK (Requried for all implementations of the Donky SDK. If using Cocoapods, each module pod spec has a dependency on Core.)</li>
 </ul>
 
+## Author
+
+Donky Networks Ltd, sdk@mobiledonky.com
+
+## License
+
+Donky-Core-SDK is available under the MIT license. See the LICENSE file for more info.
 
 #Modules
 
 <ul>
 <li>Simple Push Module (Logic + UI)</li>
-<li>Rich Messaging (Logic + Pop-UP)</li>
-<li>Core Analytics</li>
-<li>Automation</li>
+<li>Rich Messaging Module (Logic + Pop-UP)</li>
+<li>COmmon Messaging Module</li>
+<li>Core Analytics Module</li>
+<li>Automation Module</li>
 </ul>
+
+
+
+
 
 # Donky-Core-SDK
 
@@ -26,6 +38,8 @@ The Modular Donky SDK. Inside this repository are the following Donky Network SD
 ## Usage
 
 Only add this to your Pod File if this is the only part of the SDk you are going to use. Adding this to your podfile is not necessary if using any of the modules. 
+
+To read more about how to get started please see [here](www.google.com).
 
 ## Requirements
 
@@ -51,14 +65,38 @@ pod 'Donky-Core-SDK', '~> 1.0'
 
 ```
 
-## Author
 
-Donky Networks Ltd, sdk@mobiledonky.com
-
-## License
-
-Donky-Core-SDK is available under the MIT license. See the LICENSE file for more info.
+# Donky-SimplePush-Module
 
 
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-Core-SDK.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-SimplePush-Module)
+[![Version](https://img.shields.io/cocoapods/v/Donky-Core-SDK.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-Module)
+[![License](https://img.shields.io/cocoapods/l/Donky-Core-SDK.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-Module)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-Core-SDK.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-Module)
 
-# Donky-SinplePush-SDK
+## Usage
+
+Use the Simple Push module to enable your application to receive Simple Push messages.
+To read more about how to get started please see [here](www.google.com).
+
+## Requirements
+
+<ul>
+<li>iOS 7.1+</li>
+<li>Arc must be enabled.</li>
+</ul>
+
+
+#Third Party Dependencies
+
+[AFNetworking](https://github.com/AFNetworking/AFNetworking)
+[UIView-AutoLayout](https://github.com/jrturton/UIView-Autolayout) (If using the UI component)
+
+## Installation
+
+
+```ruby
+pod 'Donky-SimplePush-Module', '~> 1.0'
+
+```
+
