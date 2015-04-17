@@ -47,7 +47,8 @@ Donky-Core-SDK is available through [CocoaPods](http://cocoapods.org). To instal
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod "Donky-Core-SDK"
+pod 'Donky-Core-SDK', '~> 1.0'
+
 ```
 
 ## Author
