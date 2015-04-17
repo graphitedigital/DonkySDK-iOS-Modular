@@ -37,7 +37,7 @@ Only add this to your Pod File if this is the only part of the SDk you are going
 </ul>
 
 
-#Third Party Depdencies
+#Third Party Dependencies
 
 [AFNetworking](https://github.com/AFNetworking/AFNetworking)
 
