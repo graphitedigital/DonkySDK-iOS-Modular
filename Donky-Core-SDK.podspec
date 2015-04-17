@@ -14,10 +14,10 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
                        This is the Donky Core SDK, it contains all of the API's requred to register with and send data over the Donky Network. If using any of the Donky-Modules then it is not necessary to also explicitly add this to your PodFile. 
                        DESC
-  s.homepage         = "https://github.com/Donky-Network/Donky-Network-SDK-iOS"
+  s.homepage         = "https://github.com/Donky-Network/DonkySDK-iOS-Modular"
   s.license          = 'MIT'
   s.author           = { "Donky Networks Ltd" => "sdk@mobiledonky.com" }
-  s.source           = { :git => "https://github.com/Donky-Network/Donky-Network-SDK-iOS.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/Donky-Network/DonkySDK-iOS-Modular.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/mobiledonky'
 
   s.platform     = :ios, '7.0'
