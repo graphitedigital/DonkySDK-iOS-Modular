@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CIDR_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../../../../../modules/Core">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../modules/Core" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../../modules/Messaging/Common">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../modules/Messaging/Common" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../../modules/Messaging/Rich/Rich Logic">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../modules/Messaging/Rich/Rich Logic" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../../modules/Messaging/Rich/Rich UI">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../modules/Messaging/Rich/Rich UI" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
