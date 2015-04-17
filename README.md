@@ -10,10 +10,10 @@ The Modular Donky SDK. Inside this repository are the following Donky Network SD
 #Modules
 
 <ul>
-<li>Simple Push Module (Logic + UI).</li>
-<li>Rich Messaging (Logic + Pop-UP).</li>
-<li>Core Analytics..</li>
-<li>Automation.</li>
+<li>Simple Push Module (Logic + UI)</li>
+<li>Rich Messaging (Logic + Pop-UP)</li>
+<li>Core Analytics</li>
+<li>Automation</li>
 </ul>
 
 # Donky-Core-SDK
@@ -29,11 +29,21 @@ Only add this to your Pod File if this is the only part of the SDk you are going
 
 ## Requirements
 
-iOS 7.1+
-Arc must be enabled.
-Any third party dependencies will be imported automatically when using cocoapods, otherwise see below:
+<ul>
+<li>iOS 7.1+</li>
+<li>Arc must be enabled.</li>
+<li>Core Analytics</li>
+<li>Any third party dependencies will be imported automatically when using cocoapods, otherwise see below:</li>
+<ul>
+	<li>[AFNetworking](https://github.com/AFNetworking/AFNetworking)</li>
+</ul>
+</ul>
 
-[AFNetworking](https://github.com/AFNetworking/AFNetworking)
+
+
+
+
+
 
 ## Installation
 
