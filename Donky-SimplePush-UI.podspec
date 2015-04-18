@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-SimplePush-UI"
-  s.version          = "1.0.4.3"
+  s.version          = "1.9.9.9"
   s.summary          = "The complete Simple Push Module"
   s.description      = <<-DESC
                        This is the Simple Push UI, it includes everthirng you need to receive Simple Push messages as well as utilising Donky's built in app Banner View and analytics.
