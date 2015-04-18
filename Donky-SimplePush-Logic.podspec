@@ -4,6 +4,7 @@ Pod::Spec.new do |s|
   s.summary          = "The base logic layer required to handle incoming Remote notifications and also Simple Push messages stored on the server."
   s.description      = <<-DESC
                        This is the Simple Push logic , it contains all the logic necessary to receive and process remote notificaitons. As well as receive and process notifications via the Donky Backup channel.
+					   DESC
   s.homepage         = "https://github.com/Donky-Network/DonkySDK-iOS-Modular"
   s.license          = 'MIT'
   s.author           = { "Donky Networks Ltd" => "sdk@mobiledonky.com" }
