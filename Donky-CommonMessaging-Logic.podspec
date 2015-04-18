@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-CommonMessaging-Logic"
-  s.version          = "1.9.9.9"
+  s.version          = "0.0.1"
   s.summary          = "The shared messaging logic"
   s.description      = <<-DESC
                        This contains all shared logic for Socail/Messaging funtiocnality.
@@ -17,6 +17,6 @@ Pod::Spec.new do |s|
   s.source_files = 'src/modules/Messaging/Common/Logic/**/*',  
   s.frameworks = 'UIKit', 'Foundation'
   
-  s.dependency 'Donky-Core-SDK', '~> 1.0'
+  s.dependency 'Donky-Core-SDK', '~> 1.0.0.0'
   
 end

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-SimplePush-Logic"
-  s.version          = "1.9.9.9"
+  s.version          = "0.0.1"
   s.summary          = "The base logic layer required to handle incoming Remote notifications and also Simple Push messages stored on the server."
   s.description      = <<-DESC
                        This is the Simple Push logic , it contains all the logic necessary to receive and process remote notificaitons. As well as receive and process notifications via the Donky Backup channel.
