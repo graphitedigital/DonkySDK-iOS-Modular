@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'src/modules/Messaging/Rich/UI/**/*'
 
-  s.resources = "src/modules/Messaging/Simple\ Push/Push\ UI/Helpers/Images"
+  s.resources = 'src/modules/Messaging/Simple\ Push/Push\ UI/Helpers/Images'
   
   s.frameworks = 'UIKit', 'Foundation'
   s.dependency 'Donky-RichMessage-Logic', '~> 2.0'
