@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "Donky-Core-SDK"
-  s.version          = "1.9.9.9"
+  s.version          = "1.0.9.9"
   s.summary          = "The base logic to register and communicate with the Donky Network."
   s.description      = <<-DESC
                        This is the Donky Core SDK, it contains all of the API's requred to register with and send data over the Donky Network. If using any of the Donky-Modules then it is not necessary to also explicitly add this to your PodFile. 
