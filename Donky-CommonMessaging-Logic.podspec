@@ -17,6 +17,6 @@ Pod::Spec.new do |s|
   s.source_files = 'src/modules/Messaging/Common/Logic/**/*',  
   s.frameworks = 'UIKit', 'Foundation'
   
-  s.dependency 'Donky-Core-SDK', '~> 1.0.0.0'
+  s.dependency 'Donky-Core-SDK', '~> 0.0.1'
   
 end

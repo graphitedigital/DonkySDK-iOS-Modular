@@ -1,12 +1,3 @@
-#
-# Be sure to run `pod lib lint Donky-Core-SDK.podspec' to ensure this is a
-# valid spec and remove all comments before submitting the spec.
-#
-# Any lines starting with a # are optional, but encouraged
-#
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
-#
-
 Pod::Spec.new do |s|
   s.name             = "Donky-Core-SDK"
   s.version          = "0.0.1"
@@ -23,7 +14,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '7.0'
   s.requires_arc = true
 
-  s.source_files = ['src/modules/Core/**/*', 'src/modules/Core\ Analytics/**/*']
+  s.source_files = 'src/modules/Core/**/*', 'src/modules/Core\ Analytics/**/*'
   
   s.resources = ["src/modules/Core/App\ Settings\ Controller/Resources/DNConfiguration.plist", "src/modules/Core/Data\ Controller/Resources/DNDonkyDataModel.xcdatamodeld"]
 
