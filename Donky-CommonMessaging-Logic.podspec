@@ -1,9 +1,9 @@
 Pod::Spec.new do |s|
-  s.name             = "Donky-RichMessage-Logic"
+  s.name             = "Donky-CommonMessaging-Logic"
   s.version          = "1.9.9.9"
-  s.summary          = "The base logic layer required to handle incoming Rich Messages."
+  s.summary          = "The shared messaging logic"
   s.description      = <<-DESC
-                       This is the Rich Message logic , it contains all the logic necessary to receive and process inbound rich messages, saving them into the Database and recording analytics around delivery.
+                       This contains all shared logic for Socail/Messaging funtiocnality.
 					   DESC
   s.homepage         = "https://github.com/Donky-Network/DonkySDK-iOS-Modular"
   s.license          = 'MIT'
@@ -14,9 +14,9 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '7.0'
   s.requires_arc = true
 
-  s.source_files = 'src/modules/Messaging/Rich/Logic/**/*'
-  
+  s.source_files = 'src/modules/Messaging/Common/Logic/**/*',  
   s.frameworks = 'UIKit', 'Foundation'
+  
   s.dependency 'Donky-Core-SDK', '~> 1.0'
-  s.dependency 'Donky-CommonMessaging-Logic', '~> 1.0'
+  
 end

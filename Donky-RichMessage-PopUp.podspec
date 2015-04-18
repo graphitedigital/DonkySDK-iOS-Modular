@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '7.0'
   s.requires_arc = true
 
-  s.source_files = ['src/modules/Core/**/*', 'src/modules/Core\ Analytics/**/*', 'src/modules/Messaging/Common/**/*', 'src/modules/Messaging/Rich/**/*']
+  s.source_files = 'src/modules/Messaging/Rich/**/*'
   
   s.resources = ["src/modules/Core/App\ Settings\ Controller/Resources/DNConfiguration.plist", "src/modules/Core/Data\ Controller/Resources/DNDonkyDataModel.xcdatamodeld", "src/modules/Messaging/Simple\ Push/Push\ UI/Helpers/Images"]
   
