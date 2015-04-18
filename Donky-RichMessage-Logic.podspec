@@ -1,9 +1,9 @@
 Pod::Spec.new do |s|
-  s.name             = "Donky-SimplePush-Logic"
+  s.name             = "Donky-RichMessage-Logic"
   s.version          = "1.0.4.3"
-  s.summary          = "The base logic layer required to handle incoming Remote notifications and also Simple Push messages stored on the server."
+  s.summary          = "The base logic layer required to handle incoming Rich Messages."
   s.description      = <<-DESC
-                       This is the Simple Push logic , it contains all the logic necessary to receive and process remote notificaitons. As well as receive and process notifications via the Donky Backup channel.
+                       This is the Rich Message logic , it contains all the logic necessary to receive and process inbound rich messages, saving them into the Database and recording analytics around delivery.
 					   DESC
   s.homepage         = "https://github.com/Donky-Network/DonkySDK-iOS-Modular"
   s.license          = 'MIT'
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '7.0'
   s.requires_arc = true
 
-  s.source_files = ['src/modules/Core/**/*', 'src/modules/Core\ Analytics/**/*' 'src/modules/Messaging/Common/Logic/**/*', 'src/modules/Messaging/Simple\ Push/Push\ Logic/**/*']
+  s.source_files = ['src/modules/Core/**/*', 'src/modules/Core\ Analytics/**/*' 'src/modules/Messaging/Common/Logic/**/*', 'src/modules/Messaging/Rich/Logic/**/*']
   
   s.resources = ["src/modules/Core/App\ Settings\ Controller/Resources/DNConfiguration.plist", "src/modules/Core/Data\ Controller/Resources/DNDonkyDataModel.xcdatamodeld"]
   s.frameworks = 'UIKit', 'Foundation'
