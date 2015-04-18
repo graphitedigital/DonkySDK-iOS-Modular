@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-CommonMessaging-UI"
-  s.version          = "0.0.1"
+  s.version          = "2.0"
   s.summary          = "The shared messaging UI"
   s.description      = <<-DESC
                        This contains all shared UI Logic for Socail/Messaging funtiocnality.
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.source_files = 'src/modules/Messaging/Common/UI/**/*',  
   s.frameworks = 'UIKit', 'Foundation'
   
-  s.dependency 'Donky-CommonMessaging-Logic', '~> 0.0.1'
+  s.dependency 'Donky-CommonMessaging-Logic', '~> 2.0'
   s.dependency 'UIView-Autolayout', '~> 0.2'  
   
 end
