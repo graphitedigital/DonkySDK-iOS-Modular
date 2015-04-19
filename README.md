@@ -181,7 +181,7 @@ To read more about how to get started please see [here](www.google.com).
 
 
 ```ruby
-pod 'Donky-RichMessage-PopUp', '~> 2.1'
+pod 'Donky-RichMessage-PopUp', '~> 2.2'
 
 ```
 
