@@ -43,10 +43,11 @@
         [richMessage setTitle:[serverNotification data][DCMDescription]];
         [richMessage setSenderInternalUserID:[serverNotification data][DCMSenderInternalUserID]];
         [richMessage setMessageReceivedTimestamp:[NSDate date]];
+        [richMessage setUrlToShare:[serverNotification data][DCMUrlToShare]];
         
         [[DNDataController sharedInstance] saveAllData];
         
-            return richMessage;
+        return richMessage;
 
     }
     @catch (NSException *exception) {
