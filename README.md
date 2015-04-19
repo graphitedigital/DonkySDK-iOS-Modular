@@ -130,10 +130,10 @@ pod 'Donky-SimplePush-UI', '~> 2.1'
 # Donky-RichMessage-Logic
 
 
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/RichMessage-Logic.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-RichMessage-Logic)
-[![Version](https://img.shields.io/cocoapods/v/RichMessage-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Logic)
-[![License](https://img.shields.io/cocoapods/l/RichMessage-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Logic)
-[![Platform](https://img.shields.io/cocoapods/p/RichMessage-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Logic)
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-RichMessage-Logic.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-RichMessage-Logic)
+[![Version](https://img.shields.io/cocoapods/v/Donky-RichMessage-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Logic)
+[![License](https://img.shields.io/cocoapods/l/Donky-RichMessage-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Logic)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-RichMessage-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Logic)
 
 ## Usage
 
@@ -159,10 +159,10 @@ pod 'Donky-RichMessage-Logic', '~> 2.2'
 # Donky-RichMessage-PopUp
 
 
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/RichMessage-PopUp.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/RichMessage-PopUp)
-[![Version](https://img.shields.io/cocoapods/v/RichMessage-PopUp.svg?style=flat)](http://cocoapods.org/pods/RichMessage-PopUp)
-[![License](https://img.shields.io/cocoapods/l/RichMessage-PopUp.svg?style=flat)](http://cocoapods.org/pods/RichMessage-PopUp)
-[![Platform](https://img.shields.io/cocoapods/p/RichMessage-PopUp.svg?style=flat)](http://cocoapods.org/pods/RichMessage-PopUp)
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-RichMessage-PopUp.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/RichMessage-PopUp)
+[![Version](https://img.shields.io/cocoapods/v/Donky-RichMessage-PopUp.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-PopUp)
+[![License](https://img.shields.io/cocoapods/l/Donky-RichMessage-PopUp.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-PopUp)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-RichMessage-PopUp.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-PopUp)
 
 ## Usage
 
