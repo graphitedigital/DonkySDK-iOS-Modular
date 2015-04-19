@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-SimplePush-UI"
-  s.version          = "2.0"
+  s.version          = "2.1"
   s.summary          = "The complete Simple Push Module"
   s.description      = <<-DESC
                        This is the Simple Push UI, it includes everthirng you need to receive Simple Push messages as well as utilising Donky's built in app Banner View and analytics.
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '7.0'
   s.requires_arc = true
 
-  s.source_files = 'src/modules/Messaging/Simple\ Push/**/*'
+  s.source_files = 'src/modules/Messaging/Simple\ Push/**/*.{h,m}'
   
   s.frameworks = 'UIKit', 'Foundation'
   s.dependency 'Donky-SimplePush-Logic', '~> 2.0'
