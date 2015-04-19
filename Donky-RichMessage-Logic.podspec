@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-RichMessage-Logic"
-  s.version          = "2.1"
+  s.version          = "2.2"
   s.summary          = "The base logic layer required to handle incoming Rich Messages."
   s.description      = <<-DESC
                        This is the Rich Message logic , it contains all the logic necessary to receive and process inbound rich messages, saving them into the Database and recording analytics around delivery.
@@ -15,6 +15,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.source_files = 'src/modules/Messaging/Rich/Logic/**/*.{h,m}'
+  s.resources = 'src/modules/Messaging/Rich/Logic/Localisation/DRLocalization.strings'
   
   s.frameworks = 'UIKit', 'Foundation'
   s.dependency 'Donky-CommonMessaging-Logic', '~> 2.0'
