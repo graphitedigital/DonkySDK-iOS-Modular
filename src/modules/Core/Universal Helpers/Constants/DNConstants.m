@@ -11,7 +11,7 @@
 #pragma mark -
 #pragma mark - Network API
 
-NSString * const kDNNetworkHostURL = @"https://client-api.mobiledonky.com/";
+NSString * const kDNNetworkHostURL = @"https://dev-client-api.mobiledonky.com/";
 
 NSString * const kDNNetworkRegistration = @"api/registration";
 
