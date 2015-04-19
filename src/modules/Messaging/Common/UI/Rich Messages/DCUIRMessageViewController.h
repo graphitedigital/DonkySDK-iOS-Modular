@@ -17,7 +17,7 @@
 
 @end
 
-@interface DCUIRMessageViewController : UIViewController
+@interface DCUIRMessageViewController : UIViewController <UIPopoverControllerDelegate>
 
 @property (nonatomic, weak) id <DCUIRMessageViewControllerDelegate> delegate;
 
