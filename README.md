@@ -59,9 +59,11 @@ Donky-Core-SDK is available through [CocoaPods](http://cocoapods.org). To instal
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'Donky-Core-SDK', '~> 1.0'
+pod 'Donky-Core-SDK', '~> 2.2'
 
 ```
+
+
 
 
 # Donky-SimplePush-Logic
@@ -89,7 +91,7 @@ To read more about how to get started please see [here](www.google.com).
 
 
 ```ruby
-pod 'Donky-SimplePush-Logic', '~> 1.0'
+pod 'Donky-SimplePush-Logic', '~> 2.1'
 
 ```
 
@@ -118,11 +120,9 @@ To read more about how to get started please see [here](www.google.com).
 
 
 ```ruby
-pod 'Donky-SimplePush-UI', '~> 1.0'
+pod 'Donky-SimplePush-UI', '~> 2.1'
 
 ```
-
-
 
 
 
@@ -152,17 +152,17 @@ To read more about how to get started please see [here](www.google.com).
 
 
 ```ruby
-pod 'Donky-RichMessage-Logic', '~> 1.0'
+pod 'Donky-RichMessage-Logic', '~> 2.2'
 
 ```
 
-# Donky-RichMessage-UI
+# Donky-RichMessage-PopUp
 
 
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/RichMessage-UI.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/RichMessage-UI)
-[![Version](https://img.shields.io/cocoapods/v/RichMessage-UI.svg?style=flat)](http://cocoapods.org/pods/RichMessage-UI)
-[![License](https://img.shields.io/cocoapods/l/RichMessage-UI.svg?style=flat)](http://cocoapods.org/pods/RichMessage-UI)
-[![Platform](https://img.shields.io/cocoapods/p/RichMessage-UI.svg?style=flat)](http://cocoapods.org/pods/RichMessage-UI)
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/RichMessage-PopUp.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/RichMessage-PopUp)
+[![Version](https://img.shields.io/cocoapods/v/RichMessage-PopUp.svg?style=flat)](http://cocoapods.org/pods/RichMessage-PopUp)
+[![License](https://img.shields.io/cocoapods/l/RichMessage-PopUp.svg?style=flat)](http://cocoapods.org/pods/RichMessage-PopUp)
+[![Platform](https://img.shields.io/cocoapods/p/RichMessage-PopUp.svg?style=flat)](http://cocoapods.org/pods/RichMessage-PopUp)
 
 ## Usage
 
@@ -181,7 +181,7 @@ To read more about how to get started please see [here](www.google.com).
 
 
 ```ruby
-pod 'Donky-RichMessage-UI', '~> 1.0'
+pod 'Donky-RichMessage-PopUp', '~> 2.1'
 
 ```
 
