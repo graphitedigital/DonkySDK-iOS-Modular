@@ -1,5 +1,5 @@
 //
-//  NSManagedObject+MRHelper.h
+//  NSManagedObject+DNHelper.m
 //
 //  Created by Chris Watson on 16/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.

@@ -64,7 +64,7 @@
         [[DNDonkyCore sharedInstance] publishEvent:richEvent];
     }];
 
-    self.moduleDefinition = [[DNModuleDefinition alloc] initWitName:NSStringFromClass([self class]) version:@"1.0.0.0"];
+    self.moduleDefinition = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.0.0"];
 
     __weak DRLogicMainController *weakSelf = self;
     self.richMessageHandler = ^(id data) {
