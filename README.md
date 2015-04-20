@@ -23,7 +23,7 @@ Donky-Core-SDK is available under the MIT license. See the LICENSE file for more
 <ul>
 <li>Simple Push Module (Logic + UI)</li>
 <li>Rich Messaging Module (Logic + Pop-Up)</li>
-<li>Common Messaging Module</li>
+<li>Common Messaging Module (Logic + UI)</li>
 <li>Core Analytics Module</li>
 <li>Automation Module</li>
 </ul>
