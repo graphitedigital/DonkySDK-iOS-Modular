@@ -507,7 +507,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 }
 
 - (NSArray *)filterRichMessage:(NSString *)filter tempContext:(BOOL)tempContext {
-    return [DNRichMessage fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"messageDescription cd == %@", filter]
+    return [DNRichMessage fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"messageDescription CONTAINS[cd] %@", filter]
                                     sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sentTimeStamp" ascending:YES]]
                                         withContext:tempContext ? [self temporaryContext]  : [self mainContext]];
 }

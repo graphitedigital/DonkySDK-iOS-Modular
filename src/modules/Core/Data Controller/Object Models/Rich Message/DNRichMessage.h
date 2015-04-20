@@ -19,14 +19,13 @@
 @property (nonatomic, retain) NSString * conversationID;
 @property (nonatomic, retain) NSString * expiredBody;
 @property (nonatomic, retain) NSString * externalRef;
-@property (nonatomic, retain) NSString * messageDecription;
+@property (nonatomic, retain) NSString * messageDescription;
 @property (nonatomic, retain) NSDate * messageReceivedTimestamp;
 @property (nonatomic, retain) NSString * messageType;
 @property (nonatomic, retain) NSString * senderAccountType;
 @property (nonatomic, retain) NSString * senderExternalUserID;
 @property (nonatomic, retain) NSNumber * silentNotification;
 @property (nonatomic, retain) NSString * title;
-@property (nonatomic, retain) NSString * messageDescription;
 @property (nonatomic, retain) NSString * urlToShare;
 
 @end

@@ -17,14 +17,13 @@
 @dynamic conversationID;
 @dynamic expiredBody;
 @dynamic externalRef;
-@dynamic messageDecription;
+@dynamic messageDescription;
 @dynamic messageReceivedTimestamp;
 @dynamic messageType;
 @dynamic senderAccountType;
 @dynamic senderExternalUserID;
 @dynamic silentNotification;
 @dynamic title;
-@dynamic messageDescription;
 @dynamic urlToShare;
 
 @end

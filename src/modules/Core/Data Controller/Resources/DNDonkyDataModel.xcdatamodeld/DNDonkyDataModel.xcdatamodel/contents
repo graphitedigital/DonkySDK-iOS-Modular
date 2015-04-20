@@ -35,7 +35,6 @@
         <attribute name="conversationID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="expiredBody" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="externalRef" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="messageDecription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="messageDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="messageReceivedTimestamp" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="messageType" optional="YES" attributeType="String" syncable="YES"/>
@@ -61,7 +60,7 @@
         <element name="DNDeviceUser" positionX="-126" positionY="-153" width="128" height="73"/>
         <element name="DNMessage" positionX="-117" positionY="-144" width="128" height="210"/>
         <element name="DNNotification" positionX="-36" positionY="9" width="128" height="180"/>
-        <element name="DNRichMessage" positionX="-126" positionY="-153" width="128" height="270"/>
+        <element name="DNRichMessage" positionX="-126" positionY="-153" width="128" height="255"/>
         <element name="DNUser" positionX="-218" positionY="-304" width="128" height="195"/>
     </elements>
 </model>
