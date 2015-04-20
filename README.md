@@ -2,7 +2,7 @@
   <img src="https://avatars2.githubusercontent.com/u/11334935?v=3&s=200" alt="Donky Networks LTD" title="Donky Network SDK">
 </p>
 
-# DonkySDK-iOS-Modular
+# Donky Modular SDK
 
 The Modular Donky SDK. Inside this repository are the following Donky Network SDK elements:
 
