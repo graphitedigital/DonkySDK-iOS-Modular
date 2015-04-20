@@ -13,6 +13,7 @@
 
 @interface DCUIRMessageViewController ()
 @property(nonatomic, strong) DNRichMessage *richMessage;
+@property(nonatomic, strong) UIPopoverController *shareButtonPopOver;
 @end
 
 @implementation DCUIRMessageViewController
@@ -39,12 +40,49 @@
                                                                              style:UIBarButtonItemStyleDone
                                                                             target:self
                                                                             action:@selector(closeView:)];
+
+    if ([[[self richMessage] canShare] boolValue]) {
+        //We meed to laod the share button:
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(loadShareSheet:)];
+
+    }
+
     if ([[self richMessage] body]) {
         UIWebView *webView = [UIWebView autoLayoutView];
         [webView loadHTMLString:[[self richMessage] body] baseURL:nil];
         [[self view] addSubview:webView];
         [webView pinToSuperviewEdges:JRTViewPinAllEdges inset:0.0];
     }
+}
+
+- (void)loadShareSheet:(id)sender {
+
+    NSURL *shareUrl = [NSURL URLWithString:[self.richMessage urlToShare]];
+
+    if (shareUrl) {
+        UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:@[shareUrl] applicationActivities:nil];
+
+        [controller setCompletionHandler:^(NSString *activityType, BOOL completed) {
+           //Report sharing:
+        }];
+
+        //Are we on iPad:
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            self.shareButtonPopOver = [[UIPopoverController alloc] initWithContentViewController:controller];
+            [self.shareButtonPopOver presentPopoverFromBarButtonItem:sender
+                                            permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                            animated:YES];
+        }
+        else {
+            [self.navigationController presentViewController:controller animated:YES completion:nil];
+        }
+
+        [self.shareButtonPopOver setDelegate:self];
+    }
+}
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    self.shareButtonPopOver = nil;
 }
 
 - (void)closeView:(id)sender {

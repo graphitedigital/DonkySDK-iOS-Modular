@@ -6,8 +6,7 @@
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "AFHTTPSessionManager.h"
+#import <AFHTTPSessionManager.h>
 #import "DNBlockDefinitions.h"
 
 /*!

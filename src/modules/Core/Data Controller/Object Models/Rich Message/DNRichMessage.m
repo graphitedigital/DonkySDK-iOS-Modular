@@ -25,5 +25,6 @@
 @dynamic silentNotification;
 @dynamic title;
 @dynamic messageDescription;
+@dynamic urlToShare;
 
 @end

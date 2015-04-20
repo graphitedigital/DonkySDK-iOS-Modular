@@ -71,7 +71,11 @@ extern NSString *const DCMCanForward;
 extern NSString *const DCMDescription;
 
 //
+extern NSString * const DCMUrlToShare;
+
+//
 extern NSString *const DCMSenderInternalUserID;
 
-
+//
 extern NSString * const kDNDonkyEventSimplePushTapped;
+

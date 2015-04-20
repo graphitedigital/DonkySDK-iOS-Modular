@@ -69,6 +69,9 @@ NSString *const DCMCanForward = @"canForward";
 NSString *const DCMDescription = @"description";
 
 //
+NSString *const DCMUrlToShare = @"urlToShare";
+
+//
 NSString *const DCMSenderInternalUserID = @"senderInternalUserId";
 
 //

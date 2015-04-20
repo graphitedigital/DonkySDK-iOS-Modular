@@ -18,13 +18,11 @@ Donky-Core-SDK is available under the MIT license. See the LICENSE file for more
 
 <ul>
 <li>Simple Push Module (Logic + UI)</li>
-<li>Rich Messaging Module (Logic + Pop-UP)</li>
-<li>COmmon Messaging Module</li>
+<li>Rich Messaging Module (Logic + Pop-Up)</li>
+<li>Common Messaging Module</li>
 <li>Core Analytics Module</li>
 <li>Automation Module</li>
 </ul>
-
-
 
 
 
@@ -61,18 +59,20 @@ Donky-Core-SDK is available through [CocoaPods](http://cocoapods.org). To instal
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'Donky-Core-SDK', '~> 1.0'
+pod 'Donky-Core-SDK', '~> 2.2'
 
 ```
 
 
-# Donky-SimplePush-Module
 
 
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-Core-SDK.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-SimplePush-Module)
-[![Version](https://img.shields.io/cocoapods/v/Donky-Core-SDK.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-Module)
-[![License](https://img.shields.io/cocoapods/l/Donky-Core-SDK.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-Module)
-[![Platform](https://img.shields.io/cocoapods/p/Donky-Core-SDK.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-Module)
+# Donky-SimplePush-Logic
+
+
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-SimplePush-Logic.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-SimplePush-Logic)
+[![Version](https://img.shields.io/cocoapods/v/Donky-SimplePush-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-Logic)
+[![License](https://img.shields.io/cocoapods/l/Donky-SimplePush-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-Logic)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-SimplePush-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-Logic)
 
 ## Usage
 
@@ -87,16 +87,101 @@ To read more about how to get started please see [here](www.google.com).
 </ul>
 
 
-#Third Party Dependencies
+## Installation
 
-[AFNetworking](https://github.com/AFNetworking/AFNetworking)
-[UIView-AutoLayout](https://github.com/jrturton/UIView-Autolayout) (If using the UI component)
+
+```ruby
+pod 'Donky-SimplePush-Logic', '~> 2.1'
+
+```
+
+# Donky-SimplePush-UI
+
+
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-SimplePush-UI.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-SimplePush-UI)
+[![Version](https://img.shields.io/cocoapods/v/Donky-SimplePush-UI.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-UI)
+[![License](https://img.shields.io/cocoapods/l/Donky-SimplePush-UI.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-UI)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-SimplePush-UI.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-UI)
+
+## Usage
+
+Use the Simple Push module to enable your application to receive Simple Push messages.
+To read more about how to get started please see [here](www.google.com).
+
+## Requirements
+
+<ul>
+<li>iOS 7.1+</li>
+<li>Arc must be enabled.</li>
+</ul>
+
 
 ## Installation
 
 
 ```ruby
-pod 'Donky-SimplePush-Module', '~> 1.0'
+pod 'Donky-SimplePush-UI', '~> 2.1'
+
+```
+
+
+
+
+# Donky-RichMessage-Logic
+
+
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-RichMessage-Logic.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-RichMessage-Logic)
+[![Version](https://img.shields.io/cocoapods/v/Donky-RichMessage-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Logic)
+[![License](https://img.shields.io/cocoapods/l/Donky-RichMessage-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Logic)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-RichMessage-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Logic)
+
+## Usage
+
+Use the Rich Message  module to enable your application to receive Simple Push messages.
+To read more about how to get started please see [here](www.google.com).
+
+## Requirements
+
+<ul>
+<li>iOS 7.1+</li>
+<li>Arc must be enabled.</li>
+</ul>
+
+
+## Installation
+
+
+```ruby
+pod 'Donky-RichMessage-Logic', '~> 2.2'
+
+```
+
+# Donky-RichMessage-PopUp
+
+
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-RichMessage-PopUp.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/RichMessage-PopUp)
+[![Version](https://img.shields.io/cocoapods/v/Donky-RichMessage-PopUp.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-PopUp)
+[![License](https://img.shields.io/cocoapods/l/Donky-RichMessage-PopUp.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-PopUp)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-RichMessage-PopUp.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-PopUp)
+
+## Usage
+
+Use the Rich Message module to enable your application to receive Simple Push messages.
+To read more about how to get started please see [here](www.google.com).
+
+## Requirements
+
+<ul>
+<li>iOS 7.1+</li>
+<li>Arc must be enabled.</li>
+</ul>
+
+
+## Installation
+
+
+```ruby
+pod 'Donky-RichMessage-PopUp', '~> 2.2'
 
 ```
 
