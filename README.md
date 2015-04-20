@@ -1,4 +1,4 @@
-# DonkySDK-Modular-iOS
+# DonkySDK-iOS-Modular
 
 The Modular Donky SDK. Inside this repository are the following Donky Network SDK elements:
 
