@@ -215,7 +215,7 @@ static NSString *const DNConfiguration = @"configuration";
 #pragma mark - Donky Core Notifications
 
 - (void)addCoreSubscribers {
-    DNModuleDefinition *moduleDefinition = [[DNModuleDefinition alloc] initWitName:NSStringFromClass([self class]) version:@"1.0.0.0"];
+    DNModuleDefinition *moduleDefinition = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.0.0"];
     DNSubscription *subscription = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationTransmitDebugLog handler:^(id data) {
         DNServerNotification *serverNotification = data;
         [DNLoggingController submitLogToDonkyNetwork:[serverNotification serverNotificationID] success:nil failure:nil];

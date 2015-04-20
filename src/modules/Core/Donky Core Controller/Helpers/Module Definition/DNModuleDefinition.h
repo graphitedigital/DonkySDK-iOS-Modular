@@ -37,6 +37,6 @@
  
  @since 2.0.0.0
  */
-- (instancetype) initWitName:(NSString *)name version:(NSString *)version;
+- (instancetype)initWithName:(NSString *)name version:(NSString *)version;
 
 @end

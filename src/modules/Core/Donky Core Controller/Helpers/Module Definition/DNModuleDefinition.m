@@ -15,7 +15,7 @@
 
 @implementation DNModuleDefinition
 
-- (instancetype) initWitName:(NSString *)name version:(NSString *)version {
+- (instancetype)initWithName:(NSString *)name version:(NSString *)version {
 
     self = [super init];
 
