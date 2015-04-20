@@ -59,7 +59,7 @@ Donky-Core-SDK is available through [CocoaPods](http://cocoapods.org). To instal
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'Donky-Core-SDK', '~> 2.2'
+pod 'Donky-Core-SDK', '~> 2.0.0'
 
 ```
 
@@ -91,7 +91,7 @@ To read more about how to get started please see [here](www.google.com).
 
 
 ```ruby
-pod 'Donky-SimplePush-Logic', '~> 2.1'
+pod 'Donky-SimplePush-Logic', '~> 2.0.0'
 
 ```
 
@@ -120,7 +120,7 @@ To read more about how to get started please see [here](www.google.com).
 
 
 ```ruby
-pod 'Donky-SimplePush-UI', '~> 2.1'
+pod 'Donky-SimplePush-UI', '~> 2.0.0'
 
 ```
 
@@ -152,7 +152,7 @@ To read more about how to get started please see [here](www.google.com).
 
 
 ```ruby
-pod 'Donky-RichMessage-Logic', '~> 2.2'
+pod 'Donky-RichMessage-Logic', '~> 2.0.0'
 
 ```
 
@@ -181,7 +181,7 @@ To read more about how to get started please see [here](www.google.com).
 
 
 ```ruby
-pod 'Donky-RichMessage-PopUp', '~> 2.2'
+pod 'Donky-RichMessage-PopUp', '~> 2.0.0'
 
 ```
 
