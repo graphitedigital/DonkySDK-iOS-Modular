@@ -41,7 +41,7 @@ Donky-Core-SDK is available under the MIT license. See the LICENSE file for more
 
 Only add this to your Pod File if this is the only part of the SDk you are going to use. Adding this to your podfile is not necessary if using any of the modules. 
 
-To read more about how to get started please see [here](www.google.com).
+To read more about how to get started please see [here](http://docs.mobiledonky.com/v1.1/docs).
 
 ## Requirements
 
@@ -63,7 +63,7 @@ Donky-Core-SDK is available through [CocoaPods](http://cocoapods.org). To instal
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'Donky-Core-SDK', '~> 2.0.0'
+pod 'Donky-Core-SDK', '~> 1.0.0'
 
 ```
 
@@ -81,7 +81,7 @@ pod 'Donky-Core-SDK', '~> 2.0.0'
 ## Usage
 
 Use the Simple Push module to enable your application to receive Simple Push messages.
-To read more about how to get started please see [here](www.google.com).
+To read more about how to get started please see [here](http://docs.mobiledonky.com/v1.1/docs).
 
 ## Requirements
 
@@ -95,7 +95,7 @@ To read more about how to get started please see [here](www.google.com).
 
 
 ```ruby
-pod 'Donky-SimplePush-Logic', '~> 2.0.0'
+pod 'Donky-SimplePush-Logic', '~> 1.0.0'
 
 ```
 
@@ -110,7 +110,7 @@ pod 'Donky-SimplePush-Logic', '~> 2.0.0'
 ## Usage
 
 Use the Simple Push module to enable your application to receive Simple Push messages.
-To read more about how to get started please see [here](www.google.com).
+To read more about how to get started please see [here](http://docs.mobiledonky.com/v1.1/docs).
 
 ## Requirements
 
@@ -124,7 +124,7 @@ To read more about how to get started please see [here](www.google.com).
 
 
 ```ruby
-pod 'Donky-SimplePush-UI', '~> 2.0.0'
+pod 'Donky-SimplePush-UI', '~> 1.0.0'
 
 ```
 
@@ -142,7 +142,7 @@ pod 'Donky-SimplePush-UI', '~> 2.0.0'
 ## Usage
 
 Use the Rich Message  module to enable your application to receive Simple Push messages.
-To read more about how to get started please see [here](www.google.com).
+To read more about how to get started please see [here](http://docs.mobiledonky.com/v1.1/docs).
 
 ## Requirements
 
@@ -156,7 +156,7 @@ To read more about how to get started please see [here](www.google.com).
 
 
 ```ruby
-pod 'Donky-RichMessage-Logic', '~> 2.0.0'
+pod 'Donky-RichMessage-Logic', '~> 1.0.0'
 
 ```
 
@@ -171,7 +171,7 @@ pod 'Donky-RichMessage-Logic', '~> 2.0.0'
 ## Usage
 
 Use the Rich Message module to enable your application to receive Simple Push messages.
-To read more about how to get started please see [here](www.google.com).
+To read more about how to get started please see [here](http://docs.mobiledonky.com/v1.1/docs).
 
 ## Requirements
 
@@ -185,7 +185,34 @@ To read more about how to get started please see [here](www.google.com).
 
 
 ```ruby
-pod 'Donky-RichMessage-PopUp', '~> 2.0.0'
+pod 'Donky-RichMessage-PopUp', '~> 1.0.0'
 
 ```
 
+# Donky-Automation-Logic
+
+
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-Automation-Logic.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/RichMessage-PopUp)
+[![Version](https://img.shields.io/cocoapods/v/Donky-Automation-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-PopUp)
+[![License](https://img.shields.io/cocoapods/l/Donky-Automation-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-PopUp)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-Automation-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-PopUp)
+
+## Usage
+
+Use the Automation module to enable to trigger campaigns setup on Campaign Builder/Donky Control.  [here](http://docs.mobiledonky.com/v1.1/docs).
+
+## Requirements
+
+<ul>
+<li>iOS 7.1+</li>
+<li>Arc must be enabled.</li>
+</ul>
+
+
+## Installation
+
+
+```ruby
+pod 'Donky-Automation-Logic', '~> 1.0.0'
+
+```
