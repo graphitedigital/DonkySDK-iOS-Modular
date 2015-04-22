@@ -199,7 +199,7 @@ pod 'Donky-RichMessage-PopUp', '~> 1.0.0'
 
 ## Usage
 
-Use the Automation module to enable to trigger campaigns setup on Campaign Builder/Donky Control.  [here](http://docs.mobiledonky.com/v1.1/docs).
+Use the Automation module to enable to trigger campaigns setup on Campaign Builder/Donky Control   [here](http://docs.mobiledonky.com/v1.1/docs).
 
 ## Requirements
 
