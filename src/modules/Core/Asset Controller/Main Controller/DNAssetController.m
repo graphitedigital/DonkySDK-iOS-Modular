@@ -15,6 +15,9 @@ static NSString *const DNAssetURLFormat = @"AssetDownloadUrlFormat";
 @implementation DNAssetController
 
 + (UIImage *) avatarAssetForID:(NSString *)avatarAssetID {
+    
+    if (!avatarAssetID)
+        return nil;
 
     NSString *assetDownloadUrl = [DNConfigurationController configuration][DNAssetURLFormat];
 
