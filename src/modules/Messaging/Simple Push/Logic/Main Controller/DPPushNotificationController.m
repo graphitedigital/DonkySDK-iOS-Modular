@@ -54,7 +54,7 @@ static NSString *const DNInteractionResult = @"InteractionResult";
         
         [self setPendingPushNotifications:[[NSMutableArray alloc] init]];
 
-        self.moduleDefinition = [[DNModuleDefinition alloc] initWitName:NSStringFromClass([self class]) version:@"1.0"];
+        self.moduleDefinition = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0"];
     }
     
     return  self;
