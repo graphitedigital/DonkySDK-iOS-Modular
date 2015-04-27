@@ -109,6 +109,7 @@ static NSString *const DNCustomType = @"customType";
 
 - (void)performSecureDonkyNetworkCall:(BOOL)secure route:(NSString *)route httpMethod:(DonkyNetworkRoute)httpMethod parameters:(id)parameters success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
 
+
     DNRequest *request = [[DNRequest alloc] initWithSecure:secure route:route httpMethod:httpMethod parameters:parameters success:successBlock failure:failureBlock];
 
     if ([[self deviceConnectivity] hasValidConnection]) {
@@ -143,7 +144,7 @@ static NSString *const DNCustomType = @"customType";
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                 return;
             }
-
+            
             NSURLSessionTask *currentTask = [DNNetworkHelper performNetworkTaskForRequest:request sessionManager:[self networkSessionManager] success:^(NSURLSessionDataTask *task, id responseData) {
                 [self handleSuccess:responseData forTask:task request:request];
             } failure:^(NSURLSessionDataTask *task, NSError *error) {

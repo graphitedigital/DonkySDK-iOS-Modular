@@ -63,7 +63,7 @@ Donky-Core-SDK is available through [CocoaPods](http://cocoapods.org). To instal
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'Donky-Core-SDK', '=> 4.0.0.0'
+pod 'Donky-Core-SDK', '~> 4.0.0.0'
 
 ```
 
@@ -95,7 +95,7 @@ To read more about how to get started please see [here](http://docs.mobiledonky.
 
 
 ```ruby
-pod 'Donky-SimplePush-Logic', '=> 4.0.0.0'
+pod 'Donky-SimplePush-Logic', '~> 4.0.0.0'
 
 ```
 
@@ -124,7 +124,7 @@ To read more about how to get started please see [here](http://docs.mobiledonky.
 
 
 ```ruby
-pod 'Donky-SimplePush-UI', '=> 4.0.0.0'
+pod 'Donky-SimplePush-UI', '~> 4.0.0.0'
 
 ```
 
@@ -156,7 +156,7 @@ To read more about how to get started please see [here](http://docs.mobiledonky.
 
 
 ```ruby
-pod 'Donky-RichMessage-Logic', '=> 4.0.0.0'
+pod 'Donky-RichMessage-Logic', '~> 4.0.0.0'
 
 ```
 
@@ -185,7 +185,7 @@ To read more about how to get started please see [here](http://docs.mobiledonky.
 
 
 ```ruby
-pod 'Donky-RichMessage-PopUp', '=> 4.0.0.0'
+pod 'Donky-RichMessage-PopUp', '~> 4.0.0.0'
 
 ```
 
@@ -213,6 +213,6 @@ Use the Automation module to enable to trigger campaigns setup on Campaign Build
 
 
 ```ruby
-pod 'Donky-Automation-Logic', '=> 4.0.0.0'
+pod 'Donky-Automation-Logic', '~> 4.0.0.0'
 
 ```

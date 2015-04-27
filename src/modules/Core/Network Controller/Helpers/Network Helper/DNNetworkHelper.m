@@ -217,7 +217,6 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
 + (NSURLSessionTask *)performNetworkTaskForRequest:(DNRequest *)request sessionManager:(DNSessionManager *)sessionManage success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
 
     NSURLSessionTask *currentTask = nil;
-
     switch ([request method]) {
         case DNPost: {
             currentTask = [sessionManage performPostWithRoute:[request route] parameteres:[request parameters] success:^(NSURLSessionDataTask *task, id responseData) {

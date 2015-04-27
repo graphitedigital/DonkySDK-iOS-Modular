@@ -96,33 +96,43 @@ static NSString *const DNConfiguration = @"configuration";
 }
 
 - (void)initialiseWithAPIKey:(NSString *)apiKey userDetails:(DNUserDetails *)userDetails deviceDetails:(DNDeviceDetails *)deviceDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        if (!apiKey || apiKey.length == 0) {
+            DNErrorLog(@"---- No API Key supplied - Bailing out of Donky Initialisation, please check input... ----");
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (failureBlock)
+                    failureBlock(nil, [DNErrorController errorWithCode:DNCoreSDKErrorNoAPIKey]);
+            });
+            return;
+        }
 
-    if (!apiKey) {
-        DNErrorLog(@"---- No API Key supplied - Bailing out of Donky Initialisation, please check input... ----");
-        if (failureBlock)
-            failureBlock(nil, [DNErrorController errorWithCode:DNCoreSDKErrorNoAPIKey]);
-        return;
-    }
+        //Save the api key:
+        [DNDonkyNetworkDetails saveAPIKey:apiKey];
+        //Check if registered:ios moving app to background status
+        [DNAccountController initialiseUserDetails:userDetails deviceDetails:deviceDetails success:^(NSURLSessionDataTask *task, id responseData) {
 
-    //Save the api key:
-    [DNDonkyNetworkDetails saveAPIKey:apiKey];
-    //Check if registered:ios moving app to background status
-    [DNAccountController initialiseUserDetails:userDetails deviceDetails:deviceDetails success:^(NSURLSessionDataTask *task, id responseData) {
-        [DNNotificationController registerForPushNotifications];
-        [[DNNetworkController sharedInstance] startMinimumTimeForSynchroniseBuffer:0];
-        
-        [self addCoreSubscribers];
-        
-        [DNAccountController updateClientModules:[self allRegisteredModules]];
-        
-        DNInfoLog(@"DonkySDK is initilaised. All user data has been saved.");
-        [[DNNetworkController sharedInstance] synchronise];
-        if (successBlock)
-            successBlock(task, responseData);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        if (failureBlock)
-            failureBlock(task, error);
-    }];
+            [DNNotificationController registerForPushNotifications];
+
+            [[DNNetworkController sharedInstance] startMinimumTimeForSynchroniseBuffer:0];
+
+            [self addCoreSubscribers];
+
+            [DNAccountController updateClientModules:[self allRegisteredModules]];
+
+            DNInfoLog(@"DonkySDK is initilaised. All user data has been saved.");
+            [[DNNetworkController sharedInstance] synchronise];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (successBlock)
+                    successBlock(task, responseData);
+
+            });
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (failureBlock)
+                    failureBlock(task, error);
+            });
+        }];
+    });
 }
 
 #pragma mark -
