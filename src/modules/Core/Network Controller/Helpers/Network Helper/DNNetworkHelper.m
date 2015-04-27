@@ -179,13 +179,11 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
                                                                                      message:DNNetworkLocalizedString(@"dn_network_no_internet_message")
                                                                               preferredStyle:UIAlertControllerStyleAlert];
             [alertController addAction:[UIAlertAction actionWithTitle:DNNetworkLocalizedString(@"dn_network_no_internet_button") style:UIAlertActionStyleDefault handler:nil]];
-            UIViewController *rootView = [[[DNDonkyCore sharedInstance] applicationWindow] rootViewController] ? : [UIViewController applicationRootViewController];
-            if ([rootView isViewLoaded]) {
-                if (!rootView)
-                    DNErrorLog(@"Couldn't present alert view, root view is nil.");
-                else
-                    [rootView presentViewController:alertController animated:YES completion:nil];
-            }
+            UIViewController *rootView = [UIViewController applicationRootViewController];
+            if (!rootView)
+                DNErrorLog(@"Couldn't present alert view, root view is nil.");
+            else
+             [rootView presentViewController:alertController animated:YES completion:nil];
         }
         else {
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:DNNetworkLocalizedString(@"dn_network_no_internet_tile")

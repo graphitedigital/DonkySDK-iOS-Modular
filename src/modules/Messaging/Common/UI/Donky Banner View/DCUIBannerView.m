@@ -108,17 +108,14 @@
     [self.nowLabel pinAttribute:NSLayoutAttributeTop toSameAttributeOfItem:self.displayNameLabel];
     [self.activityView startAnimating];
 
-    //We only download the avatar if there's an asset ID;
-    if (avatarID) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            UIImage *avatar = [DNAssetController avatarAssetForID:avatarID];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[self avatarImageView] setImage:avatar];
-                [[self avatarImageView] setNeedsDisplay];
-                [self.activityView stopAnimating];
-            });
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        UIImage *avatar = [DNAssetController avatarAssetForID:avatarID];
+        dispatch_async(dispatch_get_main_queue(),^{
+            [[self avatarImageView] setImage:avatar];
+            [[self avatarImageView] setNeedsDisplay];
+            [self.activityView stopAnimating];
         });
-    }
+    });
 }
 
 @end
