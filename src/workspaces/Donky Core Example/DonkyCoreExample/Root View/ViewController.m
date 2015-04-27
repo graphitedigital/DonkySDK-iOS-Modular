@@ -16,6 +16,19 @@
 
 @implementation ViewController
 
+- (instancetype) init {
+    
+    self = [super init];
+    
+    if (self) {
+        
+        [self.view setBackgroundColor:[UIColor whiteColor]];
+    }
+    
+    return self;
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
@@ -33,11 +46,9 @@
 }
 
 - (void)changeColour:(id)sender {
-
     if (self.demoDataController) {
-        [self.demoDataController sendColourMessage:[UIColor redColor]];
+        [self.demoDataController sendColourMessage:[UIColor orangeColor]];
     }
-    
 }
 
 - (void)addCustomNotificationModules {

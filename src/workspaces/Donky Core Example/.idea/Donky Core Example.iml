@@ -38,6 +38,9 @@
       <sourceFolder url="file://$MODULE_DIR$/../../modules/Core/Universal Helpers" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$/../Third Party Dependencies/AFNetworking 2.5.2">
+      <sourceFolder url="file://$MODULE_DIR$/../Third Party Dependencies/AFNetworking 2.5.2" isTestSource="false" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

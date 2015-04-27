@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "DCAAnalyticsController.h"
 #import "DNDonkyCore.h"
+#import "ViewController.h"
 
 @interface AppDelegate ()
 
@@ -19,12 +20,21 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
     //We start analytics (optional):
     [[DCAAnalyticsController sharedInstance] start];
 
     //Start Donky:
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"4lb223aQAi9yMGrFpvYYvRL03asETHcYBa77RCYTDJEpckrJbgdPfa7iZ8IPbn432kalnUyry5AEssOduiSw"];
+    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@""];
+
+    ViewController *viewController = [[ViewController alloc] init];
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    
+    self.window.rootViewController = navController;
+    [self.window makeKeyAndVisible];
 
     return YES;
 }

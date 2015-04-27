@@ -86,7 +86,6 @@
 		D7639BFC1AEE862900270548 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = D7639BEF1AEE862900270548 /* AFURLResponseSerialization.m */; };
 		D7639BFD1AEE862900270548 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D7639BF11AEE862900270548 /* AFURLSessionManager.m */; };
 		D76564551AEE5F350075D669 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D76564541AEE5F350075D669 /* main.m */; };
-		D765645E1AEE5F350075D669 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D765645C1AEE5F350075D669 /* Main.storyboard */; };
 		D76564601AEE5F350075D669 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D765645F1AEE5F350075D669 /* Images.xcassets */; };
 		D76564631AEE5F350075D669 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D76564611AEE5F350075D669 /* LaunchScreen.xib */; };
 /* End PBXBuildFile section */
@@ -247,7 +246,6 @@
 		D765644F1AEE5F350075D669 /* DonkyCoreExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DonkyCoreExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D76564531AEE5F350075D669 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D76564541AEE5F350075D669 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		D765645D1AEE5F350075D669 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D765645F1AEE5F350075D669 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		D76564621AEE5F350075D669 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		E2B73A9C1B9184827017C142 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -295,8 +293,8 @@
 		B85593F1A4C595F7CC44FB12 /* App Delegate */ = {
 			isa = PBXGroup;
 			children = (
-				B855977B087601F5B53C42E5 /* AppDelegate.m */,
 				B855978DEBF5D19D4539EF60 /* AppDelegate.h */,
+				B855977B087601F5B53C42E5 /* AppDelegate.m */,
 			);
 			path = "App Delegate";
 			sourceTree = "<group>";
@@ -1174,7 +1172,6 @@
 				D7639BDB1AEE862900270548 /* AFNetworking 2.5.2 */,
 				D713FA8F1AEE615400D6597D /* Analytics */,
 				D76564781AEE5F3C0075D669 /* Donky Core */,
-				D765645C1AEE5F350075D669 /* Main.storyboard */,
 				D765645F1AEE5F350075D669 /* Images.xcassets */,
 				D76564611AEE5F350075D669 /* LaunchScreen.xib */,
 				D76564521AEE5F350075D669 /* Supporting Files */,
@@ -1265,7 +1262,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D765645E1AEE5F350075D669 /* Main.storyboard in Resources */,
 				D7639BF31AEE862900270548 /* .gitignore in Resources */,
 				D7639BF41AEE862900270548 /* .travis.yml in Resources */,
 				D713FA611AEE60F100D6597D /* DNConfiguration.plist in Resources */,
@@ -1395,14 +1391,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		D765645C1AEE5F350075D669 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D765645D1AEE5F350075D669 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		D76564611AEE5F350075D669 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1451,7 +1439,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "a3cbeb25-104e-4992-ab05-b86d7dea8ef2";
@@ -1491,7 +1479,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE = "a3cbeb25-104e-4992-ab05-b86d7dea8ef2";
 				SDKROOT = iphoneos;
