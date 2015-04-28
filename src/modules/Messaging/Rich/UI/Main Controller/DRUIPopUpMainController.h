@@ -22,7 +22,7 @@
 @property (nonatomic) UIModalPresentationStyle richPopUpPresentationStyle;
 
 /*!
- Whether the Rich Message should be automatically deleted when the view is dimissed.
+ Whether the Rich Message should be automatically deleted when the view is dismissed.
  
  @since 2.0.0.0
  */
