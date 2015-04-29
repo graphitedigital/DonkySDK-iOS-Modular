@@ -17,8 +17,12 @@ Donky-Core-SDK is available under the MIT license. See the LICENSE file for more
 
 The minimal technical requirements for the Donky Module SDK are:
 
-	- Xcode 5.0
-	- iOS 7.0
+<ul>
+<li>Xcode 5.0+</li>
+<li>iOS 7.0+</li>
+<li>Arc must be enabled.</li>
+</ul>
+
 	
 
 Read our complete documentation [here](http://docs.mobiledonky.com)
@@ -34,7 +38,7 @@ Cloning the GitRepo:
 	
 Using [CocoaPods](https://cocoapods.org)
 
-	Please see below for all the information specific to the CocoaPods:
+	Please see below for all the information specific to the CocoaPods
 	
 	
 ##Support
@@ -64,10 +68,10 @@ To read more about how to get started please see [here](http://docs.mobiledonky.
 
 ## Requirements
 
-<ul>
-<li>iOS 7.0+</li>
-<li>Arc must be enabled.</li>
-</ul>
+    <ul>
+    <li>iOS 7.0+</li>
+    <li>Arc must be enabled.</li>
+    </ul>
 
 
 #Third Party Dependencies
