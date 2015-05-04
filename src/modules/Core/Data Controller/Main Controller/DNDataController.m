@@ -484,6 +484,12 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
                                         withContext:tempContext ? [self temporaryContext] : [self mainContext]];
 }
 
+- (NSArray *)allRichMessagesTempContext:(BOOL)tempContext {
+    return [DNRichMessage fetchObjectsWithPredicate:nil
+                                    sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:YES]]
+                                        withContext:tempContext ? [self temporaryContext] : [self mainContext]];
+}
+
 - (DNRichMessage *)richMessageForID:(NSString *)messageID tempContext:(BOOL)tempContext {
     DNRichMessage *message = [DNRichMessage fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"messageID == %@", messageID]
                                                                withContext:tempContext ? [self temporaryContext] : [self mainContext]];
@@ -508,7 +514,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
 - (NSArray *)filterRichMessage:(NSString *)filter tempContext:(BOOL)tempContext {
     return [DNRichMessage fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"messageDescription CONTAINS[cd] %@", filter]
-                                    sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sentTimeStamp" ascending:YES]]
+                                    sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sentTimestamp" ascending:YES]]
                                         withContext:tempContext ? [self temporaryContext]  : [self mainContext]];
 }
 

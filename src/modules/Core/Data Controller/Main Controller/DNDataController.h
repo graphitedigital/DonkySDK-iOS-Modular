@@ -55,6 +55,8 @@
 
 - (NSArray *)unreadRichMessages:(BOOL)unread tempContext:(BOOL)tempContext;
 
+- (NSArray *)allRichMessagesTempContext:(BOOL)tempContext;
+
 - (DNRichMessage *)richMessageForID:(NSString *)messageID tempContext:(BOOL)tempContext;
 
 - (void)deleteRichMessage:(NSString *)messageID tempContext:(BOOL)tempContext;
