@@ -19,10 +19,7 @@
 #import "DNContentNotification.h"
 #import "DNRetryHelper.h"
 #import "DNConfigurationController.h"
-<<<<<<< HEAD
 #import "DNAccountController.h"
-=======
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 
 static NSString *const DNMaxTimeWithoutSynchronise = @"MaxMinutesWithoutNotificationExchange";
 
@@ -334,11 +331,8 @@ static NSString *const DNCustomType = @"customType";
             //Save data:
             [[DNDataController sharedInstance] saveClientNotificationsToStore:sentClientNotifications];
             [[DNDataController sharedInstance] saveClientNotificationsToStore:sentContentNotifications];
-<<<<<<< HEAD
             if ([DNErrorController serviceReturned:401 error:error])
                 [DNAccountController refreshAccessTokenSuccess:nil failure:nil];
-=======
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (failureBlock)
                     failureBlock(task, error);

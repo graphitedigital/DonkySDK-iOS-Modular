@@ -3,11 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>SDK Version</key>
-<<<<<<< HEAD
 	<string>2.0.1.0</string>
-=======
-	<string>2.0</string>
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 	<key>Display No Internet Alert</key>
 	<true/>
 	<key>Debug Log Submission Interval</key>

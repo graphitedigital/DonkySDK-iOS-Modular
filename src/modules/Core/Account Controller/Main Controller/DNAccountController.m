@@ -72,11 +72,7 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 
             //We have an anonymous reg
             if ([userDetails isAnonymous]) {
-<<<<<<< HEAD
                 DNUserDetails *anonymousDetails = [[DNUserDetails alloc] initWithUserID:[accountRegistrationResponse userId] displayName:[accountRegistrationResponse userId] emailAddress:nil mobileNumber:nil countryCode:nil firstName:nil lastName:nil avatarID:nil selectedTags:nil additionalProperties:nil anonymous:YES];
-=======
-                DNUserDetails *anonymousDetails = [[DNUserDetails alloc] initWithUserID:[accountRegistrationResponse userId] displayName:[accountRegistrationResponse userId] emailAddress:nil mobileNumber:nil countryCode:nil firstName:nil lastName:nil avatarID:nil selectedTags:nil additionalProperties:nil];
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
                 [[DNDataController sharedInstance] saveUserDetails:anonymousDetails];
             }
             else
@@ -278,11 +274,7 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 }
 
 + (DNUserDetails *)userID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)email mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSMutableArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties {
-<<<<<<< HEAD
     return [[DNUserDetails alloc] initWithUserID:userID displayName:displayName emailAddress:email mobileNumber:mobileNumber countryCode:countryCode firstName:firstName lastName:lastName avatarID:avatarID selectedTags:selectedTags additionalProperties:additionalProperties anonymous:displayName == nil];
-=======
-    return [[DNUserDetails alloc] initWithUserID:userID displayName:displayName emailAddress:email mobileNumber:mobileNumber countryCode:countryCode firstName:firstName lastName:lastName avatarID:avatarID selectedTags:selectedTags additionalProperties:additionalProperties];
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 }
 
 + (BOOL)isRegistered {

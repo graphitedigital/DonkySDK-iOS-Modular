@@ -4,15 +4,12 @@
 
 # Donky Modular SDK
 
-<<<<<<< HEAD
 The Modular Donky SDK. Inside this repository are the following Donky Network SDK elements:
 
 <ul>
 <li>Donky Core SDK (Requried for all implementations of the Donky SDK. If using Cocoapods, each module pod spec has a dependency on Core.)</li>
 </ul>
 
-=======
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 ## Author
 
 Donky Networks Ltd, sdk@mobiledonky.com
@@ -21,7 +18,6 @@ Donky Networks Ltd, sdk@mobiledonky.com
 
 Donky-Core-SDK is available under the MIT license. See the LICENSE file for more info.
 
-<<<<<<< HEAD
 #Modules
 
 <ul>
@@ -72,8 +68,6 @@ We accept pull requests!
 
 
 ##CocoaPods
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
-
 
 # Donky-Core-SDK
 
@@ -84,10 +78,9 @@ We accept pull requests!
 
 ## Usage
 
-<<<<<<< HEAD
 Only add this to your Pod File if this is the only part of the SDk you are going to use. Adding this to your podfile is not necessary if using any of the modules. 
 
-To read more about how to get started please see [here](http://docs.mobiledonky.com/v1.1/docs).
+To read more about how to get started please see [here](http://docs.mobiledonky.com).
 
 ## Requirements
 
@@ -97,18 +90,17 @@ To read more about how to get started please see [here](http://docs.mobiledonky.
 <li>Core Analytics</li>
 <li>Automation</li>
 </ul>
-=======
+
 Only add this to your Pod File if this is the only part of the SDK you are going to use. Adding this to your ‘Podfile’ is not necessary if using any of the additional optional modules. 
 
 To read more about how to get started please see [here](http://docs.mobiledonky.com).
 
 ## Requirements
 
-    <ul>
-    <li>iOS 7.0+</li>
-    <li>Arc must be enabled.</li>
-    </ul>
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
+<ul>
+<li>iOS 7.0+</li>
+<li>Arc must be enabled.</li>
+</ul>
 
 
 #Third Party Dependencies
@@ -125,12 +117,6 @@ pod 'Donky-Core-SDK', '~> 4.0.0.0'
 
 ```
 
-
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 # Donky-SimplePush-Logic
 
 
@@ -142,20 +128,13 @@ pod 'Donky-Core-SDK', '~> 4.0.0.0'
 ## Usage
 
 Use the Simple Push module to enable your application to receive Simple Push messages.
-<<<<<<< HEAD
-To read more about how to get started please see [here](http://docs.mobiledonky.com/v1.1/docs).
-=======
+
 To read more about how to get started please see [here](http://docs.mobiledonky.com).
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 
 ## Requirements
 
 <ul>
-<<<<<<< HEAD
-<li>iOS 7.1+</li>
-=======
 <li>iOS 7.0+</li>
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 <li>Arc must be enabled.</li>
 </ul>
 
@@ -179,20 +158,13 @@ pod 'Donky-SimplePush-Logic', '~> 4.0.0.0'
 ## Usage
 
 Use the Simple Push module to enable your application to receive Simple Push messages.
-<<<<<<< HEAD
-To read more about how to get started please see [here](http://docs.mobiledonky.com/v1.1/docs).
-=======
+
 To read more about how to get started please see [here](http://docs.mobiledonky.com).
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 
 ## Requirements
 
 <ul>
-<<<<<<< HEAD
-<li>iOS 7.1+</li>
-=======
 <li>iOS 7.0+</li>
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 <li>Arc must be enabled.</li>
 </ul>
 
@@ -205,9 +177,6 @@ pod 'Donky-SimplePush-UI', '~> 4.0.0.0'
 
 ```
 
-
-
-
 # Donky-RichMessage-Logic
 
 
@@ -219,20 +188,12 @@ pod 'Donky-SimplePush-UI', '~> 4.0.0.0'
 ## Usage
 
 Use the Rich Message  module to enable your application to receive Simple Push messages.
-<<<<<<< HEAD
-To read more about how to get started please see [here](http://docs.mobiledonky.com/v1.1/docs).
-=======
 To read more about how to get started please see [here](http://docs.mobiledonky.com).
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 
 ## Requirements
 
 <ul>
-<<<<<<< HEAD
-<li>iOS 7.1+</li>
-=======
 <li>iOS 7.0+</li>
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 <li>Arc must be enabled.</li>
 </ul>
 
@@ -256,20 +217,13 @@ pod 'Donky-RichMessage-Logic', '~> 4.0.0.0'
 ## Usage
 
 Use the Rich Message module to enable your application to receive Simple Push messages.
-<<<<<<< HEAD
-To read more about how to get started please see [here](http://docs.mobiledonky.com/v1.1/docs).
-=======
+
 To read more about how to get started please see [here](http://docs.mobiledonky.com).
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 
 ## Requirements
 
 <ul>
-<<<<<<< HEAD
-<li>iOS 7.1+</li>
-=======
 <li>iOS 7.0+</li>
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 <li>Arc must be enabled.</li>
 </ul>
 
@@ -297,11 +251,7 @@ Use the Automation module to enable to trigger campaigns setup on Campaign Build
 ## Requirements
 
 <ul>
-<<<<<<< HEAD
-<li>iOS 7.1+</li>
-=======
 <li>iOS 7.0+</li>
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 <li>Arc must be enabled.</li>
 </ul>
 

@@ -113,7 +113,6 @@
 - (instancetype)initWithUserID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)emailAddress mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSMutableArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties;
 
 
-<<<<<<< HEAD
 /*!
  Initialise method to create and set the properties of a new device user.
  
@@ -135,8 +134,6 @@
 - (instancetype)initWithUserID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)emailAddress mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSMutableArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties anonymous:(BOOL)isAnonymous;
 
 
-=======
->>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 #pragma mark -
 #pragma mark - Private... Not for public consumption. Public use is unsupported and may result in undesired SDK behaviour.
 
