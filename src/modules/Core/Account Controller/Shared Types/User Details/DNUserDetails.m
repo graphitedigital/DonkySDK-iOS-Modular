@@ -73,6 +73,7 @@ static NSString *const DNRegistrationId = @"id";
     return self;
 }
 
+<<<<<<< HEAD
 - (instancetype)initWithUserID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)emailAddress mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSMutableArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties anonymous:(BOOL) isAnonymous {
 
     self = [super init];
@@ -94,6 +95,8 @@ static NSString *const DNRegistrationId = @"id";
     return self;
 }
 
+=======
+>>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 - (instancetype)initWithUserID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)emailAddress mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSMutableArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties {
     
     self = [super init];

@@ -6,7 +6,11 @@
 //  Copyright (c) 2015 Dynmark International Ltd. All rights reserved.
 //
 
+<<<<<<< HEAD
 #import <UIView-Autolayout/UIView+AutoLayout.h>
+=======
+#import "UIView+AutoLayout.h"
+>>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 #import "DPUINotificationController.h"
 #import "DPUINotification.h"
 #import "DNConstants.h"

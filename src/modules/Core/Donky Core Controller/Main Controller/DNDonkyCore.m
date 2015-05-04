@@ -22,7 +22,10 @@
 #import "DNConfigurationController.h"
 #import "DNModuleHelper.h"
 #import "DNTag.h"
+<<<<<<< HEAD
 #import "DNDonkyCoreFunctionalHelper.h"
+=======
+>>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 
 static NSString *const DNConfiguration = @"configuration";
 
@@ -122,7 +125,10 @@ static NSString *const DNConfiguration = @"configuration";
 
             DNInfoLog(@"DonkySDK is initilaised. All user data has been saved.");
             [[DNNetworkController sharedInstance] synchronise];
+<<<<<<< HEAD
 
+=======
+>>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (successBlock)
                     successBlock(task, responseData);
@@ -228,6 +234,7 @@ static NSString *const DNConfiguration = @"configuration";
 
 - (void)addCoreSubscribers {
     DNModuleDefinition *moduleDefinition = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.0.0"];
+<<<<<<< HEAD
 
     DNSubscription *transmitDebugLog = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationTransmitDebugLog handler:^(id data) {
         DNServerNotification *serverNotification = data;
@@ -247,6 +254,15 @@ static NSString *const DNConfiguration = @"configuration";
 
     [self subscribeToDonkyNotifications:moduleDefinition subscriptions:@[transmitDebugLog, newDeviceMessage]];
 
+=======
+    DNSubscription *subscription = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationTransmitDebugLog handler:^(id data) {
+        DNServerNotification *serverNotification = data;
+        [DNLoggingController submitLogToDonkyNetwork:[serverNotification serverNotificationID] success:nil failure:nil];
+    }];
+    
+    [subscription setAutoAcknowledge:YES];
+    [self subscribeToDonkyNotifications:moduleDefinition subscriptions:@[subscription]];
+>>>>>>> 985f7a913df527142bac13219ea9575fd07cf9bb
 }
 
 @end
