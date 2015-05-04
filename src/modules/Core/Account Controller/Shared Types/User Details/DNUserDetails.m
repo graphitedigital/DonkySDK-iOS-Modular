@@ -73,6 +73,27 @@ static NSString *const DNRegistrationId = @"id";
     return self;
 }
 
+- (instancetype)initWithUserID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)emailAddress mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSMutableArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties anonymous:(BOOL) isAnonymous {
+
+    self = [super init];
+
+    if (self) {
+        [self setUserID:userID];
+        [self setDisplayName:displayName];
+        [self setEmailAddress:emailAddress];
+        [self setCountryCode:countryCode];
+        [self setMobileNumber:mobileNumber];
+        [self setFirstName:firstName];
+        [self setLastName:lastName];
+        [self setAvatarAssetID:avatarID];
+        [self setSelectedTags:selectedTags];
+        [self setAdditionalProperties:additionalProperties];
+        [self setAnonymous:isAnonymous];
+    }
+
+    return self;
+}
+
 - (instancetype)initWithUserID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)emailAddress mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSMutableArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties {
     
     self = [super init];

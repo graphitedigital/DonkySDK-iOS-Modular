@@ -30,7 +30,6 @@ static NSString *const DPPushNotificationID = @"notificationId";
     return;
 #else
 
-// Device specific code
     if ([DNSystemHelpers donkySystemVersionAtLeast:8.0]) {
         NSMutableSet *buttonSets = [DNConfigurationController buttonsAsSets];
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings

@@ -47,6 +47,9 @@ NSString * const kDNDonkyNotificationSimplePush = @"SimplePushMessage";
 //
 NSString * const kDNDonkyNotificationRichMessage = @"RichMessage";
 
+//
+NSString * const kDNDonkyNotificationNewDeviceMessage = @"NewDeviceAddedToUser";
+
 #pragma mark -
 #pragma mark - Donky Event Types
 

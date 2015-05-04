@@ -72,7 +72,7 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 
             //We have an anonymous reg
             if ([userDetails isAnonymous]) {
-                DNUserDetails *anonymousDetails = [[DNUserDetails alloc] initWithUserID:[accountRegistrationResponse userId] displayName:[accountRegistrationResponse userId] emailAddress:nil mobileNumber:nil countryCode:nil firstName:nil lastName:nil avatarID:nil selectedTags:nil additionalProperties:nil];
+                DNUserDetails *anonymousDetails = [[DNUserDetails alloc] initWithUserID:[accountRegistrationResponse userId] displayName:[accountRegistrationResponse userId] emailAddress:nil mobileNumber:nil countryCode:nil firstName:nil lastName:nil avatarID:nil selectedTags:nil additionalProperties:nil anonymous:YES];
                 [[DNDataController sharedInstance] saveUserDetails:anonymousDetails];
             }
             else
@@ -274,7 +274,7 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 }
 
 + (DNUserDetails *)userID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)email mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSMutableArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties {
-    return [[DNUserDetails alloc] initWithUserID:userID displayName:displayName emailAddress:email mobileNumber:mobileNumber countryCode:countryCode firstName:firstName lastName:lastName avatarID:avatarID selectedTags:selectedTags additionalProperties:additionalProperties];
+    return [[DNUserDetails alloc] initWithUserID:userID displayName:displayName emailAddress:email mobileNumber:mobileNumber countryCode:countryCode firstName:firstName lastName:lastName avatarID:avatarID selectedTags:selectedTags additionalProperties:additionalProperties anonymous:displayName == nil];
 }
 
 + (BOOL)isRegistered {

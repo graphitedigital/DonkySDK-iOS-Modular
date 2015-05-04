@@ -22,6 +22,7 @@
 #import "DNConfigurationController.h"
 #import "DNModuleHelper.h"
 #import "DNTag.h"
+#import "DNDonkyCoreFunctionalHelper.h"
 
 static NSString *const DNConfiguration = @"configuration";
 
@@ -121,6 +122,7 @@ static NSString *const DNConfiguration = @"configuration";
 
             DNInfoLog(@"DonkySDK is initilaised. All user data has been saved.");
             [[DNNetworkController sharedInstance] synchronise];
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (successBlock)
                     successBlock(task, responseData);
@@ -226,13 +228,25 @@ static NSString *const DNConfiguration = @"configuration";
 
 - (void)addCoreSubscribers {
     DNModuleDefinition *moduleDefinition = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.0.0"];
-    DNSubscription *subscription = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationTransmitDebugLog handler:^(id data) {
+
+    DNSubscription *transmitDebugLog = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationTransmitDebugLog handler:^(id data) {
         DNServerNotification *serverNotification = data;
         [DNLoggingController submitLogToDonkyNetwork:[serverNotification serverNotificationID] success:nil failure:nil];
     }];
-    
-    [subscription setAutoAcknowledge:YES];
-    [self subscribeToDonkyNotifications:moduleDefinition subscriptions:@[subscription]];
+
+    DNSubscription *newDeviceMessage = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationNewDeviceMessage handler:^(id data) {
+        DNServerNotification *serverNotification = data;
+        [DNDonkyCoreFunctionalHelper handleNewDeviceMessage:serverNotification];
+        //Create a new event:
+        DNLocalEvent *newDeviceEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyNotificationNewDeviceMessage
+                                                                     publisher:NSStringFromClass([self class])
+                                                                     timeStamp:[NSDate date]
+                                                                          data:[serverNotification data]];
+        [self publishEvent:newDeviceEvent];
+    }];
+
+    [self subscribeToDonkyNotifications:moduleDefinition subscriptions:@[transmitDebugLog, newDeviceMessage]];
+
 }
 
 @end

@@ -11,3 +11,9 @@
 "dn_network_no_internet_message" = "There is no valid internet connection. Please check connection settings.";
 
 "dn_network_no_internet_button" = "OK";
+
+"dn_donky_core_new_device_title" = "New Device";
+
+"dn_donky_core_new_device_message" = "A new device has been registered on your account.\n\nDevice Type: %@\nOperating System: %@";
+
+"dn_donky_core_new_device_button" = "OK";

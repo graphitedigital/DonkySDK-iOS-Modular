@@ -130,6 +130,13 @@ extern NSString * const kDNDonkyNotificationSimplePush;
 
 extern NSString * const kDNDonkyNotificationRichMessage;
 
+/*!
+ Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound Rich Messages.
+
+ @since 2.0.1.0
+ */
+extern NSString * const kDNDonkyNotificationNewDeviceMessage;
+
 #pragma mark -
 #pragma mark - Donky Event Types
 
