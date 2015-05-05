@@ -37,7 +37,7 @@ The minimal technical requirements for the Donky Module SDK are:
 <ul>
 <li>Xcode 5.0+</li>
 <li>iOS 7.0+</li>
-<li>Arc must be enabled.</li>
+<li>Arc must be enabled</li>
 </ul>
 
 	
