@@ -31,8 +31,6 @@ NSString * const kDNNetworkGetNotification = @"api/notification/";
 
 NSString * const kDNNetworkSendDebugLog = @"api/debugLog";
 
-NSString * const kDNNetworkSendNotifications = @"api/content/send";
-
 NSString * const kDNNetworkUserTags = @"api/registration/user/tags";
 
 #pragma mark -
@@ -145,3 +143,15 @@ CGFloat  const kDonkyLogFileSizeLimit = 2000.0; //this is in bytes, default is 2
 #pragma mark - Donky Notification Keys
 
 NSString * const kDNDonkyNotificationCustomDataKey = @"CustomData";
+
+#pragma mark -
+#pragma mark - Donky Module Versions
+
+//
+NSString * const kDNDonkyCoreVersion = @"1.0.0.1";
+
+//
+NSString * const kDNDonkyNetworkVersion = @"1.0.1.2";
+
+//
+NSString * const kDNDonkyNotificationVersion = @"1.0.0.0";

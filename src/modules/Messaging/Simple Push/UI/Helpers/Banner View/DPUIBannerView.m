@@ -16,6 +16,7 @@
 #import "NSDate+DNDateHelper.h"
 #import "NSMutableDictionary+DNDictionary.h"
 #import "DNConstants.h"
+#import "DCMConstants.h"
 
 static NSString *const DPUIButtonSetActions = @"buttonSetActions";
 
@@ -159,8 +160,15 @@ static NSString *const DPUIButtonSetActions = @"buttonSetActions";
     [params dnSetObject:button.senderMessageId forKey:@"senderMessageId"];
     [params dnSetObject:button.messageId forKey:@"messageId"];
 
-    [params dnSetObject:[button.createdOn donkyDateForServer] forKey:@"msgSentTimeStamp"];
-    [params dnSetObject:@([interactionDate timeIntervalSinceDate:button.createdOn]) forKey:@"timeToInteractionSeconds"];
+    [params dnSetObject:[button.createdOn donkyDateForServer] forKey:@"messageSentTimeStamp"];
+    
+    double timeToInteract = [interactionDate timeIntervalSinceDate:button.createdOn];
+    
+    if (isnan(timeToInteract))
+        timeToInteract = 0;
+    
+    [params dnSetObject:@(timeToInteract) forKey:@"timeToInteractionSeconds"];
+    
     [params dnSetObject:[buttonSetAction count] == 2 ? @"twoButton" : @"oneButton" forKey:@"interactionType"];
 
     [params dnSetObject:button.contextItems forKey:@"contextItems"];
@@ -168,6 +176,10 @@ static NSString *const DPUIButtonSetActions = @"buttonSetActions";
     DNLocalEvent *interactionResult = [[DNLocalEvent alloc] initWithEventType:@"InteractionResult" publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:params];
 
     [[DNDonkyCore sharedInstance] publishEvent:interactionResult];
+    
+    
+    DNLocalEvent *pushTappedEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventSimplePushTapped publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:[button actionData]];
+    [[DNDonkyCore sharedInstance] publishEvent:pushTappedEvent];
 
 }
 

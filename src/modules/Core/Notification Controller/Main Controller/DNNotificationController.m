@@ -24,6 +24,10 @@ static NSString *const DPPushNotificationID = @"notificationId";
 @implementation DNNotificationController
 
 + (void)registerForPushNotifications {
+    
+    //Register Module:
+    DNModuleDefinition *notificationModule = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:kDNDonkyNotificationVersion];
+    [[DNDonkyCore sharedInstance] registerModule:notificationModule];
 
 #if TARGET_IPHONE_SIMULATOR
     DNErrorLog(@"Cannot register for push notifications on simulator");
@@ -126,8 +130,14 @@ static NSString *const DPPushNotificationID = @"notificationId";
     [params dnSetObject:[notification data][@"senderMessageId"] forKey:@"senderMessageId"];
     [params dnSetObject:[notification data][@"messageId"] forKey:@"messageId"];
 
-    [params dnSetObject:[[notification createdOn] donkyDateForServer] forKey:@"msgSentTimeStamp"];
-    [params dnSetObject:@([interactionDate timeIntervalSinceDate:[notification createdOn]]) forKey:@"timeToInteractionSeconds"];
+    [params dnSetObject:[[notification createdOn] donkyDateForServer] forKey:@"messageSentTimeStamp"];
+    
+    double timeToInteract = [interactionDate timeIntervalSinceDate:[notification createdOn]];
+    
+    if (isnan(timeToInteract))
+        timeToInteract = 0;
+    
+    [params dnSetObject:@(timeToInteract) forKey:@"timeToInteractionSeconds"];
     [params dnSetObject:[buttonSetAction count] == 2 ? @"twoButton" : @"oneButton" forKey:@"interactionType"];
 
     [params dnSetObject:[notification data][@"contextItems"] forKey:@"contextItems"];
