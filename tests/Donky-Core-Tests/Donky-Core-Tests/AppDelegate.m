@@ -22,7 +22,7 @@
   
     [[DCAAnalyticsController sharedInstance] start];
     
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@""];
+    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"ye7MDvQQVUKwR2DgMhHC89gy76HOFVtYq3PLKiOyYvDyQwFKzusUCBAphwDvMNGvlDfK2WhRFo41sF0fD4sf1Q"];
     
     return YES;
 }

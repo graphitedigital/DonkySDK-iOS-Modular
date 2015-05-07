@@ -31,6 +31,8 @@
 #import "DNDeviceConnectivityController.h"
 #import "DNErrorController.h"
 
+static NSString * const API_KEY = @"ye7MDvQQVUKwR2DgMhHC89gy76HOFVtYq3PLKiOyYvDyQwFKzusUCBAphwDvMNGvlDfK2WhRFo41sF0fD4sf1Q";
+
 @interface Donky_Core_TestsTests : XCTestCase
 
 @end
@@ -56,7 +58,7 @@
     __block BOOL waitingForBlock = YES;
     
     // Put setup code here. This method is called before the invocation of each test method in the class.init
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"" userDetails:[[DNAccountController registrationDetails] userDetails] success:^(NSURLSessionDataTask *task, id responseData) {
+    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:API_KEY userDetails:[[DNAccountController registrationDetails] userDetails] success:^(NSURLSessionDataTask *task, id responseData) {
         if ([DNDonkyNetworkDetails networkId])
             waitingForBlock = NO;
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -444,7 +446,7 @@
     [[DNDataController sharedInstance] saveAllData];
     
     
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"vMBC8SHsILtV1g+UVnozZ0QmMKM4mcpNbNLfwUQnKq8P2z1XPMhhuHThwszJorUv32epCXMSjq3kwq0KM35w" userDetails:nil deviceDetails:nil success:^(NSURLSessionDataTask *task, id responseData) {
+    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:API_KEY userDetails:nil deviceDetails:nil success:^(NSURLSessionDataTask *task, id responseData) {
         XCTFail(@"Succeeded when it shouldn't have");
         waitingForBlock = NO;
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -732,7 +734,7 @@
     
     __block NSInteger done = 0;
     
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"vMBC8SHsILtV1g+UVnozZ0QmMKM4mcpNbNLfwUQnKq8P2z1XPMhhuHThwszJorUv32epCXMSjq3kwq0KM35w" userDetails:[[DNAccountController registrationDetails] userDetails] success:^(NSURLSessionDataTask *task, id responseData) {
+    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:API_KEY userDetails:[[DNAccountController registrationDetails] userDetails] success:^(NSURLSessionDataTask *task, id responseData) {
         done ++;
         if (done == 4) {
             waitingForBlock = NO;
@@ -741,7 +743,7 @@
         XCTFail(@"Failed: %@", [error localizedDescription]);
     }];
     
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"vMBC8SHsILtV1g+UVnozZ0QmMKM4mcpNbNLfwUQnKq8P2z1XPMhhuHThwszJorUv32epCXMSjq3kwq0KM35w" userDetails:[[DNAccountController registrationDetails] userDetails] success:^(NSURLSessionDataTask *task, id responseData) {
+    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:API_KEY userDetails:[[DNAccountController registrationDetails] userDetails] success:^(NSURLSessionDataTask *task, id responseData) {
         done ++;
         if (done == 4) {
             waitingForBlock = NO;
@@ -750,7 +752,7 @@
         XCTFail(@"Failed: %@", [error localizedDescription]);
     }];
     
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"vMBC8SHsILtV1g+UVnozZ0QmMKM4mcpNbNLfwUQnKq8P2z1XPMhhuHThwszJorUv32epCXMSjq3kwq0KM35w" userDetails:[[DNAccountController registrationDetails] userDetails] success:^(NSURLSessionDataTask *task, id responseData) {
+    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:API_KEY userDetails:[[DNAccountController registrationDetails] userDetails] success:^(NSURLSessionDataTask *task, id responseData) {
         done ++;
         if (done == 4) {
             waitingForBlock = NO;
@@ -759,7 +761,7 @@
         XCTFail(@"Failed: %@", [error localizedDescription]);
     }];
     
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"vMBC8SHsILtV1g+UVnozZ0QmMKM4mcpNbNLfwUQnKq8P2z1XPMhhuHThwszJorUv32epCXMSjq3kwq0KM35w" userDetails:[[DNAccountController registrationDetails] userDetails] success:^(NSURLSessionDataTask *task, id responseData) {
+    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:API_KEY userDetails:[[DNAccountController registrationDetails] userDetails] success:^(NSURLSessionDataTask *task, id responseData) {
         done ++;
         if (done == 4) {
             waitingForBlock = NO;
