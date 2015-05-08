@@ -2,7 +2,7 @@
   <img src="https://avatars2.githubusercontent.com/u/11334935?v=3&s=200" alt="Donky Networks LTD" title="Donky Network SDK">
 </p>
 
-# Donky Modular SDK
+# Donky Modular SDK (V2.0.2.6)
 
 ## Author
 
