@@ -44,17 +44,12 @@
 
 -(instancetype)initPrivate
 {
-
     self  = [super init];
 
     if (self) {
-
         self.donkyRichLogicController = [[DRLogicMainController alloc] init];
-
         self.pendingMessages = [[NSMutableArray alloc] init];
-
         self.autoDelete = YES;
-        
     }
 
     return self;

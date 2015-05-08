@@ -54,10 +54,6 @@ static NSString *const DAAppSession = @"appSession";
     
     if (self) {
 
-        //Register Module:
-        DNModuleDefinition *analyticsModule = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:kDAAnalyticsVersion];
-        [[DNDonkyCore sharedInstance] registerModule:analyticsModule];
-
     }
 
     return self;
@@ -91,6 +87,11 @@ static NSString *const DAAppSession = @"appSession";
     };
 
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDAEventInfluencedAppOpen handler:self.appInfluenceEvent];
+    
+    
+    //Register Module:
+    DNModuleDefinition *analyticsModule = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:kDAAnalyticsVersion];
+    [[DNDonkyCore sharedInstance] registerModule:analyticsModule];
 }
 
 - (void)stop {

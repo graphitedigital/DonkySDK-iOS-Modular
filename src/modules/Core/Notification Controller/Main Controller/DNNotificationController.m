@@ -28,7 +28,7 @@ static NSString *const DPPushNotificationID = @"notificationId";
     //Register Module:
     DNModuleDefinition *notificationModule = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:kDNDonkyNotificationVersion];
     [[DNDonkyCore sharedInstance] registerModule:notificationModule];
-
+    
 #if TARGET_IPHONE_SIMULATOR
     DNErrorLog(@"Cannot register for push notifications on simulator");
     return;
@@ -46,7 +46,7 @@ static NSString *const DPPushNotificationID = @"notificationId";
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge];
 
 #endif
-
+    
 }
 
 + (void)registerDeviceToken:(NSData *)token {

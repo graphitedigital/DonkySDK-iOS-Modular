@@ -17,7 +17,6 @@
 
 static NSString *const DNPendingPushNotifications = @"PendingPushNotifications";
 static NSString *const DNAnalyticsInfluencedAppOpens = @"DonkyAnalyticsInfluencedAppOpen";
-
 static NSString *const DNInteractionResult = @"InteractionResult";
 
 @interface DPPushNotificationController ()
@@ -54,7 +53,7 @@ static NSString *const DNInteractionResult = @"InteractionResult";
         
         [self setPendingPushNotifications:[[NSMutableArray alloc] init]];
 
-        self.moduleDefinition = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0"];
+        self.moduleDefinition = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.0.0"];
     }
     
     return  self;

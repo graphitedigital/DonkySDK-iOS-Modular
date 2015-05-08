@@ -81,10 +81,6 @@ static NSString *const DNCustomType = @"customType";
         [self setDeviceConnectivity:[[DNDeviceConnectivityController alloc] init]];
         [self setRetryHelper:[[DNRetryHelper alloc] init]];
         [self initialisePendingNotifications];
-
-        //Register Module:
-        DNModuleDefinition *networkModule = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:kDNDonkyNetworkVersion];
-        [[DNDonkyCore sharedInstance] registerModule:networkModule];
     }
 
     return self;
