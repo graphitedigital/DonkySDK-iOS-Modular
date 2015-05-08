@@ -4,11 +4,7 @@
 
 # Donky Modular SDK
 
-The Modular Donky SDK. Inside this repository are the following Donky Network SDK elements:
-
-<ul>
-<li>Donky Core SDK (Requried for all implementations of the Donky SDK. If using Cocoapods, each module pod spec has a dependency on Core.)</li>
-</ul>
+The Modular Donky SDK.
 
 ## Author
 
