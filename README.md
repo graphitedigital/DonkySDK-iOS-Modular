@@ -68,10 +68,10 @@ To read more about how to get started please see [here](http://docs.mobiledonky.
 
 ## Requirements
 
-    <ul>
-    <li>iOS 7.0+</li>
-    <li>Arc must be enabled.</li>
-    </ul>
+<ul>
+<li>iOS 7.0+</li>
+<li>Arc must be enabled.</li>
+</ul>
 
 
 #Third Party Dependencies
