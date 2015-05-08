@@ -84,7 +84,7 @@ Donky-Core-SDK is available through [CocoaPods](http://cocoapods.org). To instal
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'Donky-Core-SDK', '~> 4.0.0.0'
+pod "Donky-Core-SDK"
 
 ```
 
@@ -107,6 +107,7 @@ To read more about how to get started please see [here](http://docs.mobiledonky.
 <ul>
 <li>iOS 7.0+</li>
 <li>Arc must be enabled.</li>
+<li>For Interactive notifications iOS 8.0+ is required.</li>
 </ul>
 
 
@@ -114,7 +115,7 @@ To read more about how to get started please see [here](http://docs.mobiledonky.
 
 
 ```ruby
-pod 'Donky-SimplePush-Logic', '~> 4.0.0.0'
+pod "Donky-SimplePush-Logic"
 
 ```
 
@@ -143,7 +144,7 @@ To read more about how to get started please see [here](http://docs.mobiledonky.
 
 
 ```ruby
-pod 'Donky-SimplePush-UI', '~> 4.0.0.0'
+pod "Donky-SimplePush-UI"
 
 ```
 
@@ -175,7 +176,7 @@ To read more about how to get started please see [here](http://docs.mobiledonky.
 
 
 ```ruby
-pod 'Donky-RichMessage-Logic', '~> 4.0.0.0'
+pod "Donky-RichMessage-Logic"
 
 ```
 
@@ -204,7 +205,7 @@ To read more about how to get started please see [here](http://docs.mobiledonky.
 
 
 ```ruby
-pod 'Donky-RichMessage-PopUp', '~> 4.0.0.0'
+pod "Donky-RichMessage-PopUp"
 
 ```
 
@@ -218,7 +219,7 @@ pod 'Donky-RichMessage-PopUp', '~> 4.0.0.0'
 
 ## Usage
 
-Use the Automation module to enable to trigger campaigns setup on Campaign Builder/Donky Control   [here](http://docs.mobiledonky.com/v1.1/docs).
+Use the Automation module to enable to trigger campaigns setup on Campaign Builder/Donky Control   [here](http://docs.mobiledonky.com).
 
 ## Requirements
 
@@ -232,6 +233,6 @@ Use the Automation module to enable to trigger campaigns setup on Campaign Build
 
 
 ```ruby
-pod 'Donky-Automation-Logic', '~> 4.0.0.0'
+pod "Donky-Automation-Logic"
 
 ```
