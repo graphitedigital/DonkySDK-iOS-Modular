@@ -22,7 +22,7 @@ Donky Networks Ltd, sdk@mobiledonky.com
 
 ## License
 
-Donky-Core-SDK is available under the MIT license. See the LICENSE file for more info.
+DonkySDK-iOS-Modular is available under the MIT license. See the LICENSE file for more info.
 
 
 ##Minimum Technical Requirements
