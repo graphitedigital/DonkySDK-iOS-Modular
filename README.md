@@ -8,7 +8,6 @@ The modular SDK exposes all of the network functionality in a way that means dev
 
 <ul>
 <li>Send custom notifications</li>
-<li>iOS 7.0+</li>
 <li>Use Donky's messaging features</li>
 <li>Automate actions and messaging</li>
 <li>Track in app analytics</li>
