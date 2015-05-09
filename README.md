@@ -4,6 +4,19 @@
 
 # Donky Modular SDK (V2.0.2.6)
 
+The modular SDK exposes all of the network functionality in a way that means developers can consume only the pieces they need in order to:
+
+<ul>
+<li>Send custom notifications</li>
+<li>iOS 7.0+</li>
+<li>Use Donky's messaging features</li>
+<li>Automate actions and messaging</li>
+<li>Track in app analytics</li>
+<li>Build complex M2M, A2P and P2P applications</li>
+</ul>
+
+Using Donky as a data network allows developers to focus on writing the apps code rather than having to worry about building a reliable and secure network. The complexities of transferring data across the internet are taken care of, allowing developers to just build their applications.
+
 ## Author
 
 Donky Networks Ltd, sdk@mobiledonky.com
@@ -23,7 +36,6 @@ The minimal technical requirements for the Donky Module SDK are:
 <li>Arc must be enabled.</li>
 </ul>
 
-	
 
 Read our complete documentation [here](http://docs.mobiledonky.com)
 
