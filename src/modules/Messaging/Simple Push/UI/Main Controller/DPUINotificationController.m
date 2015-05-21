@@ -83,6 +83,10 @@ static CGFloat const DPUINotificationBannerDismissTime = 10.0f;
     };
     
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventSimplePushTapped handler:self.bannerTappedHandler];
+    
+    DNModuleDefinition *simplePushUIController = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.1.0.0"];
+    [[DNDonkyCore sharedInstance] registerModule:simplePushUIController];
+    
 }
 
 - (void)stop {

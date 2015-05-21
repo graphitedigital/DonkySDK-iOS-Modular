@@ -3,7 +3,7 @@
 //  RichPopUp
 //
 //  Created by Chris Watson on 13/04/2015.
-//  Copyright (c) 2015 Chris Watson. All rights reserved.
+//  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import "DRLogicHelper.h"
@@ -19,7 +19,7 @@
 + (DNRichMessage *)saveRichMessage:(DNServerNotification *)serverNotification {
 
     @try {
-        DNRichMessage *richMessage = [[DNDataController sharedInstance] richMessageForID:[serverNotification data][DCMMessageID] tempContext:YES];
+        DNRichMessage *richMessage = [[DNDataController sharedInstance] richMessageForID:[serverNotification data][DCMMessageID] tempContext:NO];
         
         [richMessage setExpiryTimestamp:[NSDate donkyDateFromServer:[serverNotification data][DCMExpiryTimeStamp]]];
         [richMessage setSenderDisplayName:[serverNotification data][DCMSenderDisplayName]];
@@ -64,11 +64,11 @@
 }
 
 + (NSArray *)allUnreadRichMessages {
-    return [[DNDataController sharedInstance] unreadRichMessages:YES tempContext:YES];
+    return [[DNDataController sharedInstance] unreadRichMessages:YES tempContext:NO];
 }
 
 + (NSArray *)allRichMessages {
-    return [[DNDataController sharedInstance] allRichMessagesTempContext:YES];
+    return [[DNDataController sharedInstance] allRichMessagesTempContext:NO];
 }
 
 + (NSArray *)filteredRichMessage:(NSString *)filter tempContext:(BOOL)context {

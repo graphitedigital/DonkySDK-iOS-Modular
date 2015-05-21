@@ -3,7 +3,7 @@
 //  Core Container
 //
 //  Created by Chris Watson on 20/03/2015.
-//  Copyright (c) 2015 Chris Watson. All rights reserved.
+//  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import "DNConfigurationController.h"

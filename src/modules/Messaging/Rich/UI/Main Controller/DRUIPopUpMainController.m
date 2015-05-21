@@ -3,7 +3,7 @@
 //  RichPopUp
 //
 //  Created by Chris Watson on 13/04/2015.
-//  Copyright (c) 2015 Chris Watson. All rights reserved.
+//  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import "DRUIPopUpMainController.h"
@@ -15,6 +15,8 @@
 #import "UIViewController+DNRootViewController.h"
 #import "DRLogicMainController.h"
 #import "DNRichMessage.h"
+#import "NSDate+DNDateHelper.h"
+#import "DNLoggingController.h"
 
 @interface DRUIPopUpMainController ()
 @property(nonatomic, strong) DRLogicMainController *donkyRichLogicController;
@@ -48,6 +50,8 @@
 
     if (self) {
         self.donkyRichLogicController = [[DRLogicMainController alloc] init];
+        [self.donkyRichLogicController start];
+        
         self.pendingMessages = [[NSMutableArray alloc] init];
         self.autoDelete = YES;
     }
@@ -71,7 +75,9 @@
     
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyNotificationRichMessage handler:self.richMessageHandler];
 
-    [[self donkyRichLogicController] start];
+    DNModuleDefinition *richModule = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.1.0.0"];
+    [[DNDonkyCore sharedInstance] registerModule:richModule];
+  
 }
 
 - (void)stop {
@@ -80,31 +86,46 @@
 }
 
 - (void)presentPopUp:(DNLocalEvent *)event {
-    self.displayingPopUp = YES;
 
     DNRichMessage *richMessage = [event data];
 
-    DCUIRMessageViewController *popUpController = [[DCUIRMessageViewController alloc] initWithRichMessage:richMessage];
-    [popUpController setDelegate:self];
+    NSDate *thirtyDaysExpired = [[NSDate date] dateByAddingTimeInterval:(3600 * 24 * 30) * -1];
 
-    UIViewController *applicationViewController = [UIViewController applicationRootViewController];
-
-    if (!applicationViewController.isViewLoaded) {
-        [self performSelector:@selector(presentPopUp:) withObject:event afterDelay:0.25];
-        return;
+    if ([[richMessage messageReceivedTimestamp] isDateBeforeDate:thirtyDaysExpired]) {
+        DNInfoLog(@"Rich message: %@ is more than 30 days old... Marking as read and deleting message.", [richMessage messageID]);
+        [[self donkyRichLogicController] markMessageAsRead:[richMessage messageID]];
+        [[self donkyRichLogicController] deleteMessage:[richMessage messageID]];
     }
 
-    [[self donkyRichLogicController] markMessageAsRead:[richMessage messageID]];
+    else {
 
-    [applicationViewController presentViewController:[popUpController richPopUpNavigationControllerWithModalPresentationStyle:self.richPopUpPresentationStyle]
-                                            animated:YES
-                                          completion:nil];
+        DCUIRMessageViewController *popUpController = [[DCUIRMessageViewController alloc] initWithRichMessage:richMessage];
+        [popUpController setDelegate:self];
+
+        UIViewController *applicationViewController = [UIViewController applicationRootViewController];
+
+        if (!applicationViewController.isViewLoaded) {
+            [self performSelector:@selector(presentPopUp:) withObject:event afterDelay:0.25];
+            return;
+        }
+
+        [[self donkyRichLogicController] markMessageAsRead:[richMessage messageID]];
+
+        id popOverViewController = [popUpController richPopUpNavigationControllerWithModalPresentationStyle:self.richPopUpPresentationStyle];
+        if (popOverViewController) {
+            self.displayingPopUp = YES;
+            [applicationViewController presentViewController:popOverViewController
+                                                    animated:YES
+                                                  completion:nil];
+        }
+    }
 
     if ([[self pendingMessages] containsObject:event])
         [[self pendingMessages] removeObject:event];
+
 }
 
-- (void)messageWasClosed:(NSString *)messageID {
+- (void)richMessagePopUpWasClosed:(NSString *)messageID {
     self.displayingPopUp = NO;
 
     if ([self shouldAutoDelete])

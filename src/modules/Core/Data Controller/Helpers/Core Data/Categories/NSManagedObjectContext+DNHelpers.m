@@ -7,13 +7,22 @@
 //
 
 #import "NSManagedObjectContext+DNHelpers.h"
+#import "DNLoggingController.h"
 
 @implementation NSManagedObjectContext (DNHelpers)
 
 -(BOOL)saveIfHasChanges:(NSError *__autoreleasing*)error {
-    if ([self hasChanges])
-        return [self save:error];
-    return YES;
+    @try {
+        if ([self hasChanges])
+            return [self save:error];
+        return YES;
+    }
+    @catch (NSException *exception) {
+        DNErrorLog(@"Fatal exception caught: %@", [exception description]);
+        [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil];
+    }
+
+    return NO;
 }
 
 @end

@@ -3,7 +3,7 @@
 //  RichPopUp
 //
 //  Created by Chris Watson on 13/04/2015.
-//  Copyright (c) 2015 Chris Watson. All rights reserved.
+//  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -20,12 +20,23 @@
 
 /*!
  Method invoked when the view controller is dismissed.
+
+ @param messageID the message ID of the Rich Message currently being displayed.
+
+ @since 2.0.3.6
+ */
+- (void)richMessagePopUpWasClosed:(NSString *)messageID;
+
+@optional
+
+/*!
+ Method invoked when the view controller is dismissed.
  
  @param messageID the message ID of the Rich Message currently being displayed.
  
  @since 2.0.0.0
  */
-- (void)messageWasClosed:(NSString *)messageID;
+- (void)messageWasClosed:(NSString *)messageID __attribute__((deprecated("deprecated, please use richMessagePopUpWasClosed")));
 
 @end
 

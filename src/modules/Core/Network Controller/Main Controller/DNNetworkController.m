@@ -87,8 +87,8 @@ static NSString *const DNCustomType = @"customType";
 }
 
 - (void)initialisePendingNotifications {
-    [[self pendingClientNotifications] addObjectsFromArray:[[DNDataController sharedInstance] clientNotificationsWithTempContext:NO]];
-    [[self pendingContentNotifications] addObjectsFromArray:[[DNDataController sharedInstance] contentNotificationsInTempContext:NO]];
+    [[self pendingClientNotifications] addObjectsFromArray:[[DNDataController sharedInstance] clientNotificationsWithTempContext:YES]];
+    [[self pendingContentNotifications] addObjectsFromArray:[[DNDataController sharedInstance] contentNotificationsInTempContext:YES]];
 }
 
 - (void)startMinimumTimeForSynchroniseBuffer:(NSTimeInterval)buffer {

@@ -52,7 +52,7 @@ static NSString *const DNMessageRead = @"MessageRead";
 
 + (void)markMessageAsRead:(NSString *)messageID {
 
-    DNRichMessage *message = [[DNDataController sharedInstance] richMessageForID:messageID tempContext:YES];
+    DNRichMessage *message = [[DNDataController sharedInstance] richMessageForID:messageID tempContext:NO];
 
     if (!message) {
         return;

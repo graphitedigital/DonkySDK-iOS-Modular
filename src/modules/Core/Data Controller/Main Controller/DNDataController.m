@@ -64,6 +64,9 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
         [notificationCenter addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
         [notificationCenter addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
 
+        [self mainContext];
+        [self temporaryContext];
+
         [self clearBrokenNotificationsWithTempContext:YES];
     }
     return self;
@@ -117,7 +120,8 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
     _temporaryContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     _temporaryContext.undoManager = nil;
-    _temporaryContext.parentContext = [self mainContext];
+    _temporaryContext.parentContext = _mainContext;
+
     return _temporaryContext;
 }
 
@@ -161,8 +165,10 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
 -(void)saveMainContext
 {
+    DNInfoLog(@"Saving Main Context changes?: %d", [_mainContext hasChanges]);
+
     NSError *error = nil;
-    [[self mainContext] saveIfHasChanges:&error];
+    [_mainContext saveIfHasChanges:&error];
 
     if (error)
         DNErrorLog(@"Saving context: %@", [error localizedDescription]);
@@ -170,8 +176,10 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
 -(void)saveTemporaryContext
 {
+    DNInfoLog(@"Saving Temp Context changes?: %d", [_temporaryContext hasChanges]);
+
     NSError *error = nil;
-    [[self temporaryContext] saveIfHasChanges:&error];
+    [_temporaryContext saveIfHasChanges:&error];
 
     if (error)
         DNErrorLog(@"Saving context: %@", [error localizedDescription]);
@@ -182,7 +190,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
 - (DNUserDetails *)currentDeviceUser {
 
-    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"] withContext:[self mainContext]] ? : [self newDevice];
+    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"] withContext:_mainContext] ? : [self newDevice];
 
     DNUserDetails *dnUserDetails = [[DNUserDetails alloc] initWithDeviceUser:deviceUser];
 
@@ -190,7 +198,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 }
 
 - (void)saveUserDetails:(DNUserDetails *)details {
-    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"] withContext:[self mainContext]] ? : [self newDevice];
+    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"] withContext:_mainContext] ? : [self newDevice];
     [deviceUser setIsAnonymous:@([details isAnonymous])];
     [deviceUser setDisplayName:[details displayName]];
     [deviceUser setMobileNumber:[details mobileNumber]];
@@ -204,7 +212,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 }
 
 - (DNDeviceUser *)newDevice {
-    DNDeviceUser *device = [DNDeviceUser insertNewInstanceWithContext:[self mainContext]];
+    DNDeviceUser *device = [DNDeviceUser insertNewInstanceWithContext:_mainContext];
     [device setIsDeviceUser:@(YES)];
     [device setIsAnonymous:@(YES)];
     return device;
@@ -214,10 +222,10 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
     //Check if we already have a client notification for this id:
     DNNotification *clientNotification = [DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@", [notification notificationID]]
-                                                                            withContext:tempContext ? [self temporaryContext] : [self mainContext]];
+                                                                            withContext:tempContext ? _temporaryContext : _mainContext];
 
     if (!clientNotification) {
-        clientNotification = [DNNotification insertNewInstanceWithContext:tempContext ? [self temporaryContext] : [self mainContext]];
+        clientNotification = [DNNotification insertNewInstanceWithContext:tempContext ? _temporaryContext : _mainContext];
         [clientNotification setServerNotificationID:[notification notificationID] ? : [DNSystemHelpers generateGUID]];
         [clientNotification setType:[notification notificationType]];
         [clientNotification setAcknowledgementDetails:[notification acknowledgementDetails]];
@@ -232,7 +240,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 - (NSArray *)clientNotificationsWithTempContext:(BOOL)tempContext {
     NSArray *allNotifications = [DNNotification fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"type != %@", DNCustomNotificationType]
                                            sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:DNType ascending:YES]]
-                                               withContext:tempContext ? [self temporaryContext] : [self mainContext]];
+                                               withContext:tempContext ? _temporaryContext : _mainContext];
     return [self mappedClientNotifications:allNotifications];
 }
 
@@ -252,10 +260,10 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
     //Check if we already have a client notification for this id:
     DNNotification *contentNotification = [DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@", [notification notificationID]]
-                                                                            withContext:tempContext ? [self temporaryContext] : [self mainContext]];
+                                                                            withContext:tempContext ? _temporaryContext : _mainContext];
 
     if (!contentNotification) {
-        contentNotification = [DNNotification insertNewInstanceWithContext:tempContext ? [self temporaryContext] : [self mainContext]];
+        contentNotification = [DNNotification insertNewInstanceWithContext:tempContext ? _temporaryContext : _mainContext];
         [contentNotification setServerNotificationID:[notification notificationID] ?: [DNSystemHelpers generateGUID]];
         [contentNotification setType:DNCustomNotificationType];
         [contentNotification setData:(id) [notification acknowledgementDetails]];
@@ -273,7 +281,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 - (NSArray *)contentNotificationsInTempContext:(BOOL)tempContext {
     NSArray *allNotifications = [DNNotification fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"type == %@", DNCustomNotificationType]
                                            sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:DNType ascending:YES]]
-                                               withContext:tempContext ? [self temporaryContext] : [self mainContext]];
+                                               withContext:tempContext ? _temporaryContext : _mainContext];
     return [self mappedContentNotification:allNotifications];
 }
 
@@ -379,7 +387,8 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
         }
     }];
 
-    [self saveAllData];
+    if ([array count])
+        [self saveAllData];
 }
 
 - (NSMutableArray *)sendContentNotifications:(NSArray *)notifications {
@@ -435,41 +444,50 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
             [storeObjects addObject:[self contentNotifications:obj inTempContext:YES]];
     }];
 
+    if (![storeObjects count])
+        return;
+
     if (tempContext)
-        [[self temporaryContext] deleteAllObjectsInArray:storeObjects];
+        [_temporaryContext deleteAllObjectsInArray:storeObjects];
     else
-        [[self mainContext] deleteAllObjectsInArray:storeObjects];
+        [_mainContext deleteAllObjectsInArray:storeObjects];
 
     [self saveAllData];
 }
 
 - (void)clearBrokenNotificationsWithTempContext:(BOOL)tempContext {
     //Get all broken types i.e. send tries > 10 && with no valid type:
-    NSArray *brokenDonkyNotifications = [DNNotification fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"sendTries >= %d", DNMaximumSendTries] sortDescriptors:nil withContext:tempContext ? [self temporaryContext] : [self mainContext]];
+    NSArray *brokenDonkyNotifications = [DNNotification fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"sendTries >= %d", DNMaximumSendTries]
+                                                                  sortDescriptors:nil
+                                                                      withContext:tempContext ? _temporaryContext : _mainContext];
+
+    if (![brokenDonkyNotifications count])
+        return;
+
     if (tempContext)
-        [[self temporaryContext] deleteAllObjectsInArray:brokenDonkyNotifications];
+        [_temporaryContext deleteAllObjectsInArray:brokenDonkyNotifications];
     else
-        [[self mainContext] deleteAllObjectsInArray:brokenDonkyNotifications];
+        [_mainContext deleteAllObjectsInArray:brokenDonkyNotifications];
 
     [self saveAllData];
 }
 
 - (void)deleteNotificationForID:(NSString *)serverID withTempContext:(BOOL)temp {
     DNNotification *clientNotification = [DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@", serverID]
-                                                                            withContext:temp ? [self temporaryContext] : [self mainContext]];
+                                                                            withContext:temp ? _temporaryContext : _mainContext];
 
     if (clientNotification) {
         if (temp)
-            [[self temporaryContext] deleteObject:clientNotification];
+            [_temporaryContext deleteObject:clientNotification];
         else
-            [[self mainContext] deleteObject:clientNotification];
+            [_mainContext deleteObject:clientNotification];
     }
 }
 
 - (DNNotification *)notificationWithID:(NSString *) notificationID withTempContext:(BOOL)temp {
 
     DNNotification *clientNotification = [DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@", notificationID]
-                                                                            withContext:temp ? [self temporaryContext] : [self mainContext]];
+                                                                            withContext:temp ? _temporaryContext : _mainContext];
 
     return clientNotification;
 }
@@ -481,20 +499,20 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 - (NSArray *)unreadRichMessages:(BOOL)unread tempContext:(BOOL)tempContext {
     return [DNRichMessage fetchObjectsWithPredicate:unread ? [NSPredicate predicateWithFormat:@"read == NO"] : nil
                                     sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:YES]]
-                                        withContext:tempContext ? [self temporaryContext] : [self mainContext]];
+                                        withContext:tempContext ? _temporaryContext : _mainContext];
 }
 
 - (NSArray *)allRichMessagesTempContext:(BOOL)tempContext {
     return [DNRichMessage fetchObjectsWithPredicate:nil
                                     sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:YES]]
-                                        withContext:tempContext ? [self temporaryContext] : [self mainContext]];
+                                        withContext:tempContext ? _temporaryContext : _mainContext];
 }
 
 - (DNRichMessage *)richMessageForID:(NSString *)messageID tempContext:(BOOL)tempContext {
     DNRichMessage *message = [DNRichMessage fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"messageID == %@", messageID]
-                                                               withContext:tempContext ? [self temporaryContext] : [self mainContext]];
+                                                               withContext:tempContext ? _temporaryContext : _mainContext];
     if (!message) {
-        message = [DNRichMessage insertNewInstanceWithContext:tempContext ? [self temporaryContext] : [self mainContext]];
+        message = [DNRichMessage insertNewInstanceWithContext:tempContext ? _temporaryContext : _mainContext];
         [message setMessageID:messageID];
         [message setRead:@(NO)];
     }
@@ -506,16 +524,16 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
     DNRichMessage *richMessage = [self richMessageForID:messageID tempContext:tempContext];
     if (richMessage) {
         if (tempContext)
-            [[self temporaryContext] deleteObject:richMessage];
+            [_temporaryContext deleteObject:richMessage];
         else
-            [[self mainContext] deleteObject:richMessage];
+            [_mainContext deleteObject:richMessage];
     }
 }
 
 - (NSArray *)filterRichMessage:(NSString *)filter tempContext:(BOOL)tempContext {
     return [DNRichMessage fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"messageDescription CONTAINS[cd] %@", filter]
                                     sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sentTimestamp" ascending:YES]]
-                                        withContext:tempContext ? [self temporaryContext]  : [self mainContext]];
+                                        withContext:tempContext ? _temporaryContext  : _mainContext];
 }
 
 @end

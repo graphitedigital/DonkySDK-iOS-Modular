@@ -3,7 +3,7 @@
 //  RichPopUp
 //
 //  Created by Chris Watson on 13/04/2015.
-//  Copyright (c) 2015 Chris Watson. All rights reserved.
+//  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import "DRLogicMainController.h"
@@ -22,7 +22,6 @@
 @end
 
 @implementation DRLogicMainController
-
 
 +(DRLogicMainController *)sharedInstance
 {
@@ -111,7 +110,7 @@
 }
 
 - (NSArray *)filterRichMessages:(NSString *)filter {
-    return [DRLogicHelper filteredRichMessage:filter tempContext:YES];
+    return [DRLogicHelper filteredRichMessage:filter tempContext:NO];
 }
 
 @end

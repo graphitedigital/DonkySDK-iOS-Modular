@@ -3,7 +3,7 @@
 //  DonkyCore
 //
 //  Created by Chris Watson on 08/04/2015.
-//  Copyright (c) 2015 Chris Watson. All rights reserved.
+//  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
