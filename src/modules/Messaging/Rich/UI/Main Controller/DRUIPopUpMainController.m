@@ -27,7 +27,6 @@
 
 @implementation DRUIPopUpMainController
 
-
 +(DRUIPopUpMainController *)sharedInstance
 {
     static dispatch_once_t pred;
