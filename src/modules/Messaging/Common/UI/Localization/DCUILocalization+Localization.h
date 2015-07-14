@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-static inline NSString * DCUILocalizedString(NSString *key, NSString *comment) {
+static inline NSString *DCUILocalizedString(NSString *key) {
     return NSLocalizedStringWithDefaultValue(key, @"DCUILocalization", [NSBundle mainBundle], nil, comment);
 }
 

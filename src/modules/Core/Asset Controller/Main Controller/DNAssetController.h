@@ -22,4 +22,37 @@
  */
 + (UIImage *)avatarAssetForID:(NSString *)avatarAssetID;
 
+/*!
+ Method to same an image to a temporary directory inside the application documents folder. 
+ Use this if you wish to temporatily store some images.
+ 
+ @param image     the image to be saved.
+ @param imageName the name of the image.
+ 
+ @return BOOL indicating if it was successfull
+ 
+ @since 2.2.2.7
+ */
++ (BOOL)saveImageToTempDir:(UIImage *)image withImageName:(NSString *)imageName;
+
+/*!
+ Method to retrieve a temporary image from the documents directory.
+ 
+ @param imageName the name of the image.
+ 
+ @return the image, nil if image could not be found.
+ 
+ @since 2.2.2.7
+ */
++ (UIImage *)imageFromTempDir:(NSString *)imageName;
+
+/*!
+ Method to delete an image from the temporary document folder.
+ 
+ @param imageName the name of the image to delete.
+ 
+ @since 2.2.2.7
+ */
++ (void)deleteImageAtTempDir:(NSString *)imageName;
+
 @end

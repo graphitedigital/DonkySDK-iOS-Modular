@@ -27,7 +27,7 @@
 
 /*!
  Optional property, set this to your applications root window. Most of the time it is not necessary to do this and is only necessary if you are using an UI Modules. 
- Some Donky UI modules presnet UI components, to do this the Donky SDK gets the 'window' property from the [UIApplication sharedApplication] singleton. In the case of Hybrid app developemnt (Seattle Clouds etc...) the window property is never set and sometimes the window property is not declared in the AppDelegate.h. In this event the Donky SDK cannot present these view components. It is recommneded therefore that you set this porperty to the appropriate window.
+ Some Donky UI modules present UI components, to do this the Donky SDK gets the 'window' property from the [UIApplication sharedApplication] singleton. In the case of Hybrid app developemnt (Seattle Clouds etc...) the window property is never set and sometimes the window property is not declared in the AppDelegate.h. In this event the Donky SDK cannot present these view components. It is recommneded therefore that you set this porperty to the appropriate window.
  
  @since 2.0.0.0
  */
@@ -245,6 +245,6 @@
 /*!
   PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
  */
-- (void)notificationReceived:(DNServerNotification *)notification;
+- (void)notificationsReceived:(NSDictionary *)dictionary;
 
 @end

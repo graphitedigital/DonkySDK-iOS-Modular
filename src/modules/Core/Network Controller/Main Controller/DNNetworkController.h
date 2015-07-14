@@ -8,8 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DNBlockDefinitions.h"
-
-@class DNRetryHelper;
+#import "DNRetryHelper.h"
 
 typedef enum {
     DNPost,

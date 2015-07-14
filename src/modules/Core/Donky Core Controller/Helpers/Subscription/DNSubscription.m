@@ -11,6 +11,7 @@
 @interface DNSubscription ()
 @property(nonatomic, readwrite) NSString *notificationType;
 @property(nonatomic, readwrite) DNSubscriptionHandler handler;
+@property(nonatomic, readwrite) DNSubscriptionBachHandler batchHandler;
 @end
 
 @implementation DNSubscription
@@ -21,6 +22,19 @@
 
     if (self) {
         self.handler = handler;
+        self.autoAcknowledge = YES;
+        self.notificationType = notificationType;
+    }
+
+    return self;
+}
+
+- (instancetype)initWithNotificationType:(NSString *)notificationType batchHandler:(DNSubscriptionBachHandler)batchHandler {
+
+    self = [super init];
+
+    if (self) {
+        self.batchHandler = batchHandler;
         self.autoAcknowledge = YES;
         self.notificationType = notificationType;
     }

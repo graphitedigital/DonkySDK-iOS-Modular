@@ -7,20 +7,28 @@
 //
 
 #import "DRLogicHelper.h"
-#import "DNServerNotification.h"
-#import "DNRichMessage.h"
 #import "DNDataController.h"
 #import "NSDate+DNDateHelper.h"
 #import "DNLoggingController.h"
 #import "DCMConstants.h"
+#import "NSManagedObject+DNHelper.h"
+#import "DCMMainController.h"
+#import "DNDonkyCore.h"
+#import "DRConstants.h"
+
+static NSString *const DRMessageIDSortDescriptor = @"messageID";
+
+static NSString *const DRMessageTimeStampDescriptor = @"sentTimestamp";
 
 @implementation DRLogicHelper
 
 + (DNRichMessage *)saveRichMessage:(DNServerNotification *)serverNotification {
 
     @try {
-        DNRichMessage *richMessage = [[DNDataController sharedInstance] richMessageForID:[serverNotification data][DCMMessageID] tempContext:NO];
-        
+
+        DNRichMessage *richMessage = [DRLogicHelper richMessageForID:[serverNotification data][DCMMessageID]];
+
+        [richMessage setNotificationID:[serverNotification serverNotificationID]];
         [richMessage setExpiryTimestamp:[NSDate donkyDateFromServer:[serverNotification data][DCMExpiryTimeStamp]]];
         [richMessage setSenderDisplayName:[serverNotification data][DCMSenderDisplayName]];
         [richMessage setExternalRef:[serverNotification data][DCMExternalRef]];
@@ -44,9 +52,7 @@
         [richMessage setSenderInternalUserID:[serverNotification data][DCMSenderInternalUserID]];
         [richMessage setMessageReceivedTimestamp:[NSDate date]];
         [richMessage setUrlToShare:[serverNotification data][DCMUrlToShare]];
-        
-        [[DNDataController sharedInstance] saveAllData];
-        
+
         return richMessage;
 
     }
@@ -58,21 +64,106 @@
     return nil;
 }
 
-+ (void)deleteRichMessage:(NSString *)messageID {
-    [[DNDataController sharedInstance] deleteRichMessage:messageID tempContext:NO];
-    [[DNDataController sharedInstance] saveAllData];
++ (void)deleteRichMessage:(DNRichMessage *)richMessage {
+    if (richMessage) {
+        [[[DNDataController sharedInstance] mainContext] deleteObject:richMessage];
+        [[DNDataController sharedInstance] saveAllData];
+    }
 }
 
 + (NSArray *)allUnreadRichMessages {
-    return [[DNDataController sharedInstance] unreadRichMessages:YES tempContext:NO];
+    return [DNRichMessage fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"read == NO"]
+                                   sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:DRMessageIDSortDescriptor ascending:YES]]
+                                       withContext:[[DNDataController sharedInstance] mainContext]];
 }
 
-+ (NSArray *)allRichMessages {
-    return [[DNDataController sharedInstance] allRichMessagesTempContext:NO];
++ (NSArray *)allRichMessagesAscending:(BOOL)ascending {
+    return [DNRichMessage fetchObjectsWithPredicate:nil
+                                    sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:DRMessageTimeStampDescriptor ascending:ascending]]
+                                        withContext:[[DNDataController sharedInstance] mainContext]];
 }
 
-+ (NSArray *)filteredRichMessage:(NSString *)filter tempContext:(BOOL)context {
-    return [[DNDataController sharedInstance] filterRichMessage:filter tempContext:context];
++ (NSArray *)richMessagesWithOffset:(NSUInteger)offset limit:(NSUInteger)limit ascending:(BOOL)ascending {
+    return [DNRichMessage fetchObjectsWithOffset:offset
+                                           limit:limit
+                                  sortDescriptor:@[[NSSortDescriptor sortDescriptorWithKey:DRMessageTimeStampDescriptor ascending:ascending]]
+                                     withContext:[[DNDataController sharedInstance] mainContext]];
+}
+
++ (NSArray *)filteredRichMessage:(NSString *)filter tempContext:(BOOL)tempContext ascendingOrder:(BOOL)ascending {
+    if (!filter) {
+        return nil;
+    }
+
+    return [DNRichMessage fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"messageDescription CONTAINS[cd] %@ || senderDisplayName CONTAINS[cd] %@", filter, filter]
+                                    sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:DRMessageTimeStampDescriptor ascending:ascending]]
+                                        withContext:tempContext ? [[DNDataController sharedInstance] temporaryContext]  : [[DNDataController sharedInstance] mainContext]];
+}
+
++ (DNRichMessage *)richMessageForID:(NSString *)messageID {
+    DNRichMessage *message = [DNRichMessage fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"messageID == %@ || notificationID == %@", messageID, messageID]
+                                                               withContext:[[DNDataController sharedInstance] mainContext]];
+    if (!message) {
+        message = [DNRichMessage insertNewInstanceWithContext:[[DNDataController sharedInstance] mainContext]];
+        [message setMessageID:messageID];
+        [message setRead:@(NO)];
+    }
+
+    return message;
+}
+
++ (void)markMessageAsRead:(DNRichMessage *)richMessage {
+    if (richMessage && ![[richMessage read] boolValue]) {
+        [DCMMainController markMessageAsRead:richMessage];
+
+        DNLocalEvent *messageRead = [[DNLocalEvent alloc] initWithEventType:kDRichMessageReadEvent
+                                                                  publisher:NSStringFromClass([self class])
+                                                                  timeStamp:[NSDate date]
+                                                                       data:richMessage];
+        [[DNDonkyCore sharedInstance] publishEvent:messageRead];
+
+        [[DNDataController sharedInstance] saveAllData];
+    }
+}
+
++ (void)deleteAllRichMessages:(NSArray *)richMessages {
+    [richMessages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        DNRichMessage *message = obj;
+        //Reduce app badge count:
+        if (![[message read] boolValue]) {
+            DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageBadgeCount publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(1)];
+            [[DNDonkyCore sharedInstance] publishEvent:localEvent];
+        }
+        [[[DNDataController sharedInstance] mainContext] deleteObject:message];
+    }];
+
+    [[DNDataController sharedInstance] saveAllData];
+}
+
++ (BOOL)richMessageExistsForID:(NSString *)messageID {
+    return [DNRichMessage fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"messageID == %@ || notificationID == %@", messageID, messageID]
+                                                      withContext:[[DNDataController sharedInstance] mainContext]] != nil;
+}
+
++ (DNRichMessage *)richMessageWithID:(NSString *)messageID {
+    return [DNRichMessage fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"messageID == %@ || notificationID == %@", messageID, messageID]
+                                             withContext:[[DNDataController sharedInstance] mainContext]];
+}
+
++ (void)deleteAllExpiredMessages {
+
+    NSArray *allMessages = [DRLogicHelper allRichMessagesAscending:YES];
+
+    NSMutableArray *expiredMessages = [[NSMutableArray alloc] init];
+
+    [allMessages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        DNRichMessage *message = obj;
+        if ([[message sentTimestamp] donkyHasMessageExpired]) {
+            [expiredMessages addObject:message];
+        }
+    }];
+
+    [DRLogicHelper deleteAllRichMessages:expiredMessages];
 }
 
 @end

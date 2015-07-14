@@ -94,7 +94,7 @@ static NSString *const DNRegistrationId = @"id";
     return self;
 }
 
-- (instancetype)initWithUserID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)emailAddress mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSMutableArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties {
+- (instancetype)initWithUserID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)emailAddress mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties {
     
     self = [super init];
 
@@ -107,7 +107,7 @@ static NSString *const DNRegistrationId = @"id";
         [self setFirstName:firstName];
         [self setLastName:lastName];
         [self setAvatarAssetID:avatarID];
-        [self setSelectedTags:selectedTags];
+        [self setSelectedTags:[selectedTags mutableCopy]];
         [self setAdditionalProperties:additionalProperties];
         [self setAnonymous:displayName == nil]; //We set to anonymous if there is no display name
     }
@@ -179,6 +179,18 @@ static NSString *const DNRegistrationId = @"id";
             [self toggleTag:[tag value] isSelected:[tag isSelected]];
         }];
     }
+}
+
+#pragma mark - 
+#pragma mark - Getters
+
+- (NSDictionary *)additionalProperties {
+    
+    if (!_additionalProperties) {
+        _additionalProperties = [[NSDictionary alloc] init];
+    }
+    
+    return _additionalProperties;
 }
 
 

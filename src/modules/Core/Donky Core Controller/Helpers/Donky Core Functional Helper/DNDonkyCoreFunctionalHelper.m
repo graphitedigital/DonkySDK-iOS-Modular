@@ -22,7 +22,7 @@
     NSString *model = [notification data][@"model"];
     NSString *operatingSystem = [notification data][@"operatingSystem"];
 
-    if ([DNSystemHelpers donkySystemVersionAtLeast:8.0]) {
+    if ([DNSystemHelpers systemVersionAtLeast:8.0]) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:DNNetworkLocalizedString(@"dn_donky_core_new_device_title")
                                                                                  message:[NSString stringWithFormat:DNNetworkLocalizedString(@"dn_donky_core_new_device_message"), model, operatingSystem]
                                                                           preferredStyle:UIAlertControllerStyleAlert];

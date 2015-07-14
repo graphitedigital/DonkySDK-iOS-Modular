@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
+#import "AFURLConnectionOperation.h"
 #import "DNRetryHelper.h"
-#import "DNRequest.h"
 #import "DNConfigurationController.h"
 #import "DNRetryObject.h"
 #import "DNLoggingController.h"
@@ -43,7 +43,13 @@ static NSString *const DNRetryPolicy = @"DeviceCommsConnectionRetrySchedule";
     //Check if this request has already been retried:
     [[self retriedRequests] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         DNRetryObject *retriedRequest = obj;
-        if ([[retriedRequest request] successBlock] == [request successBlock]) {
+        if ([[retriedRequest request] parameters]) {
+            if ([[retriedRequest request] parameters] == [request parameters]) {
+                retryObject = retriedRequest;
+                *stop = YES;
+            }
+        }
+        else if ([[retriedRequest request] successBlock] == [request successBlock]) {
             retryObject = retriedRequest;
             *stop = YES;
         }

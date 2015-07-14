@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@class DNServerNotification;
+#import "DNServerNotification.h"
 
 @interface DNDonkyCoreFunctionalHelper : NSObject
 

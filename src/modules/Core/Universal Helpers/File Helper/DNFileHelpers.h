@@ -112,7 +112,7 @@
  
  @since 2.0.0.0
  */
-+ (BOOL)copyItemAtPath:(NSString *)path1 toPath:(NSString *const)path2;
++ (BOOL)copyItemAtPath:(NSString *)path1 toPath:(NSString *)path2;
 
 /*!
  A helper method to get the size of a file for a given path.

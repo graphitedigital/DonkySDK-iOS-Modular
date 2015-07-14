@@ -27,4 +27,6 @@
 
 + (CGFloat)maximumContentByteSize;
 
++ (NSInteger)richMessageAvailabilityDays;
+
 @end

@@ -9,11 +9,12 @@
 #import "DNNotificationSubscriber.h"
 #import "DNLoggingController.h"
 #import "DNAccountController.h"
-#import "DNDataController.h"
 #import "DNSubscription.h"
 #import "DNModuleHelper.h"
 #import "DNNetworkController.h"
 #import "NSMutableDictionary+DNDictionary.h"
+#import "DNClientNotification.h"
+#import "DNDataController.h"
 
 static NSString *const DNNotificationCustom = @"Custom";
 static NSString *const DNNotificationCustomType = @"customType";
@@ -31,7 +32,6 @@ static NSString *const DNResult = @"result";
 
 @implementation DNNotificationSubscriber
 
-
 - (instancetype)init {
 
     self = [super init];
@@ -48,8 +48,9 @@ static NSString *const DNResult = @"result";
 
 - (void)subscribeToDonkyNotifications:(DNModuleDefinition *)moduleDefinition subscriptions:(NSArray *)subscriptions {
     [subscriptions enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (![obj isKindOfClass:[DNSubscription class]])
+        if (![obj isKindOfClass:[DNSubscription class]]) {
             DNErrorLog(@"Something has gone wrong with. Expected DNSubscription (or subclass thereof) got: %@... Bailing out", NSStringFromClass([obj class]));
+        }
         else {
             DNSubscription *subscription = obj;
             [DNModuleHelper addModule:moduleDefinition toModuleList:[self donkyNotificationSubscribers] subscription:subscription];
@@ -59,8 +60,9 @@ static NSString *const DNResult = @"result";
 
 - (void)unSubscribeToDonkyNotifications:(DNModuleDefinition *)moduleDefinition subscriptions:(NSArray *)subscriptions {
     [subscriptions enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (![obj isKindOfClass:[DNSubscription class]])
+        if (![obj isKindOfClass:[DNSubscription class]]) {
             DNErrorLog(@"Something has gone wrong with. Expected DNSubscription (or subclass thereof) got: %@... Bailing out", NSStringFromClass([obj class]));
+        }
         else {
             DNSubscription *subscription = obj;
             [DNModuleHelper removeModule:moduleDefinition toModuleList:[self donkyNotificationSubscribers] subscription:subscription];
@@ -92,44 +94,66 @@ static NSString *const DNResult = @"result";
     }];
 }
 
-- (void)notificationReceived:(DNServerNotification *)notification {
-    NSArray *subscribers = nil;
-    if ([[notification notificationType] isEqualToString:DNNotificationCustom]) {
-        NSString *type = [notification data][DNNotificationCustomType];
-        subscribers = [[self customNotificationSubscribers][type] allObjects];
-    }
-    else
-        subscribers = [[self donkyNotificationSubscribers][[notification notificationType]] allObjects];
-
-    [self processNotification:notification subscribers:subscribers];
+- (void)notificationsReceived:(NSDictionary *)dictionary {
+    __block NSArray *subscribers = nil;
+    [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        if ([key isEqualToString:DNNotificationCustom]) {
+            //Get subscriber:
+            subscribers = [[self customNotificationSubscribers][key] allObjects];
+        }
+        else {
+            subscribers = [[self donkyNotificationSubscribers][key] allObjects];
+        }
+        if (subscribers) {
+            [self processNotifications:obj subscribers:subscribers];
+        }
+        else {
+            DNInfoLog(@"No subscribers for: %@", key);
+            [self acknowledgeNotifications:obj hasSubscribers:NO];
+        }
+    }];
 }
 
-- (void)processNotification:(DNServerNotification *)notification subscribers:(NSArray *)subscribers {
+- (void)processNotifications:(NSArray *)notifications subscribers:(NSArray *)subscribers {
+
+    __block BOOL hasAcknowledged = NO;
     [subscribers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if (![obj isKindOfClass:[DNSubscription class]])
             DNErrorLog(@"Something has gone wrong with. Expected DNSubscription (or subclass thereof) got: %@... Bailing out", NSStringFromClass([obj class]));
         else {
             DNSubscription *subscription = obj;
-
-            if ([subscription shouldAutoAcknowledge] && idx == 0)
-                [self acknowledgeNotification:notification hasSubscribers:YES];
-
-            if ([subscription handler])
-                [subscription handler](notification);
+            if ([subscription shouldAutoAcknowledge] && !hasAcknowledged) {
+                [self acknowledgeNotifications:notifications hasSubscribers:YES];
+                hasAcknowledged = YES;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([subscription batchHandler]) {
+                    [subscription batchHandler](notifications);
+                }
+                else if ([subscription handler]) {
+                    //Notifications
+                    [notifications enumerateObjectsUsingBlock:^(id obj2, NSUInteger idx2, BOOL *stop2) {
+                        [subscription handler](obj2);
+                    }];
+                }
+            });
         }
     }];
 
-    if (![subscribers count])
-        [self acknowledgeNotification:notification hasSubscribers:NO];
+    if (![subscribers count]) {
+        [self acknowledgeNotifications:notifications hasSubscribers:NO];
+    }
+
+    [[DNDataController sharedInstance] saveAllData];
 }
 
-- (void)acknowledgeNotification:(DNServerNotification *)notification hasSubscribers:(BOOL)hasSubscribers {
-    DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithAcknowledgementNotification:notification];
-    [clientNotification setNotificationType:DNAcknowledgement];
-    [[clientNotification acknowledgementDetails] dnSetObject:hasSubscribers ? DNDelivered : DNDeliveredNoSubscription forKey:DNResult];
-    [[DNNetworkController sharedInstance] queueClientNotifications:@[clientNotification]];
+- (void)acknowledgeNotifications:(NSArray *)notifications hasSubscribers:(BOOL)hasSubscribers {
+    [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithAcknowledgementNotification:obj];
+        [clientNotification setNotificationType:DNAcknowledgement];
+        [[clientNotification acknowledgementDetails] dnSetObject:hasSubscribers ? DNDelivered : DNDeliveredNoSubscription forKey:DNResult];
+        [[DNNetworkController sharedInstance] queueClientNotifications:@[clientNotification]];
+    }];
 }
-
-
 
 @end

@@ -8,13 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "DNBlockDefinitions.h"
-
-@class DNRequest;
-@class DNSessionManager;
+#import "DNRequest.h"
+#import "DNSessionManager.h"
 
 @interface DNNetworkHelper : NSObject
 
-+ (BOOL)mandatoryTasksInProgress:(NSMutableArray *)exchangeRequests;
++ (BOOL)isPerformingBlockingTask:(NSMutableArray *)exchangeRequests;
 
 + (void)handleError:(NSError *)error task:(NSURLSessionDataTask *)task request:(DNRequest *)request;
 
@@ -32,4 +31,7 @@
 
 + (NSURLSessionTask *)performNetworkTaskForRequest:(DNRequest *)request sessionManager:(DNSessionManager *)sessionManager success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
 
++ (BOOL)isCallNecessary:(DNRequest *)request;
+
++ (BOOL)isRequest:(DNRequest *)request duplicated:(NSMutableArray *)queuedRequests;
 @end

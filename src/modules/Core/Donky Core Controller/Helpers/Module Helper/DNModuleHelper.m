@@ -15,17 +15,27 @@
 @implementation DNModuleHelper
 
 + (void)addModule:(DNModuleDefinition *)module toModuleList:(NSMutableDictionary *)moduleList subscription:(DNSubscription *)subscription {
-    if (![[moduleList allKeys] containsObject:[subscription notificationType]])
-        (moduleList)[[subscription notificationType]] = [[NSMutableDictionary alloc] init];
-    if (![[moduleList[[subscription notificationType]] allKeys] containsObject:[module name]])
-        [moduleList[[subscription notificationType]] setObject:subscription forKey:[module name]];
-    else
+    if (![[moduleList allKeys] containsObject:[subscription notificationType]]) {
+        @synchronized (moduleList) {
+            (moduleList)[[subscription notificationType]] = [[NSMutableDictionary alloc] init];
+        }
+    }
+    if (![[moduleList[[subscription notificationType]] allKeys] containsObject:[module name]]) {
+        @synchronized (moduleList) {
+            [moduleList[[subscription notificationType]] setObject:subscription forKey:[module name]];
+        }
+    }
+    else {
         DNInfoLog(@"Module %@ is already subscriped to %@", [module name], [subscription notificationType]);
+    }
 }
 
 + (void)removeModule:(DNModuleDefinition *)module toModuleList:(NSMutableDictionary *)moduleList subscription:(DNSubscription *)subscription {
-    if ([[moduleList[[subscription notificationType]] allKeys] containsObject:[module name]])
-        [moduleList[[subscription notificationType]] removeObjectForKey:[module name]];
+    if ([[moduleList[[subscription notificationType]] allKeys] containsObject:[module name]]) {
+        @synchronized (moduleList) {
+            [moduleList[[subscription notificationType]] removeObjectForKey:[module name]];
+        }
+    }
 }
 
 + (BOOL)isModuleRegistered:(NSMutableArray *)modules moduleName:(NSString *)moduleName moduleVersion:(NSString *)moduleVersion {
@@ -47,10 +57,12 @@
                 NSInteger originalValue = [obj2 integerValue];
                 NSInteger comparatorValue = [suppliedVersion[idx2] integerValue];
 
-                if (comparatorValue > originalValue)
+                if (comparatorValue > originalValue) {
                     *stop2 = YES;
-                else if (idx2 == [originalVersion count] - 1)
+                }
+                else if (idx2 == [originalVersion count] - 1) {
                     minimumVersionMet = YES;
+                }
             }];
 
             if (minimumVersionMet)
@@ -66,8 +78,9 @@
 
 + (void)padArray:(NSMutableArray *)suppliedVersion {
     NSInteger missingDigits = 4 - [suppliedVersion count];
-    for (int i = 0; i < missingDigits; i++)
+    for (int i = 0; i < missingDigits; i++) {
         [suppliedVersion addObject:@"0"];
+    }
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import "NSDate+DNDateHelper.h"
 #import "DNConstants.h"
+#import "DNConfigurationController.h"
 
 @implementation NSDate (DNDateHelper)
 
@@ -25,6 +26,7 @@
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         NSLocale *enUSPOSIXLocale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
         [dateFormatter setLocale:enUSPOSIXLocale];
+        [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
 
         return [dateFormatter dateFromString:date];
@@ -33,22 +35,36 @@
     return nil;
 }
 
-- (NSString *) donkyDateForDebugLog {
+- (NSString *)donkyDateForDebugLog {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:kDNLoggingDateFormat];
     return [formatter stringFromDate:self];
 }
 
 - (BOOL)donkyHasDateExpired {
-    if (!self)
+    if (!self) {
         return YES;
+    }
     
     return [self compare:[NSDate date]] != NSOrderedDescending;
 }
 
+- (BOOL)donkyHasMessageExpired {
+    if (!self) {
+        return YES;
+    }
+
+    NSCalendar *c = [NSCalendar currentCalendar];
+    NSDateComponents *components = [c components:(NSDayCalendarUnit) fromDate:self toDate:[NSDate date] options:0];
+
+    return ([components day] > [DNConfigurationController richMessageAvailabilityDays]);
+}
+
 - (BOOL)isDateBeforeDate:(NSDate *) secondDate {
-    if (secondDate)
+    if (secondDate) {
         return [self compare:secondDate] != NSOrderedDescending;
+    }
+    
     return NO;
 }
 

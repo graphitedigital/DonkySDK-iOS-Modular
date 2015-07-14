@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@class DNRequest;
+#import "DNRequest.h"
 
 @interface DNRetryObject : NSObject
 

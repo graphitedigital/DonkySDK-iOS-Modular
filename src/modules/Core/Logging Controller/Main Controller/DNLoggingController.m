@@ -125,16 +125,18 @@ static NSString *const DNPascalAlwaysSubmitErrors = @"alwaysSubmitErrors";
     if (lastDate) {
         NSTimeInterval timeSinceLastSubmission = [[NSDate date] timeIntervalSinceDate:lastDate];
         if (timeSinceLastSubmission < [DNAppSettingsController debugLogSubmissionInterval]) {
-            if (failureBlock)
+            if (failureBlock) {
                 failureBlock(nil, [DNErrorController errorWithCode:DNCoreFrequentErrorLogs]);
+            }
             return;
         }
     }
 
     //If this is an auto submit log and always submit errors is false then we bail out early.
     if (!notificationID && ![[DNConfigurationController objectFromConfiguration:DNAlwaysSubmitErrors] boolValue]) {
-        if (failureBlock)
+        if (failureBlock) {
             failureBlock(nil, [DNErrorController errorWithCode:DNCoreAutoLoggingDisabled]);
+        }
         return;
     }
     
@@ -147,14 +149,15 @@ static NSString *const DNPascalAlwaysSubmitErrors = @"alwaysSubmitErrors";
         [debugLogSubmission dnSetObject:logString forKey:DNDataKey];
         [debugLogSubmission dnSetObject:notificationID ? DNLogSubmissionRequestReason : DNLogSubmissionAutomaticReason forKey:DNLogSubmissionReasonKey];
         [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:YES route:kDNNetworkSendDebugLog httpMethod:DNPost parameters:debugLogSubmission success:^(NSURLSessionDataTask *task, id responseData) {
-            DNInfoLog(@"log sent. Deleting logs ...");
+            DNInfoLog(@"Log sent. Deleting logs ...");
             [DNConfigurationController saveConfigurationObject:@([responseData[DNPascalAlwaysSubmitErrors] boolValue]) forKey:DNAlwaysSubmitErrors];
             [DNLoggingController deleteLogs];
             
             //Save time:
             [DNUserDefaultsHelper saveObject:[NSDate date] withKey:DNDebugLogSubmissionTime];
-            if (successBlock)
+            if (successBlock) {
                 successBlock(task, responseData);
+            }
         } failure:failureBlock];
     }
 }

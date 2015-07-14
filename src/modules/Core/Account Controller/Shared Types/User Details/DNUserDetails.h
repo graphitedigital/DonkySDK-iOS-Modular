@@ -93,6 +93,8 @@
  */
 @property(nonatomic, readonly) NSString *lastName;
 
+- (instancetype)init;
+
 /*!
  Initialise method to create and set the properties of a new device user.
  
@@ -110,7 +112,7 @@
  
  @since 2.0.0.0
  */
-- (instancetype)initWithUserID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)emailAddress mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSMutableArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties;
+- (instancetype)initWithUserID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)emailAddress mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties;
 
 
 /*!

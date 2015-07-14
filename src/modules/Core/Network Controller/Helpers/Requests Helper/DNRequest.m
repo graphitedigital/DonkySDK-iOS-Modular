@@ -7,7 +7,6 @@
 //
 
 #import "DNRequest.h"
-#import "DNNetworkController.h"
 #import "DNBlockDefinitions.h"
 
 @interface DNRequest ()

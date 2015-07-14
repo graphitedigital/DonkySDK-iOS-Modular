@@ -7,16 +7,18 @@
 //
 
 #import "DRLogicMainController.h"
-#import "DNModuleDefinition.h"
 #import "DNDonkyCore.h"
 #import "DNConstants.h"
-#import "DCMMainController.h"
 #import "DRLogicHelper.h"
-#import "DNRichMessage.h"
-#import "DNLoggingController.h"
+#import "NSDate+DNDateHelper.h"
+#import "DRLogicMainControllerHelper.h"
+#import "DCAConstants.h"
 
 @interface DRLogicMainController ()
-@property(nonatomic, copy) void (^richMessageHandler)(id);
+@property (nonatomic, strong) DNLocalEventHandler backgroundNotificationsReceived;
+@property(nonatomic, copy) DNSubscriptionBachHandler richMessageHandler;
+@property (nonatomic, strong) NSMutableArray *backgroundNotifications;
+@property (nonatomic, strong) DNLocalEventHandler notificationLoaded;
 @property(nonatomic, strong) DNModuleDefinition *moduleDefinition;
 @property(nonatomic, strong) DNSubscription *subscription;
 @end
@@ -46,71 +48,143 @@
 
     if (self) {
 
+        [self setBackgroundNotifications:[[NSMutableArray alloc] init]];
+
     }
     
     return self;
 }
 
-
 - (void)start {
+
+    [self deleteAllExpiredMessages];
 
     //Get unread chat messages:
     NSArray *unreadChat = [self allUnreadRichMessages];
 
-    [unreadChat enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        DNRichMessage *richMessage = obj;
-        DNLocalEvent *richEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyNotificationRichMessage publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:richMessage];
-        [[DNDonkyCore sharedInstance] publishEvent:richEvent];
-    }];
-
-    self.moduleDefinition = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.0.1"];
-
-    __weak DRLogicMainController *weakSelf = self;
-    self.richMessageHandler = ^(id data) {
-
-        DNRichMessage *richMessage = [DRLogicHelper saveRichMessage:data];
-
-        if (richMessage) {
-            DNLocalEvent *richEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyNotificationRichMessage
-                                                                    publisher:NSStringFromClass([weakSelf class])
-                                                                    timeStamp:[NSDate date]
-                                                                         data:richMessage];
+    //We don't want this to block the thread:
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [unreadChat enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            DNRichMessage *richMessage = obj;
+            DNLocalEvent *richEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyNotificationRichMessage publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:richMessage];
             [[DNDonkyCore sharedInstance] publishEvent:richEvent];
+        }];
+    });
 
-            [DCMMainController markMessageAsReceived:data];
-        }
-        else
-            DNErrorLog(@"Could not create rich message from server notification: %@", data);
-    };
+    self.moduleDefinition = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.1.1"];
 
-    self.subscription = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationRichMessage handler:self.richMessageHandler];
-    [self.subscription setAutoAcknowledge:NO];
+    self.subscription = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationRichMessage batchHandler:self.richMessageHandler];
+
+    if (![[DNDonkyCore sharedInstance] isModuleRegistered:@"DRIMainController" moduleVersion:@"1.0.0.0"]) {
+        [self.subscription setAutoAcknowledge:NO];
+    }
 
     [[DNDonkyCore sharedInstance] subscribeToDonkyNotifications:self.moduleDefinition subscriptions:@[self.subscription]];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventNotificationLoaded handler:self.notificationLoaded];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventBackgroundNotificationReceived handler:self.backgroundNotificationsReceived];
+
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppWillEnterForegroundNotification handler:^(DNLocalEvent *event) {
+        if ([self.backgroundNotifications count]) {
+            //Report influenced open:
+            DNLocalEvent *pushOpenEvent = [[DNLocalEvent alloc] initWithEventType:kDAEventInfluencedAppOpen
+                                                                        publisher:NSStringFromClass([self class])
+                                                                        timeStamp:[NSDate date]
+                                                                             data:self.backgroundNotifications];
+            [[DNDonkyCore sharedInstance] publishEvent:pushOpenEvent];
+        }
+    }];
+
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNEventRegistration handler:^(DNLocalEvent *event) {
+        BOOL wasUpdate = [[event data][@"IsUpdate"] boolValue];
+        if (!wasUpdate) {
+            [self deleteAllMessages:[self allRichMessagesAscending:YES]];
+        }
+    }];
 }
 
 - (void)stop {
     [[DNDonkyCore sharedInstance] unSubscribeToDonkyNotifications:self.moduleDefinition subscriptions:@[self.subscription]];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventNotificationLoaded handler:self.notificationLoaded];
 }
 
-- (NSArray *)allRichMessages {
-    return [DRLogicHelper allRichMessages];
+#pragma mark -
+#pragma mark - Helper Methods
+
+- (NSArray *)allRichMessagesAscending:(BOOL)ascending {
+    return [DRLogicHelper allRichMessagesAscending:ascending];
+}
+
+- (NSArray *)richMessagesWithOffset:(NSUInteger)offset limit:(NSUInteger)limit ascending:(BOOL)ascending {
+    return [DRLogicHelper richMessagesWithOffset:offset limit:limit ascending:ascending];
 }
 
 - (NSArray *)allUnreadRichMessages {
     return [DRLogicHelper allUnreadRichMessages];
 }
 
-- (void)deleteMessage:(NSString *)messageID {
-    [DRLogicHelper deleteRichMessage:messageID];
+- (void)deleteMessage:(DNRichMessage *)richMessage {
+    [DRLogicHelper deleteRichMessage:richMessage];
 }
 
-- (void)markMessageAsRead:(NSString *)messageID {
-    [DCMMainController markMessageAsRead:messageID];
+- (void)deleteAllMessages:(NSArray *)richMessages {
+    [DRLogicHelper deleteAllRichMessages:richMessages];
 }
 
-- (NSArray *)filterRichMessages:(NSString *)filter {
-    return [DRLogicHelper filteredRichMessage:filter tempContext:NO];
+- (void)markMessageAsRead:(DNRichMessage *)message {
+    [DRLogicHelper markMessageAsRead:message];
+}
+
+- (NSArray *)filterRichMessages:(NSString *)filter ascending:(BOOL)ascending {
+    return [DRLogicHelper filteredRichMessage:filter tempContext:NO ascendingOrder:ascending];
+}
+
+- (BOOL)doesRichMessageExistForID:(NSString *)messageID {
+    return [DRLogicHelper richMessageExistsForID:messageID];
+}
+
+- (DNRichMessage *)richMessageWithID:(NSString *)messageID {
+    return [DRLogicHelper richMessageWithID:messageID];
+}
+
+- (BOOL)hasRichMessageExpired:(DNRichMessage *)richMessage {
+    return [[richMessage expiryTimestamp] donkyHasDateExpired] || [[richMessage sentTimestamp] donkyHasMessageExpired];
+}
+
+- (void)richMessageNotificationsReceived:(NSArray *)notifications {
+    [DRLogicMainControllerHelper richMessageNotificationReceived:notifications backgroundNotifications:self.backgroundNotifications];
+    @synchronized (self.backgroundNotifications) {
+        [self.backgroundNotifications removeAllObjects];
+    }
+}
+
+- (void)deleteAllExpiredMessages {
+    [DRLogicHelper deleteAllExpiredMessages];
+}
+
+#pragma mark -
+#pragma mark - Getters:
+
+- (DNSubscriptionBachHandler)richMessageHandler {
+    if (!_richMessageHandler) {
+        __weak DRLogicMainController *weakSelf = self;
+        _richMessageHandler = [DRLogicMainControllerHelper richMessageHandler:weakSelf];
+    }
+    return _richMessageHandler;
+}
+
+- (DNLocalEventHandler)notificationLoaded {
+    if (!_notificationLoaded) {
+        __weak DRLogicMainController *weakSelf = self;
+        _notificationLoaded = [DRLogicMainControllerHelper notificationLoaded:weakSelf];
+    }
+    return _notificationLoaded;
+}
+
+- (DNLocalEventHandler)backgroundNotificationsReceived {
+    if (!_backgroundNotificationsReceived) {
+        _backgroundNotificationsReceived = [DRLogicMainControllerHelper backgroundNotificationsReceived:self.backgroundNotifications];
+    }
+    return _backgroundNotificationsReceived;
 }
 
 @end

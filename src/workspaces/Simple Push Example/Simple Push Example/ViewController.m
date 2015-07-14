@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "DNNetworkController.h"
 
 @interface ViewController ()
 
@@ -22,6 +23,12 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)buttonTapped:(id)sender {
+    NSLog(@"TAPPED");
+    
+    [[DNNetworkController sharedInstance] synchronise];
 }
 
 @end

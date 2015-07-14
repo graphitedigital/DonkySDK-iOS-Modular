@@ -19,7 +19,7 @@
     return [NSEntityDescription entityForName:[self className] inManagedObjectContext:context] ;
 }
 
-+ (NSString *) className
++ (NSString *)className
 {
     return NSStringFromClass([self class]);
 }
@@ -69,5 +69,20 @@
     return results;
 }
 
++ (NSArray *)fetchObjectsWithOffset:(NSUInteger)offset limit:(NSUInteger)limit sortDescriptor:(NSArray *)sortDescriptors withContext:(NSManagedObjectContext *)context {
+
+    NSFetchRequest *request = [self fetchRequestWithContext:context];
+    [request setFetchOffset:offset];
+    [request setFetchLimit:limit];
+    request.sortDescriptors = sortDescriptors;
+
+    NSError *error;
+    NSArray *results = [context executeFetchRequest:request error:&error];
+
+    if (error)
+        DNDebugLog(@"Problem fetching request: %@\nError: %@", request, error);
+
+    return results;
+}
 
 @end

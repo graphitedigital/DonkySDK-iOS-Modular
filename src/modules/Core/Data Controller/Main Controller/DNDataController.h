@@ -9,58 +9,66 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "DNServerNotification.h"
 #import "DNUserDetails.h"
-#import "DNNotification.h"
-#import "DNClientNotification.h"
 #import "DNDeviceUser.h"
-
-@class DNRichMessage;
 
 @interface DNDataController : NSObject
 
+/*!
+ The main context that is used for managing all managed objects in the Donky SDK.
+ 
+ @since 2.0.0.0
+ */
 @property (nonatomic, strong, readonly) NSManagedObjectContext *mainContext;
 
+/*!
+ The temporary context that is used for managing all managed objects in teh Donky SDK.
+ 
+ @since 2.0.0.0
+ */
 @property (nonatomic, strong, readonly) NSManagedObjectContext *temporaryContext;
 
+/*!
+ The persistent store coordinator for the Core Data model used in the Donky SDK.
+ 
+ @since 2.0.0.0
+ */
 @property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+/*!
+ The shared instance that should be used to access all methods and properties of the
+ DNDataController.
+ 
+ @return the shared static instance.
+ 
+ @since 2.0.0.0
+ */
 + (DNDataController *)sharedInstance;
 
+/*!
+ Helper method to save all the pending data transactions in both the main and 
+ temporary context.
+ 
+ @since 2.0.0.0
+ */
 - (void)saveAllData;
 
+#pragma mark -
+#pragma mark - Private... Not for public consumption. Public use is unsupported and may result in undesired SDK behaviour.
+
+/*!
+ PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ */
 - (DNUserDetails *)currentDeviceUser;
 
+/*!
+ PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ */
 - (void)saveUserDetails:(DNUserDetails *)details;
 
+/*!
+ PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ */
 - (DNDeviceUser *)newDevice;
-
-- (NSArray *)clientNotificationsWithTempContext:(BOOL)tempContext;
-
-- (NSArray *)contentNotificationsInTempContext:(BOOL)tempContext;
-
-- (NSMutableArray *)sendContentNotifications:(NSArray *)notifications;
-
-- (void)saveClientNotificationsToStore:(NSArray *)array;
-
-- (void)saveContentNotificationsToStore:(NSArray *)array;
-
-- (void)deleteNotifications:(NSArray *)notifications inTempContext:(BOOL)tempContext;
-
-- (NSMutableDictionary *)networkClientNotifications:(NSMutableArray *)clientNotifications networkContentNotifications:(NSMutableArray *)contentNotifications;
-
-- (void)deleteNotificationForID:(NSString *)serverID withTempContext:(BOOL)temp;
-
-- (DNNotification *)notificationWithID:(NSString *)notificationID withTempContext:(BOOL)temp;
-
-- (NSArray *)unreadRichMessages:(BOOL)unread tempContext:(BOOL)tempContext;
-
-- (NSArray *)allRichMessagesTempContext:(BOOL)tempContext;
-
-- (DNRichMessage *)richMessageForID:(NSString *)messageID tempContext:(BOOL)tempContext;
-
-- (void)deleteRichMessage:(NSString *)messageID tempContext:(BOOL)tempContext;
-
-- (NSArray *)filterRichMessage:(NSString *)filter tempContext:(BOOL)tempContext;
 
 @end

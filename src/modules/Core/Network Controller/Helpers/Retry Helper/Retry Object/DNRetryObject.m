@@ -7,7 +7,6 @@
 //
 
 #import "DNRetryObject.h"
-#import "DNRequest.h"
 
 @interface DNRetryObject ()
 @property(nonatomic, readwrite) DNRequest *request;

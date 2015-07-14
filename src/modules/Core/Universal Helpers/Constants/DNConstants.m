@@ -72,6 +72,18 @@ NSString * const kDNDonkyEventAppOpen = @"DonkyAppOpen";
 //
 NSString * const kDNDonkyEventAppClose = @"DonkyAppClose";
 
+//
+NSString * const kDNDonkyEventAppWillEnterForegroundNotification = @"DonkyAppEnteringForegroundNotification";
+
+//
+NSString * const kDNDonkyEventNotificationLoaded = @"DonkyNotificationLoadedEvent";
+
+//
+NSString * const kDNDonkyEventBackgroundNotificationReceived = @"DonkyNotificationReeivedInBackground";
+
+//
+NSString * const kDNDonkySetBadgeCount = @"DonkySetBadgeCountEevnt";
+
 #pragma mark -
 #pragma mark - Donky Config Items
 
@@ -139,6 +151,8 @@ NSString * const kDonkyErrorDomain = @"com.dynmark.donkyNetworkSDK";
 
 CGFloat  const kDonkyLogFileSizeLimit = 2000.0; //this is in bytes, default is 2k
 
+NSString * const kDNTempDirectory = @"DonkyTempDirectory";
+
 #pragma mark -
 #pragma mark - Donky Notification Keys
 
@@ -155,3 +169,4 @@ NSString * const kDNDonkyNetworkVersion = @"1.0.1.2";
 
 //
 NSString * const kDNDonkyNotificationVersion = @"1.0.0.0";
+

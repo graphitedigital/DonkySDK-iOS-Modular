@@ -35,7 +35,19 @@
  
  @since 2.0.0.0
  */
-+ (BOOL)donkySystemVersionAtLeast:(CGFloat) version;
++ (BOOL)systemVersionAtLeast:(CGFloat) version;
+
+/*!
+ Helper method to determine if the version of iOS currenly being used is the same. NOTE
+ this only checks large version numbers, i.e. 7 OR 8
+ 
+ @param version the version of iOS that should be running i.e. 7 OR 8
+ 
+ @return BOOL indicating if the current iOS version matches the supplied.
+ 
+ @since 2.2.2.7
+ */
++ (BOOL)systemVersionEquals:(CGFloat)version;
 
 /*!
  Helper method to get a new GUID.
@@ -45,5 +57,40 @@
  @since 2.0.0.0
  */
 + (NSString *)generateGUID;
+
+/*!
+ Helper method to determine if the current device is an iPad.
+ 
+ @return BOOL inditicating whether the device is an iPad or not.
+ 
+ @since 2.2.2.7
+ */
++ (BOOL)isDeviceIPad;
+
+/*!
+ Helper method to determine if the current device is an iPhone 6+
+ 
+ NOTE: This mehtod only works on a real device, not a simulator as it relies upon
+ systemInfo.machine.
+ 
+ @return BOOL indicating whether or not the device is an iPhone 6+ or not.
+ 
+ @since 2.2.2.7
+ */
++ (BOOL)isDeviceSixPlus;
+
+/*!
+ Helper method to determine whether the current device is an iPhone 6+
+ AND that it is in landscape orientation.
+ 
+ NOTE: This mehtod only works on a real device, not a simulator as it relies upon
+ systemInfo.machine.
+ 
+ @return BOOL indicating whether the current device is an iPhone 6+ AND
+ it is in landscape orientation.
+ 
+ @since 2.2.2.7
+ */
++ (BOOL)isDeviceSixPlusLandscape;
 
 @end

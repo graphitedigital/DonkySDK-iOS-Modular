@@ -17,9 +17,9 @@
 #import "DNLoggingController.h"
 #import "DNErrorController.h"
 #import "DNContentNotification.h"
-#import "DNRetryHelper.h"
 #import "DNConfigurationController.h"
 #import "DNAccountController.h"
+#import "DNNetworkDataHelper.h"
 
 static NSString *const DNMaxTimeWithoutSynchronise = @"MaxMinutesWithoutNotificationExchange";
 
@@ -44,6 +44,7 @@ static NSString *const DNCustomType = @"customType";
 @property(nonatomic, strong) NSTimer *synchroniseTimer;
 
 @property (nonatomic, strong) NSDate *lastSynchronise;
+
 @end
 
 @implementation DNNetworkController
@@ -55,9 +56,13 @@ static NSString *const DNCustomType = @"customType";
 {
     static DNNetworkController *sharedInstance = nil;
     static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[DNNetworkController alloc] initPrivate];
-    });
+
+    if (!sharedInstance) {
+        dispatch_once(&onceToken, ^{
+            sharedInstance = [[DNNetworkController alloc] initPrivate];
+        });
+    }
+
     return sharedInstance;
 }
 
@@ -78,7 +83,6 @@ static NSString *const DNCustomType = @"customType";
         [self setPendingClientNotifications:[[NSMutableArray alloc] init]];
         [self setPendingContentNotifications:[[NSMutableArray alloc] init]];
 
-        [self setDeviceConnectivity:[[DNDeviceConnectivityController alloc] init]];
         [self setRetryHelper:[[DNRetryHelper alloc] init]];
         [self initialisePendingNotifications];
     }
@@ -87,19 +91,23 @@ static NSString *const DNCustomType = @"customType";
 }
 
 - (void)initialisePendingNotifications {
-    [[self pendingClientNotifications] addObjectsFromArray:[[DNDataController sharedInstance] clientNotificationsWithTempContext:YES]];
-    [[self pendingContentNotifications] addObjectsFromArray:[[DNDataController sharedInstance] contentNotificationsInTempContext:YES]];
+    [DNNetworkDataHelper clearBrokenNotificationsWithTempContext:YES];
+    [[self pendingClientNotifications] addObjectsFromArray:[DNNetworkDataHelper clientNotificationsWithTempContext:YES]];
+    [[self pendingContentNotifications] addObjectsFromArray:[DNNetworkDataHelper contentNotificationsInTempContext:YES]];
 }
 
 - (void)startMinimumTimeForSynchroniseBuffer:(NSTimeInterval)buffer {
-    if ([self synchroniseTimer])
+
+    if ([self synchroniseTimer]) {
         [[self synchroniseTimer] invalidate], [self setSynchroniseTimer:nil];
+    }
 
     NSInteger maxTime = [[DNConfigurationController objectFromConfiguration:DNMaxTimeWithoutSynchronise] integerValue];
     if (maxTime > 0) {
         NSTimeInterval interval = (maxTime * 60) - buffer; //Convert to minutes
-        if (interval < 0)
+        if (interval < 0) {
             interval = 0; //Guard against 0 value
+        }
         [self setSynchroniseTimer:[NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(syncFromTimer) userInfo:nil repeats:NO]];
         [[NSRunLoop mainRunLoop] addTimer:[self synchroniseTimer] forMode:NSDefaultRunLoopMode];
     }
@@ -110,6 +118,9 @@ static NSString *const DNCustomType = @"customType";
 
 - (void)performSecureDonkyNetworkCall:(BOOL)secure route:(NSString *)route httpMethod:(DonkyNetworkRoute)httpMethod parameters:(id)parameters success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
 
+    if (!self.deviceConnectivity) {
+        [self setDeviceConnectivity:[[DNDeviceConnectivityController alloc] init]];
+    }
 
     DNRequest *request = [[DNRequest alloc] initWithSecure:secure route:route httpMethod:httpMethod parameters:parameters success:successBlock failure:failureBlock];
 
@@ -124,17 +135,26 @@ static NSString *const DNCustomType = @"customType";
 
         //If we are suspended we simply bail out:
         if (secure && [DNDonkyNetworkDetails isSuspended]) {
-            if (failureBlock)
+            if (failureBlock) {
                 failureBlock(nil, [DNErrorController errorCode:DNCoreSDKSuspendedUser userInfo:@{@"Reason" : @"User is suspended"}]);
+            }
             return;
         }
 
-        DNInfoLog(@"Starting network call: %@", route);
+        if (![DNNetworkHelper isCallNecessary:request]) {
+            DNInfoLog(@"No need to perform: %@", [request route]);
+            if (successBlock) {
+                successBlock(nil, nil);
+            }
 
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        }
+        
         //Ensure there aren't any registration calls happening:
-        if (![DNNetworkHelper mandatoryTasksInProgress:self.exchangeRequests]) {
-            if (!self.networkSessionManager || [self.networkSessionManager isUsingSecure] != secure)
+        else if (![DNNetworkHelper isPerformingBlockingTask:self.exchangeRequests]) {
+            if (!self.networkSessionManager || [self.networkSessionManager isUsingSecure] != secure) {
                 self.networkSessionManager = [[DNSessionManager alloc] initWithSecureURl:secure];
+            }
 
             //We remove all non active tasks from the queue:
             [self removeAllCompletedTasksFromQueue];
@@ -158,31 +178,44 @@ static NSString *const DNCustomType = @"customType";
             }
         }
         else {
-            DNInfoLog(@"SDK is in the process of performing a mandatory task... Your request will be performed immediately once these have finished...");
-            [[self queuedCalls] addObject:request];
+            DNInfoLog(@"Donky is performing protected calls, your request will be performed immediately once these have finished...");
+            //Do we have a duplicate task?
+            @synchronized ([self queuedCalls]) {
+                if (![DNNetworkHelper isRequest:request duplicated:self.queuedCalls]) {
+                    [[self queuedCalls] addObject:request];
+                }
+            }
         }
     }
     else {
         [[self deviceConnectivity] addFailedRequestToQueue:request];
-        [DNNetworkHelper showNoConnectionAlert];
     }
 }
 
 - (void)handleSuccess:(id)responseData forTask:(NSURLSessionDataTask *)task request:(DNRequest *)request {
-    if ([DNNetworkHelper mandatoryTasksInProgress:[@[task] mutableCopy]])
-        DNSensitiveLog(@"Request %@ successful, response data = %@", [task taskDescription], responseData ? : @"");
-    else
-       DNInfoLog(@"Request %@ successful, response data = %@", [task taskDescription], responseData ? : @"");
+    if ([DNNetworkHelper isPerformingBlockingTask:[@[task] mutableCopy]]) {
+        DNSensitiveLog(@"Request %@ successful, response data = %@", [task taskDescription], responseData ?: @"");
+    }
+    else {
+        DNInfoLog(@"Request %@ successful, response data = %@", [task taskDescription], responseData ?: @"");
+    }
 
-    if ([request successBlock])
+    if ([request successBlock]) {
         [request successBlock](task, responseData);
+    }
+    else {
+        DNErrorLog(@"No Completion block: %@", [request route]);
+    }
 
     [self removeTask:task];
     [self performNextTask];
 }
 
 - (void)performNextTask {
-    DNRequest *nextRequest = [[self queuedCalls] firstObject];
+    DNRequest *nextRequest = nil;
+    @synchronized ([self queuedCalls]) {
+         nextRequest = [[self queuedCalls] firstObject];
+    }
     if (nextRequest) {
         [self performSecureDonkyNetworkCall:[nextRequest isSecure]
                                       route:[nextRequest route]
@@ -190,7 +223,9 @@ static NSString *const DNCustomType = @"customType";
                                  parameters:[nextRequest parameters]
                                     success:[nextRequest successBlock]
                                     failure:[nextRequest failureBlock]];
-        [[self queuedCalls] removeObject:nextRequest];
+        @synchronized ([self queuedCalls]) {
+            [[self queuedCalls] removeObject:nextRequest];
+        }
     }
     else {
         DNInfoLog(@"No more requests in the queue...");
@@ -198,6 +233,7 @@ static NSString *const DNCustomType = @"customType";
 }
 
 - (void)handleError:(NSError *)error task:(NSURLSessionDataTask *)task request:(DNRequest *)request {
+    DNErrorLog(@"Network reponse error: %@", [error localizedDescription]);
     [self removeTask:task];
     if (![DNErrorController serviceReturned:400 error:error] && ![DNErrorController serviceReturned:401 error:error] && ![DNErrorController serviceReturned:403 error:error] && ![DNErrorController serviceReturned:404 error:error])
         [[self retryHelper] retryRequest:request task:task];
@@ -208,43 +244,52 @@ static NSString *const DNCustomType = @"customType";
                 [[self retryHelper] retryRequest:request task:task];
         } failure:nil];
     }
-    else
+    else {
         [DNNetworkHelper handleError:error task:task request:request];
+    }
 }
 
 - (void)serverNotificationForId:(NSString *)notificationID success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
     NSString *getNotificationRoute = [NSString stringWithFormat:@"%@%@", kDNNetworkGetNotification, notificationID];
     [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:YES route:getNotificationRoute httpMethod:DNGet parameters:nil success:^(NSURLSessionDataTask *task, id responseData) {
         DNServerNotification *serverNotification = [[DNServerNotification alloc] initWithNotification:responseData];
-        [[DNDonkyCore sharedInstance] notificationReceived:serverNotification];
-        if (successBlock)
+        NSMutableDictionary *notifications = [[NSMutableDictionary alloc] init];
+        notifications[[serverNotification notificationType]] = @[serverNotification];
+        [[DNDonkyCore sharedInstance] notificationsReceived:notifications];
+        if (successBlock) {
             successBlock(task, serverNotification);
+        }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         DNErrorLog(@"%@", [error localizedDescription]);
-        if (failureBlock)
+        if (failureBlock) {
             failureBlock(task, error);
+        }
     }];
 }
 
 - (void)allServerNotificationsSuccess:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
     [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:YES route:kDNNetworkGetNotification httpMethod:DNGet parameters:nil success:^(NSURLSessionDataTask *task, id responseData) {
         [self processNotificationResponse:@{@"serverNotifications" : responseData} task:task success:nil failure:nil];
-        if (successBlock)
+        if (successBlock) {
             successBlock(task, responseData);
+        }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         DNErrorLog(@"%@", [error localizedDescription]);
-        if (failureBlock)
+        if (failureBlock) {
             failureBlock(task, error);
+        }
     }];
 }
 
 - (void)syncFromTimer {
     //Check last sync:
     NSTimeInterval timeSinceSync = [[NSDate date] timeIntervalSinceDate:[self lastSynchronise]];
-    if (timeSinceSync >= (60 * [[DNConfigurationController objectFromConfiguration:DNMaxTimeWithoutSynchronise] integerValue]))
+    if (timeSinceSync >= (60 * [[DNConfigurationController objectFromConfiguration:DNMaxTimeWithoutSynchronise] integerValue])) {
         [self synchronise];
-    else
+    }
+    else {
         [self startMinimumTimeForSynchroniseBuffer:timeSinceSync];
+    }
 }
 
 - (void)synchronise {
@@ -261,7 +306,7 @@ static NSString *const DNCustomType = @"customType";
     
     //Remove completed tasks:
     [self removeAllCompletedTasksFromQueue];
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         //Get queue:
         __block BOOL isRunning = NO;
@@ -278,8 +323,9 @@ static NSString *const DNCustomType = @"customType";
         if (isRunning) {
             DNInfoLog(@"Synchronise is already running, cancelling new request: %d", isRunning);
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (failureBlock)
+                if (failureBlock) {
                     failureBlock(nil, [DNErrorController errorWithCode:DNCoreSDKErrorDuplicateSynchronise]);
+                }
             });
             return;
         }
@@ -306,7 +352,7 @@ static NSString *const DNCustomType = @"customType";
             }
         }];
 
-        NSMutableDictionary *params = [[DNDataController sharedInstance] networkClientNotifications:[self pendingClientNotifications]
+        NSMutableDictionary *params = [DNNetworkDataHelper networkClientNotifications:[self pendingClientNotifications]
                                                                         networkContentNotifications:[self pendingContentNotifications]];
         NSArray *sentClientNotifications = [NSArray arrayWithArray:[self pendingClientNotifications]];
         NSArray *sentContentNotifications = [NSArray arrayWithArray:[self pendingContentNotifications]];
@@ -315,14 +361,20 @@ static NSString *const DNCustomType = @"customType";
         [self performSecureDonkyNetworkCall:YES route:kDNNetworkNotificationSynchronise httpMethod:DNPost parameters:params success:^(NSURLSessionDataTask *task, id responseData) {
 
             @try {
-                [[self pendingClientNotifications] removeObjectsInArray:sentClientNotifications];
-                [[self pendingContentNotifications] removeObjectsInArray:sentContentNotifications];
+                @synchronized ([self pendingClientNotifications]) {
+                    [[self pendingClientNotifications] removeObjectsInArray:sentClientNotifications];
+                }
+                @synchronized ([self pendingContentNotifications]) {
+                    [[self pendingContentNotifications] removeObjectsInArray:sentContentNotifications];
+                }
 
                 //We need to clear out these types:
-                if ([sentClientNotifications count])
-                    [[DNDataController sharedInstance] deleteNotifications:sentClientNotifications inTempContext:YES];
-                if ([sentContentNotifications count])
-                    [[DNDataController sharedInstance] deleteNotifications:sentContentNotifications inTempContext:YES];
+                if ([sentClientNotifications count]) {
+                    [DNNetworkDataHelper deleteNotifications:sentClientNotifications inTempContext:YES];
+                }
+                if ([sentContentNotifications count]) {
+                    [DNNetworkDataHelper deleteNotifications:sentContentNotifications inTempContext:YES];
+                }
 
                 [self processNotificationResponse:responseData task:nil success:successBlock failure:failureBlock];
             }
@@ -330,17 +382,20 @@ static NSString *const DNCustomType = @"customType";
                 DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
                 [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    if (failureBlock)
+                    if (failureBlock) {
                         failureBlock(nil, nil);
+                    }
                 });
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             //Save data:
-            [[DNDataController sharedInstance] saveClientNotificationsToStore:sentClientNotifications];
-            [[DNDataController sharedInstance] saveClientNotificationsToStore:sentContentNotifications];
+            [DNNetworkDataHelper saveClientNotificationsToStore:sentClientNotifications];
+            [DNNetworkDataHelper saveClientNotificationsToStore:sentContentNotifications];
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (failureBlock)
+                [[DNDataController sharedInstance] saveAllData];
+                if (failureBlock) {
                     failureBlock(task, error);
+                }
             });
         }];
     });
@@ -380,7 +435,9 @@ static NSString *const DNCustomType = @"customType";
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     if ([task state] == NSURLSessionTaskStateCompleted) {
         DNInfoLog(@"Clearing completed task: %@", [task taskDescription]);
-        [[self exchangeRequests] removeObject:task];
+        @synchronized (self.exchangeRequests) {
+            [[self exchangeRequests] removeObject:task];
+        }
     }
 }
 
@@ -389,13 +446,16 @@ static NSString *const DNCustomType = @"customType";
     //Clear completed tasks:
     [[self exchangeRequests] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSURLSessionDataTask *task = obj;
-        if ([task state] != NSURLSessionTaskStateRunning)
+        if ([task state] != NSURLSessionTaskStateRunning) {
             [tasksToClear addObject:task];
+        }
     }];
 
     if ([tasksToClear count]) {
         DNInfoLog(@"Removing all non running tasks: %@", tasksToClear);
-        [self.exchangeRequests removeObjectsInArray:tasksToClear];
+        @synchronized (self.exchangeRequests) {
+            [self.exchangeRequests removeObjectsInArray:tasksToClear];
+        }
     }
 }
 

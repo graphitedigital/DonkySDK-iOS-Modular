@@ -7,10 +7,11 @@
 //
 
 #include <sys/sysctl.h>
-#import <MacTypes.h>
+#import <sys/utsname.h>
 #import "DNErrorController.h"
 #import "DNSystemHelpers.h"
 #import "DNLoggingController.h"
+
 
 @implementation DNSystemHelpers
 
@@ -40,8 +41,12 @@
     return debuggerIsAttached;
 }
 
-+ (BOOL)donkySystemVersionAtLeast:(CGFloat)version {
++ (BOOL)systemVersionAtLeast:(CGFloat)version {
     return [[[UIDevice currentDevice] systemVersion] floatValue] >= version;
+}
+
++ (BOOL)systemVersionEquals:(CGFloat)version {
+    return [[[UIDevice currentDevice] systemVersion] floatValue] >= version && [[[UIDevice currentDevice] systemVersion] floatValue] < (version + 1);
 }
 
 + (NSString *)generateGUID {
@@ -53,5 +58,24 @@
     return guid;
 }
 
++ (BOOL)isDeviceIPad {
+    return [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
+}
+
++ (BOOL)isDeviceSixPlus {
+
+    NSString *platform;
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    platform = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+
+    return ([platform isEqualToString:@"iPhone7,1"]);
+}
+
++ (BOOL)isDeviceSixPlusLandscape {
+
+    return [DNSystemHelpers isDeviceSixPlus] && UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]);
+
+}
 
 @end

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DNServerNotification.h"
+#import "DNMessage.h"
 
 @interface DCMMainController : NSObject
 
@@ -27,6 +28,16 @@
  
  @since 2.0.0.0
  */
-+ (void)markMessageAsRead:(NSString *)messageID;
++ (void)markMessageAsRead:(DNMessage *)message;
+
+/*!
+ Helper method to report the fact that a rich message has been shared via the share sheet.
+ 
+ @param message     the message that was shared.
+ @param sharedUsing the name of the service used to share the message i.e. twitter
+ 
+ @since 2.2.2.7
+ */
++ (void)reportSharingOfRichMessage:(DNMessage *)message sharedUsing:(NSString *)sharedUsing;
 
 @end

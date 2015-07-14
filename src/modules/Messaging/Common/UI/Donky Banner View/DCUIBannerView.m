@@ -20,11 +20,13 @@
 @property(nonatomic, strong) UILabel *nowLabel;
 @property(nonatomic, readwrite) UIImageView *avatarImageView;
 @property(nonatomic, readwrite) UILabel *messageLabel;
+@property(nonatomic, copy) NSString *notificationType;
+@property(nonatomic, copy) NSString *messageID;
 @end
 
 @implementation DCUIBannerView
 
-- (instancetype)initWithSenderDisplayName:(NSString *)displayName body:(NSString *)body messageSentTime:(NSDate *)sentTime avatarAssetID:(NSString *)assetId {
+- (instancetype)initWithSenderDisplayName:(NSString *)displayName body:(NSString *)body messageSentTime:(NSDate *)sentTime avatarAssetID:(NSString *)assetId notificationType:(NSString *)type messageID:(NSString *)messageID {
 
     self = [super initWithFrame:CGRectZero];
 
@@ -38,11 +40,14 @@
         [self.backgroundView pinToSuperviewEdges:JRTViewPinAllEdges inset:0.0];
 
         [self configureBasicView:displayName notificationBody:body messageSent:sentTime avatartAssetID:assetId];
+        
+        self.notificationType = type;
+        
+        self.messageID = messageID;
     }
 
     return self;
 }
-
 
 - (void)configureGestures {
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
@@ -51,14 +56,16 @@
 }
 
 - (void)singleTap:(UITapGestureRecognizer *)singleTap {
-    DNLocalEvent *buttonTappedEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventSimplePushTapped publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:self];
+    DNLocalEvent *buttonTappedEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventNotificationTapped
+                                                                    publisher:NSStringFromClass([self class])
+                                                                    timeStamp:[NSDate date] data:@{@"bannerView" : self, @"type" :  self.notificationType, @"messageID" : self.messageID}];
     [[DNDonkyCore sharedInstance] publishEvent:buttonTappedEvent];
 }
 
 - (void)configureBasicView:(NSString *)senderDisplayName notificationBody:(NSString *)body messageSent:(NSDate *)messageSent avatartAssetID:(NSString *)avatarID {
     
     self.avatarImageView = [UIImageView autoLayoutView];
-    [self.avatarImageView setImage:[UIImage imageNamed:@"avatar_default.png"]];
+    [self.avatarImageView setImage:[UIImage imageNamed:@"common_messaging_default_avatar.png"]];
     self.avatarImageView.layer.borderWidth = 1.0f;
     self.avatarImageView.layer.borderColor = [[UIColor colorWithRed:149.0f/255.0f green:151.0f/255.0f blue:153.0f/255.0f alpha:1.0f] CGColor];
 
@@ -88,13 +95,14 @@
     //Detail Label:
     self.messageLabel = [UILabel autoLayoutView];
     [self.messageLabel setText:body];
-    [self.messageLabel setNumberOfLines:2];
-    [self.messageLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+    [self.messageLabel setNumberOfLines:4];
+    [self.messageLabel setLineBreakMode:NSLineBreakByWordWrapping];
     self.messageLabel.textColor = [UIColor whiteColor];
     self.messageLabel.font = [UIFont systemFontOfSize:12.0f];
     [self.backgroundView addSubview:self.messageLabel];
 
     [self.messageLabel pinToSuperviewEdges:JRTViewPinLeftEdge inset:66];
+    [self.messageLabel pinToSuperviewEdges:JRTViewPinRightEdge inset:10];
     [self.messageLabel pinAttribute:NSLayoutAttributeTop toAttribute:NSLayoutAttributeBottom ofItem:self.displayNameLabel];
 
     self.nowLabel = [UILabel autoLayoutView];
@@ -113,8 +121,10 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             UIImage *avatar = [DNAssetController avatarAssetForID:avatarID];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[self avatarImageView] setImage:avatar];
-                [[self avatarImageView] setNeedsDisplay];
+                if (avatar) {
+                    [[self avatarImageView] setImage:avatar];
+                    [[self avatarImageView] setNeedsDisplay];
+                }
                 [self.activityView stopAnimating];
             });
         });

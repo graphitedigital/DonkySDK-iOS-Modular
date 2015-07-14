@@ -7,29 +7,13 @@
 //
 
 #import "DNDataController.h"
-#import "NSManagedObjectContext+DNDelete.h"
 #import "NSManagedObjectContext+DNHelpers.h"
 #import "DNLoggingController.h"
-#import "NSMutableDictionary+DNDictionary.h"
 #import "NSManagedObject+DNHelper.h"
-#import "DNContentNotification.h"
-#import "DNSystemHelpers.h"
-#import "DNRichMessage.h"
-
-static const int DNMaximumSendTries = 10;
-
-static NSString *const DNType = @"type";
-static NSString *const DNCustomNotificationType = @"Custom";
-static NSString *const DNDefinition = @"definition";
-static NSString *const DNContent = @"content";
-static NSString *const DNFilters = @"filters";
-static NSString *const DNAudience = @"audience";
-static NSString *const DNSendContent = @"SendContent";
-static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
+#import "DNNetworkDataHelper.h"
+#import "DNAccountController.h"
 
 @interface DNDataController ()
-
-@property (nonatomic, strong, readwrite) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *mainContext;
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *temporaryContext;
 @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator *persistentStoreCoordinator;
@@ -44,9 +28,11 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 {
     static dispatch_once_t onceToken;
     static DNDataController *sharedInstance = nil;
+
     dispatch_once(&onceToken, ^{
         sharedInstance = [[DNDataController alloc] initPrivate];
     });
+
     return sharedInstance;
 }
 
@@ -63,11 +49,6 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
         [notificationCenter addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
-
-        [self mainContext];
-        [self temporaryContext];
-
-        [self clearBrokenNotificationsWithTempContext:YES];
     }
     return self;
 }
@@ -120,7 +101,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
     _temporaryContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     _temporaryContext.undoManager = nil;
-    _temporaryContext.parentContext = _mainContext;
+    _temporaryContext.parentContext = self.mainContext;
 
     return _temporaryContext;
 }
@@ -165,10 +146,10 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
 -(void)saveMainContext
 {
-    DNInfoLog(@"Saving Main Context changes?: %d", [_mainContext hasChanges]);
-
     NSError *error = nil;
-    [_mainContext saveIfHasChanges:&error];
+    @synchronized (self.mainContext) {
+        [self.mainContext saveIfHasChanges:&error];
+    }
 
     if (error)
         DNErrorLog(@"Saving context: %@", [error localizedDescription]);
@@ -176,10 +157,10 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
 -(void)saveTemporaryContext
 {
-    DNInfoLog(@"Saving Temp Context changes?: %d", [_temporaryContext hasChanges]);
-
     NSError *error = nil;
-    [_temporaryContext saveIfHasChanges:&error];
+    @synchronized (self.temporaryContext) {
+        [self.temporaryContext saveIfHasChanges:&error];
+    }
 
     if (error)
         DNErrorLog(@"Saving context: %@", [error localizedDescription]);
@@ -190,7 +171,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
 - (DNUserDetails *)currentDeviceUser {
 
-    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"] withContext:_mainContext] ? : [self newDevice];
+    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"] withContext:self.mainContext] ? : [self newDevice];
 
     DNUserDetails *dnUserDetails = [[DNUserDetails alloc] initWithDeviceUser:deviceUser];
 
@@ -198,7 +179,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 }
 
 - (void)saveUserDetails:(DNUserDetails *)details {
-    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"] withContext:_mainContext] ? : [self newDevice];
+    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"] withContext:self.mainContext] ? : [self newDevice];
     [deviceUser setIsAnonymous:@([details isAnonymous])];
     [deviceUser setDisplayName:[details displayName]];
     [deviceUser setMobileNumber:[details mobileNumber]];
@@ -212,328 +193,11 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 }
 
 - (DNDeviceUser *)newDevice {
-    DNDeviceUser *device = [DNDeviceUser insertNewInstanceWithContext:_mainContext];
+    DNDeviceUser *device = [DNDeviceUser insertNewInstanceWithContext:self.mainContext];
     [device setIsDeviceUser:@(YES)];
     [device setIsAnonymous:@(YES)];
     return device;
 }
 
-- (DNNotification *)clientNotifications:(DNClientNotification *)notification inTempContext:(BOOL)tempContext {
-
-    //Check if we already have a client notification for this id:
-    DNNotification *clientNotification = [DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@", [notification notificationID]]
-                                                                            withContext:tempContext ? _temporaryContext : _mainContext];
-
-    if (!clientNotification) {
-        clientNotification = [DNNotification insertNewInstanceWithContext:tempContext ? _temporaryContext : _mainContext];
-        [clientNotification setServerNotificationID:[notification notificationID] ? : [DNSystemHelpers generateGUID]];
-        [clientNotification setType:[notification notificationType]];
-        [clientNotification setAcknowledgementDetails:[notification acknowledgementDetails]];
-        [clientNotification setData:[notification data]];
-    }
-
-    [clientNotification setSendTries:[notification sendTries]];
-
-    return clientNotification;
-}
-
-- (NSArray *)clientNotificationsWithTempContext:(BOOL)tempContext {
-    NSArray *allNotifications = [DNNotification fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"type != %@", DNCustomNotificationType]
-                                           sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:DNType ascending:YES]]
-                                               withContext:tempContext ? _temporaryContext : _mainContext];
-    return [self mappedClientNotifications:allNotifications];
-}
-
-- (NSArray *)mappedClientNotifications:(NSArray *)allNotifications {
-    NSMutableArray *formattedArray = [[NSMutableArray alloc] init];
-
-    [allNotifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        DNNotification *storeNotification = obj;
-        DNClientNotification *notification = [[DNClientNotification alloc] initWithNotification:storeNotification];
-        [formattedArray addObject:notification];
-    }];
-
-    return formattedArray;
-}
-
-- (DNNotification *)contentNotifications:(DNContentNotification *)notification inTempContext:(BOOL)tempContext {
-
-    //Check if we already have a client notification for this id:
-    DNNotification *contentNotification = [DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@", [notification notificationID]]
-                                                                            withContext:tempContext ? _temporaryContext : _mainContext];
-
-    if (!contentNotification) {
-        contentNotification = [DNNotification insertNewInstanceWithContext:tempContext ? _temporaryContext : _mainContext];
-        [contentNotification setServerNotificationID:[notification notificationID] ?: [DNSystemHelpers generateGUID]];
-        [contentNotification setType:DNCustomNotificationType];
-        [contentNotification setData:(id) [notification acknowledgementDetails]];
-        [contentNotification setAudience:[notification audience]];
-        [contentNotification setContent:[notification content]];
-        [contentNotification setFilters:[notification filters]];
-        [contentNotification setNativePush:[notification nativePush]];
-    }
-
-    [contentNotification setSendTries:[notification sendTries]];
-
-    return contentNotification;
-}
-
-- (NSArray *)contentNotificationsInTempContext:(BOOL)tempContext {
-    NSArray *allNotifications = [DNNotification fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"type == %@", DNCustomNotificationType]
-                                           sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:DNType ascending:YES]]
-                                               withContext:tempContext ? _temporaryContext : _mainContext];
-    return [self mappedContentNotification:allNotifications];
-}
-
-- (NSArray *)mappedContentNotification:(NSArray *)allNotifications {
-    NSMutableArray *formattedArray = [[NSMutableArray alloc] init];
-
-    [allNotifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        DNNotification *storeNotification = obj;
-        DNContentNotification *notification = [[DNContentNotification alloc] initWithAudience:[storeNotification audience]
-                                                                                      filters:[storeNotification filters]
-                                                                                      content:[storeNotification content]
-                                                                                   nativePush:[storeNotification nativePush]];
-        [formattedArray addObject:notification];
-    }];
-
-    return formattedArray;
-}
-
-- (NSMutableDictionary *)networkClientNotifications:(NSMutableArray *)clientNotifications networkContentNotifications:(NSMutableArray *)contentNotifications {
-
-    DNInfoLog(@"Preparing Notifications for network");
-    __block NSMutableArray *allNotifications = [[NSMutableArray alloc] init];
-    __block NSMutableArray *brokenNotifications = [[NSMutableArray alloc] init];
-
-    [clientNotifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (![obj isKindOfClass:[DNClientNotification class]]) {
-            DNErrorLog(@"WHoops, something has gone wrong with this client notification. Expected class DNClientNotification, got: %@", NSStringFromClass([obj class]));
-        }
-        else {
-            DNClientNotification *originalNotification = obj;
-
-            NSInteger sendTries = [[originalNotification sendTries] integerValue];
-            sendTries ++;
-            [originalNotification setSendTries:@(sendTries)];
-
-            NSMutableDictionary *formattedNotification = [[NSMutableDictionary alloc] init];
-            [formattedNotification dnSetObject:[originalNotification notificationType] forKey:DNType];
-
-            if ([originalNotification acknowledgementDetails])
-                [formattedNotification dnSetObject:[originalNotification acknowledgementDetails] forKey:DNAcknowledgementDetails];
-
-            [[originalNotification data] enumerateKeysAndObjectsUsingBlock:^(id key, id obj2, BOOL *stop2) {
-                [formattedNotification dnSetObject:obj2 forKey:key];
-            }];
-
-            if (![self checkForBrokenNotification:formattedNotification])
-                [allNotifications addObject:formattedNotification];
-            else
-                [brokenNotifications addObject:originalNotification];
-        }
-    }];
-
-    [contentNotifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (![obj isKindOfClass:[DNContentNotification class]]) {
-            DNErrorLog(@"WHoops, something has gone wrong with this client notification. Expected class DNContentNotification, got: %@", NSStringFromClass([obj class]));
-        }
-        else {
-            DNContentNotification *originalNotification = obj;
-            NSInteger sendTries = [[originalNotification sendTries] integerValue];
-            sendTries ++;
-            [originalNotification setSendTries:@(sendTries)];
-            NSMutableDictionary *formattedNotification = [[NSMutableDictionary alloc] init];
-            [formattedNotification dnSetObject:DNSendContent forKey:DNType];
-            NSMutableDictionary *definition = [[NSMutableDictionary alloc] init];
-            [definition dnSetObject:[originalNotification audience] forKey:DNAudience];
-            [definition dnSetObject:[originalNotification filters] forKey:DNFilters];
-            [definition dnSetObject:[originalNotification content] forKey:DNContent];
-            [formattedNotification dnSetObject:definition forKey:DNDefinition];
-
-            if (![self checkForBrokenNotification:formattedNotification])
-                [allNotifications addObject:formattedNotification];
-            else
-                [brokenNotifications addObject:originalNotification];
-        }
-    }];
-
-    [self deleteNotifications:brokenNotifications inTempContext:YES];
-
-    //We save the send tries increment:
-    [self saveAllData];
-
-    //Prepare return:
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-    [params dnSetObject:allNotifications forKey:@"clientNotifications"];
-    [params dnSetObject:[[UIApplication sharedApplication] applicationState] != UIApplicationStateActive ? @"false" : @"true" forKey:@"isBackground"];
-    return params;
-}
-
-- (BOOL)checkForBrokenNotification:(NSMutableDictionary *)dictionary {
-    //Do we have a type:
-    NSString *type = dictionary[DNType];
-    return !type;
-}
-
-- (void)saveClientNotificationsToStore:(NSArray *)array {
-    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (![obj isKindOfClass:[DNClientNotification class]]) {
-            DNErrorLog(@"WHoops, something has gone wrong with this client notification. Expected class DNClientNotification, got: %@", NSStringFromClass([obj class]));
-        }
-        else {
-            DNClientNotification *clientNotification = obj;
-            [self clientNotifications:clientNotification inTempContext:YES];
-        }
-    }];
-
-    if ([array count])
-        [self saveAllData];
-}
-
-- (NSMutableArray *)sendContentNotifications:(NSArray *)notifications {
-
-    __block NSMutableArray *allNotifications = [[NSMutableArray alloc] init];
-    __block NSMutableArray *brokenNotifications = [[NSMutableArray alloc] init];
-
-    [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (![obj isKindOfClass:[DNContentNotification class]]) {
-            DNErrorLog(@"WHoops, something has gone wrong with this client notification. Expected class DNContentNotification, got: %@", NSStringFromClass([obj class]));
-        }
-        else {
-            DNContentNotification *originalNotification = obj;
-            NSInteger sendTries = [[originalNotification sendTries] integerValue];
-            sendTries++;
-            [originalNotification setSendTries:@(sendTries)];
-            NSMutableDictionary *formattedNotification = [[NSMutableDictionary alloc] init];
-            [formattedNotification dnSetObject:[originalNotification audience] forKey:DNAudience];
-            [formattedNotification dnSetObject:[originalNotification filters] forKey:DNFilters];
-            [formattedNotification dnSetObject:[originalNotification content] forKey:DNContent];
-            [allNotifications addObject:formattedNotification];
-        }
-    }];
-
-    [self deleteNotifications:brokenNotifications inTempContext:YES];
-
-    return allNotifications;
-}
-
-- (void)saveContentNotificationsToStore:(NSArray *)array {
-    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (![obj isKindOfClass:[DNContentNotification class]]) {
-            DNErrorLog(@"WHoops, something has gone wrong with this client notification. Expected class DNContentNotification, got: %@", NSStringFromClass([obj class]));
-        }
-        else {
-            DNContentNotification *contentNotification = obj;
-            [self contentNotifications:contentNotification inTempContext:YES];
-        }
-    }];
-
-    [self saveAllData];
-}
-
-
-- (void)deleteNotifications:(NSArray *)notifications inTempContext:(BOOL)tempContext {
-
-    __block NSMutableArray *storeObjects = [[NSMutableArray alloc] init];
-
-    [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[DNClientNotification class]])
-            [storeObjects addObject:[self clientNotifications:obj inTempContext:YES]];
-        else
-            [storeObjects addObject:[self contentNotifications:obj inTempContext:YES]];
-    }];
-
-    if (![storeObjects count])
-        return;
-
-    if (tempContext)
-        [_temporaryContext deleteAllObjectsInArray:storeObjects];
-    else
-        [_mainContext deleteAllObjectsInArray:storeObjects];
-
-    [self saveAllData];
-}
-
-- (void)clearBrokenNotificationsWithTempContext:(BOOL)tempContext {
-    //Get all broken types i.e. send tries > 10 && with no valid type:
-    NSArray *brokenDonkyNotifications = [DNNotification fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"sendTries >= %d", DNMaximumSendTries]
-                                                                  sortDescriptors:nil
-                                                                      withContext:tempContext ? _temporaryContext : _mainContext];
-
-    if (![brokenDonkyNotifications count])
-        return;
-
-    if (tempContext)
-        [_temporaryContext deleteAllObjectsInArray:brokenDonkyNotifications];
-    else
-        [_mainContext deleteAllObjectsInArray:brokenDonkyNotifications];
-
-    [self saveAllData];
-}
-
-- (void)deleteNotificationForID:(NSString *)serverID withTempContext:(BOOL)temp {
-    DNNotification *clientNotification = [DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@", serverID]
-                                                                            withContext:temp ? _temporaryContext : _mainContext];
-
-    if (clientNotification) {
-        if (temp)
-            [_temporaryContext deleteObject:clientNotification];
-        else
-            [_mainContext deleteObject:clientNotification];
-    }
-}
-
-- (DNNotification *)notificationWithID:(NSString *) notificationID withTempContext:(BOOL)temp {
-
-    DNNotification *clientNotification = [DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@", notificationID]
-                                                                            withContext:temp ? _temporaryContext : _mainContext];
-
-    return clientNotification;
-}
-
-
-#pragma mark -
-#pragma mark - Messaging:
-
-- (NSArray *)unreadRichMessages:(BOOL)unread tempContext:(BOOL)tempContext {
-    return [DNRichMessage fetchObjectsWithPredicate:unread ? [NSPredicate predicateWithFormat:@"read == NO"] : nil
-                                    sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:YES]]
-                                        withContext:tempContext ? _temporaryContext : _mainContext];
-}
-
-- (NSArray *)allRichMessagesTempContext:(BOOL)tempContext {
-    return [DNRichMessage fetchObjectsWithPredicate:nil
-                                    sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"messageID" ascending:YES]]
-                                        withContext:tempContext ? _temporaryContext : _mainContext];
-}
-
-- (DNRichMessage *)richMessageForID:(NSString *)messageID tempContext:(BOOL)tempContext {
-    DNRichMessage *message = [DNRichMessage fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"messageID == %@", messageID]
-                                                               withContext:tempContext ? _temporaryContext : _mainContext];
-    if (!message) {
-        message = [DNRichMessage insertNewInstanceWithContext:tempContext ? _temporaryContext : _mainContext];
-        [message setMessageID:messageID];
-        [message setRead:@(NO)];
-    }
-
-    return message;
-}
-
-- (void)deleteRichMessage:(NSString *)messageID tempContext:(BOOL)tempContext {
-    DNRichMessage *richMessage = [self richMessageForID:messageID tempContext:tempContext];
-    if (richMessage) {
-        if (tempContext)
-            [_temporaryContext deleteObject:richMessage];
-        else
-            [_mainContext deleteObject:richMessage];
-    }
-}
-
-- (NSArray *)filterRichMessage:(NSString *)filter tempContext:(BOOL)tempContext {
-    return [DNRichMessage fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"messageDescription CONTAINS[cd] %@", filter]
-                                    sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sentTimestamp" ascending:YES]]
-                                        withContext:tempContext ? _temporaryContext  : _mainContext];
-}
 
 @end

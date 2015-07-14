@@ -54,6 +54,15 @@
 - (BOOL)donkyHasDateExpired;
 
 /*!
+ Helper method to determine if a donky message has expired.
+ 
+ @return BOOL indicating whether the message has expired.
+ 
+ @since 2.2.2.7
+ */
+- (BOOL)donkyHasMessageExpired;
+
+/*!
  Helper method to determine if a date is before another date.
  
  @param secondDate the date which should be after the current date.

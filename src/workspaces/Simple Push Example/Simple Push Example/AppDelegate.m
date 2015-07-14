@@ -10,9 +10,11 @@
 #import "DPUINotificationController.h"
 #import "DNDonkyCore.h"
 #import "DCAAnalyticsController.h"
+#import "DNNotificationController.h"
 
 @interface AppDelegate ()
-
+@property(nonatomic, strong) DCAAnalyticsController *analyticsController;
+@property(nonatomic, strong) DPUINotificationController *pushUINotificationController;
 @end
 
 @implementation AppDelegate
@@ -22,15 +24,27 @@
     // Override point for customization after application launch.
     
     //Start the analytics controller (optional)
-    [[DCAAnalyticsController sharedInstance] start];
+    self.analyticsController = [[DCAAnalyticsController alloc] init];
+    [self.analyticsController start];
     
     //Start the Push Notification Controller
-    [[DPUINotificationController sharedInstance] start];
+    self.pushUINotificationController = [[DPUINotificationController alloc] init];
+    [self.pushUINotificationController start];
     
     //Initialise Donky
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@""];
+    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"ye7MDvQQVUKwR2DgMhHC89gy76HOFVtYq3PLKiOyYvDyQwFKzusUCBAphwDvMNGvlDfK2WhRFo41sF0fD4sf1Q"];
     
     return YES;
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [DNNotificationController registerDeviceToken:deviceToken];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler {
+    [DNNotificationController didReceiveNotification:userInfo handleActionIdentifier:nil completionHandler:^(NSString *string) {
+        completionHandler(UIBackgroundFetchResultNewData);
+    }];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

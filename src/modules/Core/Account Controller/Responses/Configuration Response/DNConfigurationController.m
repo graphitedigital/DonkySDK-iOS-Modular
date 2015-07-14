@@ -17,14 +17,29 @@ static NSString *const DNConfigurationSets = @"configurationSets";
 static NSString *const DNConfiguration = @"ConfigurationItems";
 static NSString *const DNButtonValues = @"buttonValues";
 static NSString *const DNMaximumContentBytes = @"CustomContentMaxSizeBytes";
+static NSString *const DNCRichMessageAvailabilityDays = @"RichMessageAvailabilityDays";
 
 @implementation DNConfigurationController
 
 + (void)saveConfiguration:(NSDictionary *)configuration {
     
     NSDictionary *configItems = configuration[DNConfigurationItems];
+    
+    NSMutableDictionary *parsedConfig = [[NSMutableDictionary alloc] init];
+    //Strip out string tru values:
+    [configItems enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        if ([obj isEqualToString:@"true"]) {
+            [parsedConfig setObject:@(1) forKey:key];
+        }
+        else if ([obj isEqualToString:@"false"]) {
+            [parsedConfig setObject:@(0) forKey:key];
+        }
+        else {
+            [parsedConfig setObject:obj forKey:key];
+        }
+    }];
 
-    [DNUserDefaultsHelper saveObject:configItems withKey:DNConfiguration];
+    [DNUserDefaultsHelper saveObject:parsedConfig withKey:DNConfiguration];
     
     NSDictionary *configurationSets = configuration[DNConfigurationSets];
     
@@ -112,6 +127,10 @@ static NSString *const DNMaximumContentBytes = @"CustomContentMaxSizeBytes";
 
 + (CGFloat)maximumContentByteSize {
     return [[DNConfigurationController objectFromConfiguration:DNMaximumContentBytes] floatValue];
+}
+
++ (NSInteger)richMessageAvailabilityDays {
+    return [[DNConfigurationController objectFromConfiguration:DNCRichMessageAvailabilityDays] integerValue];
 }
 
 @end

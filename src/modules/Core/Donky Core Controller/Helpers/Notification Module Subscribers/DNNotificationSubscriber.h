@@ -19,9 +19,9 @@
 
 - (void)subscribeToNotifications:(DNModuleDefinition *)moduleDefinition subscriptions:(NSArray *)subscriptions;
 
-- (void)notificationReceived:(DNServerNotification *)notification;
+- (void)notificationsReceived:(NSDictionary *)dictionary;
 
-- (void)processNotification:(DNServerNotification *)notification subscribers:(NSArray *)subscribers;
+- (void)processNotifications:(NSArray *)notifications subscribers:(NSArray *)subscribers;
 
 - (void)unSubscribeToDonkyNotifications:(DNModuleDefinition *)moduleDefinition subscriptions:(NSArray *)subscriptions;
 

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "DNBlockDefinitions.h"
-
 #import "DNDeviceDetails.h"
 #import "DNRegistrationDetails.h"
 #import "DNClientDetails.h"
@@ -134,6 +133,18 @@
  @since 2.0.0.0
  */
 + (void)usersTags:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
+
+/*!
+ Method to update a users additioanl properties. NOTE: This is desctructive, if you don't pass in all existing properties as well as 
+ additional ones and changes, you will lose them.
+ 
+ @param newAdditionalProperties the new complete additional properties to be saved against this user.
+ @param successBlock  block called upon successful completion of the operation.
+ @param failureBlock  block called upon failure to complete the operation.
+ 
+ @since 2.2.2.7
+ */
++ (void)updateAdditionalProperites:(NSDictionary *)newAdditionalProperties success:(DNNetworkSuccessBlock) successBlock failure:(DNNetworkFailureBlock) failureBlock;
 
 /*!
  Method to determine if the current device holds a valid registration.

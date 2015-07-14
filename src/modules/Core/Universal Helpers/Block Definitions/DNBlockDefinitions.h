@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
-@class DNLocalEvent;
+#import "DNLocalEvent.h"
 
 /*!
  Success block definition used for all methods that perform a network call.

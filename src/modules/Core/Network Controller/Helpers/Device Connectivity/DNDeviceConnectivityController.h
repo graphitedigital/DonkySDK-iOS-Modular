@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "DNRequest.h"
 
-@class DNRequest;
-
 /*!
  Helper class to monitor and report on device connectivity state changes. kDNDonkyEventNetworkStateChanged events are published when the devices connectivity state changes i.e. going from WiFI to Cellular. At this point a syncronise call will be made to check for a valid internet connection. The result of which is stored in the validConnection BOOL.
  

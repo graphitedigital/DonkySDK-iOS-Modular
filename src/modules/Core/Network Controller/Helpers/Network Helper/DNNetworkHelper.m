@@ -6,48 +6,68 @@
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 #import "DNNetworkHelper.h"
-
-#import "AFURLResponseSerialization.h"
 #import "DNConstants.h"
 #import "DNLoggingController.h"
 #import "DNErrorController.h"
 #import "DNSynchroniseResponse.h"
 #import "DNServerNotification.h"
 #import "DNDonkyCore.h"
-#import "DNNetworkController.h"
 #import "DNAppSettingsController.h"
 #import "DNSystemHelpers.h"
 #import "DNNetwork+Localization.h"
 #import "UIViewController+DNRootViewController.h"
 #import "DNContentNotification.h"
 #import "DNDataController.h"
-#import "DNRequest.h"
 #import "DNConfigurationController.h"
 #import "DNAccountController.h"
 #import "DNDonkyNetworkDetails.h"
-#import "DNRetryHelper.h"
-#import "DNSessionManager.h"
+#import "DNNetworkDataHelper.h"
 
 
 static NSString *const DNDeviceNotFound = @"DeviceNotFound";
 
 @implementation DNNetworkHelper
 
-+ (BOOL)mandatoryTasksInProgress:(NSMutableArray *)exchangeRequests {
++ (BOOL)isPerformingBlockingTask:(NSMutableArray *)exchangeRequests {
 
-    __block BOOL isRegistering = NO;
+    @synchronized (exchangeRequests) {
+        __block BOOL isPerformingBlockingTask = NO;
 
-    [exchangeRequests enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSURLSessionDataTask *task = obj;
-        if (([[task taskDescription] isEqualToString:kDNNetworkRegistration] || [[task taskDescription] isEqualToString:kDNNetworkAuthentication]) && [task state] != NSURLSessionTaskStateCompleted) {
-            isRegistering = YES;
+        [exchangeRequests enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSURLSessionDataTask *task = obj;
+            if (([[task taskDescription] isEqualToString:kDNNetworkRegistration] ||
+                    [[task taskDescription] isEqualToString:kDNNetworkAuthentication] ||
+                    [[task taskDescription] isEqualToString:kDNNetworkRegistrationDeviceUser] ||
+                    [[task taskDescription] isEqualToString:kDNNetworkRegistrationDevice] ||
+                    [[task taskDescription] isEqualToString:kDNNetworkRegistrationClient]) &&
+                    [task state] != NSURLSessionTaskStateCompleted) {
+                isPerformingBlockingTask = YES;
+                *stop = YES;
+            }
+        }];
+
+        return isPerformingBlockingTask;
+    }
+}
+
++ (BOOL)isCallNecessary:(DNRequest *)request {
+    return !([[request route] isEqualToString:kDNNetworkRegistration] && [DNAccountController isRegistered]);
+}
+
++ (BOOL)isRequest:(DNRequest *)request duplicated:(NSMutableArray *)queuedRequests {
+
+    __block BOOL isDuplicate = NO;
+
+    [queuedRequests enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        DNRequest *currentRequest = obj;
+        if ([[currentRequest route] isEqualToString:[request route]] && (![[currentRequest route] isEqualToString:kDNNetworkRegistrationClient] && ![[currentRequest route] isEqualToString:kDNNetworkRegistrationDevice]  && ![[currentRequest route] isEqualToString:kDNNetworkRegistrationDeviceUser])) {
+            isDuplicate = YES;
             *stop = YES;
         }
     }];
 
-    return isRegistering;
+    return isDuplicate;
 }
-
 
 + (void)handleError:(NSError *)error task:(NSURLSessionDataTask *)task request:(DNRequest *)request {
     NSData *data = [error userInfo][AFNetworkingOperationFailingURLResponseDataErrorKey];
@@ -92,12 +112,15 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
             DNErrorLog(@"Whoops, something has gone wrong, expected class DNClientNotification. Got %@", NSStringFromClass([obj class]));
         }
         else {
-            if (![pendingNotifications containsObject:obj])
-                [pendingNotifications addObject:obj];
+            @synchronized (pendingNotifications) {
+                if (![pendingNotifications containsObject:obj]) {
+                    [pendingNotifications addObject:obj];
+                }
+            }
         }
     }];
 
-    [[DNDataController sharedInstance] saveClientNotificationsToStore:notifications];
+    [DNNetworkDataHelper saveClientNotificationsToStore:notifications];
 }
 
 + (NSError *)queueContentNotifications:(NSArray *)notifications pendingNotifications:(NSMutableArray *)pendingNotifications{
@@ -128,9 +151,12 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
                 [unAcceptableNotifications addObject:notification];
             }
             else {
-                if (![pendingNotifications containsObject:obj])
-                    [pendingNotifications addObject:obj];
-                [acceptableNotifications addObject:notification];
+                @synchronized (pendingNotifications) {
+                    if (![pendingNotifications containsObject:obj]) {
+                        [pendingNotifications addObject:obj];
+                    }
+                    [acceptableNotifications addObject:notification];
+                }
             }
         }
     }];
@@ -140,7 +166,7 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
         return error;
     }
 
-    [[DNDataController sharedInstance] saveContentNotificationsToStore:acceptableNotifications];
+    [DNNetworkDataHelper saveContentNotificationsToStore:acceptableNotifications];
 
     return nil;
 }
@@ -154,34 +180,43 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
             DNErrorLog(@"Failed client notification: %@", obj);
             //We need the notification id:
             NSString *serverID = [DNNetworkHelper failedClientNotificationServerID:obj];
-            if (serverID)
-                [[DNDataController sharedInstance] deleteNotificationForID:serverID withTempContext:YES];
+            if (serverID) {
+                [DNNetworkDataHelper deleteNotificationForID:serverID withTempContext:YES];
+            }
         }];
+
+
+        //Lets process the response
+        __block NSMutableDictionary *responseBatches = [[NSMutableDictionary alloc] init];
 
         [[response serverNotifications] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             DNServerNotification *serverNotification = [[DNServerNotification alloc] initWithNotification:obj];
+            NSMutableArray *batch = responseBatches[[serverNotification notificationType]] ? : [[NSMutableArray alloc] init];
             if (![serverNotification serverNotificationID]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (failureBlock)
-                        failureBlock(task, [DNErrorController errorCode:DNCoreSDKFatalException userInfo:@{@"Exception: " : @"Coulnd't process server notification."}]);
-                });
+                DNErrorLog(@"Cannot save notification %@ - No ID.", serverNotification);
             }
             else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [[DNDonkyCore sharedInstance] notificationReceived:serverNotification];
-                });
+                [batch addObject:serverNotification];
+
+                responseBatches[[serverNotification notificationType]] = batch;
             }
         }];
+
+        if ([[responseBatches allKeys] count]) {
+            [[DNDonkyCore sharedInstance] notificationsReceived:responseBatches];
+        }
 
         //The network sends a maximum of 100 notifications at a time, in this case we need to perform the request again before completing:
         if ([response moreNotificationsAvailable] || [pendingClientNotifications count] || [pendingContentNotifications count]) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                [[DNDataController sharedInstance] saveAllData];
                 [[DNNetworkController sharedInstance] synchroniseSuccess:successBlock failure:failureBlock];
             });
         }
         else {
             if (successBlock) {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    [[DNDataController sharedInstance] saveAllData];
                     successBlock(task, nil); //We don't return the response data as the core library handles this.
                 });
             }
@@ -191,8 +226,9 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
         DNErrorLog(@"Fatal exception (%@) when processing network response.... Retporting & Continuing", [exception description]);
         [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (failureBlock)
+            if (failureBlock) {
                 failureBlock(nil, nil);
+            }
         });
     }
 }
@@ -204,17 +240,21 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
 + (void)showNoConnectionAlert {
 
     if ([DNAppSettingsController displayNoInternetAlert]) {
-        if ([DNSystemHelpers donkySystemVersionAtLeast:8.0]) {
+        if ([DNSystemHelpers systemVersionAtLeast:8.0]) {
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:DNNetworkLocalizedString(@"dn_network_no_internet_tile")
                                                                                      message:DNNetworkLocalizedString(@"dn_network_no_internet_message")
                                                                               preferredStyle:UIAlertControllerStyleAlert];
             [alertController addAction:[UIAlertAction actionWithTitle:DNNetworkLocalizedString(@"dn_network_no_internet_button") style:UIAlertActionStyleDefault handler:nil]];
             UIViewController *rootView = [[[DNDonkyCore sharedInstance] applicationWindow] rootViewController] ? : [UIViewController applicationRootViewController];
             if ([rootView isViewLoaded]) {
-                if (!rootView)
+                if (!rootView) {
                     DNErrorLog(@"Couldn't present alert view, root view is nil.");
-                else
-                    [rootView presentViewController:alertController animated:YES completion:nil];
+                }
+                else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [rootView presentViewController:alertController animated:YES completion:nil];
+                    });
+                }
             }
         }
         else {

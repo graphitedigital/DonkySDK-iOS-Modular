@@ -89,7 +89,7 @@
     }
 }
 
-+ (BOOL)copyItemAtPath:(NSString *)path1 toPath:(NSString *const)path2 {
++ (BOOL)copyItemAtPath:(NSString *)path1 toPath:(NSString *)path2 {
     NSError *error;
     if (![[NSFileManager defaultManager] copyItemAtPath:path1 toPath:path2 error:&error]) {
         DNErrorLog(@"Can't copy file: %@", [error localizedDescription]);

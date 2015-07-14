@@ -58,7 +58,7 @@
 
 #pragma mark -
 
-#pragma mark - Private... Not for public consumption. Public use of these API's is unsupported.
+#pragma mark - Private... Not for public consumption. Public use of these APIs is unsupported.
 
 /*!
   PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour

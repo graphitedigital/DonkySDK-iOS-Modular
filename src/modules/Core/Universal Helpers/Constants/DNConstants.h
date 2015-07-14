@@ -97,6 +97,7 @@ extern NSString * const kDNNetworkSendDebugLog;
  */
 extern NSString * const kDNNetworkUserTags;
 
+
 #pragma mark -
 #pragma mark - Donky Notification Types
 
@@ -179,7 +180,7 @@ extern NSString * const kDNEventRegistration;
 extern NSString * const kDNDonkyLogEvent;
 
 /*!
- Subscribe to this event ro receive notifications when the application is opened.
+ Subscribe to this event to receive notifications when the application is opened.
 
   This notification should contain contain a nil data property.
  
@@ -195,6 +196,37 @@ extern NSString * const kDNDonkyEventAppOpen;
  @since 2.0.0.0
  */
 extern NSString * const kDNDonkyEventAppClose;
+
+/*!
+ Subscribe to this event to receive notifications when the application is entering the foreground.
+ 
+ @since 2.2.2.7
+ */
+extern NSString * const kDNDonkyEventAppWillEnterForegroundNotification;
+
+/*!
+ Subscribe to this event to receive notifications when a remote notification has been tapped to load the application. 
+ NOTE: This is only applicable to notifications with the 'content' flag set i.e. Rich Messages.
+ 
+ @since 2.2.2.7
+ */
+extern NSString * const kDNDonkyEventNotificationLoaded;
+
+/*!
+ Subscribe to this event to receive notifications when a remote notification was received and the application was in the 
+ background.
+ 
+ @since 2.2.2.7
+ */
+extern NSString * const kDNDonkyEventBackgroundNotificationReceived;
+
+/*!
+ Publish this event when you want to cahnge the badge count of your appplication AND set the 
+ new badge count on the network.
+ 
+ @since 2.2.2.7
+ */
+extern NSString * const kDNDonkySetBadgeCount;
 
 #pragma mark -
 #pragma mark - Donky Config Items
@@ -277,6 +309,9 @@ extern NSString * const kDonkyErrorDomain;
  @since 2.0.0.0
  */
 extern CGFloat const kDonkyLogFileSizeLimit;
+
+//
+extern NSString * const kDNTempDirectory;
 
 #pragma mark -
 #pragma mark - Donky Notification Keys
