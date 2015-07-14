@@ -10,7 +10,6 @@
 #import <UIKit/UIKit.h>
 #import "DNRichMessage.h"
 
-
 typedef enum {
     DMVLeftSide = 0,
     DMVRightSide
