@@ -8,7 +8,7 @@
 
 #import "DRUIPopUpMainController.h"
 #import "DNLocalEvent.h"
-#import "DCUIRMessageViewController.h"
+#import "DRMessageViewController.h"
 #import "DNDonkyCore.h"
 #import "DRLogicMainController.h"
 #import "DNConstants.h"
@@ -32,6 +32,11 @@
 {
     static dispatch_once_t pred;
     static DRUIPopUpMainController *sharedInstance = nil;
+
+    @synchronized (sharedInstance) {
+        if (sharedInstance)
+            return sharedInstance;
+    }
 
     dispatch_once(&pred, ^{
         sharedInstance = [[DRUIPopUpMainController alloc] initPrivate];
@@ -93,14 +98,17 @@
 
     if ([[richMessage messageReceivedTimestamp] isDateBeforeDate:thirtyDaysExpired]) {
         DNInfoLog(@"Rich message: %@ is more than 30 days old... Marking as read and deleting message.", [richMessage messageID]);
-        [[self donkyRichLogicController] markMessageAsRead:[richMessage messageID]];
-        [[self donkyRichLogicController] deleteMessage:[richMessage messageID]];
+        [[self donkyRichLogicController] markMessageAsRead:richMessage];
+        [[self donkyRichLogicController] deleteMessage:richMessage];
     }
 
     else {
 
-        DCUIRMessageViewController *popUpController = [[DCUIRMessageViewController alloc] initWithRichMessage:richMessage];
+        DRMessageViewController *popUpController = [[DRMessageViewController alloc] initWithRichMessage:richMessage];
         [popUpController setDelegate:self];
+
+        UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:popUpController action:NSSelectorFromString(@"closeView:")];
+        [popUpController addBarButtonItem:buttonItem buttonSide:DMVLeftSide];
 
         UIViewController *applicationViewController = [UIViewController applicationRootViewController];
 
@@ -109,9 +117,9 @@
             return;
         }
 
-        [[self donkyRichLogicController] markMessageAsRead:[richMessage messageID]];
+        [[self donkyRichLogicController] markMessageAsRead:richMessage];
 
-        id popOverViewController = [popUpController richPopUpNavigationControllerWithModalPresentationStyle:self.richPopUpPresentationStyle];
+        UINavigationController *popOverViewController = [popUpController richPopUpNavigationControllerWithModalPresentationStyle:self.richPopUpPresentationStyle];
         if (popOverViewController) {
             self.displayingPopUp = YES;
             [applicationViewController presentViewController:popOverViewController
@@ -125,11 +133,12 @@
 
 }
 
+//TODO: Change to message obj
 - (void)richMessagePopUpWasClosed:(NSString *)messageID {
     self.displayingPopUp = NO;
 
     if ([self shouldAutoDelete])
-        [[self donkyRichLogicController] deleteMessage:messageID];
+        [[self donkyRichLogicController] deleteMessage:[self.donkyRichLogicController richMessageWithID:messageID]];
 
     if ([[self pendingMessages] count])
         [self presentPopUp:[[self pendingMessages] firstObject]];
