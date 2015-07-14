@@ -7,10 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DNModuleDefinition.h"
-#import "DNSubscription.h"
-#import "DNRichMessage.h"
-#import "DNLocalEvent.h"
+
+@class DNModuleDefinition;
+@class DNSubscription;
 
 @interface DRLogicMainController : NSObject
 
@@ -42,16 +41,7 @@
  
  @since 2.0.0.0
  */
-- (void)deleteMessage:(DNRichMessage *)richMessage;
-
-/*!
- Helper method to delete more than one notification at once.
- 
- @param richMessages an array of Rich message objects.
- 
- @since 2.2.2.7
- */
-- (void)deleteAllMessages:(NSArray *)richMessages;
+- (void)deleteMessage:(NSString *)messageID;
 
 /*!
  Helper method to mark a Rich Message as read. NOTE: this must be called by the integrator when NOT using the UI. This ensures that statistics around Rich Messages is recorded and that they are not displayed more than once.
@@ -60,12 +50,12 @@
  
  @since 2.0.0.0
  */
-- (void)markMessageAsRead:(DNRichMessage *)message;
+- (void)markMessageAsRead:(NSString *)messageID;
 
 /*!
  Helper method to get all rich messages who's description contains the supplied string.
  
- @param filter the string which should be sought for.
+ @param filter the string which should be saught for.
  
  @return an array of DNRichMessage objects.
  
@@ -73,51 +63,7 @@
  
  @see DNRichMessage
  */
-- (NSArray *)filterRichMessages:(NSString *)filter ascending:(BOOL)ascending;
-
-/*!
- Helper method to determine whether a rich message exists for the supplied message ID.
- 
- @param messageID the message ID that corresponds to the message.
- 
- @return bool to determine if the message exists or not.
- 
- @since 2.2.2.7
- */
-- (BOOL)doesRichMessageExistForID:(NSString *)messageID;
-
-/*!
- Helper method to retrieve a rich message from the database given a provided message ID.
- 
- @param messageID the message ID for the rich message requested.
- 
- @return a new rich message object.
- 
- @since 2.2.2.7
- */
-- (DNRichMessage *)richMessageWithID:(NSString *)messageID;
-
-/*!
- Helper method to determine if the rich message has expired. If this returns true
- then the message should be discarded.
- 
- @param richMessage the rich message that is under question.
- 
- @return BOOL to determine if the message has or has not expired.
- 
- @since 2.2.2.7
- */
-- (BOOL)hasRichMessageExpired:(DNRichMessage *)richMessage;
-
-/*!
- Helper method to process all the rich messages that have been received from APNS.
- This accepts an array of messages so that batch processing can be achieved.
- 
- @param notifications an array of DNServerNotifications.
- 
- @since 2.2.2.7
- */
-- (void)richMessageNotificationsReceived:(NSArray *)notifications;
+- (NSArray *)filterRichMessages:(NSString *)filter;
 
 /*!
  Helper method to get all rich messages.
@@ -128,23 +74,10 @@
  
  @see DNRichMessage
  */
-- (NSArray *)allRichMessagesAscending:(BOOL)ascending;
+- (NSArray *)allRichMessages;
 
 /*!
- Helper method to retrieve rich messages with an offset. This is used to to load x amount of messages at once.
- 
- @param offset    how many messages to 'skip' when retrieving rich messages from the database.
- @param limit     the number of messages to retrieve.
- @param ascending whether to sort them in ascending order, they are sorted by message sent date.
- 
- @return an array of rich message objects.
- 
- @since 2.2.2.7
- */
-- (NSArray *)richMessagesWithOffset:(NSUInteger)offset limit:(NSUInteger)limit ascending:(BOOL)ascending;
-
-/*!
- Helper method to get all un-read rich messages.
+ Helper method to get all undread rich messages.
  
  @return an array of DNRichMessage objects.
  
@@ -153,12 +86,5 @@
  @see DNRichMessage
  */
 - (NSArray *)allUnreadRichMessages;
-
-/*!
- Helper method to delete all the expired messages from the database.
- 
- @since 2.2.2.7
- */
-- (void)deleteAllExpiredMessages;
 
 @end

@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DRMessageViewController.h"
-#import "DRLogicMainController.h"
-#import "DNLocalEvent.h"
+#import "DCUIRMessageViewController.h"
 
-@interface DRUIPopUpMainController : NSObject <DRMessageViewControllerDelegate>
+@class DRLogicMainController;
+@class DNLocalEvent;
+
+@interface DRUIPopUpMainController : NSObject <DCUIRMessageViewControllerDelegate>
 
 /*!
  The style in which the modal view should be presented.
@@ -47,5 +48,7 @@
  @since 2.0.0.0
  */
 - (void)stop;
+
+
 
 @end

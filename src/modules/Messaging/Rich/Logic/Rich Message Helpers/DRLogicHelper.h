@@ -7,33 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DNServerNotification.h"
-#import "DNRichMessage.h"
+
+@class DNServerNotification;
+@class DNRichMessage;
 
 @interface DRLogicHelper : NSObject
 
 + (DNRichMessage *)saveRichMessage:(DNServerNotification *)serverNotification;
 
-+ (void)deleteRichMessage:(DNRichMessage *)richMessage;
++ (void)deleteRichMessage:(NSString *)messageID;
 
 + (NSArray *)allUnreadRichMessages;
 
-+ (NSArray *)allRichMessagesAscending:(BOOL)ascending;
++ (NSArray *)allRichMessages;
 
-+ (NSArray *)richMessagesWithOffset:(NSUInteger)offset limit:(NSUInteger)limit ascending:(BOOL)ascending;
-
-+ (NSArray *)filteredRichMessage:(NSString *)filter tempContext:(BOOL)tempContext ascendingOrder:(BOOL)ascending;
-
-+ (DNRichMessage *)richMessageForID:(NSString *)messageID;
-
-+ (void)markMessageAsRead:(DNRichMessage *)richMessage;
-
-+ (void)deleteAllRichMessages:(NSArray *)richMessages;
-
-+ (BOOL)richMessageExistsForID:(NSString *)messageID;
-
-+ (DNRichMessage *)richMessageWithID:(NSString *)messageID;
-
-+ (void)deleteAllExpiredMessages;
++ (NSArray *)filteredRichMessage:(NSString *)filter tempContext:(BOOL)context;
 
 @end
