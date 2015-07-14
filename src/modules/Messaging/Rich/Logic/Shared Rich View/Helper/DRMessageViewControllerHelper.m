@@ -14,12 +14,12 @@
 
 @implementation DRMessageViewControllerHelper
 
-+ (UILabel *)noRichMessageViewWithTheme:(DCUITheme *)theme {
++ (UILabel *)noRichMessageView {
 
     UILabel *noRichMessages = [UILabel autoLayoutView];
     [noRichMessages setUserInteractionEnabled:NO];
-    [noRichMessages setTextColor:[theme colourForKey:kDRUIInboxNoMessagesTextColour]];
-    [noRichMessages setFont:[theme fontForKey:kDRUIInboxNoMessagesFont]];
+    [noRichMessages setTextColor:[UIColor blackColor]];
+    [noRichMessages setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
     [noRichMessages setTextAlignment:NSTextAlignmentCenter];
     [noRichMessages setNumberOfLines:0];
     [noRichMessages setText:DRichMessageLocalizedString(@"rich_inbox_no_messages_selected")];

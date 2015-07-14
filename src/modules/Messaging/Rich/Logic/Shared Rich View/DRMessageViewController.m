@@ -6,13 +6,9 @@
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
-#import <MacTypes.h>
 #import "DRMessageViewController.h"
 #import "UIView+AutoLayout.h"
 #import "NSDate+DNDateHelper.h"
-#import "DCUIThemeController.h"
-#import "DRUIThemeConstants.h"
-#import "DRichMessage+Localization.h"
 #import "DCUIActionHelper.h"
 #import "DRLogicHelper.h"
 #import "DNSystemHelpers.h"
@@ -28,7 +24,6 @@
 @property(nonatomic, strong) DNRichMessage *richMessage;
 @property(nonatomic, strong) UIView *noMessagesView;
 @property(nonatomic, strong) UIWebView *webView;
-@property(nonatomic, strong) DRUITheme *theme;
 @end
 
 @implementation DRMessageViewController
@@ -60,14 +55,6 @@
 }
 
 - (void)initialiseView:(DNRichMessage *) richMessage {
-
-    //Get the theme:
-    self.theme = (DRUITheme *) [[DCUIThemeController sharedInstance] themeForName:kDRUIThemeName];
-
-    //We don't have a theme, so initialise with the default:
-    if (!self.theme) {
-        self.theme = [[DRUITheme alloc] initWithDefaultTheme];
-    }
 
     [[self view] setBackgroundColor:[UIColor whiteColor]];
 
@@ -221,14 +208,14 @@
         if (!self.noMessagesView) {
             //Load label:
             self.noMessagesView = [UIView autoLayoutView];
-            [self.noMessagesView setBackgroundColor:[self.theme colourForKey:kDRUIInboxNoMessagesBackgroundColour]];
+            [self.noMessagesView setBackgroundColor:[UIColor whiteColor]];
             [self.noMessagesView setUserInteractionEnabled:NO];
             [self.view addSubview:self.noMessagesView];
 
             [self.noMessagesView constrainToSize:CGSizeMake(250, 150)];
             [self.noMessagesView centerInView:self.view];
 
-            UILabel *noRichMessages = [DRMessageViewControllerHelper noRichMessageViewWithTheme:self.theme];
+            UILabel *noRichMessages = [DRMessageViewControllerHelper noRichMessageView];
             [self.noMessagesView addSubview:noRichMessages];
 
             [noRichMessages centerInView:self.noMessagesView];

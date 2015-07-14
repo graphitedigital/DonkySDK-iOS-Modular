@@ -13,7 +13,7 @@
 
 @interface DRMessageViewControllerHelper : NSObject
 
-+ (UILabel *)noRichMessageViewWithTheme:(DCUITheme *)theme;
++ (UILabel *)noRichMessageView;
 
 + (void)addBarButtonItem:(UIBarButtonItem *)buttonItem buttonSide:(DonkyMessageViewBarButtonSide)side navigationController:(UINavigationItem *)navigationItem;
 
