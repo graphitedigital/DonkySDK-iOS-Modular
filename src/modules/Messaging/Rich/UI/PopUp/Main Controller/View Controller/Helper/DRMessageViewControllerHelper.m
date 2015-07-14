@@ -8,7 +8,6 @@
 
 #import "DRMessageViewControllerHelper.h"
 #import "UIView+AutoLayout.h"
-#import "DRUIThemeConstants.h"
 #import "DRichMessage+Localization.h"
 #import "DRMessageViewController.h"
 
