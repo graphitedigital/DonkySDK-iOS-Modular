@@ -25,5 +25,6 @@
 @property (nonatomic, retain) NSNumber * silentNotification;
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSString * urlToShare;
+@property (nonatomic, retain) NSString * notificationID;
 
 @end

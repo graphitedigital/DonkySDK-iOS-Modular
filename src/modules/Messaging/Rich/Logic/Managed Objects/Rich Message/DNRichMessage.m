@@ -23,5 +23,6 @@
 @dynamic silentNotification;
 @dynamic title;
 @dynamic urlToShare;
+@dynamic notificationID;
 
 @end

@@ -21,7 +21,7 @@
 @property (nonatomic, retain) NSNumber * sendTries;
 @property (nonatomic, retain) NSString * serverNotificationID;
 @property (nonatomic, retain) NSString * type;
-@property (nonatomic, retain) NSString * notificationID;
+
 
 
 @end
