@@ -8,17 +8,18 @@
 
 #import "DRMessageViewControllerHelper.h"
 #import "UIView+AutoLayout.h"
+#import "DRUIThemeConstants.h"
 #import "DRichMessage+Localization.h"
 #import "DRMessageViewController.h"
 
 @implementation DRMessageViewControllerHelper
 
-+ (UILabel *)noRichMessageView {
++ (UILabel *)noRichMessageViewWithTheme:(DCUITheme *)theme {
 
     UILabel *noRichMessages = [UILabel autoLayoutView];
     [noRichMessages setUserInteractionEnabled:NO];
-    [noRichMessages setTextColor:[UIColor blackColor]];
-    [noRichMessages setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
+    [noRichMessages setTextColor:[theme colourForKey:kDRUIInboxNoMessagesTextColour]];
+    [noRichMessages setFont:[theme fontForKey:kDRUIInboxNoMessagesFont]];
     [noRichMessages setTextAlignment:NSTextAlignmentCenter];
     [noRichMessages setNumberOfLines:0];
     [noRichMessages setText:DRichMessageLocalizedString(@"rich_inbox_no_messages_selected")];

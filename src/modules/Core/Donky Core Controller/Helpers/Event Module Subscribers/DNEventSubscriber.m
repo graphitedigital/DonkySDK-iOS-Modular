@@ -63,7 +63,9 @@
     NSArray *events = [self eventListeners][[event eventType]];
     [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         DNLocalEventHandler handler = obj;
+        if (handler) {
             handler(event);
+        }
     }];
 
     if (![events count] && ![[event eventType] isEqualToString:kDNDonkyLogEvent]) // We don't want to log out Log events otherwise we will get stuck in an infinite loop

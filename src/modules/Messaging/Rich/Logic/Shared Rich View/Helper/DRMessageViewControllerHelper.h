@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "DCUITheme.h"
 #import "DRMessageViewController.h"
 
 @interface DRMessageViewControllerHelper : NSObject
 
-+ (UILabel *)noRichMessageView;
++ (UILabel *)noRichMessageViewWithTheme:(DCUITheme *)theme;
 
 + (void)addBarButtonItem:(UIBarButtonItem *)buttonItem buttonSide:(DonkyMessageViewBarButtonSide)side navigationController:(UINavigationItem *)navigationItem;
 

@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "DNRichMessage.h"
+#import "DRUITheme.h"
+#import "DRMessageViewController.h"
 
 typedef enum {
     DMVLeftSide = 0,
