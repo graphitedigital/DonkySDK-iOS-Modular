@@ -11,7 +11,6 @@
 #import "DNSubscription.h"
 #import "DNRichMessage.h"
 #import "DNLocalEvent.h"
-#import "DCUINotificationController.h"
 
 @interface DRLogicMainController : NSObject
 
