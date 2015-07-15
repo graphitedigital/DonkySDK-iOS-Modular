@@ -75,10 +75,6 @@
 
     self.subscription = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationRichMessage batchHandler:self.richMessageHandler];
 
-    if (![[DNDonkyCore sharedInstance] isModuleRegistered:@"DRIMainController" moduleVersion:@"1.0.0.0"]) {
-        [self.subscription setAutoAcknowledge:NO];
-    }
-
     [[DNDonkyCore sharedInstance] subscribeToDonkyNotifications:self.moduleDefinition subscriptions:@[self.subscription]];
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventNotificationLoaded handler:self.notificationLoaded];
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventBackgroundNotificationReceived handler:self.backgroundNotificationsReceived];

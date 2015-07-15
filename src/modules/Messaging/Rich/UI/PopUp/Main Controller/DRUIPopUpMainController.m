@@ -70,10 +70,10 @@
     __weak DRUIPopUpMainController *weakSelf = self;
 
     self.richMessageHandler = ^(DNLocalEvent *event) {
-        if ([weakSelf displayingPopUp]) {
+        if ([weakSelf displayingPopUp] && [[event data] isKindOfClass:[DNRichMessage class]]) {
             [[weakSelf pendingMessages] addObject:event];
         }
-        else {
+        else if ([[event data] isKindOfClass:[DNRichMessage class]]){
             [weakSelf presentPopUp:event];
         }
     };
