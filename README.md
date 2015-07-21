@@ -246,4 +246,59 @@ Use the Automation module to enable to trigger campaigns setup on Campaign Build
 ```ruby
 pod "Donky-Automation-Logic"
 
-```
+```ruby
+
+# Donky-CommonMessaging-Logic
+
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-CommonMessaging-Logic.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-CommonMessaging-Logic)
+[![Version](https://img.shields.io/cocoapods/v/Donky-Donky-CommonMessaging-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-Logic)
+[![License](https://img.shields.io/cocoapods/l/Donky-CommonMessaging-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-Logic)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-CommonMessaging-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-Logic)
+## Usage
+
+Use the Common Messaging Logic in combination with any of the Logic Messaging related modules. All Logic modules will have a dependency on Common Mesaging Logic. It is therefor unecessary to include this into your podfile if you are also using any Logic (or UI) pod.
+
+## Requirements
+
+<ul>
+<li>iOS 7.0+</li>
+<li>Arc must be enabled.</li>
+</ul>
+
+
+## Installation
+
+
+```ruby
+pod "Donky-CommonMessaging-Logic"
+
+```ruby
+
+
+# Donky-CommonMessaging-UI
+
+
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-CommonMessaging-UI.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-CommonMessaging-UI)
+[![Version](https://img.shields.io/cocoapods/v/Donky-CommonMessaging-UI.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-UI)
+[![License](https://img.shields.io/cocoapods/l/Donky-CommonMessaging-UI.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-UI)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-CommonMessaging-UI.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-UI)
+
+## Usage
+
+Use the Common Messaging UI in combination with any of the UI modules. All UI modules will have a dependency on Common Mesaging UI. It is therefor unecessary to include this into your podfile if you are also using any UI pod.
+
+## Requirements
+
+<ul>
+<li>iOS 7.0+</li>
+<li>Arc must be enabled.</li>
+</ul>
+
+
+## Installation
+
+
+```ruby
+pod "Donky-CommonMessaging-UI"
+
+```ruby
