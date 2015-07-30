@@ -1,0 +1,1 @@
+../../../Donky-Core-SDK/src/modules/Core/Data Controller/Managed Objects/Device User/DNDeviceUser.h

@@ -1,0 +1,506 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		145D9D9D8AA5B099A483EE3F /* libPods-Donky Rich Message PopUp Demo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5B3815C3A93B33447BAFB2A /* libPods-Donky Rich Message PopUp Demo.a */; };
+		34F52DC7471A8EA78309E722 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5226E5A12D1A240F9FA43 /* AppDelegate.m */; };
+		D06576831B64DD9D007E5837 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D06576821B64DD9D007E5837 /* main.m */; };
+		D06576891B64DD9D007E5837 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D06576881B64DD9D007E5837 /* ViewController.m */; };
+		D065768C1B64DD9D007E5837 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D065768A1B64DD9D007E5837 /* Main.storyboard */; };
+		D065768E1B64DD9D007E5837 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D065768D1B64DD9D007E5837 /* Images.xcassets */; };
+		D06576911B64DD9D007E5837 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D065768F1B64DD9D007E5837 /* LaunchScreen.xib */; };
+		D065769D1B64DD9D007E5837 /* Donky_Rich_Message_PopUp_DemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D065769C1B64DD9D007E5837 /* Donky_Rich_Message_PopUp_DemoTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D06576971B64DD9D007E5837 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D06576751B64DD9D007E5837 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D065767C1B64DD9D007E5837;
+			remoteInfo = "Donky Rich Message PopUp Demo";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		34F521D4E3AC2121675B82AF /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		34F5226E5A12D1A240F9FA43 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		56D8040B563ED3229283A8AD /* Pods-Donky Rich Message PopUp Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Donky Rich Message PopUp Demo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Donky Rich Message PopUp Demo/Pods-Donky Rich Message PopUp Demo.release.xcconfig"; sourceTree = "<group>"; };
+		A5B3815C3A93B33447BAFB2A /* libPods-Donky Rich Message PopUp Demo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Donky Rich Message PopUp Demo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3BBBC38B8C31A0A01DAA32B /* Pods-Donky Rich Message PopUp Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Donky Rich Message PopUp Demo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Donky Rich Message PopUp Demo/Pods-Donky Rich Message PopUp Demo.debug.xcconfig"; sourceTree = "<group>"; };
+		D065767D1B64DD9D007E5837 /* Donky Rich Message PopUp Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Donky Rich Message PopUp Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D06576811B64DD9D007E5837 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D06576821B64DD9D007E5837 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		D06576871B64DD9D007E5837 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		D06576881B64DD9D007E5837 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		D065768B1B64DD9D007E5837 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		D065768D1B64DD9D007E5837 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		D06576901B64DD9D007E5837 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		D06576961B64DD9D007E5837 /* Donky Rich Message PopUp DemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Donky Rich Message PopUp DemoTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D065769B1B64DD9D007E5837 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D065769C1B64DD9D007E5837 /* Donky_Rich_Message_PopUp_DemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Donky_Rich_Message_PopUp_DemoTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D065767A1B64DD9D007E5837 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				145D9D9D8AA5B099A483EE3F /* libPods-Donky Rich Message PopUp Demo.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D06576931B64DD9D007E5837 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34F5261644DF7173ED68EDAD /* App Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				34F5226E5A12D1A240F9FA43 /* AppDelegate.m */,
+				34F521D4E3AC2121675B82AF /* AppDelegate.h */,
+			);
+			path = "App Delegate";
+			sourceTree = "<group>";
+		};
+		3B772E45BFCAE2D569E93C96 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A5B3815C3A93B33447BAFB2A /* libPods-Donky Rich Message PopUp Demo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		51F6238CFD1CBA831F2D346E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B3BBBC38B8C31A0A01DAA32B /* Pods-Donky Rich Message PopUp Demo.debug.xcconfig */,
+				56D8040B563ED3229283A8AD /* Pods-Donky Rich Message PopUp Demo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		D06576741B64DD9D007E5837 = {
+			isa = PBXGroup;
+			children = (
+				D065767F1B64DD9D007E5837 /* Donky Rich Message PopUp Demo */,
+				D06576991B64DD9D007E5837 /* Donky Rich Message PopUp DemoTests */,
+				D065767E1B64DD9D007E5837 /* Products */,
+				51F6238CFD1CBA831F2D346E /* Pods */,
+				3B772E45BFCAE2D569E93C96 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		D065767E1B64DD9D007E5837 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D065767D1B64DD9D007E5837 /* Donky Rich Message PopUp Demo.app */,
+				D06576961B64DD9D007E5837 /* Donky Rich Message PopUp DemoTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D065767F1B64DD9D007E5837 /* Donky Rich Message PopUp Demo */ = {
+			isa = PBXGroup;
+			children = (
+				D06576871B64DD9D007E5837 /* ViewController.h */,
+				D06576881B64DD9D007E5837 /* ViewController.m */,
+				D065768A1B64DD9D007E5837 /* Main.storyboard */,
+				D065768D1B64DD9D007E5837 /* Images.xcassets */,
+				D065768F1B64DD9D007E5837 /* LaunchScreen.xib */,
+				D06576801B64DD9D007E5837 /* Supporting Files */,
+				34F5261644DF7173ED68EDAD /* App Delegate */,
+			);
+			path = "Donky Rich Message PopUp Demo";
+			sourceTree = "<group>";
+		};
+		D06576801B64DD9D007E5837 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D06576811B64DD9D007E5837 /* Info.plist */,
+				D06576821B64DD9D007E5837 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D06576991B64DD9D007E5837 /* Donky Rich Message PopUp DemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				D065769C1B64DD9D007E5837 /* Donky_Rich_Message_PopUp_DemoTests.m */,
+				D065769A1B64DD9D007E5837 /* Supporting Files */,
+			);
+			path = "Donky Rich Message PopUp DemoTests";
+			sourceTree = "<group>";
+		};
+		D065769A1B64DD9D007E5837 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D065769B1B64DD9D007E5837 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D065767C1B64DD9D007E5837 /* Donky Rich Message PopUp Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D06576A01B64DD9D007E5837 /* Build configuration list for PBXNativeTarget "Donky Rich Message PopUp Demo" */;
+			buildPhases = (
+				2AE1683C63A7B2A90B933234 /* Check Pods Manifest.lock */,
+				D06576791B64DD9D007E5837 /* Sources */,
+				D065767A1B64DD9D007E5837 /* Frameworks */,
+				D065767B1B64DD9D007E5837 /* Resources */,
+				E5A80701B8EB893F95DFFBDB /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Donky Rich Message PopUp Demo";
+			productName = "Donky Rich Message PopUp Demo";
+			productReference = D065767D1B64DD9D007E5837 /* Donky Rich Message PopUp Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D06576951B64DD9D007E5837 /* Donky Rich Message PopUp DemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D06576A31B64DD9D007E5837 /* Build configuration list for PBXNativeTarget "Donky Rich Message PopUp DemoTests" */;
+			buildPhases = (
+				D06576921B64DD9D007E5837 /* Sources */,
+				D06576931B64DD9D007E5837 /* Frameworks */,
+				D06576941B64DD9D007E5837 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D06576981B64DD9D007E5837 /* PBXTargetDependency */,
+			);
+			name = "Donky Rich Message PopUp DemoTests";
+			productName = "Donky Rich Message PopUp DemoTests";
+			productReference = D06576961B64DD9D007E5837 /* Donky Rich Message PopUp DemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D06576751B64DD9D007E5837 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = "Donky Networks Ltd";
+				TargetAttributes = {
+					D065767C1B64DD9D007E5837 = {
+						CreatedOnToolsVersion = 6.4;
+					};
+					D06576951B64DD9D007E5837 = {
+						CreatedOnToolsVersion = 6.4;
+						TestTargetID = D065767C1B64DD9D007E5837;
+					};
+				};
+			};
+			buildConfigurationList = D06576781B64DD9D007E5837 /* Build configuration list for PBXProject "Donky Rich Message PopUp Demo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D06576741B64DD9D007E5837;
+			productRefGroup = D065767E1B64DD9D007E5837 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D065767C1B64DD9D007E5837 /* Donky Rich Message PopUp Demo */,
+				D06576951B64DD9D007E5837 /* Donky Rich Message PopUp DemoTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D065767B1B64DD9D007E5837 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D065768C1B64DD9D007E5837 /* Main.storyboard in Resources */,
+				D06576911B64DD9D007E5837 /* LaunchScreen.xib in Resources */,
+				D065768E1B64DD9D007E5837 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D06576941B64DD9D007E5837 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2AE1683C63A7B2A90B933234 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E5A80701B8EB893F95DFFBDB /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Donky Rich Message PopUp Demo/Pods-Donky Rich Message PopUp Demo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D06576791B64DD9D007E5837 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D06576891B64DD9D007E5837 /* ViewController.m in Sources */,
+				D06576831B64DD9D007E5837 /* main.m in Sources */,
+				34F52DC7471A8EA78309E722 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D06576921B64DD9D007E5837 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D065769D1B64DD9D007E5837 /* Donky_Rich_Message_PopUp_DemoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D06576981B64DD9D007E5837 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D065767C1B64DD9D007E5837 /* Donky Rich Message PopUp Demo */;
+			targetProxy = D06576971B64DD9D007E5837 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		D065768A1B64DD9D007E5837 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D065768B1B64DD9D007E5837 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		D065768F1B64DD9D007E5837 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D06576901B64DD9D007E5837 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		D065769E1B64DD9D007E5837 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D065769F1B64DD9D007E5837 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D06576A11B64DD9D007E5837 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B3BBBC38B8C31A0A01DAA32B /* Pods-Donky Rich Message PopUp Demo.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "Donky Rich Message PopUp Demo/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		D06576A21B64DD9D007E5837 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 56D8040B563ED3229283A8AD /* Pods-Donky Rich Message PopUp Demo.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "Donky Rich Message PopUp Demo/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		D06576A41B64DD9D007E5837 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Donky Rich Message PopUp DemoTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Donky Rich Message PopUp Demo.app/Donky Rich Message PopUp Demo";
+			};
+			name = Debug;
+		};
+		D06576A51B64DD9D007E5837 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Donky Rich Message PopUp DemoTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Donky Rich Message PopUp Demo.app/Donky Rich Message PopUp Demo";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D06576781B64DD9D007E5837 /* Build configuration list for PBXProject "Donky Rich Message PopUp Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D065769E1B64DD9D007E5837 /* Debug */,
+				D065769F1B64DD9D007E5837 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D06576A01B64DD9D007E5837 /* Build configuration list for PBXNativeTarget "Donky Rich Message PopUp Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D06576A11B64DD9D007E5837 /* Debug */,
+				D06576A21B64DD9D007E5837 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D06576A31B64DD9D007E5837 /* Build configuration list for PBXNativeTarget "Donky Rich Message PopUp DemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D06576A41B64DD9D007E5837 /* Debug */,
+				D06576A51B64DD9D007E5837 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D06576751B64DD9D007E5837 /* Project object */;
+}

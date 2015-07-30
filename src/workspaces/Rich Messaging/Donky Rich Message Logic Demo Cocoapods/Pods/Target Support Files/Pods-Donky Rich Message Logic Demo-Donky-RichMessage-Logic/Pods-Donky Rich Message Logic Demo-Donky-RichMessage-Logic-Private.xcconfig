@@ -1,0 +1,6 @@
+#include "Pods-Donky Rich Message Logic Demo-Donky-RichMessage-Logic.xcconfig"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/Donky-RichMessage-Logic" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/Donky-CommonMessaging-Logic" "${PODS_ROOT}/Headers/Public/Donky-Core-SDK" "${PODS_ROOT}/Headers/Public/Donky-RichMessage-Logic"
+OTHER_LDFLAGS = ${PODS_DONKY_RICH_MESSAGE_LOGIC_DEMO_DONKY_RICHMESSAGE_LOGIC_OTHER_LDFLAGS} -ObjC
+PODS_ROOT = ${SRCROOT}
+SKIP_INSTALL = YES

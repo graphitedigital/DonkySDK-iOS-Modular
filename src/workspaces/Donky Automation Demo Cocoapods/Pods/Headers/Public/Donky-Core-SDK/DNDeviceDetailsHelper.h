@@ -1,0 +1,1 @@
+../../../Donky-Core-SDK/src/modules/Core/Account Controller/Shared Types/Device Details/Helper/DNDeviceDetailsHelper.h

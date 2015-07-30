@@ -1,0 +1,16 @@
+# Uncomment this line to define a global platform for your project
+
+platform :ios, '7.0'
+inhibit_all_warnings!
+
+
+target 'Donky Core SDK Demo' do
+
+pod "Donky-Core-SDK"
+
+end
+
+target 'Donky Core SDK DemoTests' do
+
+end
+

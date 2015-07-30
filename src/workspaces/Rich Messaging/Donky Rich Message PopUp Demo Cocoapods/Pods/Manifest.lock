@@ -1,0 +1,49 @@
+PODS:
+  - AFNetworking (2.5.4):
+    - AFNetworking/NSURLConnection (= 2.5.4)
+    - AFNetworking/NSURLSession (= 2.5.4)
+    - AFNetworking/Reachability (= 2.5.4)
+    - AFNetworking/Security (= 2.5.4)
+    - AFNetworking/Serialization (= 2.5.4)
+    - AFNetworking/UIKit (= 2.5.4)
+  - AFNetworking/NSURLConnection (2.5.4):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.5.4):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.5.4)
+  - AFNetworking/Security (2.5.4)
+  - AFNetworking/Serialization (2.5.4)
+  - AFNetworking/UIKit (2.5.4):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+  - Donky-CommonMessaging-Logic (4.1.2.7):
+    - Donky-Core-SDK
+  - Donky-CommonMessaging-UI (4.1.2.7):
+    - Donky-CommonMessaging-Logic
+    - UIView-Autolayout (~> 0.2)
+  - Donky-Core-SDK (4.1.2.10):
+    - AFNetworking (~> 2.3)
+  - Donky-RichMessage-Logic (4.1.2.9):
+    - Donky-CommonMessaging-Logic
+  - Donky-RichMessage-PopUp (4.1.2.9):
+    - Donky-CommonMessaging-UI
+    - Donky-RichMessage-Logic
+  - UIView-Autolayout (0.2.1)
+
+DEPENDENCIES:
+  - Donky-RichMessage-PopUp
+
+SPEC CHECKSUMS:
+  AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
+  Donky-CommonMessaging-Logic: 8b9b3203be055eec28722201f3503ce4a07edab4
+  Donky-CommonMessaging-UI: b6f3de4198cc2ba41885de52f0ed6ebb4ea807e7
+  Donky-Core-SDK: afce7fd0c5e12722756d7c931b28c391ac7ca899
+  Donky-RichMessage-Logic: 1fbc74150cec8fac255ab49995ae430f3aabc9f4
+  Donky-RichMessage-PopUp: e5accb94e09f818c546a108c01a01ed57e64b7ce
+  UIView-Autolayout: 042510c499403f58620998278ddd60fa7b6cd4a7
+
+COCOAPODS: 0.37.2

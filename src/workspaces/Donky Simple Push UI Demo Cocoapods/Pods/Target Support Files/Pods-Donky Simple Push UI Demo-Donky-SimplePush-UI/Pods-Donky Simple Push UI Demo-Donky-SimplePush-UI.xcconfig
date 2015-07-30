@@ -1,0 +1,1 @@
+PODS_DONKY_SIMPLE_PUSH_UI_DEMO_DONKY_SIMPLEPUSH_UI_OTHER_LDFLAGS = -framework "Foundation" -framework "UIKit"

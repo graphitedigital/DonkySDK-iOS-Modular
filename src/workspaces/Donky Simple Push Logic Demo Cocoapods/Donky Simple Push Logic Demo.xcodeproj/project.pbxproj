@@ -1,0 +1,506 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34D67FF3767E87BA82FF8DAB /* libPods-Donky Simple Push Logic Demo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 759E998F6144C5050C7EDCC3 /* libPods-Donky Simple Push Logic Demo.a */; };
+		34F52495F45317A0D72AD42D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F52C069D08524613B81A89 /* AppDelegate.m */; };
+		D08023AB1B64D760005B999F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D08023AA1B64D760005B999F /* main.m */; };
+		D08023B11B64D760005B999F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D08023B01B64D760005B999F /* ViewController.m */; };
+		D08023B41B64D760005B999F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D08023B21B64D760005B999F /* Main.storyboard */; };
+		D08023B61B64D760005B999F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D08023B51B64D760005B999F /* Images.xcassets */; };
+		D08023B91B64D760005B999F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D08023B71B64D760005B999F /* LaunchScreen.xib */; };
+		D08023C51B64D760005B999F /* Donky_Simple_Push_Logic_DemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D08023C41B64D760005B999F /* Donky_Simple_Push_Logic_DemoTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D08023BF1B64D760005B999F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D080239D1B64D760005B999F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D08023A41B64D760005B999F;
+			remoteInfo = "Donky Simple Push Logic Demo";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		34F5213F4CBAE48F2E155D34 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		34F52C069D08524613B81A89 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		55D5EBA9B2371019141EA5EE /* Pods-Donky Simple Push Logic Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Donky Simple Push Logic Demo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Donky Simple Push Logic Demo/Pods-Donky Simple Push Logic Demo.debug.xcconfig"; sourceTree = "<group>"; };
+		759E998F6144C5050C7EDCC3 /* libPods-Donky Simple Push Logic Demo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Donky Simple Push Logic Demo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		92267C43CD037B1E3065B3E8 /* Pods-Donky Simple Push Logic Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Donky Simple Push Logic Demo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Donky Simple Push Logic Demo/Pods-Donky Simple Push Logic Demo.release.xcconfig"; sourceTree = "<group>"; };
+		D08023A51B64D760005B999F /* Donky Simple Push Logic Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Donky Simple Push Logic Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D08023A91B64D760005B999F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D08023AA1B64D760005B999F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		D08023AF1B64D760005B999F /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		D08023B01B64D760005B999F /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		D08023B31B64D760005B999F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		D08023B51B64D760005B999F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		D08023B81B64D760005B999F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		D08023BE1B64D760005B999F /* Donky Simple Push Logic DemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Donky Simple Push Logic DemoTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D08023C31B64D760005B999F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D08023C41B64D760005B999F /* Donky_Simple_Push_Logic_DemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Donky_Simple_Push_Logic_DemoTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D08023A21B64D760005B999F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34D67FF3767E87BA82FF8DAB /* libPods-Donky Simple Push Logic Demo.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D08023BB1B64D760005B999F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0831A3EA3D373E121EE20E74 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				759E998F6144C5050C7EDCC3 /* libPods-Donky Simple Push Logic Demo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		34F523A1CD9C5FB51F0F45C7 /* App Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				34F5213F4CBAE48F2E155D34 /* AppDelegate.h */,
+				34F52C069D08524613B81A89 /* AppDelegate.m */,
+			);
+			path = "App Delegate";
+			sourceTree = "<group>";
+		};
+		839C97E18E53D74A77E71F13 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				55D5EBA9B2371019141EA5EE /* Pods-Donky Simple Push Logic Demo.debug.xcconfig */,
+				92267C43CD037B1E3065B3E8 /* Pods-Donky Simple Push Logic Demo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		D080239C1B64D760005B999F = {
+			isa = PBXGroup;
+			children = (
+				D08023A71B64D760005B999F /* Donky Simple Push Logic Demo */,
+				D08023C11B64D760005B999F /* Donky Simple Push Logic DemoTests */,
+				D08023A61B64D760005B999F /* Products */,
+				839C97E18E53D74A77E71F13 /* Pods */,
+				0831A3EA3D373E121EE20E74 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		D08023A61B64D760005B999F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D08023A51B64D760005B999F /* Donky Simple Push Logic Demo.app */,
+				D08023BE1B64D760005B999F /* Donky Simple Push Logic DemoTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D08023A71B64D760005B999F /* Donky Simple Push Logic Demo */ = {
+			isa = PBXGroup;
+			children = (
+				D08023AF1B64D760005B999F /* ViewController.h */,
+				D08023B01B64D760005B999F /* ViewController.m */,
+				D08023B21B64D760005B999F /* Main.storyboard */,
+				D08023B51B64D760005B999F /* Images.xcassets */,
+				D08023B71B64D760005B999F /* LaunchScreen.xib */,
+				D08023A81B64D760005B999F /* Supporting Files */,
+				34F523A1CD9C5FB51F0F45C7 /* App Delegate */,
+			);
+			path = "Donky Simple Push Logic Demo";
+			sourceTree = "<group>";
+		};
+		D08023A81B64D760005B999F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D08023A91B64D760005B999F /* Info.plist */,
+				D08023AA1B64D760005B999F /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D08023C11B64D760005B999F /* Donky Simple Push Logic DemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				D08023C41B64D760005B999F /* Donky_Simple_Push_Logic_DemoTests.m */,
+				D08023C21B64D760005B999F /* Supporting Files */,
+			);
+			path = "Donky Simple Push Logic DemoTests";
+			sourceTree = "<group>";
+		};
+		D08023C21B64D760005B999F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D08023C31B64D760005B999F /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D08023A41B64D760005B999F /* Donky Simple Push Logic Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D08023C81B64D760005B999F /* Build configuration list for PBXNativeTarget "Donky Simple Push Logic Demo" */;
+			buildPhases = (
+				DD39582471A5FEAA1E304742 /* Check Pods Manifest.lock */,
+				D08023A11B64D760005B999F /* Sources */,
+				D08023A21B64D760005B999F /* Frameworks */,
+				D08023A31B64D760005B999F /* Resources */,
+				A2407D1583E919DC12357679 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Donky Simple Push Logic Demo";
+			productName = "Donky Simple Push Logic Demo";
+			productReference = D08023A51B64D760005B999F /* Donky Simple Push Logic Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D08023BD1B64D760005B999F /* Donky Simple Push Logic DemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D08023CB1B64D760005B999F /* Build configuration list for PBXNativeTarget "Donky Simple Push Logic DemoTests" */;
+			buildPhases = (
+				D08023BA1B64D760005B999F /* Sources */,
+				D08023BB1B64D760005B999F /* Frameworks */,
+				D08023BC1B64D760005B999F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D08023C01B64D760005B999F /* PBXTargetDependency */,
+			);
+			name = "Donky Simple Push Logic DemoTests";
+			productName = "Donky Simple Push Logic DemoTests";
+			productReference = D08023BE1B64D760005B999F /* Donky Simple Push Logic DemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D080239D1B64D760005B999F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = "Donky Networks Ltd";
+				TargetAttributes = {
+					D08023A41B64D760005B999F = {
+						CreatedOnToolsVersion = 6.4;
+					};
+					D08023BD1B64D760005B999F = {
+						CreatedOnToolsVersion = 6.4;
+						TestTargetID = D08023A41B64D760005B999F;
+					};
+				};
+			};
+			buildConfigurationList = D08023A01B64D760005B999F /* Build configuration list for PBXProject "Donky Simple Push Logic Demo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D080239C1B64D760005B999F;
+			productRefGroup = D08023A61B64D760005B999F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D08023A41B64D760005B999F /* Donky Simple Push Logic Demo */,
+				D08023BD1B64D760005B999F /* Donky Simple Push Logic DemoTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D08023A31B64D760005B999F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D08023B41B64D760005B999F /* Main.storyboard in Resources */,
+				D08023B91B64D760005B999F /* LaunchScreen.xib in Resources */,
+				D08023B61B64D760005B999F /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D08023BC1B64D760005B999F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A2407D1583E919DC12357679 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Donky Simple Push Logic Demo/Pods-Donky Simple Push Logic Demo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DD39582471A5FEAA1E304742 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D08023A11B64D760005B999F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D08023B11B64D760005B999F /* ViewController.m in Sources */,
+				D08023AB1B64D760005B999F /* main.m in Sources */,
+				34F52495F45317A0D72AD42D /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D08023BA1B64D760005B999F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D08023C51B64D760005B999F /* Donky_Simple_Push_Logic_DemoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D08023C01B64D760005B999F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D08023A41B64D760005B999F /* Donky Simple Push Logic Demo */;
+			targetProxy = D08023BF1B64D760005B999F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		D08023B21B64D760005B999F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D08023B31B64D760005B999F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		D08023B71B64D760005B999F /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D08023B81B64D760005B999F /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		D08023C61B64D760005B999F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D08023C71B64D760005B999F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D08023C91B64D760005B999F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 55D5EBA9B2371019141EA5EE /* Pods-Donky Simple Push Logic Demo.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "Donky Simple Push Logic Demo/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		D08023CA1B64D760005B999F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 92267C43CD037B1E3065B3E8 /* Pods-Donky Simple Push Logic Demo.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "Donky Simple Push Logic Demo/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		D08023CC1B64D760005B999F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Donky Simple Push Logic DemoTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Donky Simple Push Logic Demo.app/Donky Simple Push Logic Demo";
+			};
+			name = Debug;
+		};
+		D08023CD1B64D760005B999F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Donky Simple Push Logic DemoTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Donky Simple Push Logic Demo.app/Donky Simple Push Logic Demo";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D08023A01B64D760005B999F /* Build configuration list for PBXProject "Donky Simple Push Logic Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D08023C61B64D760005B999F /* Debug */,
+				D08023C71B64D760005B999F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D08023C81B64D760005B999F /* Build configuration list for PBXNativeTarget "Donky Simple Push Logic Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D08023C91B64D760005B999F /* Debug */,
+				D08023CA1B64D760005B999F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D08023CB1B64D760005B999F /* Build configuration list for PBXNativeTarget "Donky Simple Push Logic DemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D08023CC1B64D760005B999F /* Debug */,
+				D08023CD1B64D760005B999F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D080239D1B64D760005B999F /* Project object */;
+}

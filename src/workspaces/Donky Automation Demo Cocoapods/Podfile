@@ -1,0 +1,16 @@
+# Uncomment this line to define a global platform for your project
+
+platform :ios, '7.0'
+inhibit_all_warnings!
+
+
+target 'Donky Automation Demo' do
+
+pod "Donky-Automation-Logic"
+
+end
+
+target 'Donky Automation DemoTests' do
+
+end
+

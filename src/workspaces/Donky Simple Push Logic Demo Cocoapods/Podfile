@@ -1,0 +1,16 @@
+# Uncomment this line to define a global platform for your project
+
+platform :ios, '7.0'
+inhibit_all_warnings!
+
+
+target 'Donky Simple Push Logic Demo' do
+
+pod "Donky-SimplePush-Logic"
+
+end
+
+target 'Donky Simple Push Logic DemoTests' do
+
+end
+

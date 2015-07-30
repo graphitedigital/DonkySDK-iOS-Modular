@@ -1,0 +1,6 @@
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/Donky-CommonMessaging-Logic" "${PODS_ROOT}/Headers/Public/Donky-Core-SDK" "${PODS_ROOT}/Headers/Public/Donky-RichMessage-Logic"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/AFNetworking" -isystem "${PODS_ROOT}/Headers/Public/Donky-CommonMessaging-Logic" -isystem "${PODS_ROOT}/Headers/Public/Donky-Core-SDK" -isystem "${PODS_ROOT}/Headers/Public/Donky-RichMessage-Logic"
+OTHER_LDFLAGS = $(inherited) -ObjC -l"Pods-Donky Rich Message Logic Demo-AFNetworking" -l"Pods-Donky Rich Message Logic Demo-Donky-CommonMessaging-Logic" -l"Pods-Donky Rich Message Logic Demo-Donky-Core-SDK" -l"Pods-Donky Rich Message Logic Demo-Donky-RichMessage-Logic" -framework "CoreGraphics" -framework "Foundation" -framework "MobileCoreServices" -framework "Security" -framework "SystemConfiguration" -framework "UIKit"
+OTHER_LIBTOOLFLAGS = $(OTHER_LDFLAGS)
+PODS_ROOT = ${SRCROOT}/Pods

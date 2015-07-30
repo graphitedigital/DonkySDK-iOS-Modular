@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  RichInboxTabs
+
+  Created by Chris Watson on 30/07/2015.
+  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+*/
+
+
+"MSG_PRV" = "%1$@ - %2$@";
+
+"MSG_NEWDVC" = "A new %2$@ has been registered against your account; if you did not register this device please let us know immediately.";
