@@ -48,8 +48,10 @@
     self  = [super init];
     if (self) {
         //Start Push Logic:
-        self.pushNotificationController = [[DPPushNotificationController alloc] init];
-        [self.pushNotificationController start];
+        [self setPushNotificationController:[[DPPushNotificationController alloc] init]];
+        [[self pushNotificationController] start];
+
+        [self setVibrate:YES];
     }
 
     return self;
@@ -62,21 +64,21 @@
 - (void)start {
 
     __weak DPUINotificationController *weakSelf = self;
-    self.pushReceivedHandler = ^(DNLocalEvent *event) {
+    [self setPushReceivedHandler:^(DNLocalEvent *event) {
         if ([event isKindOfClass:[DNLocalEvent class]]) {
             [weakSelf pushNotificationReceived:[event data]];
         }
-    };
+    }];
 
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyNotificationSimplePush handler:self.pushReceivedHandler];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyNotificationSimplePush handler:[self pushReceivedHandler]];
     
-    self.bannerTappedHandler = ^(DNLocalEvent *event) {
+    [self setBannerTappedHandler:^(DNLocalEvent *event) {
         if ([[event data][@"type"] isEqualToString:kDNDonkyNotificationSimplePush]) {
-            [weakSelf.notificationController bannerDismissTimerDidTick];
+            [[weakSelf notificationController] bannerDismissTimerDidTick];
         }
-    };
+    }];
 
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventNotificationTapped handler:self.bannerTappedHandler];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventNotificationTapped handler:[self bannerTappedHandler]];
     
     DNModuleDefinition *simplePushUIController = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.1.0.0"];
     [[DNDonkyCore sharedInstance] registerModule:simplePushUIController];
@@ -84,11 +86,11 @@
 }
 
 - (void)stop {
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyNotificationSimplePush handler:self.pushReceivedHandler];
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyNotificationSimplePush handler:self.bannerTappedHandler];
-    
-    self.bannerTappedHandler = nil;
-    self.pushNotificationController = nil;
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyNotificationSimplePush handler:[self pushReceivedHandler]];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyNotificationSimplePush handler:[self bannerTappedHandler]];
+
+    [self setBannerTappedHandler:nil];
+    [self setPushNotificationController:nil];
 }
 
 #pragma mark -
@@ -96,38 +98,43 @@
 
 - (void)pushNotificationReceived:(NSDictionary *)notificationData {
 
-    if (!self.notificationController) {
-        self.notificationController = [[DCUINotificationController alloc] init];
+    if (![self notificationController]) {
+        [self setNotificationController:[[DCUINotificationController alloc] init]];
     }
 
     __block BOOL duplicate = NO;
 
     NSArray *backgroundNotifications = notificationData[@"PendingPushNotifications"];
 
-    self.notification = notificationData[kDNDonkyNotificationSimplePush];
+    [self setNotification:notificationData[kDNDonkyNotificationSimplePush]];
 
     [backgroundNotifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSString *notificationID = obj;
-        if ([notificationID isEqualToString:[self.notification serverNotificationID]]) {
+        if ([notificationID isEqualToString:[[self notification] serverNotificationID]]) {
             duplicate = YES;
             *stop = YES;
         }
     }];
 
-    NSDate *expired = [NSDate donkyDateFromServer:[self.notification data][@"expiryTimeStamp"]];
+    NSDate *expired = [NSDate donkyDateFromServer:[[self notification] data][@"expiryTimeStamp"]];
 
     BOOL messageExpired = NO;
-    if (expired)
+    if (expired) {
         messageExpired = [expired donkyHasDateExpired];
+    }
     
     if (!duplicate && !messageExpired) {
-        DPUINotification *donkyNotification = [[DPUINotification alloc] initWithNotification:self.notification];
+        DPUINotification *donkyNotification = [[DPUINotification alloc] initWithNotification:[self notification]];
         DPUIBannerView *bannerView = [[DPUIBannerView alloc] initWithNotification:donkyNotification];
-        [self.notificationController presentNotification:bannerView];
+        [[self notificationController] presentNotification:bannerView];
+
+        if ([self shouldVibrate]) {
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+        }
 
         //If we are on simple push, we add the other gestures:
         if (![bannerView buttonView]) {
-            [self.notificationController.notificationBannerView configureGestures];
+            [[[self notificationController] notificationBannerView] configureGestures];
         }
     }
     else

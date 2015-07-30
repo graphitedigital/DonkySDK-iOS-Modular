@@ -20,6 +20,6 @@
 @dynamic sendTries;
 @dynamic serverNotificationID;
 @dynamic type;
-
+@dynamic notificationID;
 
 @end

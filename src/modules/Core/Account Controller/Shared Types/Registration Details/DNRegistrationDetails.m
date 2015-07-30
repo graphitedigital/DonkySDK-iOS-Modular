@@ -18,14 +18,15 @@
 @end
 
 @implementation DNRegistrationDetails
+
 - (instancetype)initWithDeviceDetails:(DNDeviceDetails *)deviceDetails clientDetails:(DNClientDetails *)clientDetails userDetails:(DNUserDetails *)userDetails {
 
     self = [super init];
 
     if (self) {
-        self.deviceDetails = deviceDetails;
-        self.clientDetails = clientDetails;
-        self.userDetails = userDetails;
+        [self setDeviceDetails:deviceDetails];
+        [self setClientDetails:clientDetails];
+        [self setUserDetails:userDetails];
     }
 
     return self;

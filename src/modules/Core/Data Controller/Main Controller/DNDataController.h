@@ -53,22 +53,4 @@
  */
 - (void)saveAllData;
 
-#pragma mark -
-#pragma mark - Private... Not for public consumption. Public use is unsupported and may result in undesired SDK behaviour.
-
-/*!
- PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
- */
-- (DNUserDetails *)currentDeviceUser;
-
-/*!
- PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
- */
-- (void)saveUserDetails:(DNUserDetails *)details;
-
-/*!
- PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
- */
-- (DNDeviceUser *)newDevice;
-
 @end

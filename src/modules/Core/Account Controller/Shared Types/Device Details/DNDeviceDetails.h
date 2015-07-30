@@ -44,6 +44,13 @@
 @property(nonatomic, readonly) NSString *deviceSecret;
 
 /*!
+ The operating system of the current device.
+ 
+ @since 2.4.3.1
+ */
+@property(nonatomic, readonly) NSString *operatingSystem;
+
+/*!
  Initialiser method to create a new DNDeviceDetails object with the provided user configurable properties.
  
  @param type                 the type of device.

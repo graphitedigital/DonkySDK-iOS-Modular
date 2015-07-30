@@ -33,7 +33,7 @@ extern NSString * const kDRichMessageNotificationTapped;
 extern NSString * const kDRichMessageNotificationEvent;
 
 /*!
- Local evnt published when the rich message logic controller should affect the badge count.
+ Local event published when the rich message logic controller should affect the badge count.
  
  @since 2.2.2.7
  */

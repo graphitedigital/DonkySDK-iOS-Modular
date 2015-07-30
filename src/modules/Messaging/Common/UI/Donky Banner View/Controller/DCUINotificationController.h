@@ -37,4 +37,12 @@
  */
 - (void)bannerDismissTimerDidTick;
 
+/*!
+ Helper method to overide the attempt of loading an avatar. This will display the 
+ default 'message' image.
+ 
+ @since 2.4.3.1
+ */
+- (void)loadDefaultAvatar;
+
 @end

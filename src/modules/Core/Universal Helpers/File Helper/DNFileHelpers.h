@@ -28,6 +28,15 @@
 + (NSString *)pathForDocumentDirectory;
 
 /*!
+ Returns the documents directory in the form of a URL.
+ 
+ @return URL object pointing to applications document directory.
+ 
+ @since 2.4.3.1
+ */
++ (NSURL *)urlPathForDocumentDirectory;
+
+/*!
  Returns the full file path to a directory within the apps documents directory.
  
  @param directory    the name of the directory. Without the '/'. If the directory does not exist then the directory will be
@@ -50,6 +59,17 @@
  @since 2.0.0.0
  */
 + (NSString *)pathForFile:(NSString *)fileName inDirectory:(NSString *)directory;
+
+/*!
+ Method to retrieve a bundle from the applications document directory with the specified name.
+ 
+ @param bundleName the name of the bundle required.
+ 
+ @return a new bundle object, nil if no bundle is found.
+ 
+ @since 2.4.3.1
+ */
++ (NSBundle *)bundleWithName:(NSString *)bundleName;
 
 /*!
  Helper method to save data to a file path.

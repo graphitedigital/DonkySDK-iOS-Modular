@@ -15,10 +15,10 @@
 #import "DCAConstants.h"
 
 @interface DRLogicMainController ()
-@property (nonatomic, strong) DNLocalEventHandler backgroundNotificationsReceived;
-@property(nonatomic, copy) DNSubscriptionBachHandler richMessageHandler;
-@property (nonatomic, strong) NSMutableArray *backgroundNotifications;
-@property (nonatomic, strong) DNLocalEventHandler notificationLoaded;
+@property(nonatomic, strong) DNLocalEventHandler backgroundNotificationsReceived;
+@property(nonatomic, strong) DNSubscriptionBachHandler richMessageHandler;
+@property(nonatomic, strong) NSMutableArray *backgroundNotifications;
+@property(nonatomic, strong) DNLocalEventHandler notificationLoaded;
 @property(nonatomic, strong) DNModuleDefinition *moduleDefinition;
 @property(nonatomic, strong) DNSubscription *subscription;
 @end
@@ -50,6 +50,8 @@
 
         [self setBackgroundNotifications:[[NSMutableArray alloc] init]];
 
+        [self setVibrate:YES];
+
     }
     
     return self;
@@ -59,48 +61,44 @@
 
     [self deleteAllExpiredMessages];
 
-    //Get unread chat messages:
-    NSArray *unreadChat = [self allUnreadRichMessages];
+    [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.1.1"]];
 
-    //We don't want this to block the thread:
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [unreadChat enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            DNRichMessage *richMessage = obj;
-            DNLocalEvent *richEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyNotificationRichMessage publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:richMessage];
-            [[DNDonkyCore sharedInstance] publishEvent:richEvent];
-        }];
-    });
+    [self setSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationRichMessage batchHandler:[self richMessageHandler]]];
 
-    self.moduleDefinition = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.1.1"];
+    [[DNDonkyCore sharedInstance] subscribeToDonkyNotifications:[self moduleDefinition] subscriptions:@[[self subscription]]];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventNotificationLoaded handler:[self notificationLoaded]];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventBackgroundNotificationReceived handler:[self backgroundNotificationsReceived]];
 
-    self.subscription = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationRichMessage batchHandler:self.richMessageHandler];
-
-    [[DNDonkyCore sharedInstance] subscribeToDonkyNotifications:self.moduleDefinition subscriptions:@[self.subscription]];
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventNotificationLoaded handler:self.notificationLoaded];
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventBackgroundNotificationReceived handler:self.backgroundNotificationsReceived];
-
+    __weak DRLogicMainController *weakSelf = self;
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppWillEnterForegroundNotification handler:^(DNLocalEvent *event) {
-        if ([self.backgroundNotifications count]) {
-            //Report influenced open:
-            DNLocalEvent *pushOpenEvent = [[DNLocalEvent alloc] initWithEventType:kDAEventInfluencedAppOpen
-                                                                        publisher:NSStringFromClass([self class])
+        @synchronized (weakSelf.backgroundNotifications) {
+            if ([[weakSelf backgroundNotifications] count]) {
+                //Report influenced open:
+                DNLocalEvent *pushOpenEvent = [[DNLocalEvent alloc] initWithEventType:kDAEventInfluencedAppOpen
+                                                                        publisher:NSStringFromClass([weakSelf class])
                                                                         timeStamp:[NSDate date]
-                                                                             data:self.backgroundNotifications];
-            [[DNDonkyCore sharedInstance] publishEvent:pushOpenEvent];
+                                                                             data:[weakSelf backgroundNotifications]];
+                [[DNDonkyCore sharedInstance] publishEvent:pushOpenEvent];
+                [[weakSelf backgroundNotifications] removeAllObjects];
+            }
         }
     }];
 
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNEventRegistration handler:^(DNLocalEvent *event) {
         BOOL wasUpdate = [[event data][@"IsUpdate"] boolValue];
         if (!wasUpdate) {
-            [self deleteAllMessages:[self allRichMessagesAscending:YES]];
+            [weakSelf deleteAllMessages:[weakSelf allRichMessagesAscending:YES]];
         }
     }];
+
+    [[DNDonkyCore sharedInstance] registerService:NSStringFromClass([self class]) instance:self];
+
 }
 
 - (void)stop {
-    [[DNDonkyCore sharedInstance] unSubscribeToDonkyNotifications:self.moduleDefinition subscriptions:@[self.subscription]];
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventNotificationLoaded handler:self.notificationLoaded];
+    [[DNDonkyCore sharedInstance] unSubscribeToDonkyNotifications:[self moduleDefinition] subscriptions:@[[self subscription]]];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventNotificationLoaded handler:[self notificationLoaded]];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventBackgroundNotificationReceived handler:[self backgroundNotificationsReceived]];
 }
 
 #pragma mark -
@@ -147,9 +145,9 @@
 }
 
 - (void)richMessageNotificationsReceived:(NSArray *)notifications {
-    [DRLogicMainControllerHelper richMessageNotificationReceived:notifications backgroundNotifications:self.backgroundNotifications];
     @synchronized (self.backgroundNotifications) {
-        [self.backgroundNotifications removeAllObjects];
+        [DRLogicMainControllerHelper richMessageNotificationReceived:notifications backgroundNotifications:[self backgroundNotifications]];
+        [[self backgroundNotifications] removeAllObjects];
     }
 }
 
@@ -178,9 +176,16 @@
 
 - (DNLocalEventHandler)backgroundNotificationsReceived {
     if (!_backgroundNotificationsReceived) {
-        _backgroundNotificationsReceived = [DRLogicMainControllerHelper backgroundNotificationsReceived:self.backgroundNotifications];
+        _backgroundNotificationsReceived = [DRLogicMainControllerHelper backgroundNotificationsReceived:[self backgroundNotifications]];
     }
     return _backgroundNotificationsReceived;
+}
+
+#pragma mark -
+#pragma mark - Private Services
+
+- (NSInteger)unreadMessageCount {
+    return [[self allUnreadRichMessages] count];
 }
 
 @end

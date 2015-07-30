@@ -93,6 +93,13 @@
  */
 @property(nonatomic, readonly) NSString *lastName;
 
+/*!
+ Basic initialiser method
+ 
+ @return returned a new instance of the DNUserDetails
+ 
+ @since 2.4.3.1
+ */
 - (instancetype)init;
 
 /*!
@@ -114,30 +121,13 @@
  */
 - (instancetype)initWithUserID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)emailAddress mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties;
 
-
-/*!
- Initialise method to create and set the properties of a new device user.
- 
- @param userID               the user ID to use for this user.
- @param displayName          the users display name
- @param emailAddress         the users email address. Must be a valid email address, if not any updates to the network will result in validation failures.
- @param countryCode          the ISO country code of the user, only required if setting the mobile phone number.
- @param mobileNumber         the mobile number of the user.
- @param firstName            the first name of the user.
- @param lastName             the last name of the user.
- @param avatarAssetID        the avatar ID of the user.
- @param additionalProperties any additional key/value properties to store against this user.
- @param isAnonymous          whether this is an anonymous user.
- 
- @return returns a new instance of the DNUserDetails class with the provided details.
- 
- @since 2.0.0.1
- */
-- (instancetype)initWithUserID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)emailAddress mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSMutableArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties anonymous:(BOOL)isAnonymous;
-
-
 #pragma mark -
 #pragma mark - Private... Not for public consumption. Public use is unsupported and may result in undesired SDK behaviour.
+
+/*!
+ PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ */
+- (instancetype)initWithUserID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)emailAddress mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSMutableArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties anonymous:(BOOL)isAnonymous;
 
 /*!
   PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour

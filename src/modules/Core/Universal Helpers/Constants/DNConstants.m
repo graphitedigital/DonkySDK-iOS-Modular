@@ -149,7 +149,7 @@ NSString * const kDNMiscOperatingSystem = @"iOS";
 
 NSString * const kDonkyErrorDomain = @"com.dynmark.donkyNetworkSDK";
 
-CGFloat  const kDonkyLogFileSizeLimit = 2000.0; //this is in bytes, default is 2k
+CGFloat  const kDonkyLogFileSizeLimit = 2000000.0f; //this is in bytes, default is 2mb
 
 NSString * const kDNTempDirectory = @"DonkyTempDirectory";
 

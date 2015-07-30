@@ -26,6 +26,8 @@ static NSString *const DNTokenExpiry = @"TokenExpiry";
 static NSString *const DNNetworkID = @"c3d2b4eb-3c8d-4b5b-b52c-cc92ada48f96";
 static NSString *const DNApiKey = @"14f05d07-54c6-49ed-8c27-164e82fd1ec8";
 static NSString *const DNIsSuspended = @"IsSuspended";
+static NSString *const DNSDKVersion = @"SDKVersion";
+static NSString *const DNOSVersion = @"OSVersion";
 
 @implementation DNDonkyNetworkDetails
 
@@ -93,6 +95,14 @@ static NSString *const DNIsSuspended = @"IsSuspended";
     [DNUserDefaultsHelper saveObject:@(suspended) withKey:DNIsSuspended];
 }
 
++ (void)saveSDKVersion:(NSString *)sdkVersion {
+    [DNUserDefaultsHelper saveObject:sdkVersion withKey:DNSDKVersion];
+}
+
++ (void)saveOperatingSystemVersion:(NSString *)operatingSystem {
+    [DNUserDefaultsHelper saveObject:operatingSystem withKey:DNOSVersion];
+}
+
 + (BOOL)isDeviceRegistered {
     return [DNDonkyNetworkDetails networkId] != nil;
 }
@@ -109,12 +119,20 @@ static NSString *const DNIsSuspended = @"IsSuspended";
     return [[[DNDataController sharedInstance] temporaryContext] hasChanges] || [[[DNDataController sharedInstance] mainContext] hasChanges];
 }
 
-+ (BOOL) isPushEnabled {
++ (BOOL)isPushEnabled {
     return [[DNUserDefaultsHelper objectForKey:DNPushEnabled] boolValue];
 }
 
 + (BOOL)isSuspended {
     return [[DNUserDefaultsHelper objectForKey:DNIsSuspended] boolValue];
+}
+
++ (NSString *)savedSDKVersion {
+    return [DNUserDefaultsHelper objectForKey:DNSDKVersion];
+}
+
++ (NSString *)savedOperatingSystemVersion {
+    return [DNUserDefaultsHelper objectForKey:DNOSVersion];
 }
 
 @end

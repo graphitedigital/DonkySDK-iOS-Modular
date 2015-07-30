@@ -30,27 +30,29 @@ static NSString *const DCMTimeToReadSeconds = @"timeToReadSeconds";
 @implementation DCMMainController
 
 + (void)markMessageAsReceived:(DNServerNotification *)notification {
-    
-    NSDictionary *notificationData = [notification data];
-    
-    NSMutableDictionary *messageReceived = [[NSMutableDictionary alloc] init];
-    
-    BOOL messageExpired = [[NSDate donkyDateFromServer:notificationData[DCMExpiryTimeStamp]] donkyHasDateExpired];
 
-    [messageReceived dnSetObject:DCMMessageReceived forKey:DCMType];
-    [messageReceived dnSetObject:notificationData[DCMSenderInternalUserID] forKey:DCMSenderInternalUserID];
-    [messageReceived dnSetObject:notificationData[DCMMessageID] forKey:DCMMessageID];
-    [messageReceived dnSetObject:notificationData[DCMSenderMessageID] forKey:DCMSenderMessageID];
-    [messageReceived dnSetObject:messageExpired ? @"true" : @"false" forKey:DCMReceivedExpired];
-    [messageReceived dnSetObject:notificationData[DCMessageType] forKey:DCMMessageType];
-    [messageReceived dnSetObject:notificationData[DCMMessageScope] forKey:DCMMessageScope];
-    [messageReceived dnSetObject:notificationData[DCMSentTimestamp] forKey:DCMSentTimestamp];
-    [messageReceived dnSetObject:notificationData[DCMContextItems] forKey:DCMContextItems];
-    
-    DNClientNotification *msgReceived = [[DNClientNotification alloc] initWithType:DCMMessageReceived data:messageReceived acknowledgementData:notification];
-    [[msgReceived acknowledgementDetails] dnSetObject:DCMDelivered forKey:DCMResult];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSDictionary *notificationData = [notification data];
 
-    [[DNNetworkController sharedInstance] queueClientNotifications:@[msgReceived]];
+        NSMutableDictionary *messageReceived = [[NSMutableDictionary alloc] init];
+
+        BOOL messageExpired = [[NSDate donkyDateFromServer:notificationData[DCMExpiryTimeStamp]] donkyHasDateExpired];
+
+        [messageReceived dnSetObject:DCMMessageReceived forKey:DCMType];
+        [messageReceived dnSetObject:notificationData[DCMSenderInternalUserID] forKey:DCMSenderInternalUserID];
+        [messageReceived dnSetObject:notificationData[DCMMessageID] forKey:DCMMessageID];
+        [messageReceived dnSetObject:notificationData[DCMSenderMessageID] forKey:DCMSenderMessageID];
+        [messageReceived dnSetObject:messageExpired ? @"true" : @"false" forKey:DCMReceivedExpired];
+        [messageReceived dnSetObject:notificationData[DCMessageType] forKey:DCMMessageType];
+        [messageReceived dnSetObject:notificationData[DCMMessageScope] forKey:DCMMessageScope];
+        [messageReceived dnSetObject:notificationData[DCMSentTimestamp] forKey:DCMSentTimestamp];
+        [messageReceived dnSetObject:notificationData[DCMContextItems] forKey:DCMContextItems];
+
+        DNClientNotification *msgReceived = [[DNClientNotification alloc] initWithType:DCMMessageReceived data:messageReceived acknowledgementData:notification];
+        [[msgReceived acknowledgementDetails] dnSetObject:DCMDelivered forKey:DCMResult];
+
+        [[DNNetworkController sharedInstance] queueClientNotifications:@[msgReceived]];
+    });
 
 }
 

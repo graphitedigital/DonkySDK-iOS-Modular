@@ -30,42 +30,44 @@ static NSString *const DNPascalAlwaysSubmitErrors = @"alwaysSubmitErrors";
 @implementation DNLoggingController
 
 + (void)log:(NSString *)message function:(NSString *)function line:(NSInteger)line logType:(DonkyLogType) logType {
-    //Can we output debug logs:
-    if ([DNAppSettingsController loggingEnabled]) {
-        //We check if we can log out this type of error, if not simply return early.
-        switch (logType) {
-            case DNDebugLog:
-                if (![DNAppSettingsController outputDebugLogs] || ![DNSystemHelpers donkyIsDebuggerAttached])
-                    return;
-                break;
-            case DNErrorLog:
-                if (![DNAppSettingsController outputErrorLogs])
-                    return;
-                break;
-            case DNSensitiveLog:
-                if (![DNAppSettingsController outputSensitiveLogs] || ![DNSystemHelpers donkyIsDebuggerAttached])
-                    return;
-                break;
-            case DNWarningLog:
-                if (![DNAppSettingsController outputWarningLogs])
-                    return;
-                break;
-            case DNInfoLog:
-                if (![DNAppSettingsController outputInfoLogs])
-                    return;
-                break;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        //Can we output debug logs:
+        if ([DNAppSettingsController loggingEnabled]) {
+            //We check if we can log out this type of error, if not simply return early.
+            switch (logType) {
+                case DNDebugLog:
+                    if (![DNAppSettingsController outputDebugLogs] || ![DNSystemHelpers donkyIsDebuggerAttached])
+                        return;
+                    break;
+                case DNErrorLog:
+                    if (![DNAppSettingsController outputErrorLogs])
+                        return;
+                    break;
+                case DNSensitiveLog:
+                    if (![DNAppSettingsController outputSensitiveLogs] || ![DNSystemHelpers donkyIsDebuggerAttached])
+                        return;
+                    break;
+                case DNWarningLog:
+                    if (![DNAppSettingsController outputWarningLogs])
+                        return;
+                    break;
+                case DNInfoLog:
+                    if (![DNAppSettingsController outputInfoLogs])
+                        return;
+                    break;
+            }
+
+            //Construct the log string:
+            NSString *log = [NSString stringWithFormat:@"%@ [line %li] %@", function, (long) line, message];
+            //Output to the console:
+            NSLog(@"%@", log);
+            //Save this log to the file:
+            [DNLoggingController addLogToFile:log];
+
+            DNLocalEvent *logEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyLogEvent publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@{@"LogLevel" : @(logType), @"Message" : log}];
+            [[DNDonkyCore sharedInstance] publishEvent:logEvent];
         }
-
-        //Construct the log string:
-        NSString *log = [NSString stringWithFormat:@"%@ [line %li] %@", function, (long) line, message];
-        //Output to the console:
-        NSLog(@"%@", log);
-        //Save this log to the file:
-        [DNLoggingController addLogToFile:log];
-
-        DNLocalEvent *logEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyLogEvent publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@{@"LogLevel" : @(logType), @"Message" : log}];
-        [[DNDonkyCore sharedInstance] publishEvent:logEvent];
-    }
+    });
 }
 
 + (void)addLogToFile:(NSString *)log {
@@ -78,7 +80,7 @@ static NSString *const DNPascalAlwaysSubmitErrors = @"alwaysSubmitErrors";
     NSData *data = [stringData dataUsingEncoding:NSUTF8StringEncoding];
     [DNFileHelpers saveData:data toPath:filePath];
 
-    //Get log filesize:
+    //Get log file size:
     if ([DNFileHelpers sizeForFile:filePath] > kDonkyLogFileSizeLimit) {
         [DNLoggingController archiveDebugLog];
     }

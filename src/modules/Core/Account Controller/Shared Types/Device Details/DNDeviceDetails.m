@@ -42,16 +42,18 @@ static NSString *const DNRegistrationAdditionalProperties = @"additionalProperti
     self = [super init];
 
     if (self) {
-        
-        self.deviceID = [DNDonkyNetworkDetails deviceID];
-        self.model = [DNDeviceDetailsHelper deviceModel];
-        self.operatingSystem = [DNDeviceDetailsHelper operatingSystem];
-        self.osVersion = [DNDeviceDetailsHelper osVersion];
-        
-        self.deviceSecret = [DNDonkyNetworkDetails deviceSecret];
-        self.deviceName = [DNDeviceDetailsHelper deviceName];
-        self.additionalProperties = [DNDeviceDetailsHelper additionalProperties];
-        self.type = [DNDeviceDetailsHelper deviceType];
+
+        [self setDeviceID:[DNDonkyNetworkDetails deviceID]];
+        [self setModel:[DNDeviceDetailsHelper deviceModel]];
+        [self setOperatingSystem:[DNDeviceDetailsHelper operatingSystem]];
+        [self setOsVersion:[DNDeviceDetailsHelper osVersion]];
+
+
+        [self setDeviceSecret:[DNDonkyNetworkDetails deviceSecret]];
+        [self setDeviceName:[DNDeviceDetailsHelper deviceName]];
+
+        [self setAdditionalProperties:[DNDeviceDetailsHelper additionalProperties]];
+        [self setType:[DNDeviceDetailsHelper deviceType]];
 
     }
 
@@ -64,9 +66,10 @@ static NSString *const DNRegistrationAdditionalProperties = @"additionalProperti
     
     if (self) {
 
-        self.type = type;
-        self.deviceName = deviceName;
-        self.additionalProperties = additionalProperties;
+        [self setType:type];
+        [self setDeviceName:deviceName];
+        [self setAdditionalProperties:additionalProperties];
+
     }
 
     return self;

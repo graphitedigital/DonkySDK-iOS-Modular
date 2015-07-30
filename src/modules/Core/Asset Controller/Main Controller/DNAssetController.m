@@ -18,8 +18,9 @@ static NSString *const DNAssetURLFormat = @"AssetDownloadUrlFormat";
 
 + (UIImage *) avatarAssetForID:(NSString *)avatarAssetID {
 
-    if (!avatarAssetID || !avatarAssetID.length)
+    if (!avatarAssetID || ![avatarAssetID length]) {
         return nil;
+    }
     
     NSString *assetDownloadUrl = [DNConfigurationController configuration][DNAssetURLFormat];
 
@@ -30,8 +31,9 @@ static NSString *const DNAssetURLFormat = @"AssetDownloadUrlFormat";
     NSURL *url = [[NSURL alloc] initWithString:assetDownloadUrl];
     NSData *data = [[NSData alloc] initWithContentsOfURL:url];
 
-    if (!data)
+    if (!data) {
         DNErrorLog(@"Couldn't download asset: %@", assetDownloadUrl);
+    }
 
     return [UIImage imageWithData:data];
     

@@ -26,9 +26,9 @@ static NSString *DNContactAlertSound = @"contactAlertSound";
     self = [super init];
     
     if (self) {
-        
-        self.token = token;
-        
+
+        [self setToken:token];
+
     }
     
     return self;
@@ -38,7 +38,7 @@ static NSString *DNContactAlertSound = @"contactAlertSound";
 
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
 
-    [parameters dnSetObject:self.token forKey:DNToken];
+    [parameters dnSetObject:[self token] forKey:DNToken];
     [parameters dnSetObject:@"apns" forKey:DNRegistrationType];
     [parameters dnSetObject:[[NSBundle mainBundle] bundleIdentifier] forKey:DNBundleID];
 

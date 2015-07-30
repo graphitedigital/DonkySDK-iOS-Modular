@@ -25,6 +25,8 @@ static NSString *const DPPushNotificationID = @"notificationId";
 
 static NSString *const DNInteractionResult = @"InteractionResult";
 
+static NSString *const DNNotificationRichController = @"DRLogicMainController";
+
 @implementation DNNotificationController
 
 + (void)registerForPushNotifications {
@@ -75,6 +77,9 @@ static NSString *const DNInteractionResult = @"InteractionResult";
         DNInfoLog(@"Registering device token succeeded.");
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         DNErrorLog(@"Registering device token failed: %@", [error localizedDescription]);
+        if ([token length]) {
+            [DNNotificationController registerDeviceToken:token];
+        }
     }];
 }
 
@@ -84,55 +89,62 @@ static NSString *const DNInteractionResult = @"InteractionResult";
 }
 
 + (void)didReceiveNotification:(NSDictionary *)userInfo handleActionIdentifier:(NSString *)identifier completionHandler:(void (^)(NSString *))handler {
-
     if (![[DNDonkyCore sharedInstance] serviceForType:DNEventInteractivePushData]) {
         [[DNDonkyCore sharedInstance] subscribeToLocalEvent:DNEventInteractivePushData handler:^(DNLocalEvent *event) {
-            if ([event isKindOfClass:[DNLocalEvent class]])
-                handler([event data]);
+            if ([event isKindOfClass:[DNLocalEvent class]]) {
+                if (handler) {
+                    handler([event data]);
+                }
+            }
         }];
         [[DNDonkyCore sharedInstance] registerService:DNEventInteractivePushData instance:self];
     }
 
     if (identifier) {
         NSString *url = [userInfo[@"lbl1"] isEqualToString:identifier] ? userInfo[@"link1"] : userInfo[@"link2"];
-        handler(url);
+        if (handler) {
+            handler(url);
+        }
     }
 
     NSString *notificationID = userInfo[DPPushNotificationID];
     //Publish background notification event:
-    if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
-        DNLocalEvent *backgroundNotificationEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventBackgroundNotificationReceived
-                                                                                  publisher:NSStringFromClass([self class])
-                                                                                  timeStamp:[NSDate date]
-                                                                                       data:@{@"NotificationID" : notificationID}];
-        [[DNDonkyCore sharedInstance] publishEvent:backgroundNotificationEvent];
 
-        [[DNNetworkController sharedInstance] serverNotificationForId:notificationID success:^(NSURLSessionDataTask *task, id responseData) {
-            NSLog(@"%@", responseData);
-            if (identifier) {
-                DNLocalEvent *interactionResult = [[DNLocalEvent alloc] initWithEventType:DNInteractionResult publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:[DNNotificationController reportButtonInteraction:identifier userInfo:responseData]];
-                [[DNDonkyCore sharedInstance] publishEvent:interactionResult];
-            }
+    BOOL background = [[UIApplication sharedApplication] applicationState] != UIApplicationStateActive;
+
+    [[DNNetworkController sharedInstance] serverNotificationForId:notificationID success:^(NSURLSessionDataTask *task, id responseData) {
+        if (identifier) {
+            DNLocalEvent *interactionResult = [[DNLocalEvent alloc] initWithEventType:DNInteractionResult
+                                                                            publisher:NSStringFromClass([self class])
+                                                                            timeStamp:[NSDate date]
+                                                                                 data:[DNNotificationController reportButtonInteraction:identifier userInfo:responseData]];
+            [[DNDonkyCore sharedInstance] publishEvent:interactionResult];
+        }
+        if (background) {
+            DNLocalEvent *backgroundNotificationEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventBackgroundNotificationReceived
+                                                                                      publisher:NSStringFromClass([self class])
+                                                                                      timeStamp:[NSDate date]
+                                                                                           data:@{@"NotificationID" : notificationID}];
+            [[DNDonkyCore sharedInstance] publishEvent:backgroundNotificationEvent];
+            [DNNotificationController loadNotificationMessage:responseData notificationID:nil];
+        }
+
+        if (handler) {
             handler(nil);
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            if ([DNErrorController serviceReturned:404 error:error]) {
-                //This notification has already been ack'd, we can then send out a local event With the ID
-                DNLocalEvent *ackedEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventNotificationLoaded
-                                                                         publisher:NSStringFromClass([self class])
-                                                                         timeStamp:[NSDate date]
-                                                                              data:notificationID];
-                [[DNDonkyCore sharedInstance] publishEvent:ackedEvent];
-            }
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (handler) {
             handler(nil);
-        }];
-    }
-    else {
-        [[DNNetworkController sharedInstance] synchroniseSuccess:^(NSURLSessionDataTask *task, id responseData) {
-            handler(nil);
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            handler(nil);
-        }];
-    }
+        }
+    }];
+}
+
++ (void)loadNotificationMessage:(DNServerNotification *)notification notificationID:(NSString *)notificationID {
+    DNLocalEvent *loadedNotificationEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventNotificationLoaded
+                                                             publisher:NSStringFromClass([self class])
+                                                             timeStamp:[NSDate date]
+                                                                  data:notificationID ? : notification];
+    [[DNDonkyCore sharedInstance] publishEvent:loadedNotificationEvent];
 }
 
 + (NSMutableDictionary *)reportButtonInteraction:(NSString *)identifier userInfo:(DNServerNotification *)notification {
@@ -171,6 +183,31 @@ static NSString *const DNInteractionResult = @"InteractionResult";
     [params dnSetObject:[notification data][@"contextItems"] forKey:@"contextItems"];
 
     return params;
+}
+
++ (void)resetApplicationBadgeCount {
+
+    NSInteger count = 0;
+
+    //Calculate unread count:
+    if ([[DNDonkyCore sharedInstance] serviceForType:DNNotificationRichController]) {
+        SEL unreadCount = NSSelectorFromString(@"unreadMessageCount");
+
+        id serviceInstance = [[DNDonkyCore sharedInstance] serviceForType:DNNotificationRichController];
+
+        if ([serviceInstance respondsToSelector:unreadCount]) {
+
+            count += ((NSInteger (*)(id, SEL))[serviceInstance methodForSelector:unreadCount])(serviceInstance, unreadCount);
+
+            DNInfoLog(@"Resetting to Master count: %ld", (long)count);
+        }
+
+        DNLocalEvent *changeBadgeEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkySetBadgeCount
+                                                                       publisher:NSStringFromClass([DNNotificationController class])
+                                                                       timeStamp:[NSDate date]
+                                                                            data:@(count)];
+        [[DNDonkyCore sharedInstance] publishEvent:changeBadgeEvent];
+    }
 }
 
 @end

@@ -36,10 +36,7 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
         [exchangeRequests enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             NSURLSessionDataTask *task = obj;
             if (([[task taskDescription] isEqualToString:kDNNetworkRegistration] ||
-                    [[task taskDescription] isEqualToString:kDNNetworkAuthentication] ||
-                    [[task taskDescription] isEqualToString:kDNNetworkRegistrationDeviceUser] ||
-                    [[task taskDescription] isEqualToString:kDNNetworkRegistrationDevice] ||
-                    [[task taskDescription] isEqualToString:kDNNetworkRegistrationClient]) &&
+                    [[task taskDescription] isEqualToString:kDNNetworkAuthentication]) &&
                     [task state] != NSURLSessionTaskStateCompleted) {
                 isPerformingBlockingTask = YES;
                 *stop = YES;
@@ -74,22 +71,27 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
     NSMutableDictionary *errorDictionary = nil;
     if (data) {
         id errorObject = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingOptions) kNilOptions error:nil];
-        if ([errorObject isKindOfClass:[NSArray class]])
+        if ([errorObject isKindOfClass:[NSArray class]]) {
             errorDictionary = [[errorObject firstObject] mutableCopy];
-        else if ([errorObject isKindOfClass:[NSDictionary class]])
+        }
+        else if ([errorObject isKindOfClass:[NSDictionary class]]) {
             errorDictionary = errorObject;
-        else
+        }
+        else {
             DNInfoLog(@"unhandled error object of type: %@\n%@", [errorObject class], [error localizedDescription]);
+        }
     }
 
     DNErrorLog(@"Request %@ failed, error result = %@", [task taskDescription], errorDictionary ? : [error localizedDescription]);
 
     NSError *newError = nil;
-    if (errorDictionary)
+    if (errorDictionary) {
         newError = [DNErrorController errorCode:DNCoreSDKNetworkError userInfo:errorDictionary];
+    }
 
-    if ([request failureBlock])
+    if ([request failureBlock]) {
         [request failureBlock](task, newError ? : error);
+    }
 
     //Retry policy:
     [DNNetworkHelper deviceUserDeleted:newError ? : error];
@@ -151,12 +153,10 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
                 [unAcceptableNotifications addObject:notification];
             }
             else {
-                @synchronized (pendingNotifications) {
-                    if (![pendingNotifications containsObject:obj]) {
-                        [pendingNotifications addObject:obj];
-                    }
-                    [acceptableNotifications addObject:notification];
+                if (![pendingNotifications containsObject:obj]) {
+                    [pendingNotifications addObject:obj];
                 }
+                [acceptableNotifications addObject:notification];
             }
         }
     }];
@@ -217,13 +217,15 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
             if (successBlock) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[DNDataController sharedInstance] saveAllData];
-                    successBlock(task, nil); //We don't return the response data as the core library handles this.
+                    if (successBlock) {
+                        successBlock(task, nil); //We don't return the response data as the core library handles this.
+                    }
                 });
             }
         }
     }
     @catch (NSException *exception) {
-        DNErrorLog(@"Fatal exception (%@) when processing network response.... Retporting & Continuing", [exception description]);
+        DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
         [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
         dispatch_async(dispatch_get_main_queue(), ^{
             if (failureBlock) {
@@ -280,8 +282,9 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
                                     failure:[request failureBlock]];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         DNErrorLog(@"%@", [error localizedDescription]);
-        if (failureBlock)
+        if (failureBlock) {
             failureBlock(task, error);
+        }
     }];
 
 }
@@ -292,41 +295,49 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
     switch ([request method]) {
         case DNPost: {
             currentTask = [sessionManager performPostWithRoute:[request route] parameteres:[request parameters] success:^(NSURLSessionDataTask *task, id responseData) {
-                if (successBlock)
+                if (successBlock) {
                     successBlock(task, responseData);
+                }
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                if (failureBlock)
+                if (failureBlock) {
                     failureBlock(task, error);
+                }
             }];
         }
             break;
         case DNGet: {
             currentTask = [sessionManager performGetWithRoute:[request route] parameteres:[request parameters] success:^(NSURLSessionDataTask *task, id responseData) {
-                if (successBlock)
+                if (successBlock) {
                     successBlock(task, responseData);
+                }
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                if (failureBlock)
+                if (failureBlock) {
                     failureBlock(task, error);
+                }
             }];
         }
             break;
         case DNDelete: {
             currentTask = [sessionManager performDeleteWithRoute:[request route] parameteres:[request parameters] success:^(NSURLSessionDataTask *task, id responseData) {
-                if (successBlock)
+                if (successBlock) {
                     successBlock(task, responseData);
+                }
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                if (failureBlock)
+                if (failureBlock) {
                     failureBlock(task, error);
+                }
             }];
         }
             break;
         case DNPut: {
             currentTask = [sessionManager performPutWithRoute:[request route] parameteres:[request parameters] success:^(NSURLSessionDataTask *task, id responseData) {
-                if (successBlock)
+                if (successBlock) {
                     successBlock(task, responseData);
+                }
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                if (failureBlock)
+                if (failureBlock) {
                     failureBlock(task, error);
+                }
             }];
         }
             break;
@@ -335,6 +346,30 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
     }
 
     return currentTask;
+}
+
++ (NSArray *)clientNotifications:(NSMutableArray *)clientNotifications {
+    NSMutableArray *workingNotifications = [[NSMutableArray alloc] init];
+
+    [clientNotifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        DNClientNotification *notification = obj;
+        if ([notification notificationID]) {
+            [workingNotifications addObject:notification];
+        }
+    }];
+
+    return workingNotifications;
+}
+
++ (NSArray *)contentNotifications:(NSMutableArray *)notifications {
+    NSMutableArray *workingNotifications = [[NSMutableArray alloc] init];
+
+    [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        DNContentNotification *notification = obj;
+        [workingNotifications addObject:notification];
+    }];
+
+    return workingNotifications;
 }
 
 @end

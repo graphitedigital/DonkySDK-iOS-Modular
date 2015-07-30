@@ -118,7 +118,7 @@ static NSString *const DNRegistrationId = @"id";
 
 - (NSMutableDictionary *) parameters {
     
-    if (!self.userID || !self.displayName)
+    if (![self userID] || ![self displayName])
         return nil;
 
     NSMutableDictionary *user = [[NSMutableDictionary alloc] init];

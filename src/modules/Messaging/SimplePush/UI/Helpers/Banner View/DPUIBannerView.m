@@ -32,7 +32,7 @@ static NSString *const DPUIButtonSetActions = @"buttonSetActions";
 
     if (self) {
 
-        self.notification = notification;
+        [self setNotification:notification];
 
         if ([[notification buttonSets] count]) {
             [self addButtons:notification];
@@ -51,25 +51,25 @@ static NSString *const DPUIButtonSetActions = @"buttonSetActions";
 
     if ([buttonActions count] > 1) {
 
-        if (!self.buttonView) {
-            self.buttonView = [UIView autoLayoutView];
-            [self.buttonView setBackgroundColor:[UIColor clearColor]];
-            [self.backgroundView addSubview:self.buttonView];
+        if (![self buttonView]) {
+            [self setButtonView:[UIView autoLayoutView]];
+            [[self buttonView] setBackgroundColor:[UIColor clearColor]];
+            [[self backgroundView] addSubview:[self buttonView]];
 
-            [self.buttonView pinToSuperviewEdges:JRTViewPinAllEdges inset:0.0];
+            [[self buttonView] pinToSuperviewEdges:JRTViewPinAllEdges inset:0.0];
         }
 
         //Create the containerView
-        self.buttonBorder = [UIView autoLayoutView];
-        [self.buttonBorder setBackgroundColor:[UIColor whiteColor]];
-        [self.buttonView addSubview:self.buttonBorder];
+        [self setButtonBorder:[UIView autoLayoutView]];
+        [[self buttonBorder] setBackgroundColor:[UIColor whiteColor]];
+        [[self buttonView] addSubview:[self buttonBorder]];
 
-        [self.buttonBorder pinToSuperviewEdges:JRTViewPinLeftEdge | JRTViewPinRightEdge inset:0.0];
-        [self.buttonBorder constrainToHeight:1.0];
+        [[self buttonBorder] pinToSuperviewEdges:JRTViewPinLeftEdge | JRTViewPinRightEdge inset:0.0];
+        [[self buttonBorder] constrainToHeight:1.0];
 
         //User to pin the edges of the buttons to the center of the view.
         UIView *centerMarker = [UIView autoLayoutView];
-        [self.buttonView addSubview:centerMarker];
+        [[self buttonView] addSubview:centerMarker];
 
         [centerMarker centerInContainerOnAxis:NSLayoutAttributeCenterX];
         [centerMarker pinToSuperviewEdges:JRTViewPinBottomEdge inset:0.0];
@@ -77,25 +77,25 @@ static NSString *const DPUIButtonSetActions = @"buttonSetActions";
 
         //Add the
         UIButton *buttonOne = [self getButtonWithTag:0];
-        [self.buttonView addSubview:buttonOne];
+        [[self buttonView] addSubview:buttonOne];
 
         [buttonOne pinToSuperviewEdges:JRTViewPinLeftEdge | JRTViewPinBottomEdge inset:10.0];
         [buttonOne pinAttribute:NSLayoutAttributeRight toAttribute:NSLayoutAttributeLeft ofItem:centerMarker withConstant:-10];
 
         UIButton *buttonTwo = [self getButtonWithTag:1];
-        [self.buttonView addSubview:buttonTwo];
+        [[self buttonView] addSubview:buttonTwo];
 
         [buttonTwo pinToSuperviewEdges:JRTViewPinRightEdge | JRTViewPinBottomEdge inset:10.0];
         [buttonTwo pinAttribute:NSLayoutAttributeLeft toAttribute:NSLayoutAttributeRight ofItem:centerMarker withConstant:10];
 
-        [self.buttonBorder pinAttribute:NSLayoutAttributeBottom toAttribute:NSLayoutAttributeTop ofItem:buttonOne withConstant:-10];
+        [[self buttonBorder] pinAttribute:NSLayoutAttributeBottom toAttribute:NSLayoutAttributeTop ofItem:buttonOne withConstant:-10];
     }
 
         //We make the whole view a button
     else {
         UIButton *buttonOne = [self getButtonWithTag:0];
         [buttonOne setBackgroundColor:[UIColor clearColor]];
-        [self.backgroundView addSubview:buttonOne];
+        [[self backgroundView] addSubview:buttonOne];
 
         [buttonOne pinToSuperviewEdges:JRTViewPinAllEdges inset:0.0];
     }
@@ -126,7 +126,7 @@ static NSString *const DPUIButtonSetActions = @"buttonSetActions";
 
 - (void)performButtonAction {
 
-    NSDictionary *tappedButton = [[self.notification buttonSets] firstObject];
+    NSDictionary *tappedButton = [[[self notification] buttonSets] firstObject];
 
     NSArray *buttonActions = tappedButton[DPUIButtonSetActions];
 
@@ -148,26 +148,28 @@ static NSString *const DPUIButtonSetActions = @"buttonSetActions";
     [params dnSetObject:[interactionDate donkyDateForServer] forKey:@"interactionTimeStamp"];
 
     //First button set index:
-    NSArray *buttonSetAction = [[self.notification buttonSets] firstObject][@"buttonSetActions"];
+    NSArray *buttonSetAction = [[[self notification] buttonSets] firstObject][@"buttonSetActions"];
 
     NSString *title = dictionary[@"label"];
-    if (!title.length)
+    if (!title.length) {
         [params dnSetObject:[buttonSetAction count] == 2 ? @"Button2" : @"Button1" forKey:@"userAction"];
-    else
+    }
+    else {
         [params dnSetObject:[[buttonSetAction firstObject][@"label"] isEqualToString:title] ? @"Button1" : @"Button2" forKey:@"userAction"];
+    }
 
-    [params dnSetObject:[[self.notification buttonSets] firstObject][@"interactionType"] forKey:@"interactionType"];
+    [params dnSetObject:[[[self notification] buttonSets] firstObject][@"interactionType"] forKey:@"interactionType"];
 
     [params dnSetObject:[NSString stringWithFormat:@"%@|%@", [buttonSetAction firstObject][@"label"] ? : @"", [buttonSetAction lastObject][@"label"] ? : @""] forKey:@"buttonDescription"];
 
     //Set request ids:
-    [params dnSetObject:[self.notification senderInternalUserID] forKey:@"senderInternalUserId"];
-    [params dnSetObject:[self.notification senderMessageID] forKey:@"senderMessageId"];
-    [params dnSetObject:[self.notification messageID] forKey:@"messageId"];
+    [params dnSetObject:[[self notification] senderInternalUserID] forKey:@"senderInternalUserId"];
+    [params dnSetObject:[[self notification] senderMessageID] forKey:@"senderMessageId"];
+    [params dnSetObject:[[self notification] messageID] forKey:@"messageId"];
 
-    [params dnSetObject:[self.notification.sentTimeStamp donkyDateForServer] forKey:@"messageSentTimeStamp"];
+    [params dnSetObject:[[[self notification] sentTimeStamp] donkyDateForServer] forKey:@"messageSentTimeStamp"];
     
-    double timeToInteract = [interactionDate timeIntervalSinceDate:[self.notification sentTimeStamp]];
+    double timeToInteract = [interactionDate timeIntervalSinceDate:[[self notification] sentTimeStamp]];
     
     if (isnan(timeToInteract))
         timeToInteract = 0;
@@ -176,13 +178,13 @@ static NSString *const DPUIButtonSetActions = @"buttonSetActions";
     
     [params dnSetObject:[buttonSetAction count] == 2 ? @"twoButton" : @"oneButton" forKey:@"interactionType"];
 
-    [params dnSetObject:self.notification.contextItems forKey:@"contextItems"];
+    [params dnSetObject:[[self notification] contextItems] forKey:@"contextItems"];
 
     DNLocalEvent *interactionResult = [[DNLocalEvent alloc] initWithEventType:@"InteractionResult" publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:params];
 
     [[DNDonkyCore sharedInstance] publishEvent:interactionResult];
     
-    DNLocalEvent *pushTappedEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventNotificationTapped publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:self.notification];
+    DNLocalEvent *pushTappedEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventNotificationTapped publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:[self notification]];
     [[DNDonkyCore sharedInstance] publishEvent:pushTappedEvent];
 
 }

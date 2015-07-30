@@ -44,6 +44,8 @@
         case DNCoreAutoLoggingDisabled:break;
         case DNCoreFrequentErrorLogs:break;
         case DNCoreContentNotificationSizeLimit:break;
+        case DNCoreErrorDuplicateRequest:
+            return @"Duplicate request, cancelling";
     }
 
     return @"";
@@ -70,6 +72,8 @@
             return @"Cannot submit debug log. Last submission was too soon.";
         case DNCoreContentNotificationSizeLimit:
             return @"Some of the content notifications were too large to send. These notifications can be found inside the 'AdditionalInformation' object.";
+        case DNCoreErrorDuplicateRequest:
+            return @"This is a duplicate request, Donky does not need to process this and such it will be cancelled.";
     }
 
     return [NSString stringWithFormat:@"Unkown error... %d", code];

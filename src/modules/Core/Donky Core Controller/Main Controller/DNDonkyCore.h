@@ -33,6 +33,22 @@
  */
 @property (nonatomic, strong) UIWindow *applicationWindow;
 
+/*!
+ A boolean to dictate whether the Donky SDK should display the New Device alert automatically. To be alerted when a new device 
+ message has been received, subscribe to the local event: kDNDonkyNotificationNewDeviceMessage
+ 
+ @since 2.4.3.1
+ */
+@property (nonatomic, getter=shouldDisplayNewDeviceAlert) BOOL displayNewDeviceAlert;
+
+/*!
+ A boolean to dictate whether the Donky SDK should control the badge count. Please see documentation at http://docs.mobiledonky.com
+ for more information.
+ 
+ @since 2.4.3.1
+ */
+@property (nonatomic, getter=useDonkyBadgeCounts) BOOL donkyBadgeCounts;
+
 #pragma mark - Class Methods
 
 /*!

@@ -7,14 +7,9 @@
 //
 
 #import "DRUIPopUpMainController.h"
-#import "DNLocalEvent.h"
-#import "DRMessageViewController.h"
 #import "DNDonkyCore.h"
-#import "DRLogicMainController.h"
 #import "DNConstants.h"
 #import "UIViewController+DNRootViewController.h"
-#import "DRLogicMainController.h"
-#import "DNRichMessage.h"
 #import "NSDate+DNDateHelper.h"
 #import "DNLoggingController.h"
 
@@ -22,7 +17,7 @@
 @property(nonatomic, strong) DRLogicMainController *donkyRichLogicController;
 @property(nonatomic, copy) void (^richMessageHandler)(DNLocalEvent *);
 @property(nonatomic, strong) NSMutableArray *pendingMessages;
-@property(nonatomic) BOOL displayingPopUp;
+@property(nonatomic, getter=isDisplayingPopUp) BOOL displayingPopUp;
 @end
 
 @implementation DRUIPopUpMainController
@@ -32,11 +27,6 @@
 {
     static dispatch_once_t pred;
     static DRUIPopUpMainController *sharedInstance = nil;
-
-    @synchronized (sharedInstance) {
-        if (sharedInstance)
-            return sharedInstance;
-    }
 
     dispatch_once(&pred, ^{
         sharedInstance = [[DRUIPopUpMainController alloc] initPrivate];
@@ -54,11 +44,12 @@
     self  = [super init];
 
     if (self) {
-        self.donkyRichLogicController = [[DRLogicMainController alloc] init];
-        [self.donkyRichLogicController start];
-        
-        self.pendingMessages = [[NSMutableArray alloc] init];
-        self.autoDelete = YES;
+        [self setDonkyRichLogicController:[[DRLogicMainController alloc] init]];
+        [[self donkyRichLogicController] start];
+
+        [self setPendingMessages:[[NSMutableArray alloc] init]];
+        [self setAutoDelete:YES];
+        [self setVibrate:YES];
     }
 
     return self;
@@ -69,36 +60,48 @@
 
     __weak DRUIPopUpMainController *weakSelf = self;
 
-    self.richMessageHandler = ^(DNLocalEvent *event) {
-        if ([weakSelf displayingPopUp] && [[event data] isKindOfClass:[DNRichMessage class]]) {
+    [self setRichMessageHandler:^(DNLocalEvent *event) {
+        if ([weakSelf isDisplayingPopUp] && [[event data] isKindOfClass:[DNRichMessage class]]) {
             [[weakSelf pendingMessages] addObject:event];
         }
         else if ([[event data] isKindOfClass:[DNRichMessage class]]){
             [weakSelf presentPopUp:event];
         }
-    };
+    }];
     
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyNotificationRichMessage handler:self.richMessageHandler];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyNotificationRichMessage handler:[self richMessageHandler]];
 
-    DNModuleDefinition *richModule = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.1.0.0"];
+    DNModuleDefinition *richModule = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.1.0.1"];
     [[DNDonkyCore sharedInstance] registerModule:richModule];
-  
+
+
+    //Get unread chat messages:
+    NSArray *unreadChat = [[self donkyRichLogicController] allUnreadRichMessages];
+
+    //We don't want this to block the thread:
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [unreadChat enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            DNRichMessage *richMessage = obj;
+            DNLocalEvent *richEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyNotificationRichMessage
+                                                                    publisher:NSStringFromClass([self class])
+                                                                    timeStamp:[NSDate date]
+                                                                         data:richMessage];
+            [[DNDonkyCore sharedInstance] publishEvent:richEvent];
+        }];
+    });
 }
 
 - (void)stop {
     [[self donkyRichLogicController] stop];
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyNotificationRichMessage handler:self.richMessageHandler];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyNotificationRichMessage handler:[self richMessageHandler]];
 }
 
 - (void)presentPopUp:(DNLocalEvent *)event {
 
     DNRichMessage *richMessage = [event data];
 
-    NSDate *thirtyDaysExpired = [[NSDate date] dateByAddingTimeInterval:(3600 * 24 * 30) * -1];
-
-    if ([[richMessage messageReceivedTimestamp] isDateBeforeDate:thirtyDaysExpired]) {
-        DNInfoLog(@"Rich message: %@ is more than 30 days old... Marking as read and deleting message.", [richMessage messageID]);
-        [[self donkyRichLogicController] markMessageAsRead:richMessage];
+    if ([[richMessage messageReceivedTimestamp] donkyHasMessageExpired]) {
+        DNInfoLog(@"Rich message: %@ is more than 30 days old... Deleting message.", [richMessage messageID]);
         [[self donkyRichLogicController] deleteMessage:richMessage];
     }
 
@@ -112,36 +115,42 @@
 
         UIViewController *applicationViewController = [UIViewController applicationRootViewController];
 
-        if (!applicationViewController.isViewLoaded) {
+        if (![applicationViewController isViewLoaded]) {
             [self performSelector:@selector(presentPopUp:) withObject:event afterDelay:0.25];
             return;
         }
 
         [[self donkyRichLogicController] markMessageAsRead:richMessage];
 
-        UINavigationController *popOverViewController = [popUpController richPopUpNavigationControllerWithModalPresentationStyle:self.richPopUpPresentationStyle];
+        UINavigationController *popOverViewController = [popUpController richPopUpNavigationControllerWithModalPresentationStyle:[self richPopUpPresentationStyle]];
         if (popOverViewController) {
-            self.displayingPopUp = YES;
+            [self setDisplayingPopUp:YES];
             [applicationViewController presentViewController:popOverViewController
                                                     animated:YES
                                                   completion:nil];
+
+            if ([self shouldVibrate] && ![richMessage silentNotification]) {
+                AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+            }
         }
     }
 
-    if ([[self pendingMessages] containsObject:event])
+    if ([[self pendingMessages] containsObject:event]) {
         [[self pendingMessages] removeObject:event];
-
+    }
 }
 
-//TODO: Change to message obj
 - (void)richMessagePopUpWasClosed:(NSString *)messageID {
-    self.displayingPopUp = NO;
 
-    if ([self shouldAutoDelete])
-        [[self donkyRichLogicController] deleteMessage:[self.donkyRichLogicController richMessageWithID:messageID]];
+    [self setDisplayingPopUp:NO];
 
-    if ([[self pendingMessages] count])
+    if ([self shouldAutoDelete]) {
+        [[self donkyRichLogicController] deleteMessage:[[self donkyRichLogicController] richMessageWithID:messageID]];
+    }
+
+    if ([[self pendingMessages] count]) {
         [self presentPopUp:[[self pendingMessages] firstObject]];
+    }
 }
 
 @end

@@ -25,14 +25,15 @@
     self = [super init];
     
     if (self) {
-        
-        self.secure = secure;
-        self.route = route;
-        self.method = method;
-        self.parameters = parameters;
-        self.successBlock = successBlock;
-        self.failureBlock = failureBlock;
-        self.numberOfAttempts = 0;
+
+        [self setSecure:secure];
+        [self setRoute:route];
+        [self setMethod:method];
+        [self setParameters:parameters];
+        [self setSuccessBlock:successBlock];
+        [self setFailureBlock:failureBlock];
+        [self setNumberOfAttempts:0];
+
     }
     
     return self;

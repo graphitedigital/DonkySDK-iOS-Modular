@@ -1,0 +1,21 @@
+/* 
+  DRLocalization.strings
+  RichPopUp
+
+  Created by Chris Watson on 13/04/2015.
+  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
+*/
+
+"close_button_title" = "Close";
+
+"rich_inbox_share_button_title" = "Share";
+
+"rich_inbox_no_messages_placeholder" = "No messages";
+
+"rich_inbox_no_messages_selected" = "No message selected";
+
+"rich_inbox_new_banner_text" = "NEW";
+
+"rich_inbox_expired_time_stamp" = "Expired";
+
+"rich_box_multiple_messages_received" = "You have recevied %d messages.";

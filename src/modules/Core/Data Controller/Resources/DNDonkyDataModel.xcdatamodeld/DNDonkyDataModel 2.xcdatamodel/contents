@@ -24,6 +24,7 @@
         <attribute name="data" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="filters" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="nativePush" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="notificationID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sendTries" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="serverNotificationID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
@@ -60,7 +61,7 @@
     <elements>
         <element name="DNDeviceUser" positionX="-126" positionY="-153" width="128" height="73"/>
         <element name="DNMessage" positionX="-117" positionY="-144" width="128" height="210"/>
-        <element name="DNNotification" positionX="-36" positionY="9" width="128" height="180"/>
+        <element name="DNNotification" positionX="-36" positionY="9" width="128" height="195"/>
         <element name="DNRichMessage" positionX="-126" positionY="-153" width="128" height="270"/>
         <element name="DNUser" positionX="-218" positionY="-304" width="128" height="195"/>
     </elements>

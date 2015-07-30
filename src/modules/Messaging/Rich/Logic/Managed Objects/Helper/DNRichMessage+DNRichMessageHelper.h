@@ -11,15 +11,25 @@
 @interface DNRichMessage (DNRichMessageHelper)
 
 /*!
- Helper method to determine if a rich message has completey expired. This means 
+ Helper method to determine if a rich message has completely expired. This means
  a rich message that has a custom expiration date but NO expired content OR the rich message
- has exceeded the maximum message life time condigured on the app space.
+ has exceeded the maximum message life time configured on the app space.
  
  @return bool determining whether a rich message has fully expired.
  
  @since 2.2.2.7
  */
 - (BOOL)richHasCompletelyExpired;
+
+/*!
+ Whether the rich message can be shared, this depends on servaral variables. Whether there is a link, 
+ whether it can be sahred and if it is expired or not.
+ 
+ @return BOOL determining if the message can be shared.
+ 
+ @since 2.4.3.1
+ */
+- (BOOL)canBeShared;
 
 @end
 

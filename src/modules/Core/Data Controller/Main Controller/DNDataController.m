@@ -12,10 +12,12 @@
 #import "NSManagedObject+DNHelper.h"
 #import "DNNetworkDataHelper.h"
 #import "DNAccountController.h"
+#import "DNFileHelpers.h"
 
 @interface DNDataController ()
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *mainContext;
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *temporaryContext;
+@property (nonatomic, strong) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @end
@@ -83,12 +85,14 @@
 // If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
 -(NSManagedObjectContext *)mainContext
 {
+
     if (_mainContext != nil) {
         return _mainContext;
     }
 
     _mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-    [_mainContext setPersistentStoreCoordinator:self.persistentStoreCoordinator];
+    [_mainContext setPersistentStoreCoordinator:[self persistentStoreCoordinator]];
+
     return _mainContext;
 }
 
@@ -100,45 +104,42 @@
     }
 
     _temporaryContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    _temporaryContext.undoManager = nil;
-    _temporaryContext.parentContext = self.mainContext;
+    [_temporaryContext setUndoManager:nil];
+    [_temporaryContext setParentContext:[self mainContext]];
 
     return _temporaryContext;
 }
 
+- (NSManagedObjectModel *) managedObjectModel {
+    if (_managedObjectModel != nil) {
+        return _managedObjectModel;
+    }
+    NSURL *modelURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"DNDonkyDataModel" withExtension:@"momd"];
+    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    return _managedObjectModel;
+}
+
 -(NSPersistentStoreCoordinator *)persistentStoreCoordinator
 {
-    if (_persistentStoreCoordinator != nil) {
+    if (_persistentStoreCoordinator) {
         return _persistentStoreCoordinator;
     }
 
-    NSURL *applicationDocumentsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-
-    NSURL *storeURL = [applicationDocumentsDirectory URLByAppendingPathComponent:@"DNDonkyDataModel.sqlite"];
-
     // The managed object model for the application.
     // If the model doesn't already exist, it is created from the application's model.
-    NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+//    NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+    
+    NSURL *storeURL = [[DNFileHelpers urlPathForDocumentDirectory] URLByAppendingPathComponent:@"DNDataController.sqlite"];
+    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @(YES), NSInferMappingModelAutomaticallyOption: @(YES), NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"}};
 
     NSError *error = nil;
-    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
-
-    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES, NSInferMappingModelAutomaticallyOption : @YES};
+    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
 
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
 
-#ifdef DEBUG
-        // Remove store
-        [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
-
-        // Then clear user defaults
-        [NSUserDefaults resetStandardUserDefaults];
-
-        return nil;
-#endif
+        DNErrorLog(@"Fatal, could not load persistent store coordinator.");
+        [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil];
         
-        DNErrorLog(@"Fatal error when trying to access the core data store... aborting");
-        abort();
     }
 
     return _persistentStoreCoordinator;
@@ -147,8 +148,8 @@
 -(void)saveMainContext
 {
     NSError *error = nil;
-    @synchronized (self.mainContext) {
-        [self.mainContext saveIfHasChanges:&error];
+    @synchronized ([self mainContext]) {
+        [[self mainContext] saveIfHasChanges:&error];
     }
 
     if (error)
@@ -158,46 +159,12 @@
 -(void)saveTemporaryContext
 {
     NSError *error = nil;
-    @synchronized (self.temporaryContext) {
-        [self.temporaryContext saveIfHasChanges:&error];
+    @synchronized ([self temporaryContext]) {
+        [[self temporaryContext] saveIfHasChanges:&error];
     }
 
     if (error)
         DNErrorLog(@"Saving context: %@", [error localizedDescription]);
 }
-
-#pragma mark -
-#pragma mark - Helpers
-
-- (DNUserDetails *)currentDeviceUser {
-
-    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"] withContext:self.mainContext] ? : [self newDevice];
-
-    DNUserDetails *dnUserDetails = [[DNUserDetails alloc] initWithDeviceUser:deviceUser];
-
-    return dnUserDetails;
-}
-
-- (void)saveUserDetails:(DNUserDetails *)details {
-    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"] withContext:self.mainContext] ? : [self newDevice];
-    [deviceUser setIsAnonymous:@([details isAnonymous])];
-    [deviceUser setDisplayName:[details displayName]];
-    [deviceUser setMobileNumber:[details mobileNumber]];
-    [deviceUser setEmailAddress:[details emailAddress]];
-    [deviceUser setAvatarAssetID:[details avatarAssetID]];
-    [deviceUser setCountryCode:[details countryCode]];
-    [deviceUser setUserID:[details userID]];
-    [deviceUser setSelectedTags:[details selectedTags]];
-    [deviceUser setAdditionalProperties:[details additionalProperties]];
-    [self saveMainContext];
-}
-
-- (DNDeviceUser *)newDevice {
-    DNDeviceUser *device = [DNDeviceUser insertNewInstanceWithContext:self.mainContext];
-    [device setIsDeviceUser:@(YES)];
-    [device setIsAnonymous:@(YES)];
-    return device;
-}
-
 
 @end

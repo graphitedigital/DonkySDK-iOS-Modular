@@ -25,6 +25,8 @@ static NSString *const DAAppLaunchDefaults = @"DonkyAppLaunch";
 static NSString *const DAStartTimeUTC = @"startTimeUtc";
 static NSString *const DAEndTimeUTC = @"endTimeUtc";
 static NSString *const DAAppSession = @"appSession";
+static NSString *const DCANoneSession = @"None";
+static NSString *const DCANotificationSession = @"Notification";
 
 @interface DCAAnalyticsController ()
 @property(nonatomic, getter=wasInfluenced) BOOL influenced;
@@ -37,19 +39,17 @@ static NSString *const DAAppSession = @"appSession";
 
 +(DCAAnalyticsController *)sharedInstance
 {
-    static dispatch_once_t pred;
     static DCAAnalyticsController *sharedInstance = nil;
-    
+    static dispatch_once_t pred;
+
     dispatch_once(&pred, ^{
         sharedInstance = [[DCAAnalyticsController alloc] initPrivate];
     });
-    
     return sharedInstance;
 }
 
 -(instancetype)initPrivate
 {
-
     self = [super init];
     
     if (self) {
@@ -63,30 +63,31 @@ static NSString *const DAAppSession = @"appSession";
     return [self initPrivate];
 }
 
-- (void) start {
+- (void)start {
     __weak DCAAnalyticsController *weakSelf = self;
 
-    self.appOpenEvent = ^(DNLocalEvent *event) {
-        if (![weakSelf wasInfluenced])
+    [self setAppOpenEvent:^(DNLocalEvent *event) {
+        if (![weakSelf wasInfluenced]) {
             [weakSelf recordInfluencedAppOpen:NO];
+        }
         [weakSelf setInfluenced:NO];
-    };
+    }];
 
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppOpen handler:self.appOpenEvent];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppOpen handler:[self appOpenEvent]];
 
-    self.appCloseEvent = ^(DNLocalEvent *event) {
+    [self setAppCloseEvent:^(DNLocalEvent *event) {
         [weakSelf recordAppClose];
-    };
+    }];
 
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppClose handler:self.appCloseEvent];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppClose handler:[self appCloseEvent]];
 
-    self.appInfluenceEvent = ^(DNLocalEvent *event) {
+    [self setAppInfluenceEvent:^(DNLocalEvent *event) {
         //We only want to respond to influenced app opens from out Push Controller:
         [weakSelf setInfluenced:YES];
         [weakSelf recordInfluencedAppOpen:YES];
-    };
+    }];
 
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDAEventInfluencedAppOpen handler:self.appInfluenceEvent];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDAEventInfluencedAppOpen handler:[self appInfluenceEvent]];
     
     //Register Module:
     DNModuleDefinition *analyticsModule = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:kDAAnalyticsVersion];
@@ -94,9 +95,9 @@ static NSString *const DAAppSession = @"appSession";
 }
 
 - (void)stop {
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventAppOpen handler:self.appOpenEvent];
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventAppClose handler:self.appCloseEvent];
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDAEventInfluencedAppOpen handler:self.appInfluenceEvent];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventAppOpen handler:[self appOpenEvent]];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventAppClose handler:[self appCloseEvent]];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDAEventInfluencedAppOpen handler:[self appInfluenceEvent]];
 }
 
 - (void)recordInfluencedAppOpen:(BOOL)influenced {
@@ -104,7 +105,7 @@ static NSString *const DAAppSession = @"appSession";
         NSMutableDictionary *appLaunch = [[NSMutableDictionary alloc] init];
 
         [appLaunch dnSetObject:[[NSDate date] donkyDateForServer] forKey:DALaunchTimeUTC];
-        [appLaunch dnSetObject:influenced ? @"Notification" : @"None" forKey:DASessionTrigger];
+        [appLaunch dnSetObject:influenced ? DCANotificationSession : DCANoneSession forKey:DASessionTrigger];
         [appLaunch dnSetObject:kDNMiscOperatingSystem forKey:DAOperatingSystem];
 
         DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithType:DAAppLaunch
@@ -126,7 +127,7 @@ static NSString *const DAAppSession = @"appSession";
             if ([startTime isDateBeforeDate:endDate]) {
                 [appLaunch dnSetObject:[startTime donkyDateForServer] forKey:DAStartTimeUTC];
                 [appLaunch dnSetObject:[endDate donkyDateForServer] forKey:DAEndTimeUTC];
-                [appLaunch dnSetObject:@"None" forKey:DASessionTrigger];
+                [appLaunch dnSetObject:DCANoneSession forKey:DASessionTrigger];
                 [appLaunch dnSetObject:kDNMiscOperatingSystem forKey:DAOperatingSystem];
 
                 DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithType:DAAppSession

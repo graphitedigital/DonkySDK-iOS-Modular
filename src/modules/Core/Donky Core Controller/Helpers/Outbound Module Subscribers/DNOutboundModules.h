@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <UIKit/UIKit.h>
 #import "DNModuleDefinition.h"
 #import "DNSubscription.h"
 

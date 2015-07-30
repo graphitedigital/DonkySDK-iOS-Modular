@@ -43,6 +43,10 @@
 
 + (void)saveIsSuspended:(BOOL)suspended;
 
++ (void)saveSDKVersion:(NSString *)sdkVersion;
+
++ (void)saveOperatingSystemVersion:(NSString *)operatingSystem;
+
 + (BOOL)isDeviceRegistered;
 
 + (BOOL)hasValidAccessToken;
@@ -52,5 +56,9 @@
 + (BOOL)isPushEnabled;
 
 + (BOOL)isSuspended;
+
++ (NSString *)savedSDKVersion;
+
++ (NSString *)savedOperatingSystemVersion;
 
 @end

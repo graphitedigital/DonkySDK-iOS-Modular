@@ -21,9 +21,9 @@
     self = [super init];
 
     if (self) {
-        self.handler = handler;
-        self.autoAcknowledge = YES;
-        self.notificationType = notificationType;
+        [self setHandler:handler];
+        [self setAutoAcknowledge:YES];
+        [self setNotificationType:notificationType];
     }
 
     return self;
@@ -34,9 +34,9 @@
     self = [super init];
 
     if (self) {
-        self.batchHandler = batchHandler;
-        self.autoAcknowledge = YES;
-        self.notificationType = notificationType;
+        [self setBatchHandler:batchHandler];
+        [self setAutoAcknowledge:YES];
+        [self setNotificationType:notificationType];
     }
 
     return self;

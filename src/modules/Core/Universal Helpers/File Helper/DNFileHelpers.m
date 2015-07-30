@@ -19,6 +19,10 @@
     return (NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES))[0];
 }
 
++ (NSURL *)urlPathForDocumentDirectory {
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
 +(NSString *)pathForDirectory:(NSString *) directory {
     NSString *path = [DNFileHelpers pathForDocumentDirectory];
     path = [path stringByAppendingPathComponent:directory];
@@ -35,6 +39,11 @@
     [DNFileHelpers ensureFileExistsAtPath:path];
 
     return path;
+}
+
++ (NSBundle *)bundleWithName:(NSString *)bundleName {
+    NSURL *bundleURL = [[NSBundle mainBundle] URLForResource:bundleName withExtension:@"bundle"];
+    return [[NSBundle alloc] initWithURL:bundleURL];
 }
 
 #pragma mark -

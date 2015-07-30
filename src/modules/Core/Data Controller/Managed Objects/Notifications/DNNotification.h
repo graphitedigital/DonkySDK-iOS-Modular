@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-
 @interface DNNotification : NSManagedObject
 
 @property (nonatomic, retain) id audience;
@@ -21,7 +20,7 @@
 @property (nonatomic, retain) NSNumber * sendTries;
 @property (nonatomic, retain) NSString * serverNotificationID;
 @property (nonatomic, retain) NSString * type;
-
+@property (nonatomic, retain) NSString * notificationID;
 
 
 @end

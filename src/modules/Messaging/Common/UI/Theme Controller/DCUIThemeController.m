@@ -7,7 +7,6 @@
 //
 
 #import "DCUIThemeController.h"
-#import "DCUITheme.h"
 #import "NSMutableDictionary+DNDictionary.h"
 
 @interface DCUIThemeController ()
@@ -39,23 +38,19 @@
 
     if (self) {
 
-        self.themes = [[NSMutableDictionary alloc] init];
+        [self setThemes:[[NSMutableDictionary alloc] init]];
         
     }
 
     return self;
 }
 
-- (void) dealloc {
-    self.themes = nil;
-}
-
 - (void)addTheme:(DCUITheme *)theme {
-    [self.themes dnSetObject:theme forKey:[theme themeName]];
+    [[self themes] dnSetObject:theme forKey:[theme themeName]];
 }
 
 - (DCUITheme *)themeForName:(NSString *)themeName {
-    return self.themes[themeName];
+    return [self themes][themeName];
 }
 
 @end

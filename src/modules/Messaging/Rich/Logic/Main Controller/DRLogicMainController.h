@@ -22,6 +22,14 @@
 + (DRLogicMainController *) sharedInstance;
 
 /*!
+ Whether the device should vibrate when a new message has been received. A device will never 
+ vibrate if the rich message was set to silent when deployed.
+ 
+ @since 2.4.3.1
+ */
+@property (nonatomic, getter=shouldVibrate) BOOL vibrate;
+
+/*!
  Method to instruct the Logic Controller to start monitoring for Rich Messages. These are processed and a local event is published with the rich message data.
  
  @since 2.0.0.0

@@ -26,29 +26,46 @@
 
 +(NSFetchRequest *)fetchRequestWithContext:(NSManagedObjectContext *)context
 {
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    request.entity = [self entityDescriptionWithContext:context];
-    
-    return request;
+    @try {
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        [request setEntity:[self entityDescriptionWithContext:context]];
+
+        return request;
+    }
+    @catch (NSException *exception) {
+        DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
+        [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
+    }
+
+    return nil;
 }
 
 + (instancetype)fetchSingleObjectWithPredicate:(NSPredicate *)predicate withContext:(NSManagedObjectContext *)context {
 
-    NSFetchRequest *request = [self fetchRequestWithContext:context];
-    request.predicate = predicate;
-    request.sortDescriptors = @[];
-    
-    NSError *error;
-    NSArray *results = [context executeFetchRequest:request error:&error];
+    @try {
+        NSFetchRequest *request = [self fetchRequestWithContext:context];
+        [request setPredicate:predicate];
+        [request setSortDescriptors:@[]];
 
-    if (error)
-        DNDebugLog(@"Problem fetching request: %@\nError: %@", request, error);
-    
-    if ([results count]) {
-        //purely for debug logging, this should never happen unless integrators manually create a device user object. DON'T DO THIS!
-        if ([results count] > 1)
-            DNDebugLog(@"Fetched more than one object: %@\nRequest: %@. Returning first.", results, request);
-        return [results firstObject];
+        NSError *error;
+        NSArray *results = [context executeFetchRequest:request error:&error];
+
+        if (error)
+            DNDebugLog(@"Problem fetching request: %@\nError: %@", request, error);
+
+        if ([results count]) {
+            //purely for debug logging, this should never happen unless integrators manually create a device user object. DON'T DO THIS!
+            if ([results count] > 1) {
+                DNDebugLog(@"Fetched more than one object: %@\nRequest: %@. Returning first.", results, request);
+            }
+            return [results firstObject];
+        }
+
+        return nil;
+    }
+    @catch (NSException *exception) {
+        DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
+        [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
     }
 
     return nil;
@@ -56,33 +73,49 @@
 
 + (NSArray *)fetchObjectsWithPredicate:(NSPredicate *)predicate sortDescriptors:(NSArray *)sortDescriptors withContext:(NSManagedObjectContext *)context {
 
-    NSFetchRequest *request = [self fetchRequestWithContext:context];
-    request.predicate = predicate;
-    request.sortDescriptors = sortDescriptors;
+    @try {
+        NSFetchRequest *request = [self fetchRequestWithContext:context];
+        [request setPredicate:predicate];
+        [request setSortDescriptors:sortDescriptors];
 
-    NSError *error;
-    NSArray *results = [context executeFetchRequest:request error:&error];
+        NSError *error;
+        NSArray *results = [context executeFetchRequest:request error:&error];
 
-    if (error)
-        DNDebugLog(@"Problem fetching request: %@\nError: %@", request, error);
+        if (error)
+            DNDebugLog(@"Problem fetching request: %@\nError: %@", request, error);
 
-    return results;
+        return results;
+    }
+    @catch (NSException *exception) {
+        DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
+        [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
+    }
+
+    return nil;
 }
 
 + (NSArray *)fetchObjectsWithOffset:(NSUInteger)offset limit:(NSUInteger)limit sortDescriptor:(NSArray *)sortDescriptors withContext:(NSManagedObjectContext *)context {
 
-    NSFetchRequest *request = [self fetchRequestWithContext:context];
-    [request setFetchOffset:offset];
-    [request setFetchLimit:limit];
-    request.sortDescriptors = sortDescriptors;
+    @try {
+        NSFetchRequest *request = [self fetchRequestWithContext:context];
+        [request setFetchOffset:offset];
+        [request setFetchLimit:limit];
+        [request setSortDescriptors:sortDescriptors];
 
-    NSError *error;
-    NSArray *results = [context executeFetchRequest:request error:&error];
+        NSError *error;
+        NSArray *results = [context executeFetchRequest:request error:&error];
 
-    if (error)
-        DNDebugLog(@"Problem fetching request: %@\nError: %@", request, error);
+        if (error)
+            DNDebugLog(@"Problem fetching request: %@\nError: %@", request, error);
 
-    return results;
+        return results;
+    }
+    @catch (NSException *exception) {
+        DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
+        [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
+    }
+
+    return nil;
 }
 
 @end

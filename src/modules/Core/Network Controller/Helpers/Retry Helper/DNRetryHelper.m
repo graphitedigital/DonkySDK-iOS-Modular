@@ -96,8 +96,9 @@ static NSString *const DNRetryPolicy = @"DeviceCommsConnectionRetrySchedule";
     DNRequest *request = [retryEvent request];
     [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:[request isSecure] route:[request route] httpMethod:[request method] parameters:[request parameters] success:^(NSURLSessionDataTask *task, id responseData) {
         [[self retriedRequests] removeObject:retryEvent];
-        if ([request successBlock])
+        if ([request successBlock]) {
             [request successBlock];
+        }
     } failure:[request failureBlock]];
 }
 

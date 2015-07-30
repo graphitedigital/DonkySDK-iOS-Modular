@@ -18,7 +18,6 @@
 
 + (void)handleNewDeviceMessage:(DNServerNotification *)notification {
 
-
     NSString *model = [notification data][@"model"];
     NSString *operatingSystem = [notification data][@"operatingSystem"];
 
@@ -41,7 +40,6 @@
                                                   otherButtonTitles:nil];
         [alertView performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
     }
-
 }
 
 

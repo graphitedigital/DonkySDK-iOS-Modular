@@ -29,13 +29,13 @@ static NSString *const DNCRichMessageAvailabilityDays = @"RichMessageAvailabilit
     //Strip out string tru values:
     [configItems enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if ([obj isEqualToString:@"true"]) {
-            [parsedConfig setObject:@(1) forKey:key];
+            parsedConfig[key] = @(1);
         }
         else if ([obj isEqualToString:@"false"]) {
-            [parsedConfig setObject:@(0) forKey:key];
+            parsedConfig[key] = @(0);
         }
         else {
-            [parsedConfig setObject:obj forKey:key];
+            parsedConfig[key] = obj;
         }
     }];
 

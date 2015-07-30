@@ -43,22 +43,35 @@ static NSString *const DCUIButtonSets = @"buttonSets";
     self = [self init];
 
     if (self) {
-        self.sentTimeStamp = [NSDate donkyDateFromServer:[self objectForKey:DCUISentTimeStamp inNotification:notification]];
-        self.expiryTimeStamp = [NSDate donkyDateFromServer:[self objectForKey:DCUIExpiryTimeStamp inNotification:notification]];
-        self.body = [self objectForKey:DCUIBody inNotification:notification];
-        self.messageType = [self objectForKey:DCUIMessageType inNotification:notification];
-        self.senderMessageID = [self objectForKey:DCUISenderMessageID inNotification:notification];
-        self.messageID = [self objectForKey:DCUIMessageID inNotification:notification];
-        self.contextItems = [self objectForKey:DCUIContextItems inNotification:notification];
-        self.senderInternalUserID = [self objectForKey:DCUISenderInternalUserID inNotification:notification];
-        self.avatarAssetID = [self objectForKey:DCUIAvatarAssetID inNotification:notification];
-        self.senderDisplayName = [self objectForKey:DCUISenderDisplayName inNotification:notification];
-        self.buttonSets = [self objectForKey:DCUIButtonSets inNotification:notification];
 
-        self.serverId = [notification serverNotificationID];
+        [self setSentTimeStamp:[NSDate donkyDateFromServer:[self objectForKey:DCUISentTimeStamp inNotification:notification]]];
+        [self setExpiryTimeStamp:[NSDate donkyDateFromServer:[self objectForKey:DCUIExpiryTimeStamp inNotification:notification]]];
+        [self setBody:[self objectForKey:DCUIBody inNotification:notification]];
+        [self setMessageType:[self objectForKey:DCUIMessageType inNotification:notification]];
+        [self setSenderMessageID:[self objectForKey:DCUISenderMessageID inNotification:notification]];
+        [self setMessageID:[self objectForKey:DCUIMessageID inNotification:notification]];
+        [self setContextItems:[self objectForKey:DCUIContextItems inNotification:notification]];
+        [self setSenderInternalUserID:[self objectForKey:DCUISenderInternalUserID inNotification:notification]];
+        [self setAvatarAssetID:[self objectForKey:DCUIAvatarAssetID inNotification:notification]];
+        [self setSenderDisplayName:[self objectForKey:DCUISenderDisplayName inNotification:notification]];
+        [self setButtonSets:[self objectForKey:DCUIButtonSets inNotification:notification]];
+        [self setServerId:[notification serverNotificationID]];
 
     }
 
+    return self;
+}
+
+- (instancetype)initWithNotification:(DNServerNotification *)notification customBody:(NSString *)customBody {
+    
+    self = [self initWithNotification:notification];
+    
+    if (self) {
+        
+        [self setBody:customBody];
+        
+    }
+    
     return self;
 }
 

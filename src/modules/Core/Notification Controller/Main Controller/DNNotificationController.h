@@ -53,4 +53,12 @@
  */
 + (void)enablePush:(BOOL)disable;
 
+/*!
+ Helper method to reset the badge count, this will get the total count of all unread messages and 
+ set the badge count to that value.
+ 
+ @since 2.4.3.1
+ */
++ (void)resetApplicationBadgeCount;
+
 @end

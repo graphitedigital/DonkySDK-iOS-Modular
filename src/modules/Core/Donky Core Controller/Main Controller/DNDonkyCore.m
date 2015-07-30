@@ -27,6 +27,8 @@
 @property(nonatomic, strong) DNEventSubscriber *eventSubscriber;
 @property(nonatomic, strong) DNOutboundModules *outboundModules;
 @property(nonatomic, strong) NSMutableArray *registeredModules;
+@property(nonatomic, getter=isSettingBadgeCount) BOOL settingBadgeCount;
+@property(nonatomic, strong) NSMutableArray *pendingBageCountUpdates;
 @end
 
 @implementation DNDonkyCore
@@ -58,7 +60,10 @@
         [self setOutboundModules:[[DNOutboundModules alloc] init]];
         [self setRegisteredServices:[[DNRegisteredServices alloc] init]];
 
+        [self setPendingBageCountUpdates:[[NSMutableArray alloc] init]];
         [self setRegisteredModules:[[NSMutableArray alloc] init]];
+
+        [self setDonkyBadgeCounts:YES];
 
         DNClientDetails *clientDetails = [[DNClientDetails alloc] init];
 
@@ -70,6 +75,8 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterForeground) name:UIApplicationDidBecomeActiveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForegroundNotification) name:UIApplicationWillEnterForegroundNotification object:nil];
+
+        self.displayNewDeviceAlert = YES;
     }
     
     return self;
@@ -119,16 +126,14 @@
         //Check if registered:ios moving app to background status
         [DNAccountController initialiseUserDetails:userDetails deviceDetails:deviceDetails success:^(NSURLSessionDataTask *task, id responseData) {
 
-            [[DNNetworkController sharedInstance] startMinimumTimeForSynchroniseBuffer:0];
+            [DNAccountController updateClientModules:[self allRegisteredModules]];
 
             [self addCoreSubscribers];
 
-            [DNAccountController updateClientModules:[self allRegisteredModules]];
-
-            [DNNotificationController registerForPushNotifications];
-
             DNInfoLog(@"DonkySDK is initilaised. All user data has been saved.");
             [[DNNetworkController sharedInstance] synchronise];
+
+            [DNNotificationController registerForPushNotifications];
 
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (successBlock) {
@@ -235,6 +240,9 @@
 #pragma mark - Donky Core Notifications
 
 - (void)addCoreSubscribers {
+
+    __weak DNDonkyCore *weakSelf = self;
+
     DNModuleDefinition *moduleDefinition = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:kDNDonkyCoreVersion];
 
     DNSubscription *transmitDebugLog = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationTransmitDebugLog batchHandler:^(NSArray *batch) {
@@ -247,33 +255,71 @@
     DNSubscription *newDeviceMessage = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationNewDeviceMessage batchHandler:^(NSArray *batch) {
         [batch enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             DNServerNotification *serverNotification = obj;
-            [DNDonkyCoreFunctionalHelper handleNewDeviceMessage:serverNotification];
+            if ([weakSelf shouldDisplayNewDeviceAlert]) {
+                [DNDonkyCoreFunctionalHelper handleNewDeviceMessage:serverNotification];
+            }
             //Create a new event:
             DNLocalEvent *newDeviceEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyNotificationNewDeviceMessage
-                                                                         publisher:NSStringFromClass([self class])
-                                                                         timeStamp:[NSDate date]
-                                                                              data:[serverNotification data]];
-            [self publishEvent:newDeviceEvent];
+                                                                             publisher:NSStringFromClass([weakSelf class])
+                                                                             timeStamp:[NSDate date]
+                                                                                  data:[serverNotification data]];
+            [weakSelf publishEvent:newDeviceEvent];
         }];
     }];
 
     [self subscribeToDonkyNotifications:moduleDefinition subscriptions:@[transmitDebugLog, newDeviceMessage]];
 
-    [self subscribeToLocalEvent:kDNDonkySetBadgeCount handler:^(DNLocalEvent *event) {
+    if ([self useDonkyBadgeCounts]) {
 
-        NSInteger badgeCount = [[event data] integerValue];
+        [self subscribeToLocalEvent:kDNDonkySetBadgeCount handler:^(DNLocalEvent *event) {
 
-        //We shouldn't ever go below 0 but just in case...
-        if (badgeCount < 0) {
-            badgeCount = 0;
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+
+                NSInteger badgeCount = [[event data] integerValue];
+
+                if (badgeCount < 0) {
+                    badgeCount = 0;
+                }
+
+                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeCount];
+
+                DNInfoLog(@"Setting local and network badge count to: %ld", (long)badgeCount);
+
+                //We need to update the server side badge count:
+                DNClientNotification *badgeCountNotification = [[DNClientNotification alloc] initWithType:@"SetBadgeCount" data:@{@"BadgeCount" : @(badgeCount)} acknowledgementData:nil];
+
+                if ([weakSelf isSettingBadgeCount]) {
+                    @synchronized ([weakSelf pendingBageCountUpdates]) {
+                        [[weakSelf pendingBageCountUpdates] addObject:badgeCountNotification];
+                        return;
+                    }
+                }
+
+                [weakSelf setSettingBadgeCount:YES];
+                [[DNNetworkController sharedInstance] queueClientNotifications:@[badgeCountNotification]];
+                [weakSelf syncBadgeCount];
+            });
+
+        }];
+
+        [DNNotificationController resetApplicationBadgeCount];
+    }
+}
+
+- (void)syncBadgeCount {
+    [[DNNetworkController sharedInstance] synchroniseSuccess:^(NSURLSessionDataTask *task, id responseData) {
+        @synchronized ([self pendingBageCountUpdates]) {
+            if ([[self pendingBageCountUpdates] count]) {
+                [[DNNetworkController sharedInstance] queueClientNotifications:@[[[self pendingBageCountUpdates] firstObject]]];
+                [[self pendingBageCountUpdates] removeObjectAtIndex:0];
+                [self syncBadgeCount];
+            }
+            else {
+                [self setSettingBadgeCount:NO];
+            }
         }
-
-        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeCount];
-
-        //We need to update the server side badge count:
-        DNClientNotification *badgeCountNotification = [[DNClientNotification alloc] initWithType:@"SetBadgeCount" data:@{@"BadgeCount" : @(badgeCount)} acknowledgementData:nil];
-        [[DNNetworkController sharedInstance] queueClientNotifications:@[badgeCountNotification]];
-        [[DNNetworkController sharedInstance] synchronise];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [self setSettingBadgeCount:NO];
     }];
 }
 

@@ -30,11 +30,11 @@ static NSString *const DNDeviceSdkVersion = @"sdkVersion";
     self = [super init];
     
     if (self) {
-        
-        self.sdkVersion = [DNClientDetailsHelper sdkVersion];
-        self.appVersion = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey];
-        self.currentLocalTime = [[NSDate date] donkyDateForServer];
-        self.moduleVersions = [DNClientDetailsHelper moduleVersions] ? : [[NSMutableDictionary alloc] init];
+
+        [self setSdkVersion:[DNClientDetailsHelper sdkVersion]];
+        [self setAppVersion:[[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey]];
+        [self setCurrentLocalTime:[[NSDate date] donkyDateForServer]];
+        [self setModuleVersions:[DNClientDetailsHelper moduleVersions] ? : [[NSMutableDictionary alloc] init]];
     }
 
     return self;

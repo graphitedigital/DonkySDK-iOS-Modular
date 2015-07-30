@@ -17,15 +17,15 @@
 
     if (self) {
 
-        self.textLabel = [UILabel autoLayoutView];
-        [self.textLabel setTextAlignment:NSTextAlignmentCenter];
-        [self.textLabel setText:text];
+        [self setTextLabel:[UILabel autoLayoutView]];
+        [[self textLabel] setTextAlignment:NSTextAlignmentCenter];
+        [[self textLabel] setText:text];
 
-        [self addSubview:self.textLabel];
+        [self addSubview:[self textLabel]];
 
-        [self.textLabel centerInView:self];
+        [[self textLabel] centerInView:self];
 
-        [self pinAttribute:NSLayoutAttributeBottom toSameAttributeOfItem:self.textLabel withConstant:10];
+        [self pinAttribute:NSLayoutAttributeBottom toSameAttributeOfItem:[self textLabel] withConstant:10];
 
     }
 

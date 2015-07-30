@@ -20,7 +20,9 @@ static NSString *const DNInteractionResult = @"InteractionResult";
 
 @interface DPPushNotificationController ()
 @property(nonatomic, strong) DNModuleDefinition *moduleDefinition;
-@property(nonatomic, copy) DNSubscriptionBachHandler pushLogicHandler;
+@property(nonatomic, strong) DNSubscriptionBachHandler pushLogicHandler;
+@property(nonatomic, strong) DNLocalEventHandler simplePushEvent;
+@property(nonatomic, strong) DNLocalEventHandler interactionEvent;
 @end
 
 @implementation DPPushNotificationController
@@ -52,7 +54,7 @@ static NSString *const DNInteractionResult = @"InteractionResult";
         
         [self setPendingPushNotifications:[[NSMutableArray alloc] init]];
 
-        self.moduleDefinition = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.0.0"];
+        [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.0.1"]];
     }
     
     return  self;
@@ -66,39 +68,46 @@ static NSString *const DNInteractionResult = @"InteractionResult";
 
     __weak DPPushNotificationController *weakSelf = self;
 
-    self.pushLogicHandler = ^(NSArray *batch) {
+    [self setPushLogicHandler:^(NSArray *batch) {
         NSArray *batchNotifications = batch;
         [batchNotifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if ([obj isKindOfClass:[DNServerNotification class]]) {
                 [weakSelf pushNotificationReceived:obj];
             }
         }];
-    };
+    }];
 
     //Simple Push:
-    self.simplePushMessage = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationSimplePush batchHandler:self.pushLogicHandler];
-    [self.simplePushMessage setAutoAcknowledge:NO];
+    [self setSimplePushMessage:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationSimplePush batchHandler:[self pushLogicHandler]]];
+    [[self simplePushMessage] setAutoAcknowledge:NO];
 
-    [[DNDonkyCore sharedInstance] subscribeToDonkyNotifications:self.moduleDefinition subscriptions:@[self.simplePushMessage]];
+    [[DNDonkyCore sharedInstance] subscribeToDonkyNotifications:[self moduleDefinition] subscriptions:@[[self simplePushMessage]]];
 
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:DNInteractionResult handler:^(DNLocalEvent *event) {
+    [self setInteractionEvent:^(DNLocalEvent *event) {
         DNClientNotification *interactionResult = [[DNClientNotification alloc] initWithType:DNInteractionResult data:[event data] acknowledgementData:nil];
         [[DNNetworkController sharedInstance] queueClientNotifications:@[interactionResult]];
     }];
 
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppWillEnterForegroundNotification handler:^(DNLocalEvent *event) {
-        if ([self.pendingPushNotifications count]) {
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:DNInteractionResult handler:[self interactionEvent]];
+
+
+    [self setSimplePushEvent:^(DNLocalEvent *event) {
+        if ([[weakSelf pendingPushNotifications] count]) {
             DNLocalEvent *pushOpenEvent = [[DNLocalEvent alloc] initWithEventType:kDAEventInfluencedAppOpen
-                                                                        publisher:NSStringFromClass([self class])
+                                                                        publisher:NSStringFromClass([weakSelf class])
                                                                         timeStamp:[NSDate date]
-                                                                             data:[self pendingPushNotifications]];
+                                                                             data:[weakSelf pendingPushNotifications]];
             [[DNDonkyCore sharedInstance] publishEvent:pushOpenEvent];
         }
     }];
+
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppWillEnterForegroundNotification handler:[self simplePushEvent]];
 }
 
 - (void)stop {
-    [[DNDonkyCore sharedInstance] unSubscribeToDonkyNotifications:self.moduleDefinition subscriptions:@[self.simplePushMessage]];
+    [[DNDonkyCore sharedInstance] unSubscribeToDonkyNotifications:[self moduleDefinition] subscriptions:@[[self simplePushMessage]]];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventAppWillEnterForegroundNotification handler:[self simplePushEvent]];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:DNInteractionResult handler:[self interactionEvent]];
 }
 
 #pragma mark -

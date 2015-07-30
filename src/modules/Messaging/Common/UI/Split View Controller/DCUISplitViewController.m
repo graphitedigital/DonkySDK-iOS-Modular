@@ -21,12 +21,12 @@
     if (self) {
 
         UINavigationController *tableViewNavigationController = [[UINavigationController alloc] initWithRootViewController:masterView];
-        
-        self.masterViewController = tableViewNavigationController;
+
+        [self setMasterViewController:tableViewNavigationController];
 
         UINavigationController *richMessageNavigationController = [[UINavigationController alloc] initWithRootViewController:detailView];
-        
-        self.detailViewController = richMessageNavigationController;
+
+        [self setDetailViewController:richMessageNavigationController];
 
         [self setViewControllers:@[tableViewNavigationController, richMessageNavigationController]];
 

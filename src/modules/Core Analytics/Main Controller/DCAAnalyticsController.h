@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@class DNLocalEvent;
+#import "DNLocalEvent.h"
 
 /*!
  The controller for reporting various analytics back to Donky Network.
@@ -53,6 +52,5 @@
  @since 2.0.0.0
  */
 - (void)recordAppClose;
-
 
 @end

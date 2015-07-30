@@ -13,8 +13,9 @@
 
 -(BOOL)saveIfHasChanges:(NSError *__autoreleasing*)error {
     @try {
-        if ([self hasChanges])
+        if ([self hasChanges]) {
             return [self save:error];
+        }
         return YES;
     }
     @catch (NSException *exception) {

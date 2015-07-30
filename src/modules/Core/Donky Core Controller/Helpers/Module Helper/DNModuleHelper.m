@@ -16,14 +16,10 @@
 
 + (void)addModule:(DNModuleDefinition *)module toModuleList:(NSMutableDictionary *)moduleList subscription:(DNSubscription *)subscription {
     if (![[moduleList allKeys] containsObject:[subscription notificationType]]) {
-        @synchronized (moduleList) {
-            (moduleList)[[subscription notificationType]] = [[NSMutableDictionary alloc] init];
-        }
+        (moduleList)[[subscription notificationType]] = [[NSMutableDictionary alloc] init];
     }
     if (![[moduleList[[subscription notificationType]] allKeys] containsObject:[module name]]) {
-        @synchronized (moduleList) {
-            [moduleList[[subscription notificationType]] setObject:subscription forKey:[module name]];
-        }
+        [moduleList[[subscription notificationType]] setObject:subscription forKey:[module name]];
     }
     else {
         DNInfoLog(@"Module %@ is already subscriped to %@", [module name], [subscription notificationType]);
@@ -32,9 +28,7 @@
 
 + (void)removeModule:(DNModuleDefinition *)module toModuleList:(NSMutableDictionary *)moduleList subscription:(DNSubscription *)subscription {
     if ([[moduleList[[subscription notificationType]] allKeys] containsObject:[module name]]) {
-        @synchronized (moduleList) {
-            [moduleList[[subscription notificationType]] removeObjectForKey:[module name]];
-        }
+        [moduleList[[subscription notificationType]] removeObjectForKey:[module name]];
     }
 }
 

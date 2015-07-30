@@ -56,4 +56,11 @@
  */
 - (void)configureGestures;
 
+/*!
+ Helper method to load a defualt avatar image..
+ 
+ @since 2.4.3.1
+ */
+- (void)loadDefaultAvatar;
+
 @end

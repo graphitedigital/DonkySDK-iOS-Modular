@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AudioToolbox/AudioToolbox.h>
 #import <UIKit/UIKit.h>
 #import "DCUIBannerView.h"
 #import "DPPushNotificationController.h"
@@ -18,6 +19,13 @@
  Main controller to handle the presentation of the internal banner view, when a notification is received or processed by Donky.
  */
 @interface DPUINotificationController : NSObject <UIGestureRecognizerDelegate>
+
+/*!
+ A bool to determine whether the SDK should vibrate the device when a new message is received.
+ 
+ @since 2.4.3.1
+ */
+@property (nonatomic, getter=shouldVibrate) BOOL vibrate;
 
 /*!
  Singleton object:

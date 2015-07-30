@@ -29,7 +29,7 @@ typedef void (^DNDeviceConnectivityCompletionBlock) (BOOL connected);
 
     if (self) {
 
-        self.validConnection = YES;
+        [self setValidConnection:YES];
 
         [self setFailedRequest:[[NSMutableArray alloc] init]];
 
@@ -40,19 +40,19 @@ typedef void (^DNDeviceConnectivityCompletionBlock) (BOOL connected);
         __weak  DNDeviceConnectivityController *weakSelf = self;
         [manager.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
             DNInfoLog(@"Network status has changed to: %ld\nChecking connection validity...", (long)status);
-            weakSelf.status = status;
+            [weakSelf setStatus:status];
             if (status == AFNetworkReachabilityStatusNotReachable) {
                 [weakSelf checkForConnections:^(BOOL connected) {
-                    self.validConnection = connected;
+                    [weakSelf setValidConnection:connected];
                     //Publish connection event: Dictionary containing a BOOL representing the connection state:
                     DNLocalEvent *connectionEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventNetworkStateChanged
-                                                                                  publisher:NSStringFromClass([self class])
+                                                                                  publisher:NSStringFromClass([weakSelf class])
                                                                                   timeStamp:[NSDate date]
-                                                                                       data:@{@"IsConnected" : @(self.hasValidConnection), @"ConnectionType" : @(self.status)}];
+                                                                                       data:@{@"IsConnected" : @([weakSelf hasValidConnection]), @"ConnectionType" : @([weakSelf status])}];
                     [[DNDonkyCore sharedInstance] publishEvent:connectionEvent];
 
-                    if ([self hasValidConnection] && [[self failedRequest] count]) {
-                        [[self failedRequest] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    if ([weakSelf hasValidConnection] && [[weakSelf failedRequest] count]) {
+                        [[weakSelf failedRequest] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                             DNRequest *originalRequest = obj;
                             DNInfoLog(@"Processing request that failed due to invalid internet connection: %@", [originalRequest route]);
                             [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:[originalRequest isSecure]
@@ -64,7 +64,7 @@ typedef void (^DNDeviceConnectivityCompletionBlock) (BOOL connected);
                         }];
 
                         //Remove the objects
-                        [[self failedRequest] removeAllObjects];
+                        [[weakSelf failedRequest] removeAllObjects];
                         //Do a sync too:
                         if ([DNAccountController isRegistered]) {
                             [[DNNetworkController sharedInstance] synchronise];
@@ -73,7 +73,7 @@ typedef void (^DNDeviceConnectivityCompletionBlock) (BOOL connected);
                 }];
             }
             else {
-                self.validConnection = YES;
+                [weakSelf setValidConnection:YES];
             }
         }];
         [manager.reachabilityManager startMonitoring];
@@ -89,19 +89,21 @@ typedef void (^DNDeviceConnectivityCompletionBlock) (BOOL connected);
                 if (!connected2) {
                     [self facebookContactable:^(BOOL connected3) {
                         if (!connected3) {
-                            [self checkForConnections:completion];
+                            if (completion) {
+                                [self checkForConnections:completion];
+                            }
                         }
-                        else {
+                        else if (completion) {
                             completion(connected3);
                         }
                     }];
                 }
-                else {
+                else if (completion) {
                     completion(connected2);
                 }
             }];
         }
-        else {
+        else if (completion){
             completion(connected);
         }
     }];

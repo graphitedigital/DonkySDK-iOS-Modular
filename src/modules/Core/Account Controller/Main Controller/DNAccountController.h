@@ -144,7 +144,7 @@
  
  @since 2.2.2.7
  */
-+ (void)updateAdditionalProperites:(NSDictionary *)newAdditionalProperties success:(DNNetworkSuccessBlock) successBlock failure:(DNNetworkFailureBlock) failureBlock;
++ (void)updateAdditionalProperties:(NSDictionary *)newAdditionalProperties success:(DNNetworkSuccessBlock) successBlock failure:(DNNetworkFailureBlock) failureBlock;
 
 /*!
  Method to determine if the current device holds a valid registration.
@@ -173,5 +173,10 @@
  PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
  */
 + (void)updateClientModules:(NSArray *)modules;
+
+/*!
+ PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ */
++ (void)updateNetworkDetails;
 
 @end

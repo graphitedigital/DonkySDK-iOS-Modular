@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AudioToolbox/AudioServices.h>
 #import "DRMessageViewController.h"
 #import "DRLogicMainController.h"
 #import "DNLocalEvent.h"
@@ -26,6 +27,13 @@
  @since 2.0.0.0
  */
 @property (nonatomic, getter=shouldAutoDelete) BOOL autoDelete;
+
+/*!
+ A bool to determine whether the SDK should vibrate the device when a new message is received.
+ 
+ @since 2.4.3.1
+ */
+@property (nonatomic, getter=shouldVibrate) BOOL vibrate;
 
 /*!
  Singleton instance for the Donky Core.

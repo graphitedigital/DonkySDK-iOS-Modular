@@ -12,21 +12,21 @@
 
 @interface DNNetworkDataHelper : NSObject
 
-+ (NSArray *)clientNotificationsWithTempContext:(BOOL)tempContext;
++ (NSArray *)clientNotificationsWithTempContext:(BOOL)temp;
 
-+ (NSArray *)contentNotificationsInTempContext:(BOOL)tempContext;
++ (NSArray *)contentNotificationsWithTempContext:(BOOL)temp;
 
-+ (NSMutableDictionary *)networkClientNotifications:(NSMutableArray *)clientNotifications networkContentNotifications:(NSMutableArray *)contentNotifications;
++ (NSMutableDictionary *)networkClientNotifications:(NSMutableArray *)clientNotifications networkContentNotifications:(NSMutableArray *)contentNotifications tempContext:(BOOL)temp;
 
 + (void)saveClientNotificationsToStore:(NSArray *)array;
 
-+ (NSMutableArray *)sendContentNotifications:(NSArray *)notifications;
++ (NSMutableArray *)sendContentNotifications:(NSArray *)notifications withContext:(NSManagedObjectContext *)context;
 
 + (void)saveContentNotificationsToStore:(NSArray *)array;
 
-+ (void)deleteNotifications:(NSArray *)notifications inTempContext:(BOOL)tempContext;
++ (void)deleteNotifications:(NSArray *)notifications tempContext:(BOOL)temp;
 
-+ (void)clearBrokenNotificationsWithTempContext:(BOOL)tempContext;
++ (void)clearBrokenNotificationsWithTempContext:(BOOL)temp;
 
 + (void)deleteNotificationForID:(NSString *)serverID withTempContext:(BOOL)temp;
 

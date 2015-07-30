@@ -21,12 +21,13 @@
 
     if (self) {
 
-        self.name = name;
+        [self setName:name];
 
-        if (!version)
+        if (!version) {
             version = @"1.0.0.0";
+        }
 
-        self.version = version;
+        [self setVersion:version];
 
     }
 

@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-
 @interface DNUser : NSManagedObject
 
 @property (nonatomic, retain) id additionalProperties;

@@ -12,17 +12,15 @@
 @implementation NSManagedObjectContext (DNDelete)
 
 - (void)deleteAllObjectsInArray:(NSArray *)array {
-    @synchronized (self) {
-        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            @try {
-                [self deleteObject:obj];
-            }
-            @catch (NSException *exception) {
-                DNErrorLog(@"Fatal exception caught: %@", [exception description]);
-                [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil];
-            }
-        }];
-    }
+    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        @try {
+            [self deleteObject:obj];
+        }
+        @catch (NSException *exception) {
+            DNErrorLog(@"Fatal exception caught: %@", [exception description]);
+            [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil];
+        }
+    }];
 }
 
 @end

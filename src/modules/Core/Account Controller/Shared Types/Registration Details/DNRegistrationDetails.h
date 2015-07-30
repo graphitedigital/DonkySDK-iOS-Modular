@@ -42,6 +42,8 @@
 /*!
  The details of the client SDK. See DNClientDetails for readwrite properties.
  
+ @see DNClientDetails
+ 
  @since 2.0.0.0
  */
 @property(nonatomic, readonly) DNClientDetails *clientDetails;

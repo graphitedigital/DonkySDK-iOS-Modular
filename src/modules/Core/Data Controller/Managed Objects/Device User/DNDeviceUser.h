@@ -10,7 +10,6 @@
 #import <CoreData/CoreData.h>
 #import "DNUser.h"
 
-
 @interface DNDeviceUser : DNUser
 
 @property (nonatomic, retain) NSNumber * isAnonymous;

@@ -15,6 +15,8 @@
 #import "NSMutableDictionary+DNDictionary.h"
 #import "DNClientNotification.h"
 #import "DNDataController.h"
+#import "DNConstants.h"
+#import "DNDonkyCore.h"
 
 static NSString *const DNNotificationCustom = @"Custom";
 static NSString *const DNNotificationCustomType = @"customType";
@@ -72,8 +74,9 @@ static NSString *const DNResult = @"result";
 
 - (void)subscribeToNotifications:(DNModuleDefinition *)moduleDefinition subscriptions:(NSArray *)subscriptions {
     [subscriptions enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (![obj isKindOfClass:[DNSubscription class]])
+        if (![obj isKindOfClass:[DNSubscription class]]) {
             DNErrorLog(@"Something has gone wrong with. Expected DNSubscription (or subclass thereof) got: %@... Bailing out", NSStringFromClass([obj class]));
+        }
         else {
             DNSubscription *subscription = obj;
             [subscription setAutoAcknowledge:YES];
@@ -84,8 +87,9 @@ static NSString *const DNResult = @"result";
 
 - (void)unSubscribeToNotifications:(DNModuleDefinition *)moduleDefinition subscriptions:(NSArray *)subscriptions {
     [subscriptions enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (![obj isKindOfClass:[DNSubscription class]])
+        if (![obj isKindOfClass:[DNSubscription class]]) {
             DNErrorLog(@"Something has gone wrong with. Expected DNSubscription (or subclass thereof) got: %@... Bailing out", NSStringFromClass([obj class]));
+        }
         else {
             DNSubscription *subscription = obj;
             [subscription setAutoAcknowledge:YES];
@@ -108,6 +112,22 @@ static NSString *const DNResult = @"result";
             [self processNotifications:obj subscribers:subscribers];
         }
         else {
+            if ([key isEqualToString:kDNDonkyNotificationSimplePush] || [key isEqualToString:kDNDonkyNotificationRichMessage]) {
+                NSInteger count = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+                if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
+                    DNInfoLog(@"Artificially increasing badge count by: %lu", (long)[obj count]);
+                    count += [obj count];
+                }
+
+                DNInfoLog(@"Decreasing server badge count as no subscribers for %lu object(s) of type %@", (long)[obj count], key);
+                count -= [obj count];
+                DNLocalEvent *changeBadgeEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkySetBadgeCount
+                                                                               publisher:NSStringFromClass([self class])
+                                                                               timeStamp:[NSDate date]
+                                                                                    data:@(count)];
+                [[DNDonkyCore sharedInstance] publishEvent:changeBadgeEvent];
+            }
+
             DNInfoLog(@"No subscribers for: %@", key);
             [self acknowledgeNotifications:obj hasSubscribers:NO];
         }
@@ -115,34 +135,28 @@ static NSString *const DNResult = @"result";
 }
 
 - (void)processNotifications:(NSArray *)notifications subscribers:(NSArray *)subscribers {
-
     __block BOOL hasAcknowledged = NO;
     [subscribers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (![obj isKindOfClass:[DNSubscription class]])
+        if (![obj isKindOfClass:[DNSubscription class]]) {
             DNErrorLog(@"Something has gone wrong with. Expected DNSubscription (or subclass thereof) got: %@... Bailing out", NSStringFromClass([obj class]));
+        }
         else {
             DNSubscription *subscription = obj;
             if ([subscription shouldAutoAcknowledge] && !hasAcknowledged) {
                 [self acknowledgeNotifications:notifications hasSubscribers:YES];
                 hasAcknowledged = YES;
             }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if ([subscription batchHandler]) {
-                    [subscription batchHandler](notifications);
-                }
-                else if ([subscription handler]) {
-                    //Notifications
-                    [notifications enumerateObjectsUsingBlock:^(id obj2, NSUInteger idx2, BOOL *stop2) {
-                        [subscription handler](obj2);
-                    }];
-                }
-            });
+            if ([subscription batchHandler]) {
+                [subscription batchHandler](notifications);
+            }
+            else if ([subscription handler]) {
+                //Notifications
+                [notifications enumerateObjectsUsingBlock:^(id obj2, NSUInteger idx2, BOOL *stop2) {
+                    [subscription handler](obj2);
+                }];
+            }
         }
     }];
-
-    if (![subscribers count]) {
-        [self acknowledgeNotifications:notifications hasSubscribers:NO];
-    }
 
     [[DNDataController sharedInstance] saveAllData];
 }
