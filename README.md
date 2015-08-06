@@ -2,7 +2,7 @@
   <img src="https://avatars2.githubusercontent.com/u/11334935?v=3&s=200" alt="Donky Networks LTD" title="Donky Network SDK">
 </p>
 
-# Donky Modular SDK (V2.4.3.1)
+# Donky Modular SDK (V2.4.4.4)
 
 The modular SDK exposes all of the network functionality in a way that means developers can consume only the pieces they need in order to:
 
