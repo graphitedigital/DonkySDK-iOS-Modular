@@ -38,6 +38,8 @@
 
 - (void)searchDidEnd;
 
+- (void)updateTabBarCount;
+
 @end
 
 @interface DRIDataController : NSObject <UITableViewDataSource, UITableViewDelegate, DRITableViewCellDelegate, NSFetchedResultsControllerDelegate, DRLFetchedResultsControllerDelegate>
@@ -88,4 +90,5 @@
 
 - (void)hideSearchBar;
 
+- (NSNumber *)unreadRichMessageCount;
 @end

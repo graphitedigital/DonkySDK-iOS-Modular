@@ -192,7 +192,7 @@ extern NSString * const kDRUIInboxOptionsDisabledTextColour;
 extern NSString * const kDRUIInboxOptionsBackgroundColour;
 
 /*!
- The colour of the option devider in the options view in 
+ The colour of the option divider in the options view in
  the rich message inbox view (only present when there are more than two options).
  
  @since 2.2.2.7

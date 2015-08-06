@@ -51,20 +51,24 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
     return !([[request route] isEqualToString:kDNNetworkRegistration] && [DNAccountController isRegistered]);
 }
 
-+ (BOOL)isRequest:(DNRequest *)request duplicated:(NSMutableArray *)queuedRequests {
++ (BOOL)duplicateUpdateDetailsCall:(DNRequest *)request exchangeRequest:(NSMutableArray *)exchangeRequests {
 
-    __block BOOL isDuplicate = NO;
+    if (![[request route] isEqualToString:kDNNetworkRegistrationClient] && ![[request route] isEqualToString:kDNNetworkRegistrationDevice] && ![[request route] isEqualToString:kDNNetworkRegistrationDeviceUser]) {
+        return NO;
+    }
 
-    [queuedRequests enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        DNRequest *currentRequest = obj;
-        if ([[currentRequest route] isEqualToString:[request route]] && (![[currentRequest route] isEqualToString:kDNNetworkRegistrationClient] && ![[currentRequest route] isEqualToString:kDNNetworkRegistrationDevice]  && ![[currentRequest route] isEqualToString:kDNNetworkRegistrationDeviceUser])) {
-            isDuplicate = YES;
+    __block BOOL duplicate = NO;
+    [exchangeRequests enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSURLSessionTask *task = obj;
+        if (([[task taskDescription] isEqualToString:kDNNetworkRegistrationClient] && [task state] == NSURLSessionTaskStateRunning) || ([[task taskDescription] isEqualToString:kDNNetworkRegistrationDevice] && [task state] == NSURLSessionTaskStateRunning) || ([[task taskDescription] isEqualToString:kDNNetworkRegistrationDeviceUser] && [task state] == NSURLSessionTaskStateRunning)) {
+            duplicate = YES;
             *stop = YES;
         }
     }];
 
-    return isDuplicate;
+    return duplicate;
 }
+
 
 + (void)handleError:(NSError *)error task:(NSURLSessionDataTask *)task request:(DNRequest *)request {
     NSData *data = [error userInfo][AFNetworkingOperationFailingURLResponseDataErrorKey];

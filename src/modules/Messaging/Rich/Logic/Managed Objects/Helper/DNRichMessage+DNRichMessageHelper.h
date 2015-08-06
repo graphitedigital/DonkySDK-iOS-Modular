@@ -21,9 +21,11 @@
  */
 - (BOOL)richHasCompletelyExpired;
 
+- (BOOL)richHasReachedExpiration;
+
 /*!
- Whether the rich message can be shared, this depends on servaral variables. Whether there is a link, 
- whether it can be sahred and if it is expired or not.
+ Whether the rich message can be shared, this depends on several variables. Whether there is a link,
+ whether it can be shared and if it is expired or not.
  
  @return BOOL determining if the message can be shared.
  

@@ -128,10 +128,9 @@
             [applicationViewController presentViewController:popOverViewController
                                                     animated:YES
                                                   completion:nil];
-
-            if ([self shouldVibrate] && ![richMessage silentNotification]) {
-                AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-            }
+            
+            DNLocalEvent *event = [[DNLocalEvent alloc] initWithEventType:@"DCMAudioPlayAudioFile" publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(0)];
+            [[DNDonkyCore sharedInstance] publishEvent:event];
         }
     }
 

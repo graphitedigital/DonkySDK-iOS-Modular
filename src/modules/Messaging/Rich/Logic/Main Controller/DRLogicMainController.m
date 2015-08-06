@@ -59,7 +59,7 @@
 
 - (void)start {
 
-    [self deleteAllExpiredMessages];
+    [self deleteMaxLifeRichMessages];
 
     [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.1.1"]];
 
@@ -140,10 +140,6 @@
     return [DRLogicHelper richMessageWithID:messageID];
 }
 
-- (BOOL)hasRichMessageExpired:(DNRichMessage *)richMessage {
-    return [[richMessage expiryTimestamp] donkyHasDateExpired] || [[richMessage sentTimestamp] donkyHasMessageExpired];
-}
-
 - (void)richMessageNotificationsReceived:(NSArray *)notifications {
     @synchronized (self.backgroundNotifications) {
         [DRLogicMainControllerHelper richMessageNotificationReceived:notifications backgroundNotifications:[self backgroundNotifications]];
@@ -153,6 +149,10 @@
 
 - (void)deleteAllExpiredMessages {
     [DRLogicHelper deleteAllExpiredMessages];
+}
+
+- (void)deleteMaxLifeRichMessages {
+    [DRLogicHelper deleteMaxLifeRichMessages];
 }
 
 #pragma mark -

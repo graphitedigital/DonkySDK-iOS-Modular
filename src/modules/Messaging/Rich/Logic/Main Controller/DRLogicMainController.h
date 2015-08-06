@@ -106,18 +106,6 @@
 - (DNRichMessage *)richMessageWithID:(NSString *)messageID;
 
 /*!
- Helper method to determine if the rich message has expired. If this returns true
- then the message should be discarded.
- 
- @param richMessage the rich message that is under question.
- 
- @return BOOL to determine if the message has or has not expired.
- 
- @since 2.2.2.7
- */
-- (BOOL)hasRichMessageExpired:(DNRichMessage *)richMessage;
-
-/*!
  Helper method to process all the rich messages that have been received from APNS.
  This accepts an array of messages so that batch processing can be achieved.
  
@@ -169,4 +157,5 @@
  */
 - (void)deleteAllExpiredMessages;
 
+- (void)deleteMaxLifeRichMessages;
 @end

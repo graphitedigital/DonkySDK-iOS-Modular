@@ -23,6 +23,7 @@ static NSString *const DNInteractionResult = @"InteractionResult";
 @property(nonatomic, strong) DNSubscriptionBachHandler pushLogicHandler;
 @property(nonatomic, strong) DNLocalEventHandler simplePushEvent;
 @property(nonatomic, strong) DNLocalEventHandler interactionEvent;
+@property(nonatomic, strong) DNLocalEventHandler backgroundNotification;
 @end
 
 @implementation DPPushNotificationController
@@ -102,25 +103,34 @@ static NSString *const DNInteractionResult = @"InteractionResult";
     }];
 
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppWillEnterForegroundNotification handler:[self simplePushEvent]];
+
+
+    [self setBackgroundNotification:^(DNLocalEvent *event) {
+        if ([[event data] isKindOfClass:[NSDictionary class]]) {
+            if ([[event data] isKindOfClass:[DNServerNotification class]]) {
+                DNServerNotification *notification = [event data];
+                [[weakSelf pendingPushNotifications] addObject:[notification serverNotificationID]];
+            }
+            else {
+                [[weakSelf pendingPushNotifications] addObject:[event data]];
+            }
+        }
+    }];
+
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventNotificationLoaded handler:[self backgroundNotification]];
 }
 
 - (void)stop {
     [[DNDonkyCore sharedInstance] unSubscribeToDonkyNotifications:[self moduleDefinition] subscriptions:@[[self simplePushMessage]]];
     [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventAppWillEnterForegroundNotification handler:[self simplePushEvent]];
     [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:DNInteractionResult handler:[self interactionEvent]];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventBackgroundNotificationReceived handler:[self backgroundNotification]];
 }
 
 #pragma mark -
 #pragma mark - Core Logic
 
 - (void)pushNotificationReceived:(DNServerNotification *)notification {
-
-    //Clean out nulls:
-    NSString *notificationID = [notification serverNotificationID];
-
-    if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
-        [[self pendingPushNotifications] addObject:notificationID];
-    }
 
     //Publish event:
     NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
@@ -132,7 +142,7 @@ static NSString *const DNInteractionResult = @"InteractionResult";
                                                             timeStamp:[NSDate date]
                                                                  data:data];
     [[DNDonkyCore sharedInstance] publishEvent:pushEvent];
-
+    
     //Mark as received:
     [DCMMainController markMessageAsReceived:notification];
 }

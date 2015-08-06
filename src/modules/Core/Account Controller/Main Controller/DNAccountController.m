@@ -80,6 +80,7 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
             [DNDonkyNetworkDetails saveDeviceID:[accountRegistrationResponse deviceId]];
             [DNDonkyNetworkDetails saveNetworkID:[accountRegistrationResponse networkId]];
             [DNDonkyNetworkDetails saveTokenExpiry:[accountRegistrationResponse tokenExpiry]];
+            [DNDonkyNetworkDetails saveNetworkProfileID:[accountRegistrationResponse networkProfileID]];
             [DNDonkyNetworkDetails saveDeviceSecret:[deviceDetails deviceSecret]];
             [DNDonkyNetworkDetails saveSDKVersion:[clientDetails sdkVersion]];
             [DNDonkyNetworkDetails saveOperatingSystemVersion:[deviceDetails operatingSystem]];
@@ -229,7 +230,34 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
             }
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        if (failureBlock) {
+        if ([DNErrorController serviceReturnedFailureKey:@"UserIdAlreadyTaken" error:error]) {
+            [[DNNetworkController sharedInstance] synchroniseSuccess:^(NSURLSessionDataTask *task1, id responseData1) {
+                [DNAccountController replaceRegistrationDetailsWithUserDetails:userDetails deviceDetails:[[DNAccountController registrationDetails] deviceDetails] success:^(NSURLSessionDataTask *task2, id responseData) {
+                    @try {
+
+                        [DNAccountController saveUserDetails:userDetails];
+
+                        if (successBlock) {
+                            successBlock(task, responseData);
+                        }
+
+                        DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventRegistrationChangedUser
+                                                                                 publisher:NSStringFromClass([self class])
+                                                                                 timeStamp:[NSDate date]
+                                                                                      data:userDetails];
+                        [[DNDonkyCore sharedInstance] publishEvent:localEvent];
+                    }
+                    @catch (NSException *exception) {
+                        DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
+                        [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
+                        if (failureBlock) {
+                            failureBlock(task, [DNErrorController errorCode:DNCoreSDKFatalException userInfo:@{@"Exception: " : [exception description]}]);
+                        }
+                    }
+                } failure:failureBlock];
+            } failure:nil];
+        }
+        else if (failureBlock) {
             failureBlock(task, error);
         }
     }];
@@ -454,7 +482,7 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 
     //Get the current user:
     DNUserDetails *currentUser = [[DNAccountController registrationDetails] userDetails];
-    
+
     DNUserDetails *updatedUser = [DNAccountController userID:[currentUser userID]
                                                  displayName:[currentUser displayName]
                                                 emailAddress:[currentUser emailAddress]
@@ -465,11 +493,10 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
                                                     avatarID:[currentUser avatarAssetID]
                                                 selectedTags:[currentUser selectedTags]
                                         additionalProperties:originalUserProperties];
-    
-    [DNAccountController updateUserDetails:updatedUser success:successBlock failure:failureBlock];
-    
-}
 
+    [DNAccountController updateUserDetails:updatedUser success:successBlock failure:failureBlock];
+
+}
 
 + (DNUserDetails *)currentDeviceUser {
 

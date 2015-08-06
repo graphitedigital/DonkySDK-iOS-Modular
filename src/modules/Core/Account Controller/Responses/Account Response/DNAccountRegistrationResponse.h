@@ -22,6 +22,8 @@
 
 @property (nonatomic, readonly) NSString *userId;
 
+@property (nonatomic, readonly) NSString *networkProfileID;
+
 @property(nonatomic, readonly) NSDictionary *configuration;
 
 - (instancetype)initWithRegistrationResponse:(NSDictionary *)responseData;

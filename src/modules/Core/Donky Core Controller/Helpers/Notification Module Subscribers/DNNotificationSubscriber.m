@@ -17,6 +17,7 @@
 #import "DNDataController.h"
 #import "DNConstants.h"
 #import "DNDonkyCore.h"
+#import "DNContentNotification.h"
 
 static NSString *const DNNotificationCustom = @"Custom";
 static NSString *const DNNotificationCustomType = @"customType";
@@ -103,15 +104,31 @@ static NSString *const DNResult = @"result";
     [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if ([key isEqualToString:DNNotificationCustom]) {
             //Get subscriber:
-            subscribers = [[self customNotificationSubscribers][key] allObjects];
+            __block NSMutableArray *processedTypes = [[NSMutableArray alloc] init];
+            [obj enumerateObjectsUsingBlock:^(id obj2, NSUInteger idx2, BOOL *stop2) {
+                DNServerNotification *serverNotification = obj2;
+                NSString *type = [serverNotification data][DNNotificationCustomType];
+                subscribers = [[self customNotificationSubscribers][type] allObjects];
+                NSArray *filteredArray = [obj filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"data.customType == %@", type]];
+                
+                __block bool processedType = NO;
+                [processedTypes enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    if ([obj isEqualToString:type]) {
+                        processedType = YES;
+                        *stop = YES;
+                    }
+                }];
+                if ([filteredArray count] && !processedType) {
+                    [processedTypes addObject:type];
+                    [self processNotifications:filteredArray subscribers:subscribers];
+                }
+            }];
         }
         else {
             subscribers = [[self donkyNotificationSubscribers][key] allObjects];
-        }
-        if (subscribers) {
             [self processNotifications:obj subscribers:subscribers];
         }
-        else {
+        if (!subscribers) {
             if ([key isEqualToString:kDNDonkyNotificationSimplePush] || [key isEqualToString:kDNDonkyNotificationRichMessage]) {
                 NSInteger count = [[UIApplication sharedApplication] applicationIconBadgeNumber];
                 if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {

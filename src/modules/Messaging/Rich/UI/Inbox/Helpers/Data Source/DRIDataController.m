@@ -22,12 +22,12 @@
 static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
 
 @interface DRIDataController ()
+@property(nonatomic, strong) DRLFetchedResultsController *richLogicFetchedResultsController;
 @property(nonatomic, strong) NSIndexPath *originalIndexPath;
-@property(nonatomic, strong) NSMutableArray *openedCells;;
+@property(nonatomic, strong) NSMutableArray *openedCells;
+@property(nonatomic, getter=wasUpdated) BOOL updated;
 @property(nonatomic, strong) UITableView *tableView;
 @property(nonatomic, strong) DRUITheme *theme;
-@property(nonatomic, strong) DRLFetchedResultsController *richLogicFetchedResultsController;
-@property(nonatomic, getter=wasUpdated) BOOL updated;
 @end
 
 @implementation DRIDataController
@@ -139,6 +139,7 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
 
 - (void)deleteAllExpiredMessages {
     [[self drLogicMainController] deleteAllExpiredMessages];
+    [self updateSelectedIndex:[self originalIndexPath]];
 }
 
 - (BOOL)toggleAllSelectedMessages {
@@ -255,6 +256,10 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
     [[self tableView] setContentOffset:CGPointMake(0, [self tableView].tableHeaderView.frame.size.height)];
 }
 
+- (NSNumber *)unreadRichMessageCount {
+    return @([[[self drLogicMainController] allUnreadRichMessages] count]);
+}
+
 #pragma mark -
 #pragma mark - Table view
 
@@ -285,14 +290,14 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
     [cell setTableViewEditing:[tableView isEditing]];
     [cell setEditing:[tableView isEditing] animated:NO];
     [cell closeCell];
-    [cell configureCell];
-    
+
     if (([DNSystemHelpers isDeviceIPad] || [DNSystemHelpers isDeviceSixPlusLandscape]) && ![tableView isEditing]) {
         [cell setSelected:[self originalIndexPath] == indexPath];
     }
 
     [cell layoutIfNeeded];
     [cell updateConstraints];
+    [cell configureCell];
 
     return cell;
 }
@@ -449,7 +454,9 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
 }
 
 - (void)messageExpired:(UITableViewCell *)cell {
-    [self clearSelectedIndexPath:[self originalIndexPath]];
+    if ([cell isSelected]) {
+        [self clearSelectedIndexPath:[self originalIndexPath]];
+    }
 }
 
 - (void)updateSelectedIndex:(NSIndexPath *) deletedCell {
@@ -476,6 +483,10 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
     if ([DNSystemHelpers isDeviceIPad] || [DNSystemHelpers isDeviceSixPlusLandscape]) {
         [self setOriginalIndexPath:[NSIndexPath indexPathForRow:[[self originalIndexPath] row] + 1 inSection:0]];
     }
+
+    if ([[self delegate] respondsToSelector:@selector(updateTabBarCount)]) {
+        [[self delegate] updateTabBarCount];
+    }
 }
 
 - (void)deleteRowsAtIndexPath:(NSIndexPath *)indexPath {
@@ -486,10 +497,18 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
             [self attemptToSelectNextRow:indexPath];
         }
     }
+
+    if ([[self delegate] respondsToSelector:@selector(updateTabBarCount)]) {
+        [[self delegate] updateTabBarCount];
+    }
 }
 
 - (void)reloadRowsAtIndexPaths:(NSArray *)indexPaths {
     [self setUpdated:YES];
+
+    if ([[self delegate] respondsToSelector:@selector(updateTabBarCount)]) {
+        [[self delegate] updateTabBarCount];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {

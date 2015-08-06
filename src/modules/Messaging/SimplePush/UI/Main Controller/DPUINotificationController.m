@@ -50,8 +50,6 @@
         //Start Push Logic:
         [self setPushNotificationController:[[DPPushNotificationController alloc] init]];
         [[self pushNotificationController] start];
-
-        [self setVibrate:YES];
     }
 
     return self;
@@ -128,9 +126,8 @@
         DPUIBannerView *bannerView = [[DPUIBannerView alloc] initWithNotification:donkyNotification];
         [[self notificationController] presentNotification:bannerView];
 
-        if ([self shouldVibrate]) {
-            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-        }
+        DNLocalEvent *event = [[DNLocalEvent alloc] initWithEventType:@"DAudioPlayAudioFile" publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(0)];
+        [[DNDonkyCore sharedInstance] publishEvent:event];
 
         //If we are on simple push, we add the other gestures:
         if (![bannerView buttonView]) {

@@ -28,36 +28,12 @@ static NSString *const DNApiKey = @"14f05d07-54c6-49ed-8c27-164e82fd1ec8";
 static NSString *const DNIsSuspended = @"IsSuspended";
 static NSString *const DNSDKVersion = @"SDKVersion";
 static NSString *const DNOSVersion = @"OSVersion";
+static NSString *const DNDeviceToken = @"DeviceToken";
+static NSString *const DNAPNSAudio = @"APNSAudio";
+
+static NSString *const DNNetworkProfileID = @"networkProfileID";
 
 @implementation DNDonkyNetworkDetails
-
-+ (NSString *)deviceSecret {
-    return [DNKeychainHelper objectForKey:kDNKeychainDeviceSecret] ? : [DNSystemHelpers generateGUID];
-}
-
-+ (NSString *)deviceID {
-    return [DNUserDefaultsHelper objectForKey:DNDeviceID] ? : [DNSystemHelpers generateGUID];
-}
-
-+ (NSString *)accessToken {
-    return [DNKeychainHelper objectForKey:kDNKeychainAccessToken];
-}
-
-+ (NSString *)secureServiceRootUrl {
-    return [DNUserDefaultsHelper objectForKey:DNSecureServicesURL];
-}
-
-+ (NSDate *)tokenExpiry {
-    return [DNUserDefaultsHelper objectForKey:DNTokenExpiry];
-}
-
-+ (NSString *)networkId {
-    return [DNUserDefaultsHelper objectForKey:DNNetworkID];
-}
-
-+ (NSString *)apiKey {
-    return [DNUserDefaultsHelper objectForKey:DNApiKey];
-}
 
 + (void)saveDeviceSecret:(NSString *) secret {
     [DNKeychainHelper saveObjectToKeychain:secret withKey:kDNKeychainDeviceSecret];
@@ -65,6 +41,10 @@ static NSString *const DNOSVersion = @"OSVersion";
 
 + (void)saveDeviceID:(NSString *) deviceID {
     [DNUserDefaultsHelper saveObject:deviceID withKey:DNDeviceID];
+}
+
++ (void)saveDeviceToken:(NSString *)deviceToken {
+    [DNUserDefaultsHelper saveObject:deviceToken withKey:DNDeviceToken];
 }
 
 + (void)saveAccessToken:(NSString *)accessToken {
@@ -103,6 +83,14 @@ static NSString *const DNOSVersion = @"OSVersion";
     [DNUserDefaultsHelper saveObject:operatingSystem withKey:DNOSVersion];
 }
 
++ (void)saveAPNSAudio:(NSString *)apnsAudio {
+    [DNUserDefaultsHelper saveObject:apnsAudio withKey:DNAPNSAudio];
+}
+
++ (void)saveNetworkProfileID:(NSString *)networkProfileID {
+    [DNUserDefaultsHelper saveObject:networkProfileID withKey:DNNetworkProfileID];
+}
+
 + (BOOL)isDeviceRegistered {
     return [DNDonkyNetworkDetails networkId] != nil;
 }
@@ -127,12 +115,52 @@ static NSString *const DNOSVersion = @"OSVersion";
     return [[DNUserDefaultsHelper objectForKey:DNIsSuspended] boolValue];
 }
 
++ (NSString *)deviceSecret {
+    return [DNKeychainHelper objectForKey:kDNKeychainDeviceSecret] ? : [DNSystemHelpers generateGUID];
+}
+
++ (NSString *)deviceID {
+    return [DNUserDefaultsHelper objectForKey:DNDeviceID] ? : [DNSystemHelpers generateGUID];
+}
+
++ (NSString *)accessToken {
+    return [DNKeychainHelper objectForKey:kDNKeychainAccessToken];
+}
+
++ (NSString *)secureServiceRootUrl {
+    return [DNUserDefaultsHelper objectForKey:DNSecureServicesURL];
+}
+
++ (NSDate *)tokenExpiry {
+    return [DNUserDefaultsHelper objectForKey:DNTokenExpiry];
+}
+
++ (NSString *)networkId {
+    return [DNUserDefaultsHelper objectForKey:DNNetworkID];
+}
+
++ (NSString *)apiKey {
+    return [DNUserDefaultsHelper objectForKey:DNApiKey];
+}
+
 + (NSString *)savedSDKVersion {
     return [DNUserDefaultsHelper objectForKey:DNSDKVersion];
 }
 
 + (NSString *)savedOperatingSystemVersion {
     return [DNUserDefaultsHelper objectForKey:DNOSVersion];
+}
+
++ (NSString *)deviceToken {
+    return [DNUserDefaultsHelper objectForKey:DNDeviceToken];
+}
+
++ (NSString *)apnsAudio {
+    return [DNUserDefaultsHelper objectForKey:DNAPNSAudio];
+}
+
++ (NSString *)networkProfileID {
+    return [DNUserDefaultsHelper objectForKey:DNNetworkProfileID];
 }
 
 @end

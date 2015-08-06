@@ -19,7 +19,8 @@ typedef enum {
     DNCoreFrequentErrorLogs,
     DNCoreSDKSuspendedUser,
     DNCoreContentNotificationSizeLimit,
-    DNCoreErrorDuplicateRequest
+    DNCoreErrorDuplicateRequest,
+    DNCoreSDKErrorDuplicateAsyncCall
 } DonkyNetworkSDKErrorCodes;
 
 @interface DNErrorController : NSObject

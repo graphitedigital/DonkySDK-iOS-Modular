@@ -51,7 +51,6 @@
 		D7743CDD1B68B36B000DEB3F /* DNDeviceUser.m in Sources */ = {isa = PBXBuildFile; fileRef = D7743B6B1B68B36B000DEB3F /* DNDeviceUser.m */; };
 		D7743CDE1B68B36B000DEB3F /* DNNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = D7743B6E1B68B36B000DEB3F /* DNNotification.m */; };
 		D7743CDF1B68B36B000DEB3F /* DNUser.m in Sources */ = {isa = PBXBuildFile; fileRef = D7743B711B68B36B000DEB3F /* DNUser.m */; };
-		D7743CE01B68B36B000DEB3F /* DNDataController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D7743B731B68B36B000DEB3F /* DNDataController.bundle */; };
 		D7743CE11B68B36B000DEB3F /* DNDonkyDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D7743B741B68B36B000DEB3F /* DNDonkyDataModel.xcdatamodeld */; };
 		D7743CE21B68B36B000DEB3F /* DNDonkyCoreFunctionalHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7743B7B1B68B36B000DEB3F /* DNDonkyCoreFunctionalHelper.m */; };
 		D7743CE31B68B36B000DEB3F /* DNEventSubscriber.m in Sources */ = {isa = PBXBuildFile; fileRef = D7743B7E1B68B36B000DEB3F /* DNEventSubscriber.m */; };
@@ -222,7 +221,6 @@
 		D7743B6E1B68B36B000DEB3F /* DNNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNotification.m; sourceTree = "<group>"; };
 		D7743B701B68B36B000DEB3F /* DNUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNUser.h; sourceTree = "<group>"; };
 		D7743B711B68B36B000DEB3F /* DNUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNUser.m; sourceTree = "<group>"; };
-		D7743B731B68B36B000DEB3F /* DNDataController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DNDataController.bundle; sourceTree = "<group>"; };
 		D7743B751B68B36B000DEB3F /* DNDonkyDataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DNDonkyDataModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		D7743B761B68B36B000DEB3F /* DNDonkyDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DNDonkyDataModel.xcdatamodel; sourceTree = "<group>"; };
 		D7743B7A1B68B36B000DEB3F /* DNDonkyCoreFunctionalHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDonkyCoreFunctionalHelper.h; sourceTree = "<group>"; };
@@ -855,7 +853,6 @@
 		D7743B721B68B36B000DEB3F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D7743B731B68B36B000DEB3F /* DNDataController.bundle */,
 				D7743B741B68B36B000DEB3F /* DNDonkyDataModel.xcdatamodeld */,
 			);
 			path = Resources;
@@ -1833,7 +1830,6 @@
 				D7743D191B68B36B000DEB3F /* DRLocalization.strings in Resources */,
 				D7743D0E1B68B36B000DEB3F /* common_messaging_default_avatar.png in Resources */,
 				D7743CD51B68B36B000DEB3F /* DNConfiguration.plist in Resources */,
-				D7743CE01B68B36B000DEB3F /* DNDataController.bundle in Resources */,
 				34F521DF092B3CF529D025C3 /* .gitignore in Resources */,
 				34F52E76510AD2982CBEF24D /* .travis.yml in Resources */,
 				D7743D151B68B36B000DEB3F /* DCUILocalization.strings in Resources */,
@@ -2176,7 +2172,7 @@
 				D7743B751B68B36B000DEB3F /* DNDonkyDataModel 2.xcdatamodel */,
 				D7743B761B68B36B000DEB3F /* DNDonkyDataModel.xcdatamodel */,
 			);
-			currentVersion = D7743B761B68B36B000DEB3F /* DNDonkyDataModel.xcdatamodel */;
+			currentVersion = D7743B751B68B36B000DEB3F /* DNDonkyDataModel 2.xcdatamodel */;
 			path = DNDonkyDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

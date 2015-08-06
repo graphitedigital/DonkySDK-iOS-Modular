@@ -120,11 +120,15 @@ static NSString *const DRIMessageID = @"messageID";
 
             __block BOOL inboxShown = NO;
 
+            if ([presentingView isKindOfClass:[UITabBarController class]]) {
+                presentingView = (UITabBarController *) [presentingView selectedViewController];
+            }
+
             if ([presentingView isKindOfClass:[DCUISplitViewController class]]) {
                 inboxShown = YES;
             }
 
-            if ([presentingView respondsToSelector:@selector(viewControllers)]) {
+            if ([presentingView respondsToSelector:@selector(viewControllers)] && !inboxShown) {
                 [[presentingView viewControllers] enumerateObjectsUsingBlock:^(id obj2, NSUInteger idx2, BOOL *stop2) {
                     if ([obj2 isKindOfClass:[DCUISplitViewController class]]) {
                         inboxShown = YES;

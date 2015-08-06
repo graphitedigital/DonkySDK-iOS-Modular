@@ -33,10 +33,9 @@
 
 + (BOOL)isCallNecessary:(DNRequest *)request;
 
-+ (BOOL)isRequest:(DNRequest *)request duplicated:(NSMutableArray *)queuedRequests;
-
 + (NSArray *)clientNotifications:(NSMutableArray *)clientNotifications;
 
 + (NSArray *)contentNotifications:(NSMutableArray *)notifications;
 
++ (BOOL)duplicateUpdateDetailsCall:(DNRequest *)request exchangeRequest:(NSMutableArray *)exchangeRequests;
 @end

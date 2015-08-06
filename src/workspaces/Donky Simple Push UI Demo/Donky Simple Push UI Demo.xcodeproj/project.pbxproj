@@ -1246,8 +1246,8 @@
 		34F52B20852B2DE4109AAC2C /* App Delegate */ = {
 			isa = PBXGroup;
 			children = (
-				34F52B07E4AC458EB5E0A779 /* AppDelegate.m */,
 				34F52696903C56D66F0AC7FC /* AppDelegate.h */,
+				34F52B07E4AC458EB5E0A779 /* AppDelegate.m */,
 			);
 			path = "App Delegate";
 			sourceTree = "<group>";
@@ -2038,6 +2038,7 @@
 				D0CD374B1B64DA2B00B5B85D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D0CD374C1B64DA2B00B5B85D /* Build configuration list for PBXNativeTarget "Donky Simple Push UI DemoTests" */ = {
 			isa = XCConfigurationList;
@@ -2046,6 +2047,7 @@
 				D0CD374E1B64DA2B00B5B85D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
@@ -2056,7 +2058,7 @@
 				34F5250B9CBD10DB5AEC16AA /* DNDonkyDataModel 2.xcdatamodel */,
 				34F521A95AB11BA8DAA3B0AE /* DNDonkyDataModel.xcdatamodel */,
 			);
-			currentVersion = 34F521A95AB11BA8DAA3B0AE /* DNDonkyDataModel.xcdatamodel */;
+			currentVersion = 34F5250B9CBD10DB5AEC16AA /* DNDonkyDataModel 2.xcdatamodel */;
 			path = DNDonkyDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

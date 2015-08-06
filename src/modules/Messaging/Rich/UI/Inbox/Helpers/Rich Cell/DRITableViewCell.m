@@ -169,7 +169,7 @@ static NSString *const DRTableCellEditControlClass = @"UITableViewCellEditContro
         [[self descriptionLabel] pinAttribute:NSLayoutAttributeLeft toAttribute:NSLayoutAttributeRight ofItem:[self avatarImageView] withConstant:10];
         [[self descriptionLabel] pinAttribute:NSLayoutAttributeTop toAttribute:NSLayoutAttributeBottom ofItem:[self titleLabel] withConstant:0];
         [[self descriptionLabel] pinToSuperviewEdges:JRTViewPinRightEdge inset:10];
-        
+
         [[self bannerView] pinToSuperviewEdges:JRTViewPinTopEdge | JRTViewPinLeftEdge | JRTViewPinRightEdge inset:0.0];
 
         [self setConstraintsSetup:YES];
@@ -213,7 +213,6 @@ static NSString *const DRTableCellEditControlClass = @"UITableViewCellEditContro
     if ([self dateLabelConstraint]) {
         [[self dateLabel] removeConstraints:[self dateLabelConstraint]];
         [[self dateLabel] layoutIfNeeded];
-        [[self titleLabel] layoutIfNeeded];
     }
 
     CGFloat stringWidth = [DCUIMainController sizeForString:[[self dateLabel] text] font:[[self theme] fontForKey:kDRUIInboxCellDateFont] maxHeight:CGFLOAT_MAX maxWidth:CGFLOAT_MAX].width;
@@ -231,12 +230,11 @@ static NSString *const DRTableCellEditControlClass = @"UITableViewCellEditContro
     else {
         [[self panHelper] setEnabled:YES];
         [self calculateExpiryDate];
+
+        [self startTimer:[self richMessage]];
     }
 
-    [self startTimer:[self richMessage]];
-
     [[self panHelper] setEditing:[self istableViewEditing]];
-
 }
 
 - (void)loadRichMessageAvatar {
@@ -311,13 +309,11 @@ static NSString *const DRTableCellEditControlClass = @"UITableViewCellEditContro
 #pragma mark - Date Label:
 
 - (void)refreshDateLabel:(NSTimer *)timer {
-
     DNRichMessage *richMessage = [timer userInfo];
-
-    [[self dateLabel] setText:[DRITableViewCellHelper dateWithMessage:richMessage]];
-
-    [self startTimer:richMessage];
-
+    if (![richMessage richHasCompletelyExpired]) {
+        [[self dateLabel] setText:[DRITableViewCellHelper dateWithMessage:richMessage]];
+        [self startTimer:richMessage];
+    }
 }
 
 - (void)startTimer:(DNRichMessage *)richMessage {

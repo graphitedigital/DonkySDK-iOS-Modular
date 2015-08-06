@@ -9,6 +9,8 @@
 #import "DNAccountRegistrationResponse.h"
 #import "NSDate+DNDateHelper.h"
 
+static NSString *const DNNetworkProfileID = @"networkProfileId";
+
 @interface DNAccountRegistrationResponse ()
 @property (nonatomic, readwrite) NSDate *tokenExpiry;
 @property (nonatomic, readwrite) NSString *rootURL;
@@ -16,6 +18,7 @@
 @property (nonatomic, readwrite) NSString *deviceId;
 @property (nonatomic, readwrite) NSString *networkId;
 @property (nonatomic, readwrite) NSString *userId;
+@property (nonatomic, readwrite) NSString *networkProfileID;
 @property(nonatomic, readwrite) NSDictionary *configuration;
 @end
 
@@ -37,6 +40,7 @@ static NSString *DNConfiguration = @"configuration";
 
     if (self) {
         NSDictionary *accessDetails = responseData[kDKAccessDetails];
+        
         [self setTokenExpiry:[NSDate donkyDateFromServer:accessDetails[kDKTokenExpiry]]];
         [self setRootURL:accessDetails[kDKSecureServiceRoot]];
         [self setAccessToken:accessDetails[kDKAccessToken]];
@@ -45,7 +49,8 @@ static NSString *DNConfiguration = @"configuration";
         [self setDeviceId:responseData[kDKDeviceID]];
         [self setNetworkId:responseData[kDKNetworkID]];
         [self setUserId:responseData[kDKUserID]];
-        
+
+        [self setNetworkProfileID:responseData[DNNetworkProfileID]];
 
     }
 

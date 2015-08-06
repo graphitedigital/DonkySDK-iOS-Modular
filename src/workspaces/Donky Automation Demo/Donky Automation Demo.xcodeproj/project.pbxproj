@@ -1624,7 +1624,7 @@
 				34F524613057EEB690972ED9 /* DNDonkyDataModel 2.xcdatamodel */,
 				34F522B533506D4AF38B4391 /* DNDonkyDataModel.xcdatamodel */,
 			);
-			currentVersion = 34F522B533506D4AF38B4391 /* DNDonkyDataModel.xcdatamodel */;
+			currentVersion = 34F524613057EEB690972ED9 /* DNDonkyDataModel 2.xcdatamodel */;
 			path = DNDonkyDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

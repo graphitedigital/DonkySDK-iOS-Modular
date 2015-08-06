@@ -162,11 +162,11 @@ NSString * const kDNDonkyNotificationCustomDataKey = @"CustomData";
 #pragma mark - Donky Module Versions
 
 //
-NSString * const kDNDonkyCoreVersion = @"1.0.0.1";
+NSString * const kDNDonkyCoreVersion = @"1.1.0.1";
 
 //
-NSString * const kDNDonkyNetworkVersion = @"1.0.1.2";
+NSString * const kDNDonkyNetworkVersion = @"1.1.2.3";
 
 //
-NSString * const kDNDonkyNotificationVersion = @"1.0.0.0";
+NSString * const kDNDonkyNotificationVersion = @"1.1.0.1";
 

@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Chris Wunsch. All rights reserved.
 //
 
-#import <AudioToolbox/AudioToolbox.h>
+
 #import "DRLogicMainControllerHelper.h"
 #import "DNServerNotification.h"
 #import "DRLogicHelper.h"
@@ -31,10 +31,9 @@
             DNServerNotification *notification = obj;
             if (![mainController doesRichMessageExistForID:[notification serverNotificationID]]) {
                 DNRichMessage *richMessage = [DRLogicHelper saveRichMessage:obj context:temp];
-                if ([mainController shouldVibrate] && ![[richMessage silentNotification] boolValue]) {
-                    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-                }
-
+                DNLocalEvent *event = [[DNLocalEvent alloc] initWithEventType:@"DAudioPlayAudioFile" publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(1)];
+                [[DNDonkyCore sharedInstance] publishEvent:event];
+                
                 if (richMessage) {
                     [DCMMainController markMessageAsReceived:obj];
                     [newNotifications addObject:obj];
@@ -70,10 +69,8 @@
         DNRichMessage *richMessage = nil;
         if (![mainController doesRichMessageExistForID:[notification serverNotificationID]]) {
             richMessage = [DRLogicHelper saveRichMessage:notification context:[[DNDataController sharedInstance] temporaryContext]];
-            if ([mainController shouldVibrate] && ![[richMessage silentNotification] boolValue]) {
-                AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-            }
-
+            DNLocalEvent *audioEvent = [[DNLocalEvent alloc] initWithEventType:@"DCMAudioPlayAudioFile" publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(1)];
+            [[DNDonkyCore sharedInstance] publishEvent:audioEvent];
             [[DNDataController sharedInstance] saveAllData];
         }
         else if ([mainController doesRichMessageExistForID:[notification serverNotificationID]]) {

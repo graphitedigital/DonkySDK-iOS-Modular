@@ -37,4 +37,5 @@
 
 + (void)deleteAllExpiredMessages;
 
++ (void)deleteMaxLifeRichMessages;
 @end

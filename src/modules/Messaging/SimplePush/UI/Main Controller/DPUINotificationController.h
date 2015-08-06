@@ -21,13 +21,6 @@
 @interface DPUINotificationController : NSObject <UIGestureRecognizerDelegate>
 
 /*!
- A bool to determine whether the SDK should vibrate the device when a new message is received.
- 
- @since 2.4.3.1
- */
-@property (nonatomic, getter=shouldVibrate) BOOL vibrate;
-
-/*!
  Singleton object:
 
  @return a new shared instance of DPUINotificationController

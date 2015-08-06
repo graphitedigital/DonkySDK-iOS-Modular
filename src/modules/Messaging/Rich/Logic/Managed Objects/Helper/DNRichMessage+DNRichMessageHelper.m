@@ -15,6 +15,10 @@
     return (([[self expiryTimestamp] donkyHasDateExpired] && ![self expiredBody].length) || [[self sentTimestamp] donkyHasMessageExpired]);
 }
 
+- (BOOL)richHasReachedExpiration {
+    return [[self sentTimestamp] donkyHasMessageExpired];
+}
+
 - (BOOL)canBeShared {
     return ((![[self expiryTimestamp] donkyHasDateExpired] && ![[self sentTimestamp] donkyHasMessageExpired]) && ([[self canShare] boolValue] && [[self urlToShare] length] > 0));
 }

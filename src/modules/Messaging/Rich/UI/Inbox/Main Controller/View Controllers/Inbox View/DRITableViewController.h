@@ -42,6 +42,9 @@
  */
 - (void)shareRichMessage:(DNRichMessage *)richMessage;
 
+
+- (void)updateTabBarCount;
+
 /*!
  Helper method to determine if the left bar button should be enabled, this should be set to true
  if you are presenting this view modally, allowing it to be dismissed.

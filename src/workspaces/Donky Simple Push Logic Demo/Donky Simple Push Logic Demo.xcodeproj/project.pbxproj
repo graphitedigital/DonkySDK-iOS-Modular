@@ -1722,6 +1722,7 @@
 				D08023CA1B64D760005B999F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D08023CB1B64D760005B999F /* Build configuration list for PBXNativeTarget "Donky Simple Push Logic DemoTests" */ = {
 			isa = XCConfigurationList;
@@ -1730,6 +1731,7 @@
 				D08023CD1B64D760005B999F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
@@ -1740,7 +1742,7 @@
 				34F52583196EFBB75955DEDF /* DNDonkyDataModel 2.xcdatamodel */,
 				34F5258B64CD80643AE34160 /* DNDonkyDataModel.xcdatamodel */,
 			);
-			currentVersion = 34F5258B64CD80643AE34160 /* DNDonkyDataModel.xcdatamodel */;
+			currentVersion = 34F52583196EFBB75955DEDF /* DNDonkyDataModel 2.xcdatamodel */;
 			path = DNDonkyDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

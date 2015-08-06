@@ -17,6 +17,7 @@
 #import "DNRichMessage+DNRichMessageHelper.h"
 #import "DCUIActionHelper.h"
 #import "DNLoggingController.h"
+#import "DNDonkyCore.h"
 
 @interface DRITableViewController ()
 @property (nonatomic, strong) DRIMessageViewController *detailViewController;
@@ -115,8 +116,6 @@
     //Lets add the search display controller:
     UISearchDisplayController *searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:[self searchBar] contentsController:self];
     [searchDisplayController setDelegate:[self searchController]];
-//    [searchDisplayController setSearchResultsDataSource:[self richInboxDataController]];
-//    [searchDisplayController setSearchResultsDelegate:[self richInboxDataController]];
 
     [[self tableView] setTableHeaderView:[self searchBar]];
 
@@ -134,6 +133,11 @@
     [super viewWillAppear:animated];
 
     [self updateTableViewUI];
+
+    //Set tab bar icon number:
+    if ([self tabBarController]) {
+        [self updateTabBarCount];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -468,6 +472,27 @@
     [self updateTableViewUI];
 }
 
+- (void)updateTabBarCount {
+
+    UITabBar *tabBar = [[self tabBarController] tabBar];
+
+    __block UITabBarItem *tab = nil;
+    [[tabBar items] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([[obj title] isEqualToString:[self title]]) {
+            tab = obj;
+            *stop = YES;
+        }
+    }];
+
+    NSNumber *unreadCount = [[self richInboxDataController] unreadRichMessageCount];
+    if ([unreadCount integerValue] > 0) {
+        [tab setBadgeValue:[unreadCount stringValue]];
+    }
+    else {
+        [tab setBadgeValue:nil];
+    }
+}
+
 #pragma mark -
 #pragma mark - Action sheet and Alert delegates
 
@@ -489,7 +514,13 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    [[self richInboxDataController] deleteMessageAtIndex:[alertView tag]];
+    if (buttonIndex == 0) {
+        [self deleteAllExpiredMessages];
+    }
+    else {
+        [[self richInboxDataController] deleteMessageAtIndex:[alertView tag]];
+    }
+
     [self updateTableViewUI];
 }
 

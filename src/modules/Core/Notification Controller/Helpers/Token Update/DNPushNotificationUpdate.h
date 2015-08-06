@@ -12,6 +12,8 @@
 
 - (instancetype) initWithPushToken:(NSString *)token;
 
+- (instancetype)initWithMessageAlertSound:(NSString *) messageAlertSound deviceToken:(NSString *) token;
+
 - (NSDictionary *)parameters;
 
 @end

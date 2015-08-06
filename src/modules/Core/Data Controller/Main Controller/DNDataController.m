@@ -17,9 +17,7 @@
 @interface DNDataController ()
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *mainContext;
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *temporaryContext;
-@property (nonatomic, strong) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-
 @end
 
 @implementation DNDataController
@@ -86,7 +84,7 @@
 -(NSManagedObjectContext *)mainContext
 {
 
-    if (_mainContext != nil) {
+    if (_mainContext) {
         return _mainContext;
     }
 
@@ -99,7 +97,7 @@
 
 - (NSManagedObjectContext *)temporaryContext
 {
-    if (_temporaryContext != nil) {
+    if (_temporaryContext) {
         return _temporaryContext;
     }
 
@@ -110,30 +108,25 @@
     return _temporaryContext;
 }
 
-- (NSManagedObjectModel *) managedObjectModel {
-    if (_managedObjectModel != nil) {
-        return _managedObjectModel;
-    }
-    NSURL *modelURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"DNDonkyDataModel" withExtension:@"momd"];
-    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    return _managedObjectModel;
-}
-
 -(NSPersistentStoreCoordinator *)persistentStoreCoordinator
 {
     if (_persistentStoreCoordinator) {
         return _persistentStoreCoordinator;
     }
 
+    NSURL *applicationDocumentsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+
+    NSURL *storeURL = [applicationDocumentsDirectory URLByAppendingPathComponent:@"DNDonkyDataModel.sqlite"];
+
     // The managed object model for the application.
     // If the model doesn't already exist, it is created from the application's model.
-//    NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
-    
-    NSURL *storeURL = [[DNFileHelpers urlPathForDocumentDirectory] URLByAppendingPathComponent:@"DNDataController.sqlite"];
-    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @(YES), NSInferMappingModelAutomaticallyOption: @(YES), NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"}};
+    NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
 
     NSError *error = nil;
-    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
+
+    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES,
+            NSInferMappingModelAutomaticallyOption : @YES};
 
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
 

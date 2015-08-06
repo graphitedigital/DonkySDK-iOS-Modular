@@ -69,7 +69,7 @@
 
 /*!
  The delegate for the cell, used for reporting when a cell was opened/closed, when the 'more button' was tapped
- and whether the tableview should stop being scrollable.
+ and whether the UITableView should stop being scrollable.
  
  @since 2.2.2.7
  */
@@ -117,4 +117,5 @@
  @since 2.4.3.1
  */
 - (void)resetLayouts;
+
 @end

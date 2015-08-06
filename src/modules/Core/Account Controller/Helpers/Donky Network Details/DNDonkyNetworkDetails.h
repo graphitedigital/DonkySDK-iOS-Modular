@@ -11,23 +11,11 @@
 
 @interface DNDonkyNetworkDetails : NSObject
 
-+ (NSString *)deviceSecret;
-
-+ (NSString *)deviceID;
-
-+ (NSString *)accessToken;
-
-+ (NSString *)secureServiceRootUrl;
-
-+ (NSDate *)tokenExpiry;
-
-+ (NSString *)networkId;
-
-+ (NSString *)apiKey;
-
 + (void)saveDeviceSecret:(NSString *)secret;
 
 + (void)saveDeviceID:(NSString *)deviceID;
+
++ (void)saveDeviceToken:(NSString *)deviceToken;
 
 + (void)saveAccessToken:(NSString *)accessToken;
 
@@ -47,6 +35,34 @@
 
 + (void)saveOperatingSystemVersion:(NSString *)operatingSystem;
 
++ (void)saveAPNSAudio:(NSString *)apnsAudio;
+
++ (void)saveNetworkProfileID:(NSString *)networkProfileID;
+
++ (NSString *)deviceSecret;
+
++ (NSString *)deviceID;
+
++ (NSString *)accessToken;
+
++ (NSString *)secureServiceRootUrl;
+
++ (NSDate *)tokenExpiry;
+
++ (NSString *)networkId;
+
++ (NSString *)apiKey;
+
++ (NSString *)savedSDKVersion;
+
++ (NSString *)savedOperatingSystemVersion;
+
++ (NSString *)deviceToken;
+
++ (NSString *)apnsAudio;
+
++ (NSString *)networkProfileID;
+
 + (BOOL)isDeviceRegistered;
 
 + (BOOL)hasValidAccessToken;
@@ -56,9 +72,5 @@
 + (BOOL)isPushEnabled;
 
 + (BOOL)isSuspended;
-
-+ (NSString *)savedSDKVersion;
-
-+ (NSString *)savedOperatingSystemVersion;
 
 @end

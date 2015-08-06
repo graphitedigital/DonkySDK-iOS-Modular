@@ -19,12 +19,11 @@
 #import "NSDate+DNDateHelper.h"
 #import "NSMutableDictionary+DNDictionary.h"
 #import "DNErrorController.h"
+#import "DNDonkyNetworkDetails.h"
 
 static NSString *const DNEventInteractivePushData = @"DonkyEventInteractivePushData";
 static NSString *const DPPushNotificationID = @"notificationId";
-
 static NSString *const DNInteractionResult = @"InteractionResult";
-
 static NSString *const DNNotificationRichController = @"DRLogicMainController";
 
 @implementation DNNotificationController
@@ -57,6 +56,11 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
 }
 
 + (void)registerDeviceToken:(NSData *)token {
+   [DNNotificationController registerDeviceToken:token remoteNotificationSound:nil];
+}
+
++ (void)registerDeviceToken:(NSData *)token remoteNotificationSound:(NSString *)soundFileName {
+
     NSMutableString *hexString = nil;
     if (token && [DNDonkyNetworkDetails isPushEnabled]) {
         const unsigned char *dataBuffer = (const unsigned char *) [token bytes];
@@ -71,14 +75,35 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
         DNInfoLog(@"Uploading device Token: %@...", [NSString stringWithString:hexString]);
     }
 
-    DNPushNotificationUpdate *update = [[DNPushNotificationUpdate alloc] initWithPushToken:hexString ? [NSString stringWithString:hexString] : @""];
+    DNPushNotificationUpdate *update = [[DNPushNotificationUpdate alloc] initWithMessageAlertSound:soundFileName ? : [DNDonkyNetworkDetails apnsAudio] deviceToken:hexString ? [NSString stringWithString:hexString] : @""];
 
     [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:YES route:kDNNetworkRegistrationPush httpMethod:hexString ? DNPut : DNDelete parameters:[update parameters] success:^(NSURLSessionDataTask *task, id networkData) {
         DNInfoLog(@"Registering device token succeeded.");
+        [DNDonkyNetworkDetails saveDeviceToken:hexString ? [NSString stringWithString:hexString] : @""];
+        [DNDonkyNetworkDetails saveAPNSAudio:soundFileName];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         DNErrorLog(@"Registering device token failed: %@", [error localizedDescription]);
         if ([token length]) {
             [DNNotificationController registerDeviceToken:token];
+        }
+    }];
+}
+
++ (void)setRemoteNotificationSoundFile:(NSString *)soundFileName successBlock:(DNNetworkSuccessBlock)success failureBlock:(DNNetworkFailureBlock)failure {
+    
+    DNPushNotificationUpdate *notificationUpdate = [[DNPushNotificationUpdate alloc] initWithMessageAlertSound:soundFileName deviceToken:[DNDonkyNetworkDetails deviceToken]];
+    
+    [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:YES route:kDNNetworkRegistrationPush httpMethod:DNPut parameters:[notificationUpdate parameters] success:^(NSURLSessionDataTask *task, id networkData) {
+        DNInfoLog(@"Sound file saved on the network.");
+        [DNDonkyNetworkDetails saveAPNSAudio:soundFileName];
+        
+        if (success) {
+            success(nil, nil);
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        DNErrorLog(@"Sound file save failed: %@", [error localizedDescription]);
+        if (failure) {
+            failure(nil, nil);
         }
     }];
 }
@@ -196,9 +221,7 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
         id serviceInstance = [[DNDonkyCore sharedInstance] serviceForType:DNNotificationRichController];
 
         if ([serviceInstance respondsToSelector:unreadCount]) {
-
             count += ((NSInteger (*)(id, SEL))[serviceInstance methodForSelector:unreadCount])(serviceInstance, unreadCount);
-
             DNInfoLog(@"Resetting to Master count: %ld", (long)count);
         }
 

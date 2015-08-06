@@ -178,4 +178,19 @@ static NSString *const DRMessageTimeStampDescriptor = @"sentTimestamp";
     [DRLogicHelper deleteAllRichMessages:expiredMessages];
 }
 
++ (void)deleteMaxLifeRichMessages {
+    NSArray *allMessages = [DRLogicHelper allRichMessagesAscending:YES];
+
+    NSMutableArray *expiredMessages = [[NSMutableArray alloc] init];
+
+    [allMessages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        DNRichMessage *message = obj;
+        if ([message richHasReachedExpiration]) {
+            [expiredMessages addObject:message];
+        }
+    }];
+
+    [DRLogicHelper deleteAllRichMessages:expiredMessages];
+}
+
 @end

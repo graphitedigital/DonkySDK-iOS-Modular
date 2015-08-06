@@ -30,11 +30,11 @@
 
 + (void)resetUserDefaults {
     NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
-    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
+    [[DNUserDefaultsHelper userDetails] removePersistentDomainForName:domainName];
 }
 
 + (void)saveUserDefaults {
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[DNUserDefaultsHelper userDetails] synchronize];
 }
 
 @end
