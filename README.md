@@ -2,7 +2,7 @@
   <img src="https://avatars2.githubusercontent.com/u/11334935?v=3&s=200" alt="Donky Networks LTD" title="Donky Network SDK">
 </p>
 
-# Donky Modular SDK (V2.4.4.4)
+# Donky Modular SDK (V2.5.4.3)
 
 The modular SDK exposes all of the network functionality in a way that means developers can consume only the pieces they need in order to:
 
@@ -455,7 +455,7 @@ Including this in your podfile will automatically pull in the following other mo
 # Donky-RichMessage-PopUp
 
 
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-RichMessage-PopUp.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/RichMessage-PopUp)
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-RichMessage-PopUp.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-RichMessage-PopUp)
 [![Version](https://img.shields.io/cocoapods/v/Donky-RichMessage-PopUp.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-PopUp)
 [![License](https://img.shields.io/cocoapods/l/Donky-RichMessage-PopUp.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-PopUp)
 [![Platform](https://img.shields.io/cocoapods/p/Donky-RichMessage-PopUp.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-PopUp)
@@ -552,7 +552,7 @@ Including this in your podfile will automatically pull in the following other mo
 # Donky-RichMessage-Inbox
 
 
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-RichMessage-Inbox.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/RichMessage-Inbox)
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-RichMessage-Inbox.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-RichMessage-Inbox)
 [![Version](https://img.shields.io/cocoapods/v/Donky-RichMessage-Inbox.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-Inbox)
 [![License](https://img.shields.io/cocoapods/l/Donky-RichMessage-Inbox.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-Inbox)
 [![Platform](https://img.shields.io/cocoapods/p/Donky-RichMessage-Inbox.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-Inbox)
@@ -602,7 +602,7 @@ Including this in your podfile will automatically pull in the following other mo
 # Donky-Automation-Logic
 
 
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-Automation-Logic.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/RichMessage-PopUp)
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-Automation-Logic.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-Automation-Logic)
 [![Version](https://img.shields.io/cocoapods/v/Donky-Automation-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-Automation-Logic)
 [![License](https://img.shields.io/cocoapods/l/Donky-Automation-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-Automation-Logic)
 [![Platform](https://img.shields.io/cocoapods/p/Donky-Automation-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-Automation-Logic)
@@ -661,6 +661,131 @@ The sample project can be found:
 
 ```ruby
 pod "Donky-Automation-Logic"
+
+```
+
+## Pod Dependencies
+
+Including this in your podfile will automatically pull in the following other modules, as they are hard dependent. There is no need to manually incldue any of the below manually:
+
+<ul>
+<li>Donky Core SDK</li>
+</ul>
+
+# Donky-CommonMessaging-Audio
+
+
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-CommonMessaging-Audio.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-CommonMessaging-Audio)
+[![Version](https://img.shields.io/cocoapods/v/Donky-CommonMessaging-Audio.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-Audio)
+[![License](https://img.shields.io/cocoapods/l/Donky-CommonMessaging-Audio.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-Audio)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-CommonMessaging-Audio.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-Audio)
+
+## Usage
+
+Use of this module allows you to save audio files against various message types and allow them to be play automatically when that type of message is recevied.  [here](http://docs.mobiledonky.com).
+
+Start the controller:
+```objective-c
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // Override point for customization after application launch.
+    
+	[[DAMainController sharedInstance] start];
+    
+	//Other donky modules or custom code:
+
+    return YES;
+}
+```
+To set a sound file, this method accepts an NSURL to the file.
+```objective-c
+[[DAMainController sharedInstance] setAudioFile:<#(NSURL *)#> forMessageType:<#(DonkyAudioMessageTypes)#>];
+```
+
+To play a sound file:
+```objective-c
+[[DAMainController sharedInstance] playAudioFileForMessage:<#(DonkyAudioMessageTypes)#>];
+```
+##Samples
+
+```
+│
+├───src
+	├───workspaces
+		├───Donky Audio
+```
+
+## Requirements
+
+<ul>
+<li>iOS 7.0+</li>
+<li>Arc must be enabled.</li>
+</ul>
+
+
+## Installation
+
+
+```ruby
+pod "Donky-CommonMessaging-Audio"
+
+```
+
+## Pod Dependencies
+
+None
+
+# Donky-Core-Sequencing
+
+
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-Core-Sequencing.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-Core-Sequencing)
+[![Version](https://img.shields.io/cocoapods/v/Donky-Core-Sequencing.svg?style=flat)](https://cocoapods.org/pods/Donky-Core-Sequencing)
+[![License](https://img.shields.io/cocoapods/l/Donky-Core-Sequencing.svg?style=flat)](https://cocoapods.org/pods/Donky-Core-Sequencing)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-Core-Sequencing.svg?style=flat)](https://cocoapods.org/pods/Donky-Core-Sequencing)
+
+## Usage
+
+Use of this module allows you to perform multiple calls to some account controller methods without needing to implement call backs or worry about sequencing when changing local and network state.
+
+This module overides the following methods inside
+ ```objective-c
+DNSequencingAccountController
+```
+
+```objective-c
++ (void)updateAdditionalProperties:(NSDictionary *)newAdditionalProperties success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
+```
+
+```objective-c
++ (void)saveUserTags:(NSMutableArray *)tags success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
+```
+
+```objective-c
++ (void)updateUserDetails:(DNUserDetails *)userDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
+```
+
+```objective-c
++ (void)updateRegistrationDetails:(DNUserDetails *)userDetails deviceDetails:(DNDeviceDetails *)deviceDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
+```
+
+```objective-c
++ (void)updateDeviceDetails:(DNDeviceDetails *)deviceDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
+```
+##Samples
+
+
+## Requirements
+
+<ul>
+<li>iOS 7.0+</li>
+<li>Arc must be enabled.</li>
+</ul>
+
+
+## Installation
+
+
+```ruby
+pod "Donky-Core-Sequencing"
 
 ```
 

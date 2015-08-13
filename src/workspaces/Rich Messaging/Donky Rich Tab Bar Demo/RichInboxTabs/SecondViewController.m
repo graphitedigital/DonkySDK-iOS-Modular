@@ -24,6 +24,7 @@
         [[self view] setBackgroundColor:[UIColor whiteColor]];
         
         self.title = @"Second View";
+        
     }
     
     return self;
