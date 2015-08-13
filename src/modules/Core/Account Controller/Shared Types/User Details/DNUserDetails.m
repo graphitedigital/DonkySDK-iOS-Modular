@@ -136,9 +136,10 @@ static NSString *const DNRegistrationId = @"id";
     
 }
 
-- (void)toggleTag:(NSString *)tag isSelected:(BOOL)selected {
-    if (![self selectedTags])
+- (BOOL)toggleTag:(NSString *)tag isSelected:(BOOL)selected {
+    if (![self selectedTags]) {
         [self setSelectedTags:[[NSMutableArray alloc] init]];
+    }
 
     __block BOOL tagExists = NO;
     __block NSMutableArray *tagsCopy = [[self selectedTags] mutableCopy];
@@ -154,8 +155,7 @@ static NSString *const DNRegistrationId = @"id";
 
     [self setSelectedTags:tagsCopy];
 
-    if (!tagExists)
-        DNErrorLog(@"No tag found for: %@", tag);
+    return tagExists;
 }
 
 - (NSMutableArray *)tagsForNetwork {
@@ -176,7 +176,13 @@ static NSString *const DNRegistrationId = @"id";
     if (tags) {
         [tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             DNTag *tag = obj;
-            [self toggleTag:[tag value] isSelected:[tag isSelected]];
+            if (![self toggleTag:[tag value] isSelected:[tag isSelected]]) {
+                DNErrorLog(@"No tag found for: %@\nWill create and save it.", tag);
+                NSMutableDictionary *currentTag = [[NSMutableDictionary alloc] init];
+                [currentTag dnSetObject:[tag value] forKey:@"value"];
+                [currentTag dnSetObject:@([tag isSelected]) forKey:@"isSelected"];
+                [[self selectedTags] addObject:currentTag];
+            }
         }];
     }
 }
