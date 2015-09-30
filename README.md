@@ -584,7 +584,7 @@ The sample project can be found:
 
 
 ```ruby
-pod "Donky-RichMessage-PopUp"
+pod "Donky-RichMessage-Inbox"
 
 ```
 
