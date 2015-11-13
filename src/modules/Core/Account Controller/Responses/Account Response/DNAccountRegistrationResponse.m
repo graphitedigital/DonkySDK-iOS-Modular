@@ -2,14 +2,17 @@
 //  DNAccountRegistrationResponse.m
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 03/03/2015.
+//  Created by Donky Networks on 03/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DNAccountRegistrationResponse.h"
 #import "NSDate+DNDateHelper.h"
-
-static NSString *const DNNetworkProfileID = @"networkProfileId";
 
 @interface DNAccountRegistrationResponse ()
 @property (nonatomic, readwrite) NSDate *tokenExpiry;
@@ -19,18 +22,21 @@ static NSString *const DNNetworkProfileID = @"networkProfileId";
 @property (nonatomic, readwrite) NSString *networkId;
 @property (nonatomic, readwrite) NSString *userId;
 @property (nonatomic, readwrite) NSString *networkProfileID;
-@property(nonatomic, readwrite) NSDictionary *configuration;
+@property (nonatomic, readwrite) NSDictionary *configuration;
+@property (nonatomic, readwrite) NSString *signalRURL;
 @end
 
 //Constants
-static NSString *kDKAccessDetails = @"accessDetails";
+static NSString *DNNetworkProfileID = @"networkProfileId";
 static NSString *kDKSecureServiceRoot = @"secureServiceRootUrl";
+static NSString *kDKAccessDetails = @"accessDetails";
 static NSString *kDKAccessToken = @"accessToken";
 static NSString *kDKTokenExpiry = @"expiresOn";
 static NSString *kDKDeviceID = @"deviceId";
 static NSString *kDKNetworkID = @"networkId";
 static NSString *kDKUserID = @"userId";
 static NSString *DNConfiguration = @"configuration";
+static NSString *DNSignalRUrl = @"signalRUrl";
 
 @implementation DNAccountRegistrationResponse
 
@@ -51,6 +57,8 @@ static NSString *DNConfiguration = @"configuration";
         [self setUserId:responseData[kDKUserID]];
 
         [self setNetworkProfileID:responseData[DNNetworkProfileID]];
+        
+        [self setSignalRURL:accessDetails[DNSignalRUrl]];
 
     }
 
@@ -65,6 +73,7 @@ static NSString *DNConfiguration = @"configuration";
         [self setTokenExpiry:[NSDate donkyDateFromServer:responseData[kDKTokenExpiry]]];
         [self setAccessToken:responseData[kDKAccessToken]];
         [self setRootURL:responseData[kDKSecureServiceRoot]];
+        [self setConfiguration:responseData[DNConfiguration]];
     }
 
     return self;

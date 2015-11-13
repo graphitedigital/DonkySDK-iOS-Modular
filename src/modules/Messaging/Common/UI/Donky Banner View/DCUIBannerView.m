@@ -2,7 +2,7 @@
 //  DCUIBannerView.m
 //  Push UI Container
 //
-//  Created by Chris Watson on 15/03/2015.
+//  Created by Donky Networks on 15/03/2015.
 //  Copyright (c) 2015 Dynmark International Ltd. All rights reserved.
 //
 
@@ -21,7 +21,7 @@
 @property(nonatomic, readwrite) UIImageView *avatarImageView;
 @property(nonatomic, readwrite) UILabel *messageLabel;
 @property(nonatomic, copy) NSString *notificationType;
-@property(nonatomic, copy) NSString *messageID;
+@property(nonatomic, readwrite) NSString *messageID;
 @end
 
 @implementation DCUIBannerView
@@ -32,6 +32,11 @@
 
     if (self) {
 
+
+        [self setNotificationType:type];
+
+        [self setMessageID:messageID];
+
         [self setBackgroundView:[UIView autoLayoutView]];
         [[self backgroundView] setBackgroundColor:[UIColor blackColor]];
         [[self backgroundView] setAlpha:0.95];
@@ -41,9 +46,6 @@
 
         [self configureBasicView:displayName notificationBody:body messageSent:sentTime avatartAssetID:assetId];
 
-        [self setNotificationType:type];
-
-        [self setMessageID:messageID];
     }
 
     return self;

@@ -2,7 +2,7 @@
 //  DNSystemHelpers.h
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 27/02/2015.
+//  Created by Donky Networks on 27/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -92,5 +92,18 @@
  @since 2.2.2.7
  */
 + (BOOL)isDeviceSixPlusLandscape;
+
+/*!
+ Helper method to combine two strings in the format expected for conversation IDs. Use this to generate repeatable unique ID's based on a set of
+ users. This allows two devices to create the same ID for a converastion or custom data channel.
+ 
+ @param firstString  the first string
+ @param secondString the second string that should be added to the first string.
+ 
+ @return a new string with the concatanted style of string1_string2
+ 
+ @since 2.6.5.4
+ */
++ (NSString *)combineString:(NSString *)firstString toString:(NSString *)secondString;
 
 @end

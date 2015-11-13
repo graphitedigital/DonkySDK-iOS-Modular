@@ -2,8 +2,8 @@
 //  DRLogicMainControllerHelper.m
 //  RichInbox
 //
-//  Created by Chris Watson on 23/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 23/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 
@@ -21,41 +21,54 @@
 
 @implementation DRLogicMainControllerHelper
 
-+ (DNSubscriptionBachHandler)richMessageHandler:(DRLogicMainController *)mainController {
++ (DNSubscriptionBatchHandler)richMessageHandler:(DRLogicMainController *)mainController {
 
-    DNSubscriptionBachHandler richMessageHandler = ^(NSArray *batch) {
+    DNSubscriptionBatchHandler richMessageHandler = ^(NSArray *batch) {
         NSMutableArray *newNotifications = [[NSMutableArray alloc] init];
-        NSManagedObjectContext *temp = [[DNDataController sharedInstance] temporaryContext];
         NSArray *allRichMessages = batch;
-        [allRichMessages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            DNServerNotification *notification = obj;
-            if (![mainController doesRichMessageExistForID:[notification serverNotificationID]]) {
-                DNRichMessage *richMessage = [DRLogicHelper saveRichMessage:obj context:temp];
+        NSManagedObjectContext *temp = [DNDataController temporaryContext];
+        [temp performBlock:^{
+            if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
+                [allRichMessages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    DNServerNotification *notification = obj;
+                    if (![mainController doesRichMessageExistForID:[notification serverNotificationID]]) {
+                        NSManagedObjectID *objectID = [[DRLogicHelper saveRichMessage:obj context:temp] objectID];
+                        if (objectID) {
+                            DNRichMessage *richMessage = [temp existingObjectWithID:objectID error:nil];
+                            if (richMessage) {
+                                [DCMMainController markMessageAsReceived:obj];
+                                [newNotifications addObject:richMessage];
+                                if ([batch count] == 1) {
+                                    DNLocalEvent *event = [[DNLocalEvent alloc] initWithEventType:@"DAudioPlayAudioFile" publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(1)];
+                                    [[DNDonkyCore sharedInstance] publishEvent:event];
+                                }
+                            }
+                            else {
+                                DNErrorLog(@"Could not create rich message from server notification: %@", obj);
+                            }
+                        }
+                        else {
+                            DNInfoLog(@"This is a duplicate message, do nothing...");
+                        }
+                    }
+                }];
+            }
+
+            [[DNDataController sharedInstance] saveContext:temp];
+
+            [mainController richMessageNotificationsReceived:newNotifications];
+
+            if ([batch count] > 1) {
                 DNLocalEvent *event = [[DNLocalEvent alloc] initWithEventType:@"DAudioPlayAudioFile" publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(1)];
                 [[DNDonkyCore sharedInstance] publishEvent:event];
-                
-                if (richMessage) {
-                    [DCMMainController markMessageAsReceived:obj];
-                    [newNotifications addObject:obj];
-                }
-                else {
-                    DNErrorLog(@"Could not create rich message from server notification: %@", obj);
-                }
             }
-            else {
-                DNInfoLog(@"This is a duplicate message, do nothing...");
-            }
+
+            DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageNotificationEvent
+                                                                     publisher:NSStringFromClass([mainController class])
+                                                                     timeStamp:[NSDate date]
+                                                                          data:newNotifications];
+            [[DNDonkyCore sharedInstance] publishEvent:localEvent];
         }];
-
-        [mainController richMessageNotificationsReceived:newNotifications];
-
-        [[DNDataController sharedInstance] saveAllData];
-
-        DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyNotificationRichMessage
-                                                                 publisher:NSStringFromClass([mainController class])
-                                                                 timeStamp:[NSDate date]
-                                                                      data:newNotifications];
-        [[DNDonkyCore sharedInstance] publishEvent:localEvent];
     };
 
     return richMessageHandler;
@@ -64,39 +77,64 @@
 + (DNLocalEventHandler)notificationLoaded:(DRLogicMainController *)mainController {
 
     DNLocalEventHandler notificationLoaded = ^(DNLocalEvent *event) {
-        [[DNDataController sharedInstance] saveAllData];
+
         DNServerNotification *notification = [event data];
-        DNRichMessage *richMessage = nil;
-        if (![mainController doesRichMessageExistForID:[notification serverNotificationID]]) {
-            richMessage = [DRLogicHelper saveRichMessage:notification context:[[DNDataController sharedInstance] temporaryContext]];
-            DNLocalEvent *audioEvent = [[DNLocalEvent alloc] initWithEventType:@"DCMAudioPlayAudioFile" publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(1)];
-            [[DNDonkyCore sharedInstance] publishEvent:audioEvent];
-            [[DNDataController sharedInstance] saveAllData];
-        }
-        else if ([mainController doesRichMessageExistForID:[notification serverNotificationID]]) {
-            richMessage = [DRLogicHelper richMessageForID:[notification serverNotificationID] context:nil];
+
+        //If we aren't looking at a rich message, we bail out:
+        if (![[notification notificationType] isEqualToString:kDNDonkyNotificationRichMessage]) {
+            return;
         }
 
-        if (richMessage && [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-            DNLocalEvent *richEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageNotificationTapped
-                                                                    publisher:NSStringFromClass([mainController class])
-                                                                    timeStamp:[NSDate date]
-                                                                         data:richMessage];
-            [[DNDonkyCore sharedInstance] publishEvent:richEvent];
-        }
-        else if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive) {
-            //We are in multi tasking, so need to increment badge count:
-            NSInteger count = [[UIApplication sharedApplication] applicationIconBadgeNumber];
-            count += 1;
+        __block DNRichMessage *richMessage = nil;
+        
+        NSDictionary *data = [notification data];
 
-            DNLocalEvent *changeBadgeEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkySetBadgeCount
-                                                                           publisher:NSStringFromClass([DRLogicMainControllerHelper class])
-                                                                           timeStamp:[NSDate date]
-                                                                                data:@(count)];
-            [[DNDonkyCore sharedInstance] publishEvent:changeBadgeEvent];
-        }
+        BOOL messageExists = [mainController doesRichMessageExistForID:data[@"messageId"]];
+
+        NSManagedObjectContext *tempContext = [DNDataController temporaryContext];
+
+        [tempContext performBlock:^{
+            if (!messageExists) {
+                NSManagedObjectID *objectID = [[DRLogicHelper saveRichMessage:notification context:tempContext] objectID];
+                if (objectID) {
+                    richMessage = [tempContext existingObjectWithID:objectID error:nil];
+                    if (![[richMessage silentNotification] boolValue]) {
+                        DNLocalEvent *audioEvent = [[DNLocalEvent alloc] initWithEventType:@"DAudioPlayAudioFile" publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(1)];
+                        [[DNDonkyCore sharedInstance] publishEvent:audioEvent];
+                    }
+                }
+            }
+            else if (messageExists) {
+                NSManagedObjectID *objectID = [[DRLogicHelper richMessageForID:data[@"messageId"] context:tempContext] objectID];
+                if (objectID) {
+                    richMessage = [tempContext existingObjectWithID:objectID error:nil];
+                }
+            }
+
+            [[DNDataController sharedInstance] saveContext:tempContext];
+
+            if (richMessage) {
+                DNLocalEvent *richEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageNotificationTapped
+                                                                        publisher:NSStringFromClass([mainController class])
+                                                                        timeStamp:[NSDate date]
+                                                                             data:richMessage];
+                [[DNDonkyCore sharedInstance] publishEvent:richEvent];
+            }
+
+            if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive) {
+                //We are in multi tasking, so need to increment badge count:
+                NSInteger count = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+                count += 1;
+
+                DNLocalEvent *changeBadgeEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkySetBadgeCount
+                                                                               publisher:NSStringFromClass([DRLogicMainControllerHelper class])
+                                                                               timeStamp:[NSDate date]
+                                                                                    data:@(count)];
+                [[DNDonkyCore sharedInstance] publishEvent:changeBadgeEvent];
+            }
+        }];
     };
-//
+
     return notificationLoaded;
 }
 
@@ -113,11 +151,14 @@
     __block NSMutableArray *notificationsToKeep = [notifications mutableCopy];
 
     [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        DNServerNotification *serverNotification = obj;
-        if ([backgroundNotifications containsObject:[serverNotification serverNotificationID]]) {
-            [backgroundNotificationsToKeep addObject:serverNotification];
-            [notificationsToKeep removeObject:serverNotification];
-        }
+        DNRichMessage *richMessage = obj;
+        [backgroundNotifications enumerateObjectsUsingBlock:^(id obj2, NSUInteger idx2, BOOL *stop2) {
+            if ([obj2 isEqualToString:[richMessage notificationID]]) {
+                [backgroundNotificationsToKeep addObject:richMessage];
+                [notificationsToKeep removeObject:richMessage];
+                *stop2 = YES;
+            }
+        }];
     }];
 
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {

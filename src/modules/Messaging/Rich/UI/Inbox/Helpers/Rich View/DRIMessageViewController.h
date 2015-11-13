@@ -2,18 +2,14 @@
 //  DRIMessageViewController.h
 //  RichPopUp
 //
-//  Created by Chris Watson on 13/04/2015.
+//  Created by Donky Networks on 13/04/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "DNRichMessage.h"
-
-typedef enum {
-    DMVLeftSide = 0,
-    DMVRightSide
-} DonkyMessageViewBarButtonSide;
+#import "DCMConstants.h"
 
 /*!
  The delegate used to alert delegates when the rich message view was closed. Use to perform additional logic once the user has closed the current rich message.
@@ -106,7 +102,7 @@ typedef enum {
 
  @since 2.0.0.0
  */
-- (void)setBarButtonItem:(UIBarButtonItem *)buttonItem isRighSide:(BOOL)rightSide __attribute__((deprecated("Please use addBarButtonItem:buttonSide instead - 2.2.2.7")));;
+- (void)setBarButtonItem:(UIBarButtonItem *)buttonItem isRighSide:(BOOL)rightSide __attribute__((deprecated("Please use addBarButtonItem:buttonSide instead - 2.2.2.7")));
 
 - (void)addBarButtonItem:(UIBarButtonItem *)buttonItem buttonSide:(DonkyMessageViewBarButtonSide)side;
 

@@ -1,8 +1,8 @@
 //
-//  DKConstants.m
+//  DNConstants.m
 //  Logging
 //
-//  Created by Chris Watson on 13/02/2015.
+//  Created by Donky Networks on 13/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -33,6 +33,16 @@ NSString * const kDNNetworkSendDebugLog = @"api/debugLog";
 
 NSString * const kDNNetworkUserTags = @"api/registration/user/tags";
 
+NSString * const kDNNetworkIsValidPlatformUser = @"api/contact/";
+
+NSString * const kDNNetworkSearchUsers = @"api/contact/search";
+
+NSString * const kDNNetworkGetActiveRegions = @"api/locationservices/geofence/active";
+
+NSString * const kDNNetworkGetActiveTriggers = @"api/trigger/clientconfiguration";
+
+NSString * const kDNNetworkUploadAsset = @"api/asset/uploadmany";
+
 #pragma mark -
 #pragma mark - Donky Notification Types
 
@@ -47,6 +57,24 @@ NSString * const kDNDonkyNotificationRichMessage = @"RichMessage";
 
 //
 NSString * const kDNDonkyNotificationNewDeviceMessage = @"NewDeviceAddedToUser";
+
+//
+NSString * const kDNDonkyNotificationChatMessage = @"Message";
+
+//
+NSString * const kDNDonkyNotificationChatMessageDelivered = @"MessageDelivered";
+
+//
+NSString * const kDNDonkyNotificationChatMessageSent = @"MessageSent";
+
+//
+NSString * const kDNDonkyNotificationChatMessageRead = @"MessageRead";
+
+//
+NSString * const kDNDonkyNotificationChatMessageRejected = @"MessageRejected";
+
+//
+NSString * const kDNDonkyNotificationUserIsTyping = @"UserIsTyping";
 
 #pragma mark -
 #pragma mark - Donky Event Types
@@ -79,10 +107,13 @@ NSString * const kDNDonkyEventAppWillEnterForegroundNotification = @"DonkyAppEnt
 NSString * const kDNDonkyEventNotificationLoaded = @"DonkyNotificationLoadedEvent";
 
 //
-NSString * const kDNDonkyEventBackgroundNotificationReceived = @"DonkyNotificationReeivedInBackground";
+NSString * const kDNDonkyEventBackgroundNotificationReceived = @"DonkyNotificationReceivedInBackground";
 
 //
 NSString * const kDNDonkySetBadgeCount = @"DonkySetBadgeCountEevnt";
+
+//
+NSString * const kDNDonkyEventTokenRefreshed = @"DonkyEventTokenRefresh";
 
 #pragma mark -
 #pragma mark - Donky Config Items
@@ -123,35 +154,50 @@ NSString * const kDNDebugLogSubmissionInterval = @"Debug Log Submission Interval
 #pragma mark -
 #pragma mark - Debug Logging Constants
 
+//
 NSString * const kDNLoggingFileName = @"DNDebugLog.log";
 
+//
 NSString * const kDNLoggingDirectoryName = @"DonkyDebugLogs";
 
+//
 NSString * const kDNLoggingArchiveFileName = @"DNDebugArchivedLog.log";
 
+//
 NSString * const kDNLoggingArchiveDirectoryName = @"DonkyDebugLogs/ArchivedLogs";
 
+//
 NSString * const kDNLoggingDateFormat = @"dd-MM-yyyy 'at' HH:mm:ss";
 
 #pragma mark -
 #pragma mark - Keychain & Security
 
+//
 NSString * const kDNKeychainDeviceSecret = @"DonkyDeviceSecret";
 
+//
 NSString * const kDNKeychainDevicePassword = @"DonkyDeviceUserPassword";
 
+//
 NSString * const kDNKeychainAccessToken = @"DonkyDeviceUserToken";
 
 #pragma mark -
 #pragma mark - Misc
 
-NSString * const kDNMiscOperatingSystem = @"iOS";
+//
+NSString * const kDNMiscOperatingSystem = @"iOS"; //@"Web";
 
+//
 NSString * const kDonkyErrorDomain = @"com.dynmark.donkyNetworkSDK";
 
+//
 CGFloat  const kDonkyLogFileSizeLimit = 2000000.0f; //this is in bytes, default is 2mb
 
+//
 NSString * const kDNTempDirectory = @"DonkyTempDirectory";
+
+//
+NSInteger const kDonkyMaxNumberOfSavedChatMessages = 2000;
 
 #pragma mark -
 #pragma mark - Donky Notification Keys

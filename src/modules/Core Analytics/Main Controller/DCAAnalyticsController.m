@@ -2,7 +2,7 @@
 //  DCAAnalyticsController.m
 //  DonkyCoreAnalytics
 //
-//  Created by Chris Watson on 01/04/2015.
+//  Created by Donky Networks on 01/04/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -25,6 +25,8 @@ static NSString *const DAAppLaunchDefaults = @"DonkyAppLaunch";
 static NSString *const DAStartTimeUTC = @"startTimeUtc";
 static NSString *const DAEndTimeUTC = @"endTimeUtc";
 static NSString *const DAAppSession = @"appSession";
+
+
 static NSString *const DCANoneSession = @"None";
 static NSString *const DCANotificationSession = @"Notification";
 
@@ -77,6 +79,7 @@ static NSString *const DCANotificationSession = @"Notification";
 
     [self setAppCloseEvent:^(DNLocalEvent *event) {
         [weakSelf recordAppClose];
+        [weakSelf setInfluenced:NO];
     }];
 
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppClose handler:[self appCloseEvent]];
@@ -101,6 +104,8 @@ static NSString *const DCANotificationSession = @"Notification";
 }
 
 - (void)recordInfluencedAppOpen:(BOOL)influenced {
+    DNInfoLog(@"Recording app open. Was influenced == %d", influenced);
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSMutableDictionary *appLaunch = [[NSMutableDictionary alloc] init];
 
@@ -119,6 +124,7 @@ static NSString *const DCANotificationSession = @"Notification";
 }
 
 - (void)recordAppClose {
+    DNInfoLog(@"Recording app close.");
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSDate *startTime = [[NSUserDefaults standardUserDefaults] objectForKey:DAAppLaunchDefaults];
         if (startTime) {
@@ -135,10 +141,27 @@ static NSString *const DCANotificationSession = @"Notification";
                                                                                   acknowledgementData:nil];
                 [[DNNetworkController sharedInstance] queueClientNotifications:@[clientNotification]];
             }
-            else
+            else {
                 DNErrorLog(@"Cannot report app session as Start date is after the end date ... Start: %@ VS End %@", startTime, endDate);
+            }
         }
     });
+}
+
++ (void)recordGeoFenceCrossing:(NSDictionary *)data {
+    
+    DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithType:kDCAnalyticsGeoFenceCrossed
+                                                                                     data:data acknowledgementData:nil];
+    [[DNNetworkController sharedInstance] queueClientNotifications:@[clientNotification]];
+    //[[DNNetworkController sharedInstance] synchronise];
+}
+
++ (void)recordGeoFenceTriggerExecuted:(NSDictionary *)data {
+    
+    DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithType:kDCAnalyticsGeoFenceTriggered
+                                                                                     data:data acknowledgementData:nil];
+    [[DNNetworkController sharedInstance] queueClientNotifications:@[clientNotification]];
+    [[DNNetworkController sharedInstance] synchronise];
 }
 
 @end

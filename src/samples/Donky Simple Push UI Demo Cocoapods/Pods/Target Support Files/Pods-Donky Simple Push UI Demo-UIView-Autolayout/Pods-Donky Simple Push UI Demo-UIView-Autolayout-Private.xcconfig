@@ -1,6 +1,0 @@
-#include "Pods-Donky Simple Push UI Demo-UIView-Autolayout.xcconfig"
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/UIView-Autolayout" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/Donky-CommonMessaging-Logic" "${PODS_ROOT}/Headers/Public/Donky-CommonMessaging-UI" "${PODS_ROOT}/Headers/Public/Donky-Core-SDK" "${PODS_ROOT}/Headers/Public/Donky-SimplePush-Logic" "${PODS_ROOT}/Headers/Public/Donky-SimplePush-UI" "${PODS_ROOT}/Headers/Public/UIView-Autolayout"
-OTHER_LDFLAGS = -ObjC
-PODS_ROOT = ${SRCROOT}
-SKIP_INSTALL = YES

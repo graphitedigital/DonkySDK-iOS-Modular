@@ -163,6 +163,7 @@
 				D0CD37231B64DA2B00B5B85D /* Frameworks */,
 				D0CD37241B64DA2B00B5B85D /* Resources */,
 				6CB6B1A8A4B85B0A24469407 /* Copy Pods Resources */,
+				13C0B80F7DCE32FF3C58143A /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -249,6 +250,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		13C0B80F7DCE32FF3C58143A /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Donky Simple Push UI Demo/Pods-Donky Simple Push UI Demo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6CB6B1A8A4B85B0A24469407 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

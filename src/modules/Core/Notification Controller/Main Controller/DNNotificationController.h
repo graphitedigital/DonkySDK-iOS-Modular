@@ -2,17 +2,17 @@
 //  DNNotificationController.h
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 16/02/2015.
+//  Created by Donky Networks on 16/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-
 #import "DNBlockDefinitions.h"
 
 /*!
- Helper class to register/unRegister a devices push notification token with the network.
+ Helper class to register/unRegister a devices push notification token with the network. As well as other 
+ notificaiton and application badge count related tasks.
  
  @since 2.0.0.0
  */
@@ -83,5 +83,26 @@
  @since 2.4.3.1
  */
 + (void)resetApplicationBadgeCount;
+
+/*!
+ Helper method to add custom cateogries to the remote notificaiton sets used by the SDK.
+ 
+ @param categories the cateogries that you wish to add to the registered set.
+ 
+ @since 2.6.5.4
+ */
++ (void)addCategoriesToRemoteNotifications:(NSMutableSet *)categories;
+
+/*!
+ Method to handle the custom action attached to a remote mention. Invoke this from the Application Delegate method of the same signature.
+ 
+ @param identifier        the identifier for the button set whoms button has been tapped.
+ @param userInfo          the user info from the notification.
+ @param responseInfo      any repsonse info, this is typically from a text field on a remote notification.
+ @param completionHandler the completion handler that is to be invoked.
+ 
+ @since 2.6.5.4
+ */
++ (void)handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo withResponseInfo:(NSDictionary *)responseInfo completionHandler:(void (^)())completionHandler;
 
 @end

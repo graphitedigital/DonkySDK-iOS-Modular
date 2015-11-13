@@ -2,8 +2,8 @@
 //  DRIMessageViewControllerHelper.m
 //  RichInbox
 //
-//  Created by Chris Watson on 14/07/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 14/07/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DRIMessageViewControllerHelper.h"
@@ -51,4 +51,5 @@
         navigationItem.rightBarButtonItems = rightBarButtonItems;
     }
 }
+
 @end

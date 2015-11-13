@@ -2,7 +2,7 @@
 //  DNConfigurationController.h
 //  Core Container
 //
-//  Created by Chris Watson on 20/03/2015.
+//  Created by Donky Networks on 20/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -26,6 +26,8 @@
 + (void)saveConfigurationObject:(id)object forKey:(NSString *)key;
 
 + (CGFloat)maximumContentByteSize;
+
++ (CGFloat)maximumSignalRByteSize;
 
 + (NSInteger)richMessageAvailabilityDays;
 

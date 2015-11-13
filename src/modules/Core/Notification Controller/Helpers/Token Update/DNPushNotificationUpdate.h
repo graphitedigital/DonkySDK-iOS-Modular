@@ -2,7 +2,7 @@
 //  DNPushNotificationUpdate.h
 //  Donky Network SDK Container
 //
-//  Created by Chris Watson on 06/03/2015.
+//  Created by Donky Networks on 06/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 @interface DNPushNotificationUpdate : NSObject
 
-- (instancetype) initWithPushToken:(NSString *)token;
+- (instancetype)initWithPushToken:(NSString *)token;
 
 - (instancetype)initWithMessageAlertSound:(NSString *) messageAlertSound deviceToken:(NSString *) token;
 

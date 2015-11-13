@@ -2,7 +2,7 @@
 //  DCUIBannerView.h
 //  Push UI Container
 //
-//  Created by Chris Watson on 15/03/2015.
+//  Created by Donky Networks on 15/03/2015.
 //  Copyright (c) 2015 Dynmark International Ltd. All rights reserved.
 //
 
@@ -30,6 +30,13 @@
  @since 2.0.0.0
  */
 @property(nonatomic, strong) UIView *buttonView;
+
+/*!
+ The ID of the message whose content is being displayed.
+ 
+ @since 2.6.5.4
+ */
+@property (nonatomic, readonly) NSString *messageID;
 
 /*!
  Initialiser method for a new banner view, containing all the details that need to be displayed

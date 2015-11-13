@@ -2,7 +2,7 @@
 //  DPUINotificationController.h
 //  Push UI Container
 //
-//  Created by Chris Watson on 15/03/2015.
+//  Created by Donky Networks on 15/03/2015.
 //  Copyright (c) 2015 Dynmark International Ltd. All rights reserved.
 //
 
@@ -19,6 +19,8 @@
  Main controller to handle the presentation of the internal banner view, when a notification is received or processed by Donky.
  */
 @interface DPUINotificationController : NSObject <UIGestureRecognizerDelegate>
+
+@property (nonatomic, getter=shouldPlayAudio) BOOL playAduio;
 
 /*!
  Singleton object:

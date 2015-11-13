@@ -2,8 +2,8 @@
 //  DRIDataController.m
 //  RichInbox
 //
-//  Created by Chris Watson on 03/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 03/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DRIDataController.h"
@@ -61,10 +61,10 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
 
     [self closeAllCells];
 
-    if (searchString.length) {
+    if ([searchString length]) {
         [[self richLogicFetchedResultsController] setFetchedResultsController:nil];
         [[self richLogicFetchedResultsController] setSearching:YES];
-        [[self richLogicFetchedResultsController]  setSearchString:searchString];
+        [[self richLogicFetchedResultsController] setSearchString:searchString];
         [[self tableView] reloadData];
     }
     else {
@@ -144,7 +144,7 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
 
 - (BOOL)toggleAllSelectedMessages {
 
-    BOOL allSelected =  [[self tableView].indexPathsForSelectedRows count] > 0;
+    BOOL allSelected =  [[[self tableView] indexPathsForSelectedRows] count] > 0;
 
         //We deselect rows:
     [[[[self richLogicFetchedResultsController] fetchedResultsController] fetchedObjects] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {

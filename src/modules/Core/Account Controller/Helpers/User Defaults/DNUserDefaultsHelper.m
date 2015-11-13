@@ -1,17 +1,24 @@
 //
 //  DNUserDefaultsHelper.m
-//  Core Container
+//  Donky COreSDK
 //
-//  Created by Chris Watson on 15/03/2015.
+//  Created by Donky Networks on 15/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DNUserDefaultsHelper.h"
+#import "DNLoggingController.h"
 
 @implementation DNUserDefaultsHelper
 
 + (NSUserDefaults *)userDetails {
-    return [NSUserDefaults standardUserDefaults];
+     NSString *domainName = [[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@"com.dynmark.donkyuserdefaults"];
+    return [[NSUserDefaults alloc] initWithSuiteName:domainName];
 }
 
 + (void)saveObject:(id)object withKey:(NSString *) key {
@@ -24,13 +31,13 @@
           return [[DNUserDefaultsHelper userDetails] objectForKey:key];
     }
     @catch (NSException *exception) {
-        NSLog(@"%@", [exception description]);
+        DNErrorLog(@"%@", [exception description]);
     }
 }
 
 + (void)resetUserDefaults {
-    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
-    [[DNUserDefaultsHelper userDetails] removePersistentDomainForName:domainName];
+    NSString *domainName = [[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@"com.dynmark.donkyuserdefaults"];
+    [[DNUserDefaultsHelper userDetails] removeSuiteNamed:domainName];
 }
 
 + (void)saveUserDefaults {

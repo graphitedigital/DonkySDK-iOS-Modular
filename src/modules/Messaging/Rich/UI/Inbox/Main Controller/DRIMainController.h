@@ -2,8 +2,8 @@
 //  DRIMainController.h
 //  RichInbox
 //
-//  Created by Chris Watson on 12/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 12/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -25,13 +25,6 @@
  @since 2.2.2.7
  */
 @property (nonatomic, getter=shouldShowBannerView) BOOL showBannerView;
-
-/*!
- Bool to determine if the rich inbox should vibrate the device when a new rich message is received.
- 
- @since 2.4.3.1
- */
-@property (nonatomic, getter=shouldVibrate) BOOL vibrate;
 
 /*!
  Whether the rich message controller should load the rich message in a full screen modal
@@ -93,7 +86,9 @@
  
  @since 2.2.2.7
  */
-- (UINavigationController *)richInboxTableViewWithNavigationController;
+- (UINavigationController *)richInboxTableViewWithNavigationController __attribute__((deprecated("Please use class method of same signature - 2.5.4.3")));
+
++ (UINavigationController *)richInboxTableViewWithNavigationController;
 
 /*!
  Helper method to return a new DRITableViewController object.
@@ -102,7 +97,9 @@
  
  @since 2.2.2.7
  */
-- (DRITableViewController *)richInboxTableViewController;
+- (DRITableViewController *)richInboxTableViewController __attribute__((deprecated("Please use class method of same signature - 2.5.4.3")));
+
++ (DRITableViewController *)richInboxTableViewController;
 
 /*!
  Helper method to return a new split view controller. This should be used for 
@@ -112,17 +109,21 @@
  
  @since 2.2.2.7
  */
-- (DCUISplitViewController *)richInboxSplitViewController;
+- (DCUISplitViewController *)richInboxSplitViewController __attribute__((deprecated("Please use class method of same signature - 2.5.4.3")));
+
++ (DCUISplitViewController *)richInboxSplitViewController;
 
 /*!
  Helper method to retrieve a usable view for the rich inbox no matter what device is being used. This is
- helpful when making unervisal apps and a split view is desired.
+ helpful when making universal apps and a split view is desired.
  
  @return a new DCUISplitViewController OR UINavigationController with the rich inbox set.
  
  @since 2.4.3.1
  */
-- (UIViewController *)universalRichInboxViewController;
+- (UIViewController *)universalRichInboxViewController __attribute__((deprecated("Please use class method of same signature - 2.5.4.3")));
+
++ (UIViewController *)universalRichInboxViewController;
 
 /*!
  Helper method to add a left bar button item to the rich inbox, this button will dismiss 

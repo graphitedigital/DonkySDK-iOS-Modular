@@ -2,8 +2,8 @@
 //  DCUIConstants.h
 //  RichInbox
 //
-//  Created by Chris Watson on 05/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 05/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

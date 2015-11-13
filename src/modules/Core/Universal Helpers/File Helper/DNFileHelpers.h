@@ -2,7 +2,7 @@
 //  DNFileHelpers.h
 //  Logging
 //
-//  Created by Chris Watson on 12/02/2015.
+//  Created by Donky Networks on 12/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -70,6 +70,19 @@
  @since 2.4.3.1
  */
 + (NSBundle *)bundleWithName:(NSString *)bundleName;
+
+/*!
+ Helper method to return a file URL for the specified file name.
+ 
+ @param fileName      the file name for which a file URL should be geenrated.
+ @param fileExtension the extension of the file name.
+ @param directory     the directory in which the file is
+ 
+ @return NSURL relating to the files path.
+ 
+ @since 2.6.5.4
+ */
++ (NSURL *)audioFileURLForName:(NSString *)fileName extension:(NSString *)fileExtension inDirectory:(NSString *)directory;
 
 /*!
  Helper method to save data to a file path.

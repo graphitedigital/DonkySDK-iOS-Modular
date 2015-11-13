@@ -2,9 +2,14 @@
 //  DNDeviceDetails.m
 //  Core Container
 //
-//  Created by Chris Watson on 16/03/2015.
+//  Created by Donky Networks on 16/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
+
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
 
 #import "DNDeviceDetails.h"
 #import "DNDeviceDetailsHelper.h"
@@ -48,7 +53,6 @@ static NSString *const DNRegistrationAdditionalProperties = @"additionalProperti
         [self setOperatingSystem:[DNDeviceDetailsHelper operatingSystem]];
         [self setOsVersion:[DNDeviceDetailsHelper osVersion]];
 
-
         [self setDeviceSecret:[DNDonkyNetworkDetails deviceSecret]];
         [self setDeviceName:[DNDeviceDetailsHelper deviceName]];
 
@@ -62,6 +66,7 @@ static NSString *const DNRegistrationAdditionalProperties = @"additionalProperti
 }
 
 - (instancetype) initWithDeviceType:(NSString *) type name:(NSString *) deviceName additionalProperties:(NSDictionary *) additionalProperties {
+
     self = [self init];
     
     if (self) {

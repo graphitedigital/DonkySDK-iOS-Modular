@@ -2,7 +2,7 @@
 //  DNDeviceDetails.h
 //  Core Container
 //
-//  Created by Chris Watson on 16/03/2015.
+//  Created by Donky Networks on 16/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -68,7 +68,9 @@
 #pragma mark - Private... Not for public consumption. Public use of these APIs is unsupported.
 
 /*!
-  PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ 
+ @warning Private, please do not use
  */
 - (NSMutableDictionary *)parameters;
 

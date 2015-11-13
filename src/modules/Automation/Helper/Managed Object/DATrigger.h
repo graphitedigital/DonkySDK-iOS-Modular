@@ -2,8 +2,8 @@
 //  DATrigger.h
 //  GeoFenceModule
 //
-//  Created by Chris Watson on 02/06/2015.
-//  Copyright (c) 2015 Chris Watson. All rights reserved.
+//  Created by Donky Networks on 02/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

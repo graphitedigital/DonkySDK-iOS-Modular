@@ -2,7 +2,7 @@
 //  DRLogicMainController.m
 //  RichPopUp
 //
-//  Created by Chris Watson on 13/04/2015.
+//  Created by Donky Networks on 13/04/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -10,13 +10,12 @@
 #import "DNDonkyCore.h"
 #import "DNConstants.h"
 #import "DRLogicHelper.h"
-#import "NSDate+DNDateHelper.h"
 #import "DRLogicMainControllerHelper.h"
 #import "DCAConstants.h"
 
 @interface DRLogicMainController ()
 @property(nonatomic, strong) DNLocalEventHandler backgroundNotificationsReceived;
-@property(nonatomic, strong) DNSubscriptionBachHandler richMessageHandler;
+@property(nonatomic, strong) DNSubscriptionBatchHandler richMessageHandler;
 @property(nonatomic, strong) NSMutableArray *backgroundNotifications;
 @property(nonatomic, strong) DNLocalEventHandler notificationLoaded;
 @property(nonatomic, strong) DNModuleDefinition *moduleDefinition;
@@ -61,7 +60,7 @@
 
     [self deleteMaxLifeRichMessages];
 
-    [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.1.1"]];
+    [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.1.1.1"]];
 
     [self setSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationRichMessage batchHandler:[self richMessageHandler]]];
 
@@ -71,7 +70,7 @@
 
     __weak DRLogicMainController *weakSelf = self;
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppWillEnterForegroundNotification handler:^(DNLocalEvent *event) {
-        @synchronized (weakSelf.backgroundNotifications) {
+        @synchronized ([weakSelf backgroundNotifications]) {
             if ([[weakSelf backgroundNotifications] count]) {
                 //Report influenced open:
                 DNLocalEvent *pushOpenEvent = [[DNLocalEvent alloc] initWithEventType:kDAEventInfluencedAppOpen
@@ -129,7 +128,7 @@
 }
 
 - (NSArray *)filterRichMessages:(NSString *)filter ascending:(BOOL)ascending {
-    return [DRLogicHelper filteredRichMessage:filter tempContext:NO ascendingOrder:ascending];
+    return [DRLogicHelper filteredRichMessage:filter ascendingOrder:ascending];
 }
 
 - (BOOL)doesRichMessageExistForID:(NSString *)messageID {
@@ -141,9 +140,8 @@
 }
 
 - (void)richMessageNotificationsReceived:(NSArray *)notifications {
-    @synchronized (self.backgroundNotifications) {
+    @synchronized ([self backgroundNotifications]) {
         [DRLogicMainControllerHelper richMessageNotificationReceived:notifications backgroundNotifications:[self backgroundNotifications]];
-        [[self backgroundNotifications] removeAllObjects];
     }
 }
 
@@ -158,7 +156,7 @@
 #pragma mark -
 #pragma mark - Getters:
 
-- (DNSubscriptionBachHandler)richMessageHandler {
+- (DNSubscriptionBatchHandler)richMessageHandler {
     if (!_richMessageHandler) {
         __weak DRLogicMainController *weakSelf = self;
         _richMessageHandler = [DRLogicMainControllerHelper richMessageHandler:weakSelf];

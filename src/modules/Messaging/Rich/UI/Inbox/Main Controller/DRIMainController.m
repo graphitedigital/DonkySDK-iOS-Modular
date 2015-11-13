@@ -2,8 +2,8 @@
 //  DRIMainController.m
 //  RichInbox
 //
-//  Created by Chris Watson on 12/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 12/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DRIMainController.h"
@@ -15,6 +15,8 @@
 #import "DCUILocalization+Localization.h"
 #import "DRIMainControllerHelper.h"
 #import "DRichMessage+Localization.h"
+#import "DCUIThemeController.h"
+#import "DRUIThemeConstants.h"
 
 @interface DRIMainController ()
 @property(nonatomic, strong) DNLocalEventHandler richMessageTapped;
@@ -58,7 +60,6 @@
 
         [self setShowBannerView:YES];
         [self setLoadTappedMessage:YES];
-        [self setVibrate:YES];
 
         [self setIPadModelPresentationStyle:UIModalPresentationFormSheet];
         
@@ -100,83 +101,66 @@
     [self setBannerTappedHandler:nil];
 }
 
-- (UINavigationController *) richInboxTableViewWithNavigationController {
-
-    UINavigationController *tableViewNavigationController = [[UINavigationController alloc] initWithRootViewController:[self richInboxTableViewController]];
-    
-    [[[tableViewNavigationController viewControllers] firstObject] setTitle:DCUILocalizedString(@"common_ui_generic_inbox")];
-
-    [self setTabBarItemProperties:tableViewNavigationController];
-
-    return tableViewNavigationController;
+- (UINavigationController *)richInboxTableViewWithNavigationController {
+    return [DRIMainController richInboxTableViewWithNavigationController];
 }
 
-- (DRITableViewController *) richInboxTableViewController {
-
-    DRITableViewController *tableViewController = [[DRITableViewController alloc] initWithStyle:UITableViewStylePlain];
-
-    return tableViewController;
+- (DRITableViewController *)richInboxTableViewController {
+    return [DRIMainController richInboxTableViewController];
 }
 
-- (DCUISplitViewController *) richInboxSplitViewController {
-
-    NSAssert([DNSystemHelpers isDeviceIPad] || [DNSystemHelpers isDeviceSixPlus], @"Error, cannot load a split view controller on an iPhone (unless it's an iPhone 6+)");
-
-    DRIMessageViewController *richMessageViewController = [[DRIMessageViewController alloc] initWithRichMessage:nil];
-
-    DRITableViewController *richTableViewController = [self richInboxTableViewController];
-
-    DCUISplitViewController *splitViewController = [[DCUISplitViewController alloc] initWithMasterView:richTableViewController detailViewController:richMessageViewController];
-
-    [richTableViewController setTitle:DCUILocalizedString(@"common_ui_generic_inbox")];
-
-    [self setTabBarItemProperties:splitViewController];
-    
-    return splitViewController;
+- (DCUISplitViewController *)richInboxSplitViewController {
+    return [DRIMainController richInboxSplitViewController];
 }
 
 - (UIViewController *)universalRichInboxViewController {
-
-    if ([DNSystemHelpers isDeviceSixPlus] || [DNSystemHelpers isDeviceIPad]) {
-        return [[DRIMainController sharedInstance] richInboxSplitViewController];
-    }
-    else {
-        return [[DRIMainController sharedInstance] richInboxTableViewWithNavigationController];
-    }
+    return [DRIMainController universalRichInboxViewController];
 }
 
 - (void)setTabBarItemProperties:(id)viewController {
-    
+
+    DRUITheme *theme = (DRUITheme *) [[DCUIThemeController sharedInstance] themeForName:kDRUIThemeName];
+
+    if (!theme) {
+        theme = [[DRUITheme alloc] initWithDefaultTheme];
+    }
+
     [[viewController tabBarItem] setTitle:DCUILocalizedString(@"common_ui_generic_inbox")];
-    [[viewController tabBarItem] setImage:[UIImage imageNamed:@"donky_inbox_icon.png"]];
-    
+    [[viewController tabBarItem] setImage:[theme imageForKey:kDRUIInboxIconImage]];
+
 }
 
 - (void)richMessageNotificationsReceived:(NSDictionary *)notificationData {
-    //Clean out nulls:
-    NSArray *notifications = notificationData[kDNDonkyNotificationRichMessage];
 
-    if ([notifications count] >= 2) {
+    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
+        if ([notificationData isKindOfClass:[NSArray class]]) {
+            return;
+        }
+        
+        NSArray *notifications = notificationData[kDNDonkyNotificationRichMessage];
 
-        //Show multi banner text:
-        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-            if ([self shouldShowBannerView] && ![self multiBannerView]) {
-                [self setMultiBannerView:[[DCUIBannerView alloc] initWithSenderDisplayName:@"Donky"
-                                                                                    body:[NSString stringWithFormat:DRichMessageLocalizedString(@"rich_box_multiple_messages_received"), [notifications count]]
-                                                                         messageSentTime:[NSDate date]
-                                                                           avatarAssetID:nil
-                                                                        notificationType:@"MultiRichMessage"
-                                                                               messageID:nil]];
-                [[self notificationController] presentNotification:[self multiBannerView]];
-                [[self notificationController] loadDefaultAvatar];
+        if ([notifications count] >= 2) {
+
+            //Show multi banner text:
+            if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
+                if ([self shouldShowBannerView] && ![self multiBannerView]) {
+                    [self setMultiBannerView:[[DCUIBannerView alloc] initWithSenderDisplayName:@"Donky"
+                                                                                        body:[NSString stringWithFormat:DRichMessageLocalizedString(@"rich_box_multiple_messages_received"), [notifications count]]
+                                                                             messageSentTime:[NSDate date]
+                                                                               avatarAssetID:nil
+                                                                            notificationType:@"MultiRichMessage"
+                                                                                   messageID:nil]];
+                    [[self notificationController] presentNotification:[self multiBannerView]];
+                    [[self notificationController] loadDefaultAvatar];
+                }
             }
         }
-    }
-    else {
-       [DRIMainControllerHelper processNotifications:notificationData
-                              notificationController:[self notificationController]
-                                 richLogicController:[self richLogicController]
-                                      showBannerView:[self shouldShowBannerView]];
+        else {
+           [DRIMainControllerHelper processNotifications:notificationData
+                                  notificationController:[self notificationController]
+                                     richLogicController:[self richLogicController]
+                                          showBannerView:[self shouldShowBannerView]];
+        }
     }
 }
 
@@ -221,4 +205,65 @@
     return _richMessageBadgeCount;
 }
 
+
+#pragma mark -
+#pragma mark - Class Methods
+
++ (UINavigationController *) richInboxTableViewWithNavigationController {
+
+    UINavigationController *tableViewNavigationController = [[UINavigationController alloc] initWithRootViewController:[DRIMainController richInboxTableViewController]];
+
+    [[[tableViewNavigationController viewControllers] firstObject] setTitle:DCUILocalizedString(@"common_ui_generic_inbox")];
+
+    [DRIMainController setTabBarItemProperties:tableViewNavigationController];
+
+    return tableViewNavigationController;
+}
+
++ (DRITableViewController *) richInboxTableViewController {
+
+    DRITableViewController *tableViewController = [[DRITableViewController alloc] initWithStyle:UITableViewStylePlain];
+
+    return tableViewController;
+}
+
++ (DCUISplitViewController *) richInboxSplitViewController {
+
+    NSAssert([DNSystemHelpers isDeviceIPad] || [DNSystemHelpers isDeviceSixPlus], @"Error, cannot load a split view controller on an iPhone (unless it's an iPhone 6+)");
+
+    DRIMessageViewController *richMessageViewController = [[DRIMessageViewController alloc] initWithRichMessage:nil];
+
+    DRITableViewController *richTableViewController = [DRIMainController richInboxTableViewController];
+
+    DCUISplitViewController *splitViewController = [[DCUISplitViewController alloc] initWithMasterView:richTableViewController detailViewController:richMessageViewController];
+
+    [richTableViewController setTitle:DCUILocalizedString(@"common_ui_generic_inbox")];
+
+    [DRIMainController setTabBarItemProperties:splitViewController];
+
+    return splitViewController;
+}
+
++ (UIViewController *)universalRichInboxViewController {
+
+    if ([DNSystemHelpers isDeviceSixPlus] || [DNSystemHelpers isDeviceIPad]) {
+        return [DRIMainController richInboxSplitViewController];
+    }
+    else {
+        return [DRIMainController richInboxTableViewWithNavigationController];
+    }
+}
+
++ (void)setTabBarItemProperties:(id)viewController {
+
+    DRUITheme *theme = (DRUITheme *) [[DCUIThemeController sharedInstance] themeForName:kDRUIThemeName];
+
+    if (!theme) {
+        theme = [[DRUITheme alloc] initWithDefaultTheme];
+    }
+
+    [[viewController tabBarItem] setTitle:DCUILocalizedString(@"common_ui_generic_inbox")];
+    [[viewController tabBarItem] setImage:[theme imageForKey:kDRUIInboxIconImage]];
+
+}
 @end

@@ -1,8 +1,8 @@
 //
-//  DKConstants.m
+//  DCAConstants.m
 //  Logging
 //
-//  Created by Chris Watson on 13/02/2015.
+//  Created by Donky Networks on 13/02/2015.
 //  Copyright (c) 2015 Dynmark International Ltd. All rights reserved.
 //
 
@@ -14,3 +14,11 @@
 NSString * const kDAEventInfluencedAppOpen = @"DonkyAnalyticsInfluencedAppOpen";
 
 NSString * const kDAAnalyticsVersion = @"1.0.0.0";
+
+#pragma mark -
+#pragma mark - Donky GeoFence Module Analytics
+
+NSString * const kDCAnalyticsGeoFenceCrossed = @"GEOFENCECROSSED";
+
+NSString * const kDCAnalyticsGeoFenceTriggered = @"TRIGGEREXECUTED";
+

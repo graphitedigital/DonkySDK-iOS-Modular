@@ -2,7 +2,7 @@
 //  DNRetryObject.h
 //  Core Container
 //
-//  Created by Chris Watson on 21/03/2015.
+//  Created by Donky Networks on 21/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -11,11 +11,11 @@
 
 @interface DNRetryObject : NSObject
 
-@property(nonatomic) NSUInteger numberOfRetries;
+@property (nonatomic) NSUInteger numberOfRetries;
 
-@property(nonatomic) NSUInteger sectionRetries;
+@property (nonatomic) NSUInteger sectionRetries;
 
-@property(nonatomic, readonly) DNRequest *request;
+@property (nonatomic, readonly) DNRequest *request;
 
 - (instancetype)initWithRequest:(DNRequest *)request;
 

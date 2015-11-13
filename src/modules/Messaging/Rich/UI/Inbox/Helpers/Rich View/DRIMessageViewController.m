@@ -2,7 +2,7 @@
 //  DRIMessageViewController.m
 //  RichPopUp
 //
-//  Created by Chris Watson on 13/04/2015.
+//  Created by Donky Networks on 13/04/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -308,7 +308,19 @@
 
 - (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController {
     [barButtonItem setTitle:DCUILocalizedString(@"common_ui_generic_inbox")];
-    [self addBarButtonItem:barButtonItem buttonSide:DMVLeftSide];
+    __block BOOL hasInboxButton = NO;
+    [[[[self navigationController] navigationItem] leftBarButtonItems] enumerateObjectsUsingBlock:^(UIBarButtonItem *obj, NSUInteger idx, BOOL *stop) {
+        UIBarButtonItem *item = obj;
+        if ([[item title] isEqualToString:DCUILocalizedString(@"common_ui_generic_inbox")]) {
+            hasInboxButton = YES;
+            *stop = YES;
+        }
+    }];
+
+    if (!hasInboxButton) {
+        [self addBarButtonItem:barButtonItem buttonSide:DMVLeftSide];
+    }
+
     [self setMasterPopoverController:popoverController];
 }
 

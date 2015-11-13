@@ -2,8 +2,8 @@
 //  DNNetworkDataHelper.h
 //  DonkyMaster
 //
-//  Created by Chris Watson on 03/06/2015.
-//  Copyright (c) 2015 Chris Watson. All rights reserved.
+//  Created by Donky Networks on 03/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -12,9 +12,9 @@
 
 @interface DNNetworkDataHelper : NSObject
 
-+ (NSArray *)clientNotificationsWithTempContext:(BOOL)temp;
++ (NSArray *)clientNotificationsWithTempContext:(NSManagedObjectContext *)context;
 
-+ (NSArray *)contentNotificationsWithTempContext:(BOOL)temp;
++ (NSArray *)contentNotificationsWithTempContext:(NSManagedObjectContext *)context;
 
 + (NSMutableDictionary *)networkClientNotifications:(NSMutableArray *)clientNotifications networkContentNotifications:(NSMutableArray *)contentNotifications tempContext:(BOOL)temp;
 
@@ -24,12 +24,12 @@
 
 + (void)saveContentNotificationsToStore:(NSArray *)array;
 
-+ (void)deleteNotifications:(NSArray *)notifications tempContext:(BOOL)temp;
++ (void)deleteNotifications:(NSArray *)notifications;
 
-+ (void)clearBrokenNotificationsWithTempContext:(BOOL)temp;
++ (void)clearBrokenNotifications;
 
-+ (void)deleteNotificationForID:(NSString *)serverID withTempContext:(BOOL)temp;
++ (void)deleteNotificationForID:(NSString *)serverID;
 
-+ (DNNotification *)notificationWithID:(NSString *)notificationID withTempContext:(BOOL)temp;
++ (NSManagedObjectID *)notificationWithID:(NSString *)notificationID;
 
 @end

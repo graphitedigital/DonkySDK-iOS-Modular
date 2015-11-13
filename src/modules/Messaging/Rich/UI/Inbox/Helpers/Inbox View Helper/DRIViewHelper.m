@@ -2,8 +2,8 @@
 //  DRIViewHelper.m
 //  RichInbox
 //
-//  Created by Chris Watson on 07/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 07/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DRIViewHelper.h"
@@ -46,18 +46,15 @@
 
             UIPopoverPresentationController *popover = alertController.popoverPresentationController;
 
-            if (popover)
-            {
+            if (popover) {
                 popover.sourceView = viewController.view;
                 popover.sourceRect = senderFrame;
                 popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
             }
+        }
 
-            [viewController presentViewController:alertController animated:YES completion:nil];
-        }
-        else {
-            [viewController presentViewController:alertController animated:YES completion:nil];
-        }
+        [viewController presentViewController:alertController animated:YES completion:nil];
+        
     }
 
     else {

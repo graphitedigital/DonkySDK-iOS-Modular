@@ -2,8 +2,8 @@
 //  DAMainController.m
 //  DonkyCommonAudio
 //
-//  Created by Chris Watson on 31/07/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 31/07/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import <AVFoundation/AVFoundation.h>
@@ -11,6 +11,9 @@
 #import "DNConstants.h"
 #import "DNLoggingController.h"
 #import "DNDonkyCore.h"
+
+static NSString *const DAMiscellaneous = @"DAMisc";
+static NSString *const DAPlayFile = @"DAudioPlayAudioFile";
 
 @interface DAMainController ()
 @property (nonatomic, strong) DNLocalEventHandler audioFileHandler;
@@ -38,7 +41,6 @@
 
 -(instancetype)initPrivate
 {
-
     self  = [super init];
 
     if (self) {
@@ -53,9 +55,10 @@
 
 - (void)start {
     
-    __weak typeof(self) weakSelf = self;
+    __weak __typeof(self) weakself = self;
+    
     [self setAudioFileHandler:^(DNLocalEvent *event) {
-        [weakSelf playAudioFileForMessage:(DonkyAudioMessageTypes) [[event data] integerValue]];
+        [weakself playAudioFileForMessage:[[event data] integerValue]];
     }];
 
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:DAPlayFile handler:[self audioFileHandler]];
@@ -64,42 +67,54 @@
     [[DNDonkyCore sharedInstance] registerModule:moduleDefinition];
     
     [[DNDonkyCore sharedInstance] registerService:NSStringFromClass([self class]) instance:self];
-
+    
 }
 
 - (void)stop {
     [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:DAPlayFile handler:[self audioFileHandler]];
 }
 
-- (void)playAudioFileForMessage:(DonkyAudioMessageTypes)messageType {
-
+- (void)playAudioFileForMessage:(NSInteger)messageType {
     NSURL *audioFile = nil;
 
     switch (messageType) {
-
-        case DASimplePushMessage:
+        case 0:
             audioFile = [self audioFiles][kDNDonkyNotificationSimplePush];
             break;
-        case DARichMessage:
+        case 1:
             audioFile = [self audioFiles][kDNDonkyNotificationRichMessage];
             break;
-        case DACustomContent:
+        case 2:
             audioFile = [self audioFiles][kDNDonkyNotificationCustomDataKey];
             break;
-        case DAMisc:
-            audioFile = [self audioFiles][@"DAMisc"];
-        default:
+        case 3:
+            audioFile = [self audioFiles][kDNDonkyNotificationChatMessage];
             break;
+        case 4:
+            audioFile = [self audioFiles][DAMiscellaneous];
+            break;
+    default:break;
     }
 
     if ([self shouldVibrate]) {
-        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+        if (messageType & DAMisc) {
+            DNInfoLog(@"donky does not vibrate with misc message type");
+        }
+        else {
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+        }
     }
-    
+
+    //Play audio file:
     if (!audioFile) {
         DNErrorLog(@"cannot play audio for message type: %lu, have you saved the audio file name?", (unsigned long)messageType);
         return;
     }
+
+#if TARGET_IPHONE_SIMULATOR
+    DNErrorLog(@"Sometimes playing audio on simulator can cause an exception...");
+    return;
+#else
 
     NSError *error;
     [self setAudioPlayer:[[AVAudioPlayer alloc] initWithContentsOfURL:audioFile error:&error]];
@@ -108,6 +123,11 @@
     if (error) {
         DNErrorLog(@"couldn't play audio file: %@", [error localizedDescription]);
     }
+#endif
+}
+
++ (void)playAuioFileForMessage:(NSInteger)messageType {
+    [[DAMainController sharedInstance] playAudioFileForMessage:messageType];
 }
 
 - (void)setAudioFile:(NSURL *)audioFile forMessageType:(DonkyAudioMessageTypes)messageType {
@@ -120,9 +140,16 @@
     if (messageType & DACustomContent) {
         [self audioFiles][kDNDonkyNotificationCustomDataKey] = audioFile;
     }
-    if (messageType & DAMisc) {
-        [self audioFiles][@"DAMisc"] = audioFile;
+    if (messageType & DAChatMessage) {
+        [self audioFiles][kDNDonkyNotificationChatMessage] = audioFile;
     }
+    if (messageType & DAMisc) {
+        [self audioFiles][DAMiscellaneous] = audioFile;
+    }
+}
+
++ (void)setAudioFile:(NSURL *)audioFile forMessageType:(DonkyAudioMessageTypes)messageType {
+    [[DAMainController sharedInstance] setAudioFile:audioFile forMessageType:messageType];
 }
 
 @end

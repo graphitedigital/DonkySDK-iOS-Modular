@@ -2,7 +2,7 @@
 //  DNLoggingController.m
 //  Logging
 //
-//  Created by Chris Watson on 12/02/2015.
+//  Created by Donky Networks on 12/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -58,14 +58,12 @@ static NSString *const DNPascalAlwaysSubmitErrors = @"alwaysSubmitErrors";
             }
 
             //Construct the log string:
-            NSString *log = [NSString stringWithFormat:@"%@ [line %li] %@", function, (long) line, message];
+            NSString *log = [NSString stringWithFormat:@"\n%@ [line %li] %@\nThread: %@", function, (long) line, message, [NSThread currentThread]];
+
             //Output to the console:
             NSLog(@"%@", log);
             //Save this log to the file:
             [DNLoggingController addLogToFile:log];
-
-            DNLocalEvent *logEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyLogEvent publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@{@"LogLevel" : @(logType), @"Message" : log}];
-            [[DNDonkyCore sharedInstance] publishEvent:logEvent];
         }
     });
 }

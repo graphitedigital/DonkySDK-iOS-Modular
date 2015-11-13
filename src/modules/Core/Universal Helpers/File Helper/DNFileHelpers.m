@@ -2,7 +2,7 @@
 //  DNFileHelpers.m
 //  Logging
 //
-//  Created by Chris Watson on 12/02/2015.
+//  Created by Donky Networks on 12/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -10,7 +10,6 @@
 #import "DNLoggingController.h"
 
 @implementation DNFileHelpers
-
 
 #pragma mark -
 #pragma mark - Pre-Built Retrievers
@@ -44,6 +43,10 @@
 + (NSBundle *)bundleWithName:(NSString *)bundleName {
     NSURL *bundleURL = [[NSBundle mainBundle] URLForResource:bundleName withExtension:@"bundle"];
     return [[NSBundle alloc] initWithURL:bundleURL];
+}
+
++ (NSURL *)audioFileURLForName:(NSString *)fileName extension:(NSString *)fileExtension inDirectory:(NSString *)directory {
+    return [[NSURL alloc] initFileURLWithPath:[[NSBundle mainBundle] pathForResource:fileName ofType:fileExtension inDirectory:directory]];
 }
 
 #pragma mark -
@@ -81,6 +84,10 @@
 }
 
 + (void)ensureFileExistsAtPath:(NSString *)path {
+
+    if (!path) {
+        return;
+    }
 
     if (![DNFileHelpers fileExists:path]) {
         NSError *err = nil;

@@ -2,8 +2,8 @@
 //  DRITableViewCell.h
 //  RichInbox
 //
-//  Created by Chris Watson on 03/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 03/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -25,7 +25,7 @@
  Method invoked when a cells more button was tapped. The button is passed
  along with this method.
  
- @param sender the button that was repsonsible for invoking the method. This is
+ @param sender the button that was responsible for invoking the method. This is
  passed so that the cell responsible can be identified.
  
  @since 2.2.2.7
@@ -33,7 +33,7 @@
 - (void)cellButtonWasTapped:(UIButton *)sender;
 
 /*!
- Method to determine whether the tableview scrolling should be disabled.
+ Method to determine whether the Table View scrolling should be disabled.
  Table view scrolling is disabled when the user is swiping the cell left or right.
  
  @param disable whether it should be disabled or now.
@@ -76,7 +76,7 @@
 @property (weak) id <DRITableViewCellDelegate> delegate;
 
 /*!
- Wether the table view is currently in edit mode.
+ Whether the table view is currently in edit mode.
  
  @since 2.2.2.7
  */

@@ -2,8 +2,8 @@
 //  DRINotification.m
 //  RichInbox
 //
-//  Created by Chris Watson on 16/06/2015.
-//  Copyright © 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 16/06/2015.
+//  Copyright © 2015 Donky Networks. All rights reserved.
 //
 
 #import "DRINotification.h"

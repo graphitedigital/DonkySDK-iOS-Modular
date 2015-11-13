@@ -29,7 +29,7 @@
     [[DPUINotificationController sharedInstance] start];
 
     //Initialise Donky
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"API-KEY"];
+    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"ye7MDvQQVUKwR2DgMhHC89gy76HOFVtYq3PLKiOyYvDyQwFKzusUCBAphwDvMNGvlDfK2WhRFo41sF0fD4sf1Q"];
 
     return YES;
 }

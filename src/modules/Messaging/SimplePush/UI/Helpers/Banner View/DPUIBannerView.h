@@ -2,7 +2,7 @@
 //  DPUIBannerView.h
 //  PushUI
 //
-//  Created by Chris Watson on 15/04/2015.
+//  Created by Donky Networks on 15/04/2015.
 //  Copyright (c) 2015 Dynmark International Ltd. All rights reserved.
 //
 

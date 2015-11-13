@@ -2,7 +2,7 @@
 //  DNNetworkHelper.h
 //  Core Container
 //
-//  Created by Chris Watson on 17/03/2015.
+//  Created by Donky Networks on 17/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -19,7 +19,7 @@
 
 + (void)deviceUserDeleted:(NSError *)error;
 
-+ (void)queueClientNotifications:(NSArray *)notifications pendingNotifications:(NSMutableArray *)pendingNotifications;
++ (NSArray *)queueClientNotifications:(NSArray *)notifications pendingNotifications:(NSMutableArray *)pendingNotifications;
 
 + (NSError *)queueContentNotifications:(NSArray *)notifications pendingNotifications:(NSMutableArray *)pendingNotifications;
 
@@ -31,11 +31,10 @@
 
 + (NSURLSessionTask *)performNetworkTaskForRequest:(DNRequest *)request sessionManager:(DNSessionManager *)sessionManager success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
 
-+ (BOOL)isCallNecessary:(DNRequest *)request;
-
 + (NSArray *)clientNotifications:(NSMutableArray *)clientNotifications;
 
 + (NSArray *)contentNotifications:(NSMutableArray *)notifications;
 
 + (BOOL)duplicateUpdateDetailsCall:(DNRequest *)request exchangeRequest:(NSMutableArray *)exchangeRequests;
+
 @end

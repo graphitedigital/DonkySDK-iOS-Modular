@@ -2,7 +2,7 @@
 //  DNNotificationSubscriber.m
 //  Donky Network SDK Container
 //
-//  Created by Chris Watson on 06/03/2015.
+//  Created by Donky Networks on 06/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -21,7 +21,6 @@
 
 static NSString *const DNNotificationCustom = @"Custom";
 static NSString *const DNNotificationCustomType = @"customType";
-static NSString *const DNAcknowledgement = @"Acknowledgement";
 static NSString *const DNDelivered = @"delivered";
 static NSString *const DNDeliveredNoSubscription = @"DeliveredNoSubscription";
 static NSString *const DNResult = @"result";
@@ -112,8 +111,8 @@ static NSString *const DNResult = @"result";
                 NSArray *filteredArray = [obj filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"data.customType == %@", type]];
                 
                 __block bool processedType = NO;
-                [processedTypes enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    if ([obj isEqualToString:type]) {
+                [processedTypes enumerateObjectsUsingBlock:^(id obj3, NSUInteger idx3, BOOL *stop3) {
+                    if ([obj3 isEqualToString:type]) {
                         processedType = YES;
                         *stop = YES;
                     }
@@ -129,7 +128,7 @@ static NSString *const DNResult = @"result";
             [self processNotifications:obj subscribers:subscribers];
         }
         if (!subscribers) {
-            if ([key isEqualToString:kDNDonkyNotificationSimplePush] || [key isEqualToString:kDNDonkyNotificationRichMessage]) {
+            if ([key isEqualToString:kDNDonkyNotificationChatMessage] || [key isEqualToString:kDNDonkyNotificationRichMessage]) {
                 NSInteger count = [[UIApplication sharedApplication] applicationIconBadgeNumber];
                 if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
                     DNInfoLog(@"Artificially increasing badge count by: %lu", (long)[obj count]);
@@ -174,17 +173,17 @@ static NSString *const DNResult = @"result";
             }
         }
     }];
-
-    [[DNDataController sharedInstance] saveAllData];
 }
 
 - (void)acknowledgeNotifications:(NSArray *)notifications hasSubscribers:(BOOL)hasSubscribers {
+    NSMutableArray *acknowledged = [[NSMutableArray alloc] init];
     [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithAcknowledgementNotification:obj];
-        [clientNotification setNotificationType:DNAcknowledgement];
         [[clientNotification acknowledgementDetails] dnSetObject:hasSubscribers ? DNDelivered : DNDeliveredNoSubscription forKey:DNResult];
-        [[DNNetworkController sharedInstance] queueClientNotifications:@[clientNotification]];
+        [acknowledged addObject:clientNotification];
     }];
+
+    [[DNNetworkController sharedInstance] queueClientNotifications:acknowledged];
 }
 
 @end

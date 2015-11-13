@@ -2,7 +2,7 @@
 //  DNAccountRegistrationResponse.h
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 03/03/2015.
+//  Created by Donky Networks on 03/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -24,7 +24,9 @@
 
 @property (nonatomic, readonly) NSString *networkProfileID;
 
-@property(nonatomic, readonly) NSDictionary *configuration;
+@property (nonatomic, readonly) NSString *signalRURL;
+
+@property (nonatomic, readonly) NSDictionary *configuration;
 
 - (instancetype)initWithRegistrationResponse:(NSDictionary *)responseData;
 

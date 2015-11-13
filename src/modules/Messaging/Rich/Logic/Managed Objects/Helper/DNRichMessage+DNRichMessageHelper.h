@@ -2,8 +2,8 @@
 //  DNRichMessage+DNRichMessageHelper.h
 //  RichInbox
 //
-//  Created by Chris Watson on 13/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 13/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DNRichMessage.h"
@@ -15,12 +15,19 @@
  a rich message that has a custom expiration date but NO expired content OR the rich message
  has exceeded the maximum message life time configured on the app space.
  
- @return bool determining whether a rich message has fully expired.
+ @return BOOL determining whether a rich message has fully expired.
  
  @since 2.2.2.7
  */
 - (BOOL)richHasCompletelyExpired;
 
+/*!
+ Helper to determine if a rich message has reached it's maximum expiration time.
+ 
+ @return BOOL determining if rich message has reached it's maximum expieration.
+ 
+ @since 2.5.4.3
+ */
 - (BOOL)richHasReachedExpiration;
 
 /*!

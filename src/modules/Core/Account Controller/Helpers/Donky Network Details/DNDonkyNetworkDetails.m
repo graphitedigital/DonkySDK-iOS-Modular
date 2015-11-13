@@ -2,9 +2,14 @@
 //  DNDonkyNetworkDetails.m
 //  Donky Network SDK Container
 //
-//  Created by Chris Watson on 06/03/2015.
+//  Created by Donky Networks on 06/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
+
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
 
 #import "NSDate+DNDateHelper.h"
 #import "DNKeychainHelper.h"
@@ -30,8 +35,9 @@ static NSString *const DNSDKVersion = @"SDKVersion";
 static NSString *const DNOSVersion = @"OSVersion";
 static NSString *const DNDeviceToken = @"DeviceToken";
 static NSString *const DNAPNSAudio = @"APNSAudio";
-
 static NSString *const DNNetworkProfileID = @"networkProfileID";
+static NSString *const DNSignalRURL = @"DNSignalRURL";
+static NSString *const DNMaximumNumberOfSavedChatMessages = @"MaximumNumberOfSavedChatMessages";
 
 @implementation DNDonkyNetworkDetails
 
@@ -53,6 +59,10 @@ static NSString *const DNNetworkProfileID = @"networkProfileID";
 
 + (void)saveSecureServiceRootUrl:(NSString *)secureServiceRootUrl {
     [DNUserDefaultsHelper saveObject:secureServiceRootUrl withKey:DNSecureServicesURL];
+}
+
++ (void)saveSignalRURL:(NSString *)signalRURL {
+    [DNUserDefaultsHelper saveObject:signalRURL withKey:DNSignalRURL];
 }
 
 + (void)saveTokenExpiry:(NSDate *)tokenExpiry {
@@ -91,20 +101,29 @@ static NSString *const DNNetworkProfileID = @"networkProfileID";
     [DNUserDefaultsHelper saveObject:networkProfileID withKey:DNNetworkProfileID];
 }
 
++ (void)saveMaximumNumberOfSavedChatMessages:(NSInteger)maximumNumberOfSavedChatMessages {
+    [DNUserDefaultsHelper saveObject:@(maximumNumberOfSavedChatMessages) withKey:DNMaximumNumberOfSavedChatMessages];
+}
+
++ (NSString *)signalRURL {
+    return [DNUserDefaultsHelper objectForKey:DNSignalRURL];
+}
+
 + (BOOL)isDeviceRegistered {
     return [DNDonkyNetworkDetails networkId] != nil;
 }
 
 + (BOOL)hasValidAccessToken {
     NSDate *reAuthenticationDate = [[DNDonkyNetworkDetails tokenExpiry] dateByAddingTimeInterval:-60.0];
-    if (!reAuthenticationDate)
+    if (!reAuthenticationDate) {
         return NO;
+    }
     
     return ![reAuthenticationDate donkyHasDateExpired];
 }
 
 + (BOOL)newUserDetails {
-    return [[[DNDataController sharedInstance] temporaryContext] hasChanges] || [[[DNDataController sharedInstance] mainContext] hasChanges];
+    return [[[DNDataController sharedInstance] mainContext] hasChanges];
 }
 
 + (BOOL)isPushEnabled {
@@ -161,6 +180,10 @@ static NSString *const DNNetworkProfileID = @"networkProfileID";
 
 + (NSString *)networkProfileID {
     return [DNUserDefaultsHelper objectForKey:DNNetworkProfileID];
+}
+
++ (NSInteger)maximumNumberOfSavedChatMessages {
+    return [[DNUserDefaultsHelper objectForKey:DNMaximumNumberOfSavedChatMessages] integerValue] ? : kDonkyMaxNumberOfSavedChatMessages;
 }
 
 @end

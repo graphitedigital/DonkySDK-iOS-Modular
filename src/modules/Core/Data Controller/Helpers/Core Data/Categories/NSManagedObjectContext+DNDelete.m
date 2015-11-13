@@ -2,7 +2,7 @@
 //  NSManagedObjectContext+DNDelete.m
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 23/02/2015.
+//  Created by Donky Networks on 23/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 

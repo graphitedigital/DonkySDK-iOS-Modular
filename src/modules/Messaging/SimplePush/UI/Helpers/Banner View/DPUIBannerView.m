@@ -2,7 +2,7 @@
 //  DPUIBannerView.m
 //  PushUI
 //
-//  Created by Chris Watson on 15/04/2015.
+//  Created by Donky Networks on 15/04/2015.
 //  Copyright (c) 2015 Dynmark International Ltd. All rights reserved.
 //
 
@@ -119,12 +119,12 @@ static NSString *const DPUIButtonSetActions = @"buttonSetActions";
     [button setTitle:title forState:UIControlStateNormal];
     [[button titleLabel] setTextAlignment:NSTextAlignmentLeft];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(performButtonAction) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(performButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
     return button;
 }
 
-- (void)performButtonAction {
+- (void)performButtonAction:(UIButton *)button {
 
     NSDictionary *tappedButton = [[[self notification] buttonSets] firstObject];
 
@@ -183,8 +183,11 @@ static NSString *const DPUIButtonSetActions = @"buttonSetActions";
     DNLocalEvent *interactionResult = [[DNLocalEvent alloc] initWithEventType:@"InteractionResult" publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:params];
 
     [[DNDonkyCore sharedInstance] publishEvent:interactionResult];
+
+    NSMutableDictionary *userTapped = [[NSMutableDictionary alloc] init];
+    [userTapped dnSetObject:buttonSetAction[[button tag]] forKey:@"ButtonAction"];
     
-    DNLocalEvent *pushTappedEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventNotificationTapped publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:[self notification]];
+    DNLocalEvent *pushTappedEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventNotificationTapped publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@{@"Notification" : [self notification], @"UserTapped" : userTapped}];
     [[DNDonkyCore sharedInstance] publishEvent:pushTappedEvent];
 
 }

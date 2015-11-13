@@ -2,8 +2,8 @@
 //  DRITableViewCell.m
 //  RichInbox
 //
-//  Created by Chris Watson on 03/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 03/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "UIView+AutoLayout.h"
@@ -22,14 +22,14 @@
 static NSString *const DRTableCellEditControlClass = @"UITableViewCellEditControl";
 
 @interface DRITableViewCell ()
-@property(nonatomic, strong) NSArray *descriptionLabelConstraints;
-@property(nonatomic, strong) DRICellPanGestureHelper *panHelper;
+@property (nonatomic, strong) NSArray *descriptionLabelConstraints;
+@property (nonatomic, strong) DRICellPanGestureHelper *panHelper;
 @property (nonatomic, strong) DCUINewBannerView *bannerView;
 @property (nonatomic, strong) UIImageView *avatarImageView;
-@property(nonatomic, strong) NSArray *dateLabelConstraint;
+@property (nonatomic, strong) NSArray *dateLabelConstraint;
 @property (nonatomic, strong) UILabel *descriptionLabel;
 @property (nonatomic, strong) NSTimer *refreshTimer;
-@property(nonatomic, strong) UIView *topContentView;
+@property (nonatomic, strong) UIView *topContentView;
 @property (nonatomic, strong) NSTimer *expiryTimer;
 @property (nonatomic, strong) UIButton *moreButton;
 @property (nonatomic, strong) UILabel *titleLabel;
@@ -125,6 +125,7 @@ static NSString *const DRTableCellEditControlClass = @"UITableViewCellEditContro
     [[self topContentView] setBackgroundColor:[[self theme] colourForKey:kDRUIInboxCellBackgroundColour]];
 
     [[self moreButton] setBackgroundColor:[[self theme] colourForKey:kDRUIInboxCellMoreButtonColour]];
+    [[self moreButton] setImage:[theme imageForKey:kDRUIInboxMoreButtonImage] forState:UIControlStateNormal];
 
     [[self bannerView] setBackgroundColor:[[self theme] colourForKey:kDRUIInboxNewBannerColour]];
     [[[self bannerView] textLabel] setFont:[[self theme] fontForKey:kDRUIInboxNewBannerFont]];
@@ -194,6 +195,7 @@ static NSString *const DRTableCellEditControlClass = @"UITableViewCellEditContro
     [[self moreButton] setEnabled:YES];
 
     [self closeCell];
+
 }
 
 - (void)configureCell {
@@ -239,7 +241,7 @@ static NSString *const DRTableCellEditControlClass = @"UITableViewCellEditContro
 
 - (void)loadRichMessageAvatar {
     UIImage *temp = [DNAssetController imageFromTempDir:[[self richMessage] messageID]];
-    UIImage *avatarImage =  temp ? : [[[self richMessage] read] boolValue] ? [UIImage imageNamed:@"donky_default_avatar_open.png"] : [UIImage imageNamed:@"donky_default_avatar_closed.png"];
+    UIImage *avatarImage =  temp ? : [[[self richMessage] read] boolValue] ? [[self theme] imageForKey:kDRUIInboxDefaultAvatarOpenImage] : [[self theme] imageForKey:kDRUIInboxDefaultAvatarClosedImage];
     [[self avatarImageView] setImage:avatarImage];
 
     if ([[self richMessage] avatarAssetID] && !temp) {
@@ -388,7 +390,7 @@ static NSString *const DRTableCellEditControlClass = @"UITableViewCellEditContro
 
         [editingControlView setBackgroundColor:[[self theme] colourForKey:kDRUInboxCellSelectedColour]];
         if ([[self theme] imageForKey:kDRUIInboxSelectionTickSelected]) {
-            [selectionImage setImage:[UIImage imageNamed:[[self theme] imageForKey:kDRUIInboxSelectionTickSelected]]];
+            [selectionImage setImage:[[self theme] imageForKey:kDRUIInboxSelectionTickSelected]];
         }
     }
     else {
@@ -397,7 +399,7 @@ static NSString *const DRTableCellEditControlClass = @"UITableViewCellEditContro
 
         [editingControlView setBackgroundColor:[[self theme] colourForKey:kDRUIInboxCellBackgroundColour]];
         if ([[self theme] imageForKey:kDRUIInboxSelectionTickUnSelected]) {
-            [selectionImage setImage:[UIImage imageNamed:[[self theme] imageForKey:kDRUIInboxSelectionTickUnSelected]]];
+            [selectionImage setImage:[[self theme] imageForKey:kDRUIInboxSelectionTickUnSelected]];
         }
     }
 
@@ -425,13 +427,13 @@ static NSString *const DRTableCellEditControlClass = @"UITableViewCellEditContro
 
         [editingControlView setBackgroundColor:[[self theme] colourForKey:kDRUInboxCellSelectedColour]];
         if ([[self theme] imageForKey:kDRUIInboxSelectionTickHighlighted]) {
-            [selectionImage setImage:[UIImage imageNamed:[[self theme] imageForKey:kDRUIInboxSelectionTickHighlighted]]];
+            [selectionImage setImage:[[self theme] imageForKey:kDRUIInboxSelectionTickHighlighted]];
         }
     }
     else if (![self istableViewEditing] || ![self isSelected]) {
 
         if ([[self theme] imageForKey:kDRUIInboxSelectionTickUnHighlighted]) {
-            [selectionImage setImage:[UIImage imageNamed:[[self theme] imageForKey:kDRUIInboxSelectionTickUnHighlighted]]];
+            [selectionImage setImage:[[self theme] imageForKey:kDRUIInboxSelectionTickUnHighlighted]];
         }
         [self setBackgroundColor:[[self theme] colourForKey:kDRUIInboxCellBackgroundColour]];
     }

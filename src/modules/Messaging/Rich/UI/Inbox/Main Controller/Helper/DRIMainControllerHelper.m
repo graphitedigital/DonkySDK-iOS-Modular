@@ -2,8 +2,8 @@
 //  DRIMainControllerHelper.m
 //  RichInbox
 //
-//  Created by Chris Watson on 23/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 23/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DRIMainControllerHelper.h"
@@ -14,6 +14,7 @@
 #import "DNDonkyCore.h"
 #import "DRINotification.h"
 #import "NSDate+DNDateHelper.h"
+#import "DNDataController.h"
 
 static NSString *const DRIExpiryTimeStamp = @"expiryTimeStamp";
 static NSString *const DRIType = @"type";
@@ -24,21 +25,36 @@ static NSString *const DRIMessageID = @"messageID";
 + (DNLocalEventHandler)richMessageTapped:(DRIMainController *)mainController {
 
     DNLocalEventHandler richMessageTapped = ^(id data) {
-        DNLocalEvent *event = data;
-        if ([[event data] isKindOfClass:[DNRichMessage class]] && mainController.shouldLoadTappedMessage) {
-            DRIMessageViewController *richMessageViewController = [[DRIMessageViewController alloc] initWithRichMessage:[event data]];
-            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:richMessageViewController];
-            [richMessageViewController addBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:richMessageViewController action:NSSelectorFromString(@"closeView:")] buttonSide:DMVLeftSide];
+        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
+            DNLocalEvent *event = data;
+            if ([[event data] isKindOfClass:[DNRichMessage class]] && [mainController shouldLoadTappedMessage]) {
 
-            UIViewController *presentingViewController = [UIViewController applicationRootViewController];
+                NSManagedObjectContext *tempContext = [DNDataController temporaryContext];
+                [tempContext performBlock:^{
+                    NSManagedObjectID *objectID = [[event data] objectID];
+                    if (objectID) {
+                        DNRichMessage *fetchedRichMessage = (DNRichMessage *) [tempContext objectWithID:objectID];
+                        if (fetchedRichMessage) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                DRIMessageViewController *richMessageViewController = [[DRIMessageViewController alloc] initWithRichMessage:fetchedRichMessage];
+                                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:richMessageViewController];
+                                [richMessageViewController addBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:richMessageViewController action:NSSelectorFromString(@"closeView:")] buttonSide:DMVLeftSide];
 
-            if ([DNSystemHelpers isDeviceIPad]) {
-                [navigationController setModalPresentationStyle:mainController.iPadModelPresentationStyle];
+                                UIViewController *presentingViewController = [UIViewController applicationRootViewController];
+
+                                if ([DNSystemHelpers isDeviceIPad]) {
+                                    [navigationController setModalPresentationStyle:mainController.iPadModelPresentationStyle];
+                                }
+
+
+                                [presentingViewController presentViewController:navigationController animated:YES completion:nil];
+                            });
+
+                            [[mainController richLogicController] markMessageAsRead:fetchedRichMessage];
+                        }
+                    }
+                }];
             }
-
-            [presentingViewController presentViewController:navigationController animated:YES completion:nil];
-
-            [mainController.richLogicController markMessageAsRead:[event data]];
         }
     };
 
@@ -53,12 +69,17 @@ static NSString *const DRIMessageID = @"messageID";
 
             //Get message ID:
             NSString *messageID = [event data][DRIMessageID];
-            DNRichMessage *richMessage = [mainController.richLogicController richMessageWithID:messageID];
-
-            if (richMessage) {
-                //Present as pop over:
-                DNLocalEvent *popUpMessageEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageNotificationTapped publisher:NSStringFromClass([mainController class]) timeStamp:[NSDate date] data:richMessage];
-                [[DNDonkyCore sharedInstance] publishEvent:popUpMessageEvent];
+            NSManagedObjectID *objectID = [[[mainController richLogicController] richMessageWithID:messageID] objectID];
+            if (objectID) {
+                NSManagedObjectContext *tempContext = [DNDataController temporaryContext];
+                [tempContext performBlock:^{
+                    DNRichMessage *richMessage = (DNRichMessage *) [tempContext existingObjectWithID:objectID error:nil];
+                    if (richMessage) {
+                        //Present as pop over:
+                        DNLocalEvent *popUpMessageEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageNotificationTapped publisher:NSStringFromClass([mainController class]) timeStamp:[NSDate date] data:richMessage];
+                        [[DNDonkyCore sharedInstance] publishEvent:popUpMessageEvent];
+                    }
+                }];
             }
         }
     };
@@ -96,23 +117,23 @@ static NSString *const DRIMessageID = @"messageID";
 
     [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 
-        DNServerNotification *notification = obj;
+        DNRichMessage *richMessage = obj;
 
         [backgroundNotifications enumerateObjectsUsingBlock:^(id obj2, NSUInteger idx2, BOOL *stop2) {
             NSString *notificationID = obj2;
-            if ([notificationID isEqualToString:[notification serverNotificationID]]) {
+            if ([notificationID isEqualToString:[richMessage notificationID]]) {
                 duplicate = YES;
                 *stop = YES;
             }
         }];
 
-        NSDate *expired = [NSDate donkyDateFromServer:[notification data][DRIExpiryTimeStamp]];
+        NSDate *expired = [richMessage expiryTimestamp];
 
         BOOL messageExpired = NO;
         if (expired)
             messageExpired = [expired donkyHasDateExpired];
 
-        DRINotification *donkyNotification = [[DRINotification alloc] initWithNotification:notification customBody:[notification data][@"description"]];
+//        DRINotification *donkyNotification = [[DRINotification alloc] initWithNotification:notification customBody:[notification data][@"description"]];
 
         if (!duplicate && !messageExpired) {
 
@@ -163,13 +184,15 @@ static NSString *const DRIMessageID = @"messageID";
             }
 
             if (!inboxShown) {
-                DCUIBannerView *bannerView = [[DCUIBannerView alloc] initWithSenderDisplayName:[donkyNotification senderDisplayName]
-                                                                                          body:[donkyNotification body]
-                                                                               messageSentTime:[donkyNotification sentTimeStamp]
-                                                                                 avatarAssetID:[donkyNotification avatarAssetID]
+                DCUIBannerView *bannerView = [[DCUIBannerView alloc] initWithSenderDisplayName:[richMessage senderDisplayName]
+                                                                                          body:[richMessage body]
+                                                                               messageSentTime:[richMessage sentTimestamp]
+                                                                                 avatarAssetID:[richMessage avatarAssetID]
                                                                               notificationType:kDNDonkyNotificationRichMessage
-                                                                                     messageID:[donkyNotification messageID]];
-                [notificationController presentNotification:bannerView];
+                                                                                     messageID:[richMessage messageID]];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [notificationController presentNotification:bannerView];
+                });
 
                 //If we are on simple push, we add the other gestures:
                 if (![bannerView buttonView]) {
@@ -179,7 +202,6 @@ static NSString *const DRIMessageID = @"messageID";
         }
         else if (duplicate) {
             if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-                DNRichMessage *richMessage = [richLogicController richMessageWithID:[donkyNotification messageID]];
                 //Present as pop over:
                 DNLocalEvent *popUpMessageEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageNotificationTapped
                                                                                 publisher:NSStringFromClass([DRIMainControllerHelper class])

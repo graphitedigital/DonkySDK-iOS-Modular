@@ -2,13 +2,13 @@
 //  DNSequencingAccountController.h
 //  DonkySequencing
 //
-//  Created by Chris Watson on 10/08/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 10/08/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DNAccountController.h"
 
-@interface DNSequencingAccountController : DNAccountController
+@interface DNSequencingAccountController : NSObject
 
 /*!
  Method to update a users additional properties. NOTE: This is destructive, if you don't pass in all existing properties as well as
@@ -46,7 +46,9 @@
 
  @since 2.5.4.3
  */
-+ (void)updateUserDetails:(DNUserDetails *)userDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
++ (void)updateUserDetails:(DNUserDetails *)userDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock) failureBlock __attribute__((deprecated("Please use updateUserDetails:automaticallyHandleUserIDTaken:success:failure - 2.6.5.4")));
+
++ (void)updateUserDetails:(DNUserDetails *)userDetails automaticallyHandleUserIDTaken:(BOOL)autoHandleIDTaken success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock) failureBlock;
 
 /*!
  Method to update multiple parts of the users and device details at once.

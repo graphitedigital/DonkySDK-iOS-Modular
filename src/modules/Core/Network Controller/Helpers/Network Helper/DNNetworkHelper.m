@@ -2,7 +2,7 @@
 //  DNNetworkHelper.m
 //  Core Container
 //
-//  Created by Chris Watson on 17/03/2015.
+//  Created by Donky Networks on 17/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 #import "DNNetworkHelper.h"
@@ -47,10 +47,6 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
     }
 }
 
-+ (BOOL)isCallNecessary:(DNRequest *)request {
-    return !([[request route] isEqualToString:kDNNetworkRegistration] && [DNAccountController isRegistered]);
-}
-
 + (BOOL)duplicateUpdateDetailsCall:(DNRequest *)request exchangeRequest:(NSMutableArray *)exchangeRequests {
 
     if (![[request route] isEqualToString:kDNNetworkRegistrationClient] && ![[request route] isEqualToString:kDNNetworkRegistrationDevice] && ![[request route] isEqualToString:kDNNetworkRegistrationDeviceUser]) {
@@ -60,7 +56,10 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
     __block BOOL duplicate = NO;
     [exchangeRequests enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSURLSessionTask *task = obj;
-        if (([[task taskDescription] isEqualToString:kDNNetworkRegistrationClient] && [task state] == NSURLSessionTaskStateRunning) || ([[task taskDescription] isEqualToString:kDNNetworkRegistrationDevice] && [task state] == NSURLSessionTaskStateRunning) || ([[task taskDescription] isEqualToString:kDNNetworkRegistrationDeviceUser] && [task state] == NSURLSessionTaskStateRunning)) {
+        if (([[task taskDescription] isEqualToString:kDNNetworkRegistrationClient] && [task state] == NSURLSessionTaskStateRunning) ||
+                ([[task taskDescription] isEqualToString:kDNNetworkRegistrationDevice] && [task state] == NSURLSessionTaskStateRunning) ||
+                ([[task taskDescription] isEqualToString:kDNNetworkRegistrationDeviceUser] && [task state] == NSURLSessionTaskStateRunning) ||
+                ([[task taskDescription] isEqualToString:kDNNetworkUserTags] && [task state] == NSURLSessionTaskStateRunning)) {
             duplicate = YES;
             *stop = YES;
         }
@@ -111,22 +110,24 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
     }
 }
 
-+ (void)queueClientNotifications:(NSArray *)notifications pendingNotifications:(NSMutableArray *)pendingNotifications {
++ (NSArray *)queueClientNotifications:(NSArray *)notifications pendingNotifications:(NSMutableArray *)pendingNotifications {
     //Enumerate through the array:
-    [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (![obj isKindOfClass:[DNClientNotification class]]) {
-            DNErrorLog(@"Whoops, something has gone wrong, expected class DNClientNotification. Got %@", NSStringFromClass([obj class]));
-        }
-        else {
-            @synchronized (pendingNotifications) {
-                if (![pendingNotifications containsObject:obj]) {
-                    [pendingNotifications addObject:obj];
+    @synchronized(notifications) {
+        [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if (![obj isKindOfClass:[DNClientNotification class]]) {
+                DNErrorLog(@"Whoops, something has gone wrong, expected class DNClientNotification. Got %@", NSStringFromClass([obj class]));
+            }
+            else {
+                @synchronized (pendingNotifications) {
+                    if (![pendingNotifications containsObject:obj]) {
+                        [pendingNotifications addObject:obj];
+                    }
                 }
             }
-        }
-    }];
-
-    [DNNetworkDataHelper saveClientNotificationsToStore:notifications];
+        }];
+        [DNNetworkDataHelper saveClientNotificationsToStore:notifications];
+        return pendingNotifications;
+    }
 }
 
 + (NSError *)queueContentNotifications:(NSArray *)notifications pendingNotifications:(NSMutableArray *)pendingNotifications{
@@ -185,17 +186,16 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
             //We need the notification id:
             NSString *serverID = [DNNetworkHelper failedClientNotificationServerID:obj];
             if (serverID) {
-                [DNNetworkDataHelper deleteNotificationForID:serverID withTempContext:YES];
+                [DNNetworkDataHelper deleteNotificationForID:serverID];
             }
         }];
-
 
         //Lets process the response
         __block NSMutableDictionary *responseBatches = [[NSMutableDictionary alloc] init];
 
         [[response serverNotifications] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             DNServerNotification *serverNotification = [[DNServerNotification alloc] initWithNotification:obj];
-            NSMutableArray *batch = responseBatches[[serverNotification notificationType]] ? : [[NSMutableArray alloc] init];
+            NSMutableArray *batch = responseBatches[[serverNotification notificationType]] ?: [[NSMutableArray alloc] init];
             if (![serverNotification serverNotificationID]) {
                 DNErrorLog(@"Cannot save notification %@ - No ID.", serverNotification);
             }
@@ -213,14 +213,12 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
         //The network sends a maximum of 100 notifications at a time, in this case we need to perform the request again before completing:
         if ([response moreNotificationsAvailable] || [pendingClientNotifications count] || [pendingContentNotifications count]) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[DNDataController sharedInstance] saveAllData];
                 [[DNNetworkController sharedInstance] synchroniseSuccess:successBlock failure:failureBlock];
             });
         }
         else {
             if (successBlock) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [[DNDataController sharedInstance] saveAllData];
                     if (successBlock) {
                         successBlock(task, nil); //We don't return the response data as the core library handles this.
                     }

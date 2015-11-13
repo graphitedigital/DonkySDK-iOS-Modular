@@ -2,8 +2,8 @@
 //  DSOperation.m
 //  DonkySequencing
 //
-//  Created by Chris Watson on 11/08/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 11/08/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DSOperation.h"
@@ -27,12 +27,10 @@ typedef enum {
 @property (nonatomic, strong) DNUserDetails *userDetails;
 @property (nonatomic, strong) DNDeviceDetails *deviceDetails;
 @property (nonatomic) DSSequenceCalls callType;
+@property (nonatomic, getter=shouldAutoHandle) BOOL autoHandle;
 @end
 
 @implementation DSOperation
-
-@synthesize finished  = _finished;
-@synthesize executing = _executing;
 
 #pragma Configure basic operation
 
@@ -75,10 +73,11 @@ typedef enum {
     return self;
 }
 
-- (instancetype)initWithUserDetails:(DNUserDetails *)userDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
+- (instancetype)initWithUserDetails:(DNUserDetails *)userDetails autoHandleUserIDTaken:(BOOL)autoHandle failure:(DNNetworkFailureBlock)failureBlock success:(DNNetworkSuccessBlock)successBlock {
     self = [self init];
     
     if (self) {
+        [self setAutoHandle:autoHandle];
         [self setUserDetails:userDetails];
         [self setSuccessBlock:successBlock];
         [self setFailureBlock:failureBlock];
@@ -158,7 +157,7 @@ typedef enum {
         }
             break;
         case DSUserDetails: {
-            [DNAccountController updateUserDetails:[self userDetails] success:^(NSURLSessionDataTask *task, id responseData) {
+            [DNAccountController updateUserDetails:[self userDetails] automaticallyHandleUserIDTaken:[self shouldAutoHandle] success:^(NSURLSessionDataTask *task, id responseData) {
                 [self executeCompletion:task responseData:responseData];
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 [self executeFailure:task error:error];
@@ -208,8 +207,8 @@ typedef enum {
 - (void)setExecuting:(BOOL)executing
 {
     [self willChangeValueForKey:@"isExecuting"];
-    if (_executing != executing) {
-        _executing = executing;
+    if ([self isExecuting] != executing) {
+        [self setExecuting:executing];
     }
     [self didChangeValueForKey:@"isExecuting"];
 }
@@ -217,8 +216,8 @@ typedef enum {
 - (void)setFinished:(BOOL)finished
 {
     [self willChangeValueForKey:@"isFinished"];
-    if (_finished != finished) {
-        _finished = finished;
+    if ([self isFinished] != finished) {
+        [self setFinished:finished];
     }
     [self didChangeValueForKey:@"isFinished"];
 }

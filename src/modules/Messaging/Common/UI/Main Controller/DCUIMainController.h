@@ -2,7 +2,7 @@
 //  DCUIMainController.h
 //  PushUI
 //
-//  Created by Chris Watson on 11/04/2015.
+//  Created by Donky Networks on 11/04/2015.
 //  Copyright (c) 2015 Dynmark International Ltd. All rights reserved.
 //
 
@@ -12,7 +12,7 @@
 @interface DCUIMainController : NSObject
 
 /*!
- Helper method to get the size of a frting.
+ Helper method to get the size of a string.
  
  @param text      the string for which the size is requested.
  @param font      the font that the text is in.
@@ -24,6 +24,19 @@
  @since 2.0.0.0
  */
 + (CGSize)sizeForString:(NSString *)text font:(UIFont *)font maxHeight:(CGFloat)maxHeight maxWidth:(CGFloat)maxWidth;
+
+/*!
+ Helper method to get the size of an attributed string.
+ 
+ @param text      the string
+ @param maxHeight the maximum height allowed.
+ @param maxWidth  the maximum width allowed.
+ 
+ @return the size of the string given the supplied max height, width and string content.
+ 
+ @since 2.6.5.4
+ */
++ (CGSize)sizeForAttributedString:(NSAttributedString *)text maxHeight:(CGFloat)maxHeight maxWidth:(CGFloat)maxWidth;
 
 /*!
  Helper method to create an attributed string with a chosen selection of characters hihglighted in a different font/colour.

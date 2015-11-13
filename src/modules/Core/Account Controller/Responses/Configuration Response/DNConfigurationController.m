@@ -2,9 +2,14 @@
 //  DNConfigurationController.m
 //  Core Container
 //
-//  Created by Chris Watson on 20/03/2015.
+//  Created by Donky Networks on 20/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
+
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
 
 #import "DNConfigurationController.h"
 #import "DNUserDefaultsHelper.h"
@@ -18,6 +23,7 @@ static NSString *const DNConfiguration = @"ConfigurationItems";
 static NSString *const DNButtonValues = @"buttonValues";
 static NSString *const DNMaximumContentBytes = @"CustomContentMaxSizeBytes";
 static NSString *const DNCRichMessageAvailabilityDays = @"RichMessageAvailabilityDays";
+static NSString *const DNMaximumSignalRBytes = @"SignalRMaxMessageSizeBytes";
 
 @implementation DNConfigurationController
 
@@ -93,21 +99,21 @@ static NSString *const DNCRichMessageAvailabilityDays = @"RichMessageAvailabilit
 + (UIMutableUserNotificationCategory *)categoryWithFirstButtonTitle:(NSString *)firstButtonTitle firstButtonIdentifier:(NSString *)firstButtonIdentifier firstButtonIsForground:(BOOL)firstButtonForeground secondButtonTitle:(NSString *)secondButtonTitle secondButtonIdentifier:(NSString *)secondButtonIdentifier secondButtonIsForeground:(BOOL)secondButtonForeground andCategoryIdentifier:(NSString *)categoryIdentifier {
 
     UIMutableUserNotificationAction *firstAction = [[UIMutableUserNotificationAction alloc] init];
-    firstAction.title = firstButtonTitle;
-    firstAction.identifier = firstButtonIdentifier;
-    firstAction.activationMode = firstButtonForeground ? UIUserNotificationActivationModeForeground : UIUserNotificationActivationModeBackground;
-    firstAction.destructive = NO;
-    firstAction.authenticationRequired = NO;
+    [firstAction setTitle:firstButtonTitle];
+    [firstAction setIdentifier:firstButtonIdentifier];
+    [firstAction setActivationMode:firstButtonForeground ? UIUserNotificationActivationModeForeground : UIUserNotificationActivationModeBackground];
+    [firstAction setDestructive:NO];
+    [firstAction setAuthenticationRequired:NO];
 
     UIMutableUserNotificationAction *secondAction = [[UIMutableUserNotificationAction alloc] init];
-    secondAction.title = secondButtonTitle;
-    secondAction.identifier = secondButtonIdentifier;
-    secondAction.activationMode = secondButtonForeground ? UIUserNotificationActivationModeForeground : UIUserNotificationActivationModeBackground;
-    secondAction.destructive = NO;
-    secondAction.authenticationRequired = NO;
+    [secondAction setTitle:secondButtonTitle];
+    [secondAction setIdentifier:secondButtonIdentifier];
+    [secondAction setActivationMode:secondButtonForeground ? UIUserNotificationActivationModeForeground : UIUserNotificationActivationModeBackground];
+    [secondAction setDestructive:NO];
+    [secondAction setAuthenticationRequired:NO];
 
     UIMutableUserNotificationCategory *notificationCategory = [[UIMutableUserNotificationCategory alloc] init];
-    notificationCategory.identifier = categoryIdentifier;
+    [notificationCategory setIdentifier:categoryIdentifier];
     [notificationCategory setActions:@[secondAction, firstAction] forContext:UIUserNotificationActionContextDefault];
     [notificationCategory setActions:@[secondAction, firstAction] forContext:UIUserNotificationActionContextMinimal];
 
@@ -127,6 +133,10 @@ static NSString *const DNCRichMessageAvailabilityDays = @"RichMessageAvailabilit
 
 + (CGFloat)maximumContentByteSize {
     return [[DNConfigurationController objectFromConfiguration:DNMaximumContentBytes] floatValue];
+}
+
++ (CGFloat)maximumSignalRByteSize {
+    return [[DNConfigurationController objectFromConfiguration:DNMaximumSignalRBytes] floatValue];
 }
 
 + (NSInteger)richMessageAvailabilityDays {

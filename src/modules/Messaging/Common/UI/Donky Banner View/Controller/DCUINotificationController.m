@@ -2,8 +2,8 @@
 //  DCUINotificationController.m
 //  RichInbox
 //
-//  Created by Chris Watson on 16/06/2015.
-//  Copyright © 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 16/06/2015.
+//  Copyright © 2015 Donky Networks. All rights reserved.
 //
 
 #import "DCUINotificationController.h"
@@ -58,7 +58,24 @@ static CGFloat const DCUINotificationBannerDismissTime = 10.0f;
             [self setQueuedNotifications:[[NSMutableArray alloc] init]];
         }
 
-        [[self queuedNotifications] addObject:notificationBannerView];
+        __block BOOL duplicate = NO;
+        [[self queuedNotifications] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            DCUIBannerView *bannerView = obj;
+            if ([[bannerView messageID] isEqualToString:[[self notificationBannerView] messageID]]) {
+                duplicate = YES;
+                *stop = YES;
+            }
+        }];
+        
+        if (!duplicate) {
+            if ([[notificationBannerView messageID] isEqualToString:[[self notificationBannerView] messageID]]) {
+                duplicate = YES;
+            }
+        }
+        
+        if (!duplicate) {
+            [[self queuedNotifications] addObject:notificationBannerView];
+        }
     }
 }
 
@@ -69,9 +86,8 @@ static CGFloat const DCUINotificationBannerDismissTime = 10.0f;
         [[self notificationBannerView] layoutIfNeeded];
         [[self notificationBannerView] removeConstraint:[self bannerViewHeightConstraint]];
     }
-
-    CGFloat stringHeight = [DCUIMainController sizeForString:[[[self notificationBannerView] messageLabel] text]
-                                                        font:[[[self notificationBannerView] messageLabel] font]
+    
+    CGFloat stringHeight = [DCUIMainController sizeForString:[[[self notificationBannerView] messageLabel] text]font:[[[self notificationBannerView] messageLabel] font]
                                                    maxHeight:CGFLOAT_MAX
                                                     maxWidth:[presentingView frame].size.width - 100].height;
 
@@ -161,6 +177,9 @@ static CGFloat const DCUINotificationBannerDismissTime = 10.0f;
             DCUIBannerView *notification = [[weakSelf queuedNotifications] firstObject];
             [[weakSelf queuedNotifications] removeObject:notification];
             [weakSelf presentNotification:notification];
+            if (![notification buttonView]) {
+                [notification configureGestures];
+            }
         }];
     } else {
         [self dismissNotificationBannerView:^{

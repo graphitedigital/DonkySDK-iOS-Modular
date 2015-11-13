@@ -2,8 +2,8 @@
 //  DRITableViewController.m
 //  RichInbox
 //
-//  Created by Chris Watson on 03/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 03/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DRITableViewController.h"
@@ -21,17 +21,17 @@
 
 @interface DRITableViewController ()
 @property (nonatomic, strong) DRIMessageViewController *detailViewController;
+@property (nonatomic, strong) UIPopoverController *shareItemPopOverController;
 @property (nonatomic, getter=isShowingOptionsView) BOOL showingOptionsView;
-@property(nonatomic, strong) DRIDataController *richInboxDataController;
-@property(nonatomic, strong) NSLayoutConstraint *optionsViewConstraint;
-@property(nonatomic, strong) DRISearchController *searchController;
-@property(nonatomic, getter=hasCloseButton) BOOL closeButton;
-@property(nonatomic, strong) DRIOptionsView *optionsView;
-@property(nonatomic, strong) UIView *noMessagesView;
-@property(nonatomic, strong) UISearchBar *searchBar;
-@property(nonatomic) UIEdgeInsets originalOffset;
-@property(nonatomic, strong) DRUITheme *theme;
-@property(nonatomic, strong) UIPopoverController *shareItemPopOverController;
+@property (nonatomic, strong) DRIDataController *richInboxDataController;
+@property (nonatomic, strong) NSLayoutConstraint *optionsViewConstraint;
+@property (nonatomic, strong) DRISearchController *searchController;
+@property (nonatomic, getter=hasCloseButton) BOOL closeButton;
+@property (nonatomic, strong) DRIOptionsView *optionsView;
+@property (nonatomic, strong) UIView *noMessagesView;
+@property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic) UIEdgeInsets originalOffset;
+@property (nonatomic, strong) DRUITheme *theme;
 @end
 
 @implementation DRITableViewController
@@ -227,8 +227,11 @@
 
     if (![[self tableView] isEditing]) {
        [self setShowingOptionsView:NO];
-        [self toggleOptionsView];
         [self createRefreshController];
+
+        if ([self optionsView]) {
+            [self toggleOptionsView];
+        }
     }
     else {
         [self setRefreshControl:nil];
@@ -261,7 +264,7 @@
                 pinAttribute:NSLayoutAttributeBottom
        toSameAttributeOfItem:[self tableView]]];
         [[[self tableView] superview] layoutIfNeeded];
-        [[self tableView] setContentInset:UIEdgeInsetsMake(self.tableView.contentInset.top, 0, self.tableView.isEditing && [[[self tableView] indexPathsForSelectedRows] count] ? 50 : self.originalOffset.bottom, 0)];
+        [[self tableView] setContentInset:UIEdgeInsetsMake([[self tableView] contentInset].top, 0, [[self tableView] isEditing] && [[[self tableView] indexPathsForSelectedRows] count] ? 50 : [self originalOffset].bottom, 0)];
     } completion:^(BOOL finished) {
         if (![self isShowingOptionsView]) {
             [[self optionsView] removeFromSuperview];
@@ -284,7 +287,7 @@
 
     [[self navigationItem] setLeftBarButtonItem:leftBarButtonItem];
 
-    if (allSelected && !self.optionsView) {
+    if (allSelected && ![self optionsView]) {
         [self setShowingOptionsView:YES];
         [self toggleOptionsView];
         [[self optionsView] updateDelete:allSelected];
@@ -298,7 +301,7 @@
 - (void)updateTableViewUI {
 
     if (![[self tableView] isEditing]) {
-        [[self navigationItem] setRightBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"donky_select_all_icon.png"]
+        [[self navigationItem] setRightBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[[self theme] imageForKey:kDRUIInboxSelectAllNavigationButtonImage]
                                                                                       style:UIBarButtonItemStylePlain
                                                                                      target:self
                                                                                      action:@selector(enterEditMode)]];
@@ -343,6 +346,8 @@
         [self setNoMessagesView:nil];
         [[[self tableView] tableHeaderView] setHidden:NO];
     }
+    
+    [self updateTabBarCount];
 }
 
 #pragma mark -
@@ -375,7 +380,7 @@
     DRIMessageViewController *richMessageViewController = nil;
 
     //If there is no navigation controller, then we present 'modally':
-    if (!self.navigationController) {
+    if (![self navigationController]) {
         richMessageViewController =  [[DRIMessageViewController alloc] initWithRichMessage:richMessage];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:richMessageViewController];
         [richMessageViewController addBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:richMessageViewController action:NSSelectorFromString(@"closeView:")] buttonSide:DMVLeftSide];
@@ -385,7 +390,7 @@
 
     //Load rich view:
     if ([DNSystemHelpers isDeviceIPad] || [DNSystemHelpers isDeviceSixPlusLandscape]) {
-        [self.detailViewController setDetailItem:richMessage];
+        [[self detailViewController] setDetailItem:richMessage];
     }
     else {
         richMessageViewController =  [[DRIMessageViewController alloc] initWithRichMessage:richMessage];
@@ -393,6 +398,8 @@
     }
 
     [richMessageViewController setDelegate:self];
+    
+    [self updateTabBarCount];
 }
 
 - (void)endRefreshingWithSuccess:(BOOL)success {

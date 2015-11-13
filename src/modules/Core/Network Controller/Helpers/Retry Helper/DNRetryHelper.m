@@ -2,7 +2,7 @@
 //  DNRetryHelper.m
 //  Core Container
 //
-//  Created by Chris Watson on 21/03/2015.
+//  Created by Donky Networks on 21/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -60,18 +60,21 @@ static NSString *const DNRetryPolicy = @"DeviceCommsConnectionRetrySchedule";
         [[self retriedRequests] addObject:retryObject];
     }
 
-    if (retryObject)
+    if (retryObject) {
         [self applyRetry:retryObject];
+    }
 }
 
 - (void)applyRetry:(DNRetryObject *)object {
     //Get retry string:
     NSString *retryString = nil;
     NSUInteger index = [object sectionRetries];
-    if (index < 10)
+    if (index < 10) {
         retryString = [self retryComponents][index];
-    else
+    }
+    else {
         retryString = [[self retryComponents] lastObject];
+    }
 
     if (retryString) {
         NSArray *retryComponents = [retryString componentsSeparatedByString:@","];
@@ -83,7 +86,7 @@ static NSString *const DNRetryPolicy = @"DeviceCommsConnectionRetrySchedule";
             return;
         }
 
-        DNInfoLog(@"request failed %@...Applying retry policy %@", [[object request] route], retryString);
+        DNInfoLog(@"request failed %@... Applying retry policy %@", [[object request] route], retryString);
         NSInteger retryTime = [[retryComponents firstObject] integerValue];
         [self performSelector:@selector(retryEvent:) withObject:object afterDelay:retryTime];
 

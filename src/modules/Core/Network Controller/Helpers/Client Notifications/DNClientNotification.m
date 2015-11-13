@@ -2,7 +2,7 @@
 //  DNClientNotification.m
 //  Core Container
 //
-//  Created by Chris Watson on 19/03/2015.
+//  Created by Donky Networks on 19/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -19,6 +19,7 @@ static NSString *const DNType = @"type";
 static NSString *const DNCustomNotificationType = @"customNotificationType";
 static NSString *const DNCustomType = @"customType";
 static NSString *const DNCustom = @"Custom";
+static NSString *const DNAcknowledgement = @"Acknowledgement";
 
 @interface DNClientNotification ()
 @property(nonatomic, readwrite) NSString *notificationID;
@@ -33,6 +34,7 @@ static NSString *const DNCustom = @"Custom";
     
     if (self) {
 
+        [self setNotificationType:DNAcknowledgement];
         [self setNotificationID:[notification serverNotificationID]];
         [self setSentTime:[notification createdOn]];
         [self setSendTries:@(0)];

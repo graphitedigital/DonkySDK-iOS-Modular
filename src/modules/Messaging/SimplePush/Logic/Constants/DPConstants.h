@@ -2,13 +2,16 @@
 //  DKConstants.h
 //  Logging
 //
-//  Created by Chris Watson on 13/02/2015.
+//  Created by Donky Networks on 13/02/2015.
 //  Copyright (c) 2015 Dynmark International Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
 #import <UIKit/UIKit.h>
+
+//Block for getting deep link
+typedef void (^DPInteractiveDeepLink) (NSString *buttonAction);
 
 /*!
  A full list of the Donky SDK constants. They are broken down into sections with the use

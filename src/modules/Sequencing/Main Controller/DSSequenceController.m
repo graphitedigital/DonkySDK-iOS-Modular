@@ -2,8 +2,8 @@
 //  DSSequenceController.m
 //  DonkySequencing
 //
-//  Created by Chris Watson on 10/08/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 10/08/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DSSequenceController.h"
@@ -51,8 +51,8 @@
     [self addOperation:blockOperation];
 }
 
-- (void)updateUserDetails:(DNUserDetails *)userDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
-    DSOperation *blockOperation = [[DSOperation alloc] initWithUserDetails:userDetails success:successBlock failure:failureBlock];
+- (void)updateUserDetails:(DNUserDetails *)userDetails automaticallyHandleUserIDTaken:(BOOL)autoHandleIDTaken success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
+    DSOperation *blockOperation = [[DSOperation alloc] initWithUserDetails:userDetails autoHandleUserIDTaken:autoHandleIDTaken failure:failureBlock success:successBlock];
     [self addOperation:blockOperation];
 }
 

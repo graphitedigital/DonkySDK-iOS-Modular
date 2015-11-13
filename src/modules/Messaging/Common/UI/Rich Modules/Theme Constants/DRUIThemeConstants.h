@@ -2,8 +2,8 @@
 //  DRUIThemeConstants.h
 //  RichInbox
 //
-//  Created by Chris Watson on 05/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 05/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -273,6 +273,53 @@ extern NSString * const kDRUInboxCellAvatarBorderColour;
  @since 2.2.2.7
  */
 extern NSString * const kDRUIInboxRefreshControlTintColour;
+
+/*!
+ The image for an unread rich message, this is used if there is no avatar and as a place
+ holder while the avatar is downloade.d
+ 
+ @since 2.6.5.4
+ */
+extern NSString * const kDRUIInboxDefaultAvatarClosedImage;
+
+/*!
+ The read avatar for rich messages, used if no avatar is avaible or while the avatar is 
+ being downloaded.
+ 
+ @since 2.6.5.4
+ */
+extern NSString * const kDRUIInboxDefaultAvatarOpenImage;
+
+/*!
+ The image used for the tab bar, if the rich inbox views are inside a tab bar controller.
+ 
+ @since 2.6.5.4
+ */
+extern NSString * const kDRUIInboxIconImage;
+
+/*!
+ The image used for a selected tab bar icon, if the inbox is inside a tab bar controller.
+ 
+ @since 2.6.5.4
+ */
+extern NSString * const kDRUIInboxSelectedIconImage;
+
+/*!
+ The more button that is revealed as the user swipes the inbox cell to the left.
+ 
+ @since 2.6.5.4
+ */
+extern NSString * const kDRUIInboxMoreButtonImage;
+
+/*!
+ The button in the navigation bar that allows the user to enter edit mode
+
+ @since 2.6.5.4
+ */
+extern NSString * const kDRUIInboxSelectAllNavigationButtonImage;
+
+
+
 
 
 

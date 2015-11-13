@@ -2,7 +2,7 @@
 //  DNUserDetails.h
 //  Core Container
 //
-//  Created by Chris Watson on 17/03/2015.
+//  Created by Donky Networks on 17/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -126,26 +126,36 @@
 
 /*!
  PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ 
+ @warning Private, please do not use
  */
 - (instancetype)initWithUserID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)emailAddress mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSMutableArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties anonymous:(BOOL)isAnonymous;
 
 /*!
-  PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ 
+ @warning Private, please do not use
  */
 - (NSMutableDictionary *)parameters;
 
 /*!
-  PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ 
+ @warning Private, please do not use
  */
 - (instancetype)initWithDeviceUser:(DNDeviceUser *) deviceUser;
 
 /*!
-  PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+
+ @warning Private, please do not use
  */
 - (NSMutableArray *)tagsForNetwork;
 
 /*!
-  PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ 
+ @warning Private, please do not use
  */
 - (void)saveUserTags:(NSMutableArray *) tags;
 

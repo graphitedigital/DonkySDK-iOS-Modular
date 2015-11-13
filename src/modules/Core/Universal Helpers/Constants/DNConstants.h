@@ -1,8 +1,8 @@
 //
-//  DKConstants.h
+//  DNConstants.h
 //  Logging
 //
-//  Created by Chris Watson on 13/02/2015.
+//  Created by Donky Networks on 13/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -97,6 +97,47 @@ extern NSString * const kDNNetworkSendDebugLog;
  */
 extern NSString * const kDNNetworkUserTags;
 
+/*!
+ Check whether a supplied user is a valid user on the app space.
+ 
+ @since 2.6.5.4
+ */
+extern NSString * const kDNNetworkIsValidPlatformUser;
+
+/*!
+ Check whether a supplied bunch of phone numbers or email addresses or user ids are valid contacts on the network.
+ 
+ @since 2.6.5.4
+ */
+extern NSString * const kDNNetworkSearchUsers;
+
+//
+extern NSString * const kDNNetworkGetActiveRegions;
+
+//
+extern NSString * const kDNNetworkGetActiveTriggers;
+
+//
+extern NSString * const kDNNetworkUploadAsset;
+
+#pragma mark -
+#pragma mark - Donky Module Geo Regions / Triggers
+
+/*!
+ 
+ Get ALL the currently active Regions.
+ 
+ @since 2.?.?.?
+ */
+extern NSString * const kDNNetworkGetActiveRegions;
+
+/*!
+ 
+ Get ALL the currently active Triggers.
+ 
+ @since 2.?.?.?
+ */
+extern NSString * const kDNNetworkGetActiveTriggers;
 
 #pragma mark -
 #pragma mark - Donky Notification Types
@@ -130,6 +171,48 @@ extern NSString * const kDNDonkyNotificationRichMessage;
  @since 2.0.1.0
  */
 extern NSString * const kDNDonkyNotificationNewDeviceMessage;
+
+/*!
+ Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound Chat Messages.
+ 
+ @since 2.6.5.4
+ */
+extern NSString * const kDNDonkyNotificationChatMessage;
+
+/*!
+ Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound Chat Message Delivered notifications.
+ 
+ @since 2.6.5.4
+ */
+extern NSString * const kDNDonkyNotificationChatMessageDelivered;
+
+/*!
+ Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound Chat Message Sent notifications.
+ 
+ @since 2.6.5.4
+ */
+extern NSString * const kDNDonkyNotificationChatMessageSent;
+
+/*!
+ Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound Chat Messages read notifications.
+ 
+ @since 2.6.5.4
+ */
+extern NSString * const kDNDonkyNotificationChatMessageRead;
+
+/*!
+ Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound Chat Message rejected notifications.
+ 
+ @since 2.6.5.4
+ */
+extern NSString * const kDNDonkyNotificationChatMessageRejected;
+
+/*!
+ Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound User is typing notifications.
+ 
+ @since 2.6.5.4
+ */
+extern NSString * const kDNDonkyNotificationUserIsTyping;
 
 #pragma mark -
 #pragma mark - Donky Event Types
@@ -228,6 +311,13 @@ extern NSString * const kDNDonkyEventBackgroundNotificationReceived;
  */
 extern NSString * const kDNDonkySetBadgeCount;
 
+/*!
+ Subscribe to this event to receive notifications when the users auth token as been refreshed.
+ 
+ @since 2.6.5.4
+ */
+extern NSString * const kDNDonkyEventTokenRefreshed;
+
 #pragma mark -
 #pragma mark - Donky Config Items
 
@@ -312,6 +402,14 @@ extern CGFloat const kDonkyLogFileSizeLimit;
 
 //
 extern NSString * const kDNTempDirectory;
+
+/*!
+ The maximum number of chat messages that the SDK will store this is controlled by a configuration
+ item on the network side, this const serves as a default only.
+
+ @since 2.6.5.4
+ */
+extern NSInteger const kDonkyMaxNumberOfSavedChatMessages;
 
 #pragma mark -
 #pragma mark - Donky Notification Keys

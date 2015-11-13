@@ -2,8 +2,8 @@
 //  DRLFetchedResultsController.m
 //  RichInbox
 //
-//  Created by Chris Watson on 24/07/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 24/07/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DRLFetchedResultsController.h"
@@ -11,6 +11,7 @@
 #import "DNDataController.h"
 #import "NSManagedObject+DNHelper.h"
 #import "DNSystemHelpers.h"
+#import "DNLoggingController.h"
 
 @interface DRLFetchedResultsController ()
 @property(nonatomic, strong) UITableView *tableView;
@@ -38,7 +39,7 @@
         [request setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sentTimestamp" ascending:NO]]];
 
         if ([self isSearching]) {
-            [request setPredicate:[NSPredicate predicateWithFormat:@"messageDescription CONTAINS[cd] %@ || senderDisplayName CONTAINS[cd] %@", self.searchString, self.searchString]];
+            [request setPredicate:[NSPredicate predicateWithFormat:@"messageDescription CONTAINS[cd] %@ || senderDisplayName CONTAINS[cd] %@", [self searchString], [self searchString]]];
         }
 
         _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[DNDataController sharedInstance] mainContext] sectionNameKeyPath:nil cacheName:nil];
@@ -46,7 +47,7 @@
 
         NSError *error;
         if (![_fetchedResultsController performFetch:&error]) {
-            NSLog(@"Problem fetching comments for request: %@\nError: %@", request, [error localizedDescription]);
+            DNErrorLog(@"Problem fetching comments for request: %@\nError: %@", request, [error localizedDescription]);
         }
     }
 
@@ -65,7 +66,7 @@
     switch(type) {
 
         case NSFetchedResultsChangeInsert: {
-            [[self tableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
+            [[self tableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             if ([[self delegate] respondsToSelector:@selector(insertRowsAtIndexPaths:)]) {
                 [[self delegate] insertRowsAtIndexPaths:@[newIndexPath]];
             }

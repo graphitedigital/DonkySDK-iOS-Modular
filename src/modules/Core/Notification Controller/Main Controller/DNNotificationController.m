@@ -2,7 +2,7 @@
 //  DNNotificationController.m
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 16/02/2015.
+//  Created by Donky Networks on 16/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -20,11 +20,14 @@
 #import "NSMutableDictionary+DNDictionary.h"
 #import "DNErrorController.h"
 #import "DNDonkyNetworkDetails.h"
+#import "DNDataController.h"
+#import "UIViewController+DNRootViewController.h"
 
 static NSString *const DNEventInteractivePushData = @"DonkyEventInteractivePushData";
 static NSString *const DPPushNotificationID = @"notificationId";
 static NSString *const DNInteractionResult = @"InteractionResult";
 static NSString *const DNNotificationRichController = @"DRLogicMainController";
+static NSString *const DNNotificationChatController = @"DChatLogicMainController";
 
 @implementation DNNotificationController
 
@@ -41,10 +44,7 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
 
     if ([DNSystemHelpers systemVersionAtLeast:8.0]) {
         NSMutableSet *buttonSets = [DNConfigurationController buttonsAsSets];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings
-                settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge)
-                      categories:buttonSets]];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
+        [DNNotificationController addCategoriesToRemoteNotifications:buttonSets];
     }
 
     else {
@@ -55,44 +55,77 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
     
 }
 
++ (void)addCategoriesToRemoteNotifications:(NSMutableSet *)categories {
+    
+    NSSet *existingCategories = [[[UIApplication sharedApplication] currentUserNotificationSettings] categories];
+    
+    
+    NSMutableSet *newCategories = [[NSMutableSet alloc] initWithSet:existingCategories];
+    
+    [categories enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+        [existingCategories enumerateObjectsUsingBlock:^(id  _Nonnull obj2, BOOL * _Nonnull stop2) {
+            UIMutableUserNotificationCategory *existingCategory = obj2;
+            if ([[existingCategory identifier] isEqualToString:[obj identifier]]) {
+                *stop2 = YES;
+                [newCategories removeObject:obj];
+            }
+        }];
+        [newCategories addObject:obj];
+    }];
+
+    [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings
+                                                                         settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge)
+                                                                         categories:newCategories]];
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    
+}
+
 + (void)registerDeviceToken:(NSData *)token {
-   [DNNotificationController registerDeviceToken:token remoteNotificationSound:nil];
+   [DNNotificationController registerDeviceToken:token remoteNotificationSound:@"Default"];
 }
 
 + (void)registerDeviceToken:(NSData *)token remoteNotificationSound:(NSString *)soundFileName {
+#if TARGET_IPHONE_SIMULATOR
+    DNErrorLog(@"Cannot register for push notifications on simulator");
+    return;
+#else
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSMutableString *hexString = nil;
+        if (token && [DNDonkyNetworkDetails isPushEnabled]) {
+            const unsigned char *dataBuffer = (const unsigned char *) [token bytes];
 
-    NSMutableString *hexString = nil;
-    if (token && [DNDonkyNetworkDetails isPushEnabled]) {
-        const unsigned char *dataBuffer = (const unsigned char *) [token bytes];
+            NSUInteger dataLength = [token length];
+            hexString = [NSMutableString stringWithCapacity:(dataLength * 2)];
 
-        NSUInteger dataLength = [token length];
-        hexString = [NSMutableString stringWithCapacity:(dataLength * 2)];
+            for (int i = 0; i < dataLength; ++i) {
+                [hexString appendString:[NSString stringWithFormat:@"%02lx", (unsigned long) dataBuffer[i]]];
+            }
 
-        for (int i = 0; i < dataLength; ++i) {
-            [hexString appendString:[NSString stringWithFormat:@"%02lx", (unsigned long) dataBuffer[i]]];
+            DNSensitiveLog(@"Uploading device Token: %@...", [NSString stringWithString:hexString]);
         }
 
-        DNInfoLog(@"Uploading device Token: %@...", [NSString stringWithString:hexString]);
-    }
+        DNPushNotificationUpdate *update = [[DNPushNotificationUpdate alloc] initWithMessageAlertSound:soundFileName ? : [DNDonkyNetworkDetails apnsAudio] deviceToken:hexString ? [NSString stringWithString:hexString] : @""];
 
-    DNPushNotificationUpdate *update = [[DNPushNotificationUpdate alloc] initWithMessageAlertSound:soundFileName ? : [DNDonkyNetworkDetails apnsAudio] deviceToken:hexString ? [NSString stringWithString:hexString] : @""];
-
-    [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:YES route:kDNNetworkRegistrationPush httpMethod:hexString ? DNPut : DNDelete parameters:[update parameters] success:^(NSURLSessionDataTask *task, id networkData) {
-        DNInfoLog(@"Registering device token succeeded.");
-        [DNDonkyNetworkDetails saveDeviceToken:hexString ? [NSString stringWithString:hexString] : @""];
-        [DNDonkyNetworkDetails saveAPNSAudio:soundFileName];
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        DNErrorLog(@"Registering device token failed: %@", [error localizedDescription]);
-        if ([token length]) {
-            [DNNotificationController registerDeviceToken:token];
-        }
-    }];
+        [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:YES route:kDNNetworkRegistrationPush httpMethod:hexString ? DNPut : DNDelete parameters:[update parameters] success:^(NSURLSessionDataTask *task, id networkData) {
+            DNInfoLog(@"Registering device token succeeded.");
+            [DNDonkyNetworkDetails saveDeviceToken:hexString ? [NSString stringWithString:hexString] : @""];
+            [DNDonkyNetworkDetails saveAPNSAudio:soundFileName];
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            DNErrorLog(@"Registering device token failed: %@", [error localizedDescription]);
+            if ([token length]) {
+                [DNNotificationController registerDeviceToken:token];
+            }
+        }];
+    });
+#endif
 }
 
 + (void)setRemoteNotificationSoundFile:(NSString *)soundFileName successBlock:(DNNetworkSuccessBlock)success failureBlock:(DNNetworkFailureBlock)failure {
-    
+#if TARGET_IPHONE_SIMULATOR
+    DNErrorLog(@"Cannot register for push notifications on simulator");
+    return;
+#else
     DNPushNotificationUpdate *notificationUpdate = [[DNPushNotificationUpdate alloc] initWithMessageAlertSound:soundFileName deviceToken:[DNDonkyNetworkDetails deviceToken]];
-    
     [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:YES route:kDNNetworkRegistrationPush httpMethod:DNPut parameters:[notificationUpdate parameters] success:^(NSURLSessionDataTask *task, id networkData) {
         DNInfoLog(@"Sound file saved on the network.");
         [DNDonkyNetworkDetails saveAPNSAudio:soundFileName];
@@ -106,6 +139,7 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
             failure(nil, nil);
         }
     }];
+#endif
 }
 
 + (void)enablePush:(BOOL)disable {
@@ -114,62 +148,111 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
 }
 
 + (void)didReceiveNotification:(NSDictionary *)userInfo handleActionIdentifier:(NSString *)identifier completionHandler:(void (^)(NSString *))handler {
-    if (![[DNDonkyCore sharedInstance] serviceForType:DNEventInteractivePushData]) {
-        [[DNDonkyCore sharedInstance] subscribeToLocalEvent:DNEventInteractivePushData handler:^(DNLocalEvent *event) {
-            if ([event isKindOfClass:[DNLocalEvent class]]) {
-                if (handler) {
-                    handler([event data]);
-                }
-            }
-        }];
-        [[DNDonkyCore sharedInstance] registerService:DNEventInteractivePushData instance:self];
-    }
-
-    if (identifier) {
-        NSString *url = [userInfo[@"lbl1"] isEqualToString:identifier] ? userInfo[@"link1"] : userInfo[@"link2"];
-        if (handler) {
-            handler(url);
-        }
-    }
-
-    NSString *notificationID = userInfo[DPPushNotificationID];
-    //Publish background notification event:
-
+    
     BOOL background = [[UIApplication sharedApplication] applicationState] != UIApplicationStateActive;
-
-    [[DNNetworkController sharedInstance] serverNotificationForId:notificationID success:^(NSURLSessionDataTask *task, id responseData) {
-        if (identifier) {
-            DNLocalEvent *interactionResult = [[DNLocalEvent alloc] initWithEventType:DNInteractionResult
-                                                                            publisher:NSStringFromClass([self class])
-                                                                            timeStamp:[NSDate date]
-                                                                                 data:[DNNotificationController reportButtonInteraction:identifier userInfo:responseData]];
-            [[DNDonkyCore sharedInstance] publishEvent:interactionResult];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        if (![[DNDonkyCore sharedInstance] serviceForType:DNEventInteractivePushData]) {
+            [[DNDonkyCore sharedInstance] subscribeToLocalEvent:DNEventInteractivePushData handler:^(DNLocalEvent *event) {
+                if ([event isKindOfClass:[DNLocalEvent class]]) {
+                    if (handler) {
+                        handler([event data]);
+                    }
+                }
+            }];
+            [[DNDonkyCore sharedInstance] registerService:DNEventInteractivePushData instance:self];
         }
+
+        if (identifier) {
+            NSString *url = [userInfo[@"lbl1"] isEqualToString:identifier] ? userInfo[@"link1"] : userInfo[@"link2"];
+            if (handler) {
+                handler(url);
+            }
+        }
+
+        NSString *notificationID = userInfo[DPPushNotificationID];
+        //Publish background notification event:
+
         if (background) {
+            
+            NSString * pushNotificationId = [NSString stringWithFormat:@"com.donky.push.%@", notificationID];
+            [[NSUserDefaults standardUserDefaults] setObject:notificationID forKey:pushNotificationId];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
             DNLocalEvent *backgroundNotificationEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventBackgroundNotificationReceived
                                                                                       publisher:NSStringFromClass([self class])
                                                                                       timeStamp:[NSDate date]
                                                                                            data:@{@"NotificationID" : notificationID}];
             [[DNDonkyCore sharedInstance] publishEvent:backgroundNotificationEvent];
-            [DNNotificationController loadNotificationMessage:responseData notificationID:nil];
         }
 
-        if (handler) {
-            handler(nil);
-        }
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        if (handler) {
-            handler(nil);
-        }
-    }];
+        [[DNNetworkController sharedInstance] serverNotificationForId:notificationID success:^(NSURLSessionDataTask *task, id responseData) {
+            if (identifier) {
+                DNLocalEvent *interactionResult = [[DNLocalEvent alloc] initWithEventType:DNInteractionResult
+                                                                                publisher:NSStringFromClass([self class])
+                                                                                timeStamp:[NSDate date]
+                                                                                     data:[DNNotificationController reportButtonInteraction:identifier
+                                                                                                                                   userInfo:responseData]];
+                [[DNDonkyCore sharedInstance] publishEvent:interactionResult];
+            }
+            
+            if (background) {
+                [DNNotificationController loadNotificationMessage:responseData];
+            }
+
+            if (handler) {
+                handler(nil);
+            }
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            if (handler) {
+                handler(nil);
+            }
+        }];
+    });
 }
 
-+ (void)loadNotificationMessage:(DNServerNotification *)notification notificationID:(NSString *)notificationID {
++ (void)loadNotificationMessage:(DNServerNotification *)notification {
     DNLocalEvent *loadedNotificationEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventNotificationLoaded
                                                              publisher:NSStringFromClass([self class])
                                                              timeStamp:[NSDate date]
-                                                                  data:notificationID ? : notification];
+                                                                  data:notification];
     [[DNDonkyCore sharedInstance] publishEvent:loadedNotificationEvent];
+}
+
++ (void)handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo withResponseInfo:(NSDictionary *)responseInfo completionHandler:(void (^)())completionHandler {
+    
+    if ([identifier isEqualToString:@"DonkyChatMessageReply"]) {
+        
+        NSString *message = responseInfo[UIUserNotificationActionResponseTypedTextKey];
+        NSString *converastionID = userInfo[@"converastionID"];
+        NSArray *users = nil;// userInfo[@"Users"];
+        
+        SEL sendMessage = NSSelectorFromString(@"replyToChatMessageInConverastion:withMessage:toUsers:");
+        id serviceInstance = NSClassFromString(@"DChatUIMainController");
+        IMP imp = [serviceInstance methodForSelector:sendMessage];
+        if ([serviceInstance respondsToSelector:sendMessage]) {
+            void (*func)(id, SEL, NSString *, NSString *, NSArray *) = (void*)imp;
+            func(serviceInstance, sendMessage, converastionID, message, users);
+        }
+        
+        else {
+            DNErrorLog(@"Couldn't load a new chat converastion, DCChatUIMainController class could not be found. Please ensure you have included the Donky-ChatMessage-Inbox module");
+        }
+    }
+    else if ([identifier isEqualToString:@"DonkyChatOpen"]) {
+        
+        NSString *converastionID = userInfo[@"converastionID"];
+        SEL openMessage = NSSelectorFromString(@"openConversationWithID:");
+        id serviceInstance = NSClassFromString(@"DChatUIMainController");
+        IMP imp = [serviceInstance methodForSelector:openMessage];
+        if ([serviceInstance respondsToSelector:openMessage]) {
+            UINavigationController* (*func)(id, SEL, NSString *) = (void*)imp;
+            UINavigationController *conversationView = func(serviceInstance, openMessage, converastionID);
+            if (conversationView) {
+                [[UIViewController applicationRootViewController] presentViewController:conversationView animated:YES completion:nil];
+            }
+        }
+    }
 }
 
 + (NSMutableDictionary *)reportButtonInteraction:(NSString *)identifier userInfo:(DNServerNotification *)notification {
@@ -211,18 +294,29 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
 }
 
 + (void)resetApplicationBadgeCount {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSInteger count = 0;
 
-    NSInteger count = 0;
+        //Calculate unread count:
+        if ([[DNDonkyCore sharedInstance] serviceForType:DNNotificationRichController]) {
+            SEL unreadCount = NSSelectorFromString(@"unreadMessageCount");
 
-    //Calculate unread count:
-    if ([[DNDonkyCore sharedInstance] serviceForType:DNNotificationRichController]) {
-        SEL unreadCount = NSSelectorFromString(@"unreadMessageCount");
+            id serviceInstance = [[DNDonkyCore sharedInstance] serviceForType:DNNotificationRichController];
 
-        id serviceInstance = [[DNDonkyCore sharedInstance] serviceForType:DNNotificationRichController];
+            if ([serviceInstance respondsToSelector:unreadCount]) {
+                count += ((NSInteger (*)(id, SEL))[serviceInstance methodForSelector:unreadCount])(serviceInstance, unreadCount);
+                DNInfoLog(@"Resetting to Master count: %ld", (long)count);
+            }
+        }
 
-        if ([serviceInstance respondsToSelector:unreadCount]) {
-            count += ((NSInteger (*)(id, SEL))[serviceInstance methodForSelector:unreadCount])(serviceInstance, unreadCount);
-            DNInfoLog(@"Resetting to Master count: %ld", (long)count);
+        if ([[DNDonkyCore sharedInstance] serviceForType:DNNotificationChatController]) {
+            SEL unreadCount = NSSelectorFromString(@"unreadMessageCount");
+            id serviceInstance = [[DNDonkyCore sharedInstance] serviceForType:DNNotificationChatController];
+
+            if ([serviceInstance respondsToSelector:unreadCount]) {
+                count += ((NSInteger (*)(id, SEL))[serviceInstance methodForSelector:unreadCount])(serviceInstance, unreadCount);
+                DNInfoLog(@"Resetting to Master count: %ld", (long)count);
+            }
         }
 
         DNLocalEvent *changeBadgeEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkySetBadgeCount
@@ -230,7 +324,7 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
                                                                        timeStamp:[NSDate date]
                                                                             data:@(count)];
         [[DNDonkyCore sharedInstance] publishEvent:changeBadgeEvent];
-    }
+    });
 }
 
 @end

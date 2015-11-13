@@ -2,8 +2,8 @@
 //  DNSequencingAccountController.m
 //  DonkySequencing
 //
-//  Created by Chris Watson on 10/08/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 10/08/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DNSequencingAccountController.h"
@@ -24,7 +24,12 @@
 
 + (void)updateUserDetails:(DNUserDetails *)userDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
     DNInfoLog(@"calling in sequencing controller...");
-    [[DSSequenceController sharedInstance] updateUserDetails:userDetails success:successBlock failure:failureBlock];
+    [DNSequencingAccountController updateUserDetails:userDetails automaticallyHandleUserIDTaken:YES success:successBlock failure:failureBlock];
+}
+
++ (void)updateUserDetails:(DNUserDetails *)userDetails automaticallyHandleUserIDTaken:(BOOL)autoHandleIDTaken success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock) failureBlock {
+    DNInfoLog(@"calling in sequencing controller...");
+    [[DSSequenceController sharedInstance] updateUserDetails:userDetails automaticallyHandleUserIDTaken:autoHandleIDTaken success:successBlock failure:failureBlock];
 }
 
 + (void)updateRegistrationDetails:(DNUserDetails *)userDetails deviceDetails:(DNDeviceDetails *)deviceDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {

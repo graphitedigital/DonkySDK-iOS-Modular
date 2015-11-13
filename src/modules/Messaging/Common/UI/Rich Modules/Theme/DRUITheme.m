@@ -2,8 +2,8 @@
 //  DRUITheme.m
 //  RichInbox
 //
-//  Created by Chris Watson on 05/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 05/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DRUITheme.h"
@@ -95,6 +95,26 @@
 
         //New banner:
         [[self themeFonts] dnSetObject:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline] forKey:kDRUIInboxNewBannerFont];
+
+        [self setThemeImages:[[NSMutableDictionary alloc] init]];
+
+        //Avatar for unread messages
+        [[self themeImages] dnSetObject:[UIImage imageNamed:@"donky_default_avatar_closed.png"] forKey:kDRUIInboxDefaultAvatarClosedImage];
+
+        //Avatar for read messages
+        [[self themeImages] dnSetObject:[UIImage imageNamed:@"donky_default_avatar_open.png"] forKey:kDRUIInboxDefaultAvatarOpenImage];
+
+        //Tab bar icon
+        [[self themeImages] dnSetObject:[UIImage imageNamed:@"donky_inbox_icon.png"] forKey:kDRUIInboxIconImage];
+
+        //Tab bar icon
+        [[self themeImages] dnSetObject:[UIImage imageNamed:@"donky_inbox_selected_icon.png"] forKey:kDRUIInboxSelectedIconImage];
+
+        //More button icon
+        [[self themeImages] dnSetObject:[UIImage imageNamed:@"donky_more_icon.png"] forKey:kDRUIInboxMoreButtonImage];
+
+        //Select all
+        [[self themeImages] dnSetObject:[UIImage imageNamed:@"donky_select_all_icon"] forKey:kDRUIInboxSelectAllNavigationButtonImage];
 
     }
 

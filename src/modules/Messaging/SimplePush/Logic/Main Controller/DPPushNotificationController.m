@@ -2,7 +2,7 @@
 //  DPPushNotificationController.m
 //  DonkyPushModule
 //
-//  Created by Chris Watson on 13/03/2015.
+//  Created by Donky Networks on 13/03/2015.
 //  Copyright (c) 2015 Dynmark International Ltd. All rights reserved.
 //
 
@@ -14,16 +14,16 @@
 #import "DNNetworkController.h"
 #import "DCMMainController.h"
 #import "DCAConstants.h"
+#import "DNNotificationController.h"
 
 static NSString *const DNPendingPushNotifications = @"PendingPushNotifications";
 static NSString *const DNInteractionResult = @"InteractionResult";
 
 @interface DPPushNotificationController ()
-@property(nonatomic, strong) DNModuleDefinition *moduleDefinition;
-@property(nonatomic, strong) DNSubscriptionBachHandler pushLogicHandler;
-@property(nonatomic, strong) DNLocalEventHandler simplePushEvent;
-@property(nonatomic, strong) DNLocalEventHandler interactionEvent;
-@property(nonatomic, strong) DNLocalEventHandler backgroundNotification;
+@property (nonatomic, strong) DNModuleDefinition *moduleDefinition;
+@property (nonatomic, copy) DNSubscriptionBatchHandler pushLogicHandler;
+@property (nonatomic, copy) DNLocalEventHandler interactionEvent;
+@property (nonatomic, strong) NSMutableArray *seenNotifications;
 @end
 
 @implementation DPPushNotificationController
@@ -53,9 +53,9 @@ static NSString *const DNInteractionResult = @"InteractionResult";
     
     if (self) {
         
-        [self setPendingPushNotifications:[[NSMutableArray alloc] init]];
-
-        [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.0.1"]];
+        [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.1.1.1"]];
+        
+        [self setSeenNotifications:[[NSMutableArray alloc] init]];
     }
     
     return  self;
@@ -67,17 +67,29 @@ static NSString *const DNInteractionResult = @"InteractionResult";
 
 - (void)start {
 
-    __weak DPPushNotificationController *weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
 
     [self setPushLogicHandler:^(NSArray *batch) {
         NSArray *batchNotifications = batch;
         [batchNotifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if ([obj isKindOfClass:[DNServerNotification class]]) {
+            
+            DNServerNotification *origina = obj;
+            __block BOOL seen = NO;
+            [[weakSelf seenNotifications] enumerateObjectsUsingBlock:^(id  _Nonnull obj2, NSUInteger idx2, BOOL * _Nonnull stop2) {
+                DNServerNotification *server = obj2;
+                if ([[origina serverNotificationID] isEqualToString:[server serverNotificationID]]) {
+                    seen = YES;
+                    *stop2 = YES;
+                }
+            }];
+            
+            if ([obj isKindOfClass:[DNServerNotification class]] && !seen) {
+                [[weakSelf seenNotifications] addObject:obj];
                 [weakSelf pushNotificationReceived:obj];
             }
         }];
     }];
-
+        
     //Simple Push:
     [self setSimplePushMessage:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationSimplePush batchHandler:[self pushLogicHandler]]];
     [[self simplePushMessage] setAutoAcknowledge:NO];
@@ -90,61 +102,47 @@ static NSString *const DNInteractionResult = @"InteractionResult";
     }];
 
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:DNInteractionResult handler:[self interactionEvent]];
-
-
-    [self setSimplePushEvent:^(DNLocalEvent *event) {
-        if ([[weakSelf pendingPushNotifications] count]) {
-            DNLocalEvent *pushOpenEvent = [[DNLocalEvent alloc] initWithEventType:kDAEventInfluencedAppOpen
-                                                                        publisher:NSStringFromClass([weakSelf class])
-                                                                        timeStamp:[NSDate date]
-                                                                             data:[weakSelf pendingPushNotifications]];
-            [[DNDonkyCore sharedInstance] publishEvent:pushOpenEvent];
-        }
-    }];
-
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppWillEnterForegroundNotification handler:[self simplePushEvent]];
-
-
-    [self setBackgroundNotification:^(DNLocalEvent *event) {
-        if ([[event data] isKindOfClass:[NSDictionary class]]) {
-            if ([[event data] isKindOfClass:[DNServerNotification class]]) {
-                DNServerNotification *notification = [event data];
-                [[weakSelf pendingPushNotifications] addObject:[notification serverNotificationID]];
-            }
-            else {
-                [[weakSelf pendingPushNotifications] addObject:[event data]];
-            }
-        }
-    }];
-
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventNotificationLoaded handler:[self backgroundNotification]];
+ 
 }
 
 - (void)stop {
     [[DNDonkyCore sharedInstance] unSubscribeToDonkyNotifications:[self moduleDefinition] subscriptions:@[[self simplePushMessage]]];
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventAppWillEnterForegroundNotification handler:[self simplePushEvent]];
     [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:DNInteractionResult handler:[self interactionEvent]];
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventBackgroundNotificationReceived handler:[self backgroundNotification]];
+//    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventBackgroundNotificationReceived handler:[self backgroundNotification]];
 }
 
 #pragma mark -
 #pragma mark - Core Logic
 
 - (void)pushNotificationReceived:(DNServerNotification *)notification {
-
-    //Publish event:
-    NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
-    [data dnSetObject:[self pendingPushNotifications] forKey:DNPendingPushNotifications];
-    [data dnSetObject:notification forKey:kDNDonkyNotificationSimplePush];
-
-    DNLocalEvent *pushEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyNotificationSimplePush
-                                                            publisher:NSStringFromClass([self class])
-                                                            timeStamp:[NSDate date]
-                                                                 data:data];
-    [[DNDonkyCore sharedInstance] publishEvent:pushEvent];
     
-    //Mark as received:
     [DCMMainController markMessageAsReceived:notification];
+    
+    NSString *pushNotificationId = [NSString stringWithFormat:@"com.donky.push.%@", [notification serverNotificationID]];
+    NSString *notificationID = [[NSUserDefaults standardUserDefaults] objectForKey:pushNotificationId];
+    if (notificationID) {
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:pushNotificationId];
+        DNLocalEvent *pushOpenEvent = [[DNLocalEvent alloc] initWithEventType:kDAEventInfluencedAppOpen
+                                                                    publisher:NSStringFromClass([self class])
+                                                                    timeStamp:[NSDate date]
+                                                                         data:[notification serverNotificationID]];
+        [[DNDonkyCore sharedInstance] publishEvent:pushOpenEvent];
+    }
+
+    else {
+        //Publish event:
+        NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
+        [data dnSetObject:[notification serverNotificationID] forKey:DNPendingPushNotifications];
+        [data dnSetObject:notification forKey:kDNDonkyNotificationSimplePush];
+
+        DNLocalEvent *pushEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyNotificationSimplePush
+                                                                publisher:NSStringFromClass([self class])
+                                                                timeStamp:[NSDate date]
+                                                                     data:data];
+        [[DNDonkyCore sharedInstance] publishEvent:pushEvent];
+        
+        [DCMMainController markMessageAsReceived:notification];
+    }
 }
 
 @end

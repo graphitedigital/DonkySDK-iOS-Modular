@@ -1,11 +1,12 @@
 //
 //  NSManagedObject+DNHelper.m
 //
-//  Created by Chris Watson on 16/02/2015.
+//  Created by Donky Networks on 16/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 
 #import "NSManagedObject+DNHelper.h"
 #import "DNLoggingController.h"
+#import "NSManagedObjectContext+DNDelete.h"
 
 @implementation NSManagedObject (DNHelper)
 
@@ -40,28 +41,16 @@
     return nil;
 }
 
-+ (instancetype)fetchSingleObjectWithPredicate:(NSPredicate *)predicate withContext:(NSManagedObjectContext *)context {
-
++ (NSFetchRequest *)fetchRequestWithContext:(NSManagedObjectContext *)context batchSize:(NSUInteger)batch offset:(NSUInteger)offset {
     @try {
-        NSFetchRequest *request = [self fetchRequestWithContext:context];
-        [request setPredicate:predicate];
-        [request setSortDescriptors:@[]];
-
-        NSError *error;
-        NSArray *results = [context executeFetchRequest:request error:&error];
-
-        if (error)
-            DNDebugLog(@"Problem fetching request: %@\nError: %@", request, error);
-
-        if ([results count]) {
-            //purely for debug logging, this should never happen unless integrators manually create a device user object. DON'T DO THIS!
-            if ([results count] > 1) {
-                DNDebugLog(@"Fetched more than one object: %@\nRequest: %@. Returning first.", results, request);
-            }
-            return [results firstObject];
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        [request setFetchBatchSize:batch];
+        if (offset > 0) {
+            [request setFetchOffset:offset];
         }
+        [request setEntity:[self entityDescriptionWithContext:context]];
 
-        return nil;
+        return request;
     }
     @catch (NSException *exception) {
         DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
@@ -71,18 +60,55 @@
     return nil;
 }
 
++ (instancetype)fetchSingleObjectWithPredicate:(NSPredicate *)predicate withContext:(NSManagedObjectContext *)context includesPendingChanges:(BOOL)pendingChanges {
+   @try {
+       NSFetchRequest *request = [self fetchRequestWithContext:context];
+       [request setIncludesPendingChanges:pendingChanges];
+       [request setPredicate:predicate];
+       [request setSortDescriptors:@[]];
+
+       NSError *error;
+       NSArray *results = [context executeFetchRequest:request error:&error];
+
+       if (error) {
+           DNDebugLog(@"Problem fetching request: %@\nError: %@", request, error);
+       }
+
+       if ([results count]) {
+           if ([results count] > 1) {
+               DNDebugLog(@"Fetched more than one object: %@\nCleaning data...", results);
+               //Cleaing dupes:
+               NSMutableArray *delete = [results mutableCopy];
+               [delete removeObject:[results lastObject]];
+               [context deleteAllObjectsInArray:delete];
+           }
+           return [results lastObject];
+       }
+
+       return nil;
+   }
+   @catch (NSException *exception) {
+       DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
+       [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
+   }
+   return nil;
+}
+
 + (NSArray *)fetchObjectsWithPredicate:(NSPredicate *)predicate sortDescriptors:(NSArray *)sortDescriptors withContext:(NSManagedObjectContext *)context {
 
     @try {
         NSFetchRequest *request = [self fetchRequestWithContext:context];
-        [request setPredicate:predicate];
+        if (predicate) {
+            [request setPredicate:predicate];
+        }
         [request setSortDescriptors:sortDescriptors];
 
         NSError *error;
         NSArray *results = [context executeFetchRequest:request error:&error];
 
-        if (error)
+        if (error) {
             DNDebugLog(@"Problem fetching request: %@\nError: %@", request, error);
+        }
 
         return results;
     }

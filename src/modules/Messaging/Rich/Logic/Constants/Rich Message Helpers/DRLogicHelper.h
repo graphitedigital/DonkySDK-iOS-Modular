@@ -2,7 +2,7 @@
 //  DRLogicHelper.h
 //  RichPopUp
 //
-//  Created by Chris Watson on 13/04/2015.
+//  Created by Donky Networks on 13/04/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -23,7 +23,7 @@
 
 + (NSArray *)richMessagesWithOffset:(NSUInteger)offset limit:(NSUInteger)limit ascending:(BOOL)ascending;
 
-+ (NSArray *)filteredRichMessage:(NSString *)filter tempContext:(BOOL)tempContext ascendingOrder:(BOOL)ascending;
++ (NSArray *)filteredRichMessage:(NSString *)filter ascendingOrder:(BOOL)ascending;
 
 + (DNRichMessage *)richMessageForID:(NSString *)messageID context:(NSManagedObjectContext *)context;
 
@@ -38,4 +38,5 @@
 + (void)deleteAllExpiredMessages;
 
 + (void)deleteMaxLifeRichMessages;
+
 @end

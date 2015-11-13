@@ -2,7 +2,7 @@
 //  DNContentNotification.h
 //  Core Container
 //
-//  Created by Chris Watson on 19/03/2015.
+//  Created by Donky Networks on 19/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 

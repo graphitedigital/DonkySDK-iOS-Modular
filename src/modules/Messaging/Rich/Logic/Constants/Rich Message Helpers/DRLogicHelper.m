@@ -2,13 +2,12 @@
 //  DRLogicHelper.m
 //  RichPopUp
 //
-//  Created by Chris Watson on 13/04/2015.
+//  Created by Donky Networks on 13/04/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import "DRLogicHelper.h"
 #import "DNDataController.h"
-#import "NSDate+DNDateHelper.h"
 #import "DNLoggingController.h"
 #import "DCMConstants.h"
 #import "NSManagedObject+DNHelper.h"
@@ -16,6 +15,7 @@
 #import "DNDonkyCore.h"
 #import "DRConstants.h"
 #import "DNRichMessage+DNRichMessageHelper.h"
+#import "DCMLogicMessageMapper.h"
 
 static NSString *const DRMessageIDSortDescriptor = @"messageID";
 
@@ -28,34 +28,17 @@ static NSString *const DRMessageTimeStampDescriptor = @"sentTimestamp";
     @try {
 
         DNRichMessage *richMessage = [DRLogicHelper richMessageForID:[serverNotification data][DCMMessageID] context:context];
-
-        [richMessage setNotificationID:[serverNotification serverNotificationID]];
-        [richMessage setExpiryTimestamp:[NSDate donkyDateFromServer:[serverNotification data][DCMExpiryTimeStamp]]];
-        [richMessage setSenderDisplayName:[serverNotification data][DCMSenderDisplayName]];
-        [richMessage setExternalRef:[serverNotification data][DCMExternalRef]];
+        
+        [DCMLogicMessageMapper upsertServerNotification:serverNotification toMessage:richMessage];
+       
         [richMessage setExpiredBody:[serverNotification data][DCMExpireBody]];
-        [richMessage setSenderMessageID:[serverNotification data][DCMSenderMessageID]];
         [richMessage setCanShare:[serverNotification data][DCMCanShare]];
-        [richMessage setCanReply:[serverNotification data][DCMCanReply]];
-        [richMessage setSenderExternalUserID:[serverNotification data][DCMSenderExternalUserID]];
-        [richMessage setSilentNotification:[serverNotification data][DCMSilentNotification]];
-        [richMessage setBody:[serverNotification data][DCMBody]];
-        [richMessage setSentTimestamp:[NSDate donkyDateFromServer:[serverNotification data][DCMSentTimestamp]]];
-        [richMessage setContextItems:[serverNotification data][DCMContextItems]];
-        [richMessage setSenderAccountType:[serverNotification data][DCMSenderAccountType]];
-        [richMessage setAvatarAssetID:[serverNotification data][DCMAvatarAssetID]];
-        [richMessage setMessageType:[serverNotification data][DCMMessageType]];
-        [richMessage setConversationID:[serverNotification data][DCMConversationID]];
-        [richMessage setMessageScope:[serverNotification data][DCMMessageScope]];
-        [richMessage setCanForward:[serverNotification data][DCMCanForward]];
         [richMessage setMessageDescription:[serverNotification data][DCMDescription]];
         [richMessage setTitle:[serverNotification data][DCMDescription]];
         [richMessage setSenderInternalUserID:[serverNotification data][DCMSenderInternalUserID]];
-        [richMessage setMessageReceivedTimestamp:[NSDate date]];
         [richMessage setUrlToShare:[serverNotification data][DCMUrlToShare]];
-
+ 
         return richMessage;
-
     }
     @catch (NSException *exception) {
         DNErrorLog(@"Fatal exception : %@. Reporting and continuing...", [exception description]);
@@ -91,19 +74,21 @@ static NSString *const DRMessageTimeStampDescriptor = @"sentTimestamp";
                                      withContext:[[DNDataController sharedInstance] mainContext]];
 }
 
-+ (NSArray *)filteredRichMessage:(NSString *)filter tempContext:(BOOL)tempContext ascendingOrder:(BOOL)ascending {
++ (NSArray *)filteredRichMessage:(NSString *)filter ascendingOrder:(BOOL)ascending {
     if (!filter) {
         return nil;
     }
+    
+    NSManagedObjectContext *context = [[DNDataController sharedInstance] mainContext];
 
     return [DNRichMessage fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"messageDescription CONTAINS[cd] %@ || senderDisplayName CONTAINS[cd] %@", filter, filter]
                                     sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:DRMessageTimeStampDescriptor ascending:ascending]]
-                                        withContext:tempContext ? [[DNDataController sharedInstance] temporaryContext]  : [[DNDataController sharedInstance] mainContext]];
+                                        withContext:context];
 }
 
 + (DNRichMessage *)richMessageForID:(NSString *)messageID context:(NSManagedObjectContext *)context {
     DNRichMessage *message = [DNRichMessage fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"messageID == %@ || notificationID == %@", messageID, messageID]
-                                                               withContext:context ? : [[DNDataController sharedInstance] mainContext]];
+                                                               withContext:context ? : [[DNDataController sharedInstance] mainContext] includesPendingChanges:YES];
     if (!message) {
         message = [DNRichMessage insertNewInstanceWithContext:context ? : [[DNDataController sharedInstance] mainContext]];
         [message setMessageID:messageID];
@@ -154,12 +139,12 @@ static NSString *const DRMessageTimeStampDescriptor = @"sentTimestamp";
 
 + (BOOL)richMessageExistsForID:(NSString *)messageID {
     return [DNRichMessage fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"messageID == %@ || notificationID == %@", messageID, messageID]
-                                                      withContext:[[DNDataController sharedInstance] mainContext]] != nil;
+                                                      withContext:[[DNDataController sharedInstance] mainContext] includesPendingChanges:YES] != nil;
 }
 
 + (DNRichMessage *)richMessageWithID:(NSString *)messageID {
     return [DNRichMessage fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"messageID == %@ || notificationID == %@", messageID, messageID]
-                                             withContext:[[DNDataController sharedInstance] mainContext]];
+                                             withContext:[[DNDataController sharedInstance] mainContext] includesPendingChanges:YES];
 }
 
 + (void)deleteAllExpiredMessages {

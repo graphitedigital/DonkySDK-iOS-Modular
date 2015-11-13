@@ -2,7 +2,7 @@
 //  DNDonkyNetworkDetails.h
 //  Donky Network SDK Container
 //
-//  Created by Chris Watson on 06/03/2015.
+//  Created by Donky Networks on 06/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -21,6 +21,8 @@
 
 + (void)saveSecureServiceRootUrl:(NSString *)secureServiceRootUrl;
 
++ (void)saveSignalRURL:(NSString *)signalRURL;
+
 + (void)saveTokenExpiry:(NSDate *)tokenExpiry;
 
 + (void)saveNetworkID:(NSString *)networkId;
@@ -38,6 +40,8 @@
 + (void)saveAPNSAudio:(NSString *)apnsAudio;
 
 + (void)saveNetworkProfileID:(NSString *)networkProfileID;
+
++ (void)saveMaximumNumberOfSavedChatMessages:(NSInteger)maximumNumberOfSavedChatMessages;
 
 + (NSString *)deviceSecret;
 
@@ -62,6 +66,10 @@
 + (NSString *)apnsAudio;
 
 + (NSString *)networkProfileID;
+
++ (NSInteger)maximumNumberOfSavedChatMessages;
+
++ (NSString *)signalRURL;
 
 + (BOOL)isDeviceRegistered;
 

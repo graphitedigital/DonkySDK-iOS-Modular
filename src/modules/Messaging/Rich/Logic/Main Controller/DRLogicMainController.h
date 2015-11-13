@@ -2,7 +2,7 @@
 //  DRLogicMainController.h
 //  RichPopUp
 //
-//  Created by Chris Watson on 13/04/2015.
+//  Created by Donky Networks on 13/04/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -30,14 +30,16 @@
 @property (nonatomic, getter=shouldVibrate) BOOL vibrate;
 
 /*!
- Method to instruct the Logic Controller to start monitoring for Rich Messages. These are processed and a local event is published with the rich message data.
+ Method to instruct the Logic Controller to start monitoring for Rich Messages. These are processed and a local event
+ is published with the rich message data.
  
  @since 2.0.0.0
  */
 - (void)start;
 
 /*!
- Method to stop the Logic for when a Rich Message is received. Any Rich Messages received after Stop is called will be ignored and deleted from the network.
+ Method to stop the Logic for when a Rich Message is received. Any Rich Messages received after Stop is called will be
+ ignored and deleted from the network.
  
  @since 2.0.0.0
  */
@@ -157,5 +159,11 @@
  */
 - (void)deleteAllExpiredMessages;
 
+/*!
+ Helper method to delete all those messages that have reached their lifetime limit (30 days).
+ 
+ @since 2.5.4.3
+ */
 - (void)deleteMaxLifeRichMessages;
+
 @end

@@ -2,8 +2,8 @@
 //  DRITableViewCellHelper.m
 //  RichInbox
 //
-//  Created by Chris Watson on 05/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 05/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DRITableViewCellHelper.h"
@@ -11,7 +11,7 @@
 #import "UIView+AutoLayout.h"
 #import "NSDate+DCMDate.h"
 #import "DRUIThemeConstants.h"
-#import "DRichMessage+Localization.h"
+#import "DCUILocalization+Localization.h"
 #import "DCUIMainController.h"
 #import "DCUIConstants.h"
 
@@ -47,12 +47,11 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTranslatesAutoresizingMaskIntoConstraints:NO];
     [button setHidden:YES];
-    [button setImage:[UIImage imageNamed:@"donky_more_icon.png"] forState:UIControlStateNormal];
     return button;
 }
 
 + (DCUINewBannerView *)bannerView {
-    DCUINewBannerView *newView = [[DCUINewBannerView alloc] initWithText:DRichMessageLocalizedString(@"rich_inbox_new_banner_text")];
+    DCUINewBannerView *newView = [[DCUINewBannerView alloc] initWithText:DCUILocalizedString(@"common_messaging_new_banner_text")];
     [newView setTranslatesAutoresizingMaskIntoConstraints:NO];
     return newView;
 }
@@ -61,7 +60,7 @@
     CGFloat stringHeight = [DCUIMainController sizeForString:messageText
                                                  font:[theme fontForKey:kDRUIInboxCellDescriptionFont]
                                             maxHeight:CGFLOAT_MAX
-                                             maxWidth:(cellFrame.size.width - (kDCUIAvatarHeightWithTenPixelInsets * (editMode ? 1.5 : 1)))].height;
+                                             maxWidth:(cellFrame.size.width - (kDCUIAvatarHeightWithTenPixelInsets * (editMode ? 1.5f : 1.0f)))].height;
     stringHeight += 10;
 
     if (editMode) {

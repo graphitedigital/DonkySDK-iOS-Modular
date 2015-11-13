@@ -2,8 +2,8 @@
 //  DRITableViewController.h
 //  RichInbox
 //
-//  Created by Chris Watson on 03/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 03/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -42,7 +42,11 @@
  */
 - (void)shareRichMessage:(DNRichMessage *)richMessage;
 
-
+/*!
+ Helper method to update the badge count on the tab bar controller icon.
+ 
+ @since 2.5.4.3
+ */
 - (void)updateTabBarCount;
 
 /*!
