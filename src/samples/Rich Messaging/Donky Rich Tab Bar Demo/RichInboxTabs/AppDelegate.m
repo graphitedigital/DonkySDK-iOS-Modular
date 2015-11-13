@@ -33,7 +33,7 @@
     //Rich Inbox:
     [[DRIMainController sharedInstance] start];
     
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"xbtdB9hdea4mJ5AKbKyGV7QA+ZtodIcG18zECr62ZFKjgHjNbPMR9rpUPCfpbYKjNS1FL7OAncGdnee3zw"];
+    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"API-KEY"];
     
     ///End Donky
     
