@@ -86,9 +86,12 @@ static NSString *const DNRetryPolicy = @"DeviceCommsConnectionRetrySchedule";
             return;
         }
 
-        DNInfoLog(@"request failed %@... Applying retry policy %@", [[object request] route], retryString);
+        DNInfoLog(@"Request failed %@... Applying retry policy %@", [[object request] route], retryString);
         NSInteger retryTime = [[retryComponents firstObject] integerValue];
-        [self performSelector:@selector(retryEvent:) withObject:object afterDelay:retryTime];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self performSelector:@selector(retryEvent:) withObject:object afterDelay:retryTime];
+        });
 
         //Check if retry greater than
         [object incrementRetryCount];
@@ -96,6 +99,7 @@ static NSString *const DNRetryPolicy = @"DeviceCommsConnectionRetrySchedule";
 }
 
 - (void)retryEvent:(DNRetryObject *)retryEvent {
+    DNInfoLog(@"Retrying request %@", [[retryEvent request] route]);
     DNRequest *request = [retryEvent request];
     [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:[request isSecure] route:[request route] httpMethod:[request method] parameters:[request parameters] success:^(NSURLSessionDataTask *task, id responseData) {
         [[self retriedRequests] removeObject:retryEvent];
