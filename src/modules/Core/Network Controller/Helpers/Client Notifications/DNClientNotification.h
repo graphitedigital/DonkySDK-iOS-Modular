@@ -29,7 +29,6 @@
 
 - (instancetype)initWithAcknowledgementNotification:(DNServerNotification *)notification;
 
-// (PAP-TRIGGERS) use this ...
 - (instancetype)initWithType:(NSString *)type data:(NSDictionary *)data acknowledgementData:(DNServerNotification *)notification;
 
 @end

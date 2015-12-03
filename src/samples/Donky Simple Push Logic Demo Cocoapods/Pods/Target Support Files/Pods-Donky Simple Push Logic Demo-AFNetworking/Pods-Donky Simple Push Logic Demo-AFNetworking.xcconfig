@@ -1,1 +1,0 @@
-PODS_DONKY_SIMPLE_PUSH_LOGIC_DEMO_AFNETWORKING_OTHER_LDFLAGS = -framework "CoreGraphics" -framework "MobileCoreServices" -framework "Security" -framework "SystemConfiguration"

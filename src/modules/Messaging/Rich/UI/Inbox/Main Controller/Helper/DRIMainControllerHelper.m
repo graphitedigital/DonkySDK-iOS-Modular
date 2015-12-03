@@ -15,6 +15,7 @@
 #import "DRINotification.h"
 #import "NSDate+DNDateHelper.h"
 #import "DNDataController.h"
+#import "DNLoggingController.h"
 
 static NSString *const DRIExpiryTimeStamp = @"expiryTimeStamp";
 static NSString *const DRIType = @"type";
@@ -33,7 +34,11 @@ static NSString *const DRIMessageID = @"messageID";
                 [tempContext performBlock:^{
                     NSManagedObjectID *objectID = [[event data] objectID];
                     if (objectID) {
-                        DNRichMessage *fetchedRichMessage = (DNRichMessage *) [tempContext objectWithID:objectID];
+                        NSError *error;
+                        DNRichMessage *fetchedRichMessage = (DNRichMessage *) [tempContext existingObjectWithID:objectID error:&error];
+                        if (error) {
+                            DNErrorLog(@"coudln't find rich message: %@", [error localizedDescription]);
+                        }
                         if (fetchedRichMessage) {
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 DRIMessageViewController *richMessageViewController = [[DRIMessageViewController alloc] initWithRichMessage:fetchedRichMessage];
@@ -115,9 +120,11 @@ static NSString *const DRIMessageID = @"messageID";
 
     NSArray *backgroundNotifications = notificationData[kDRPendingRichNotifications];
 
+    NSManagedObjectContext *context = [DNDataController temporaryContext];
+
     [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 
-        DNRichMessage *richMessage = obj;
+        DNRichMessage *richMessage = (DNRichMessage *) [context objectWithID:[obj objectID]];
 
         [backgroundNotifications enumerateObjectsUsingBlock:^(id obj2, NSUInteger idx2, BOOL *stop2) {
             NSString *notificationID = obj2;
@@ -130,10 +137,9 @@ static NSString *const DRIMessageID = @"messageID";
         NSDate *expired = [richMessage expiryTimestamp];
 
         BOOL messageExpired = NO;
-        if (expired)
+        if (expired) {
             messageExpired = [expired donkyHasDateExpired];
-
-//        DRINotification *donkyNotification = [[DRINotification alloc] initWithNotification:notification customBody:[notification data][@"description"]];
+        }
 
         if (!duplicate && !messageExpired) {
 
@@ -184,19 +190,21 @@ static NSString *const DRIMessageID = @"messageID";
             }
 
             if (!inboxShown) {
-                DCUIBannerView *bannerView = [[DCUIBannerView alloc] initWithSenderDisplayName:[richMessage senderDisplayName]
-                                                                                          body:[richMessage body]
-                                                                               messageSentTime:[richMessage sentTimestamp]
-                                                                                 avatarAssetID:[richMessage avatarAssetID]
-                                                                              notificationType:kDNDonkyNotificationRichMessage
-                                                                                     messageID:[richMessage messageID]];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [notificationController presentNotification:bannerView];
-                });
+                if (richMessage && ![richMessage isFault]) { //we don't attempt to display a banner if the core data object is faulting or nil.
+                    DCUIBannerView *bannerView = [[DCUIBannerView alloc] initWithSenderDisplayName:[richMessage senderDisplayName]
+                                                                                              body:[richMessage body]
+                                                                                   messageSentTime:[richMessage sentTimestamp]
+                                                                                     avatarAssetID:[richMessage avatarAssetID]
+                                                                                  notificationType:kDNDonkyNotificationRichMessage
+                                                                                         messageID:[richMessage messageID]];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [notificationController presentNotification:bannerView];
+                    });
 
-                //If we are on simple push, we add the other gestures:
-                if (![bannerView buttonView]) {
-                    [notificationController.notificationBannerView configureGestures];
+                    //If we are on simple push, we add the other gestures:
+                    if (![bannerView buttonView]) {
+                        [notificationController.notificationBannerView configureGestures];
+                    }
                 }
             }
         }

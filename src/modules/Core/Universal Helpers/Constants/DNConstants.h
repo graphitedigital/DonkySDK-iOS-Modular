@@ -90,7 +90,6 @@ extern NSString * const kDNNetworkGetNotification;
 extern NSString * const kDNNetworkSendDebugLog;
 
 /*!
-
  Send and get a users selected tags.
 
  @since 2.0.0.0
@@ -111,33 +110,34 @@ extern NSString * const kDNNetworkIsValidPlatformUser;
  */
 extern NSString * const kDNNetworkSearchUsers;
 
-//
+/*!
+ Route to get all active geo fences for an app space.
+ 
+ @since 2.6.6.6
+ */
 extern NSString * const kDNNetworkGetActiveRegions;
 
-//
+/*!
+ Route to get all active triggers on an app space.
+ 
+ @since 2.6.6.6
+ */
 extern NSString * const kDNNetworkGetActiveTriggers;
 
-//
+/*!
+ Route to upload an asset to the network. This is a streaming API.
+ 
+ @since 2.6.6.6
+ */
 extern NSString * const kDNNetworkUploadAsset;
 
-#pragma mark -
-#pragma mark - Donky Module Geo Regions / Triggers
-
 /*!
+ Route to get all conversations from the network histroy store. Append this 
+ to add search criteria.
  
- Get ALL the currently active Regions.
- 
- @since 2.?.?.?
+ @since 2.6.6.6
  */
-extern NSString * const kDNNetworkGetActiveRegions;
-
-/*!
- 
- Get ALL the currently active Triggers.
- 
- @since 2.?.?.?
- */
-extern NSString * const kDNNetworkGetActiveTriggers;
+extern NSString * const kDNNetworkConversationHistory;
 
 #pragma mark -
 #pragma mark - Donky Notification Types
@@ -213,6 +213,20 @@ extern NSString * const kDNDonkyNotificationChatMessageRejected;
  @since 2.6.5.4
  */
 extern NSString * const kDNDonkyNotificationUserIsTyping;
+
+/*!
+ Donky server notificaiton used when requesting the location of another user.
+ 
+ @since 2.6.5.5
+ */
+extern NSString * const kDNDonkyNotificationLocationRequest;
+
+/*!
+ Donly server notification used when a location request has been responded to.
+ 
+ @since 2.6.5.5.
+ */
+extern NSString * const kDNDonkyNotificationLocationReceived;
 
 #pragma mark -
 #pragma mark - Donky Event Types
@@ -318,6 +332,20 @@ extern NSString * const kDNDonkySetBadgeCount;
  */
 extern NSString * const kDNDonkyEventTokenRefreshed;
 
+/*!
+ Subscribe to this event to receive notifications when another user has sent you their location.
+ 
+ @since 2.6.5.5
+ */
+extern NSString * const kDNDonkyEventLocationReceived;
+
+/*!
+ Subscribe to this event to receive notifications when another user has requested your location.
+ 
+ @since 2.6.5.5
+ */
+extern NSString * const kDNDonkyEventLocationRequestReceived;
+
 #pragma mark -
 #pragma mark - Donky Config Items
 
@@ -400,7 +428,11 @@ extern NSString * const kDonkyErrorDomain;
  */
 extern CGFloat const kDonkyLogFileSizeLimit;
 
-//
+/*!
+ Temp directory that the SDK uses to store files.
+ 
+ @since 2.0.0.0
+ */
 extern NSString * const kDNTempDirectory;
 
 /*!

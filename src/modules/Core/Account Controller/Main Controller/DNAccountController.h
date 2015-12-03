@@ -181,7 +181,6 @@
 + (BOOL)isSuspended;
 
 #pragma mark - 
-
 #pragma mark - Private... Not for public consumption. Public use of these API's is unsupported. 
 
 /*!

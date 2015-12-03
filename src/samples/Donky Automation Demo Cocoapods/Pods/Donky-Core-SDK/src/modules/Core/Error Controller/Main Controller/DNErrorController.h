@@ -2,14 +2,14 @@
 //  DNErrorController.h
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 16/02/2015.
+//  Created by Donky Networks on 16/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
 typedef enum {
-    DNCoreSDKErrorNotRegistered = 6001,
+    DNCoreSDKErrorNotRegistered = 8001,
     DNCoreSDKErrorNotAuthorised = DNCoreSDKErrorNotRegistered,
     DNCoreSDKErrorNoAPIKey,
     DNCoreSDKErrorDuplicateSynchronise,
@@ -18,7 +18,9 @@ typedef enum {
     DNCoreAutoLoggingDisabled,
     DNCoreFrequentErrorLogs,
     DNCoreSDKSuspendedUser,
-    DNCoreContentNotificationSizeLimit
+    DNCoreContentNotificationSizeLimit,
+    DNCoreErrorDuplicateRequest,
+    DNCoreSDKErrorDuplicateAsyncCall
 } DonkyNetworkSDKErrorCodes;
 
 @interface DNErrorController : NSObject

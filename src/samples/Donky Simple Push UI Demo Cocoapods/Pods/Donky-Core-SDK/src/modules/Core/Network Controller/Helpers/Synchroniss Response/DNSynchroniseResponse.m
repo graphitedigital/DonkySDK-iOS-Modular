@@ -2,7 +2,7 @@
 //  DNSynchroniseResponse.m
 //  Donky Network SDK Container
 //
-//  Created by Chris Watson on 09/03/2015.
+//  Created by Donky Networks on 09/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -28,9 +28,9 @@ static NSString *DNMoreNotificationsAvailable = @"moreNotificationsAvailable";
     if (self) {
 
         @try {
-            self.serverNotifications = response[DNServerNotifications];
-            self.failedClientNotifications = response[DNFailedClientNotifications];
-            self.moreNotificationsAvailable = [response[DNMoreNotificationsAvailable] boolValue];
+            [self setServerNotifications:response[DNServerNotifications]];
+            [self setFailedClientNotifications:response[DNFailedClientNotifications]];
+            [self setMoreNotificationsAvailable:[response[DNMoreNotificationsAvailable] boolValue]];
         }
         @catch (NSException *exception) {
             DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);

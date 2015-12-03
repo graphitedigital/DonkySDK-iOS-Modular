@@ -2,7 +2,7 @@
 //  NSDictionary+DKDictionary.h
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 19/02/2015.
+//  Created by Donky Networks on 19/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -13,7 +13,7 @@
  
  @since 2.0.0.0
  */
-@interface NSMutableDictionary (DKDictionary)
+@interface NSMutableDictionary (DNDictionary)
 
 /*!
  Category to protect against exceptions raised from inserting a nil object into a Dictionary.

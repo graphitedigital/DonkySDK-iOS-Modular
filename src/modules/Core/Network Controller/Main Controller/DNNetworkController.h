@@ -50,6 +50,18 @@ typedef enum {
 - (void)performSecureDonkyNetworkCall:(BOOL)secure route:(NSString *)route httpMethod:(DonkyNetworkRoute)method parameters:(id)parameters success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
 
 /*!
+ Method to perform a streaming upload to the network. While this API is 'public' it should only really be accessed via the Asset Module as this provides
+ a contextual wrapper for any assets that you may want to upload.
+ 
+ @param assetsToUpload the asset details that should be uploaded.
+ @param successBlock block to be called upon a successful request.
+ @param failureBlock block to be called upon a failure to perform the specified request.
+ 
+ @since 2.6.5.5
+ */
+- (void)streamAssetUpload:(NSArray *)assetsToUpload success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
+
+/*!
  When wishing to send or receive new data from to/from the Donky Network. Manually invoking this method will force a Server Data refresh. All pending client
  types are sent and incoming types are directed to their subscribers. If the completion blocks are not required, simply us synchronise.
  
@@ -111,7 +123,7 @@ typedef enum {
 - (void)serverNotificationForId:(NSString *)notificationID success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
 
 #pragma mark -
-#pragma mark - Private... Not for public consumption. Public use of these API's is unsupported.
+#pragma mark - Private... Not for public consumption. Public use of these APIs is unsupported.
 
 /*!
   PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour

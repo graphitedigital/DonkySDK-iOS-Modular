@@ -2,11 +2,12 @@
 //  DCUIAvatarImageView.m
 //  RichInbox
 //
-//  Created by Chris Watson on 05/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 05/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DCUIAvatarImageView.h"
+#import "DCUIConstants.h"
 
 @implementation DCUIAvatarImageView
 
@@ -16,15 +17,18 @@
 
     if (self) {
 
-        [[self layer] setCornerRadius:96 / 2.0f];
+        [[self layer] setCornerRadius:kDCUIAvatarHeight / 2.0f];
         [[self layer] setMasksToBounds:YES];
         [[self layer] setBorderWidth:0.50];
 
-        [[self layer] setBorderColor:borderColour.CGColor];
-
+        [self setBorderColour:borderColour];
     }
 
     return self;
+}
+
+- (void)setBorderColour:(UIColor *)color {
+    [[self layer] setBorderColor:[color CGColor]];
 }
 
 @end

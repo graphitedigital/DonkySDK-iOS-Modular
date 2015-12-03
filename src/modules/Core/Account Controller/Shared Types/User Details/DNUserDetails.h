@@ -21,77 +21,86 @@
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *userID;
+@property (nonatomic, readonly) NSString *userID;
+
+/*!
+ Thet network profile ID of the user, this is an immutable value on both client and 
+ network. As such it can be relied upon to always reach the correct user, where the userIDs
+ can be changed (depending on integrator decisions) and therefor can be out of sync.
+ 
+ @since 2.6.6.5
+ */
+@property (nonatomic, readonly) NSString *networkProfileID;
 
 /*!
  Bool to determine if this device was registered using the Anonymous user registration.
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly, getter=isAnonymous) BOOL anonymous;
+@property (nonatomic, readonly, getter=isAnonymous) BOOL anonymous;
 
 /*!
  The display name of the user.
 
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *displayName;
+@property (nonatomic, copy) NSString *displayName;
 
 /*!
  The email address of the user.
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *emailAddress;
+@property (nonatomic, copy) NSString *emailAddress;
 
 /*!
  The mobile number of the user. NOTE: ISO country code is required if setting mobile number.
 
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *mobileNumber;
+@property (nonatomic, copy) NSString *mobileNumber;
 
 /*!
  The country code of the user. NOTE: This is required IF setting the mobile number. Failure to provide an ISO country code will result in server validation failures.
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString * countryCode;
+@property (nonatomic, copy) NSString * countryCode;
 
 /*!
  Avatar ID of the current user.
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *avatarAssetID;
+@property (nonatomic, copy) NSString *avatarAssetID;
 
 /*!
  The users selected tags, this can be used for segmentation when deploying campaigns.
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSMutableArray *selectedTags;
+@property (nonatomic, copy) NSMutableArray *selectedTags;
 
 /*!
  Any additional properties to store against the user on the network. Maximum of 50 key/value pairs.
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSDictionary *additionalProperties;
+@property (nonatomic, copy) NSDictionary *additionalProperties;
 
 /*!
  First name of the user.
 
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *firstName;
+@property (nonatomic, copy) NSString *firstName;
 
 /*!
  Last name of the user.
 
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *lastName;
+@property (nonatomic, copy) NSString *lastName;
 
 /*!
  Basic initialiser method

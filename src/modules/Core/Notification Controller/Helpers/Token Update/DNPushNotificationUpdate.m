@@ -51,7 +51,6 @@ static NSString *DNContactAlertSound = @"contactAlertSound";
 - (NSDictionary *) parameters {
 
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-
     [parameters dnSetObject:[self token] forKey:DNToken];
     [parameters dnSetObject:DNAPNS forKey:DNRegistrationType];
     [parameters dnSetObject:[self messageAlertSound] forKey:DNMessageAlertSound];

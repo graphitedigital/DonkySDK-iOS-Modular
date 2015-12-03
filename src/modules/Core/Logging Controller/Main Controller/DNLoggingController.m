@@ -30,7 +30,7 @@ static NSString *const DNPascalAlwaysSubmitErrors = @"alwaysSubmitErrors";
 @implementation DNLoggingController
 
 + (void)log:(NSString *)message function:(NSString *)function line:(NSInteger)line logType:(DonkyLogType) logType {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         //Can we output debug logs:
         if ([DNAppSettingsController loggingEnabled]) {
             //We check if we can log out this type of error, if not simply return early.
@@ -58,7 +58,7 @@ static NSString *const DNPascalAlwaysSubmitErrors = @"alwaysSubmitErrors";
             }
 
             //Construct the log string:
-            NSString *log = [NSString stringWithFormat:@"\n%@ [line %li] %@\nThread: %@", function, (long) line, message, [NSThread currentThread]];
+            NSString *log = [NSString stringWithFormat:@"\n%@ [line %li] %@", function, (long) line, message];
 
             //Output to the console:
             NSLog(@"%@", log);

@@ -77,7 +77,7 @@
        if ([results count]) {
            if ([results count] > 1) {
                DNDebugLog(@"Fetched more than one object: %@\nCleaning data...", results);
-               //Cleaing dupes:
+               //Cleaning dupes:
                NSMutableArray *delete = [results mutableCopy];
                [delete removeObject:[results lastObject]];
                [context deleteAllObjectsInArray:delete];

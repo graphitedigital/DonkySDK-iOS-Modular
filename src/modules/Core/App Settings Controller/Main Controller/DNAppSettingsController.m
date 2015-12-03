@@ -56,5 +56,4 @@
     return [[DNAppSettingsController donkyConfigurationPlist][kDNDebugLogSubmissionInterval] integerValue];
 }
 
-
 @end

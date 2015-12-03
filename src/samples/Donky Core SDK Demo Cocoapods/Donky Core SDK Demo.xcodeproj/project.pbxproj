@@ -68,8 +68,8 @@
 		34F5262BD91B1D761608DB88 /* App Delegate */ = {
 			isa = PBXGroup;
 			children = (
-				34F52BBA597861DEC1DCDE5B /* AppDelegate.m */,
 				34F520984C69F5DE6E4F0343 /* AppDelegate.h */,
+				34F52BBA597861DEC1DCDE5B /* AppDelegate.m */,
 			);
 			path = "App Delegate";
 			sourceTree = "<group>";
@@ -163,6 +163,7 @@
 				D0D6D20C1B64D371009E1CDC /* Frameworks */,
 				D0D6D20D1B64D371009E1CDC /* Resources */,
 				69BF28FA7D24BAF2EBBF30E4 /* Copy Pods Resources */,
+				6E70E21BC6E1A9018EB0287E /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -277,6 +278,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Donky Core SDK Demo/Pods-Donky Core SDK Demo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6E70E21BC6E1A9018EB0287E /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Donky Core SDK Demo/Pods-Donky Core SDK Demo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

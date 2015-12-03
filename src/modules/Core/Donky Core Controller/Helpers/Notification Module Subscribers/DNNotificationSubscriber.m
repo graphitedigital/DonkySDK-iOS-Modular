@@ -26,10 +26,8 @@ static NSString *const DNDeliveredNoSubscription = @"DeliveredNoSubscription";
 static NSString *const DNResult = @"result";
 
 @interface DNNotificationSubscriber ()
-
 @property(nonatomic, strong) NSMutableDictionary *donkyNotificationSubscribers;
 @property(nonatomic, strong) NSMutableDictionary *customNotificationSubscribers;
-
 @end
 
 @implementation DNNotificationSubscriber
@@ -39,10 +37,8 @@ static NSString *const DNResult = @"result";
     self = [super init];
 
     if (self) {
-
         [self setDonkyNotificationSubscribers:[[NSMutableDictionary alloc] init]];
         [self setCustomNotificationSubscribers:[[NSMutableDictionary alloc] init]];
-
     }
 
     return self;

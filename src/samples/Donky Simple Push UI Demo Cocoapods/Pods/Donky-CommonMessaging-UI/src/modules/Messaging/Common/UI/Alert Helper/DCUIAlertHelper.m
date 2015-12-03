@@ -2,8 +2,8 @@
 //  DCUIAlertHelper.m
 //  RichInbox
 //
-//  Created by Chris Watson on 07/06/2015.
-//  Copyright (c) 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 07/06/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import "DCUIAlertHelper.h"
@@ -14,8 +14,9 @@
 
 + (void)showAlertViewWithDelegate:(id)delegate title:(NSString *)title message:(NSString *)message okayButton:(NSString *)okayTitle okayHandler:(SEL)selector textField:(BOOL)textField {
 
-    if (!okayTitle)
+    if (!okayTitle) {
         okayTitle = DCUILocalizedString(@"common_ui_generic_ok");
+    }
 
     if ([DNSystemHelpers systemVersionAtLeast:8.0]) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
@@ -46,8 +47,46 @@
 
         [alertView show];
     }
-
 }
 
++ (void)showButtonAlertWithDelegate:(id)delegate title:(NSString *)title message:(NSString *)message firstButton:(NSString *)firstTitle secondButton:(NSString *)secondTitle firstHandler:(SEL)firstHandler secondHandler:(SEL)secondHandler textField:(BOOL)textField {
+
+    if ([DNSystemHelpers systemVersionAtLeast:8.0]) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
+                                                                                 message:message
+                                                                          preferredStyle:UIAlertControllerStyleAlert];
+        if (textField) {
+            [alertController addTextFieldWithConfigurationHandler:nil];
+        }
+        
+        
+        [alertController addAction:[UIAlertAction actionWithTitle:firstTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            if ([delegate respondsToSelector:firstHandler]) {
+                ((void (*)(id, SEL))[delegate methodForSelector:firstHandler])(delegate, firstHandler);
+            }
+        }]];
+
+        [alertController addAction:[UIAlertAction actionWithTitle:secondTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            if ([delegate respondsToSelector:secondHandler]) {
+                ((void (*)(id, SEL, UIAlertController *))[delegate methodForSelector:secondHandler])(delegate, secondHandler, alertController);
+            }
+        }]];
+        
+        [delegate presentViewController:alertController animated:YES completion:nil];
+    }
+    
+    else {
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                            message:message
+                                                           delegate:self
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:firstTitle, secondTitle, nil];
+        if (textField) {
+            [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
+        }
+        [alertView show];
+    }
+}
 
 @end

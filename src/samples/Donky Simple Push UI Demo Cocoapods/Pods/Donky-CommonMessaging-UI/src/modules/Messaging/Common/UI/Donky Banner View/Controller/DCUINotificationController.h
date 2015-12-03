@@ -2,8 +2,8 @@
 //  DCUINotificationController.h
 //  RichInbox
 //
-//  Created by Chris Watson on 16/06/2015.
-//  Copyright © 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 16/06/2015.
+//  Copyright © 2015 Donky Networks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -36,5 +36,13 @@
  @since 2.2.2.7
  */
 - (void)bannerDismissTimerDidTick;
+
+/*!
+ Helper method to overide the attempt of loading an avatar. This will display the 
+ default 'message' image.
+ 
+ @since 2.4.3.1
+ */
+- (void)loadDefaultAvatar;
 
 @end

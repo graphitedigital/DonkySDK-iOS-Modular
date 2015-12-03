@@ -2,7 +2,7 @@
 //  DNKeychainItemWrapper.m
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 19/02/2015.
+//  Created by Donky Networks on 19/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -28,23 +28,29 @@
 }
 
 + (id)objectForKey:(NSString *)key {
-    id ret = nil;
+    id value = nil;
     NSMutableDictionary *keychainQuery = [self getKeychainQuery:key];
-    keychainQuery[(__bridge id) kSecReturnData] = (id) kCFBooleanTrue;
-    keychainQuery[(__bridge id) kSecMatchLimit] = (__bridge id) kSecMatchLimitOne;
     CFDataRef keyData = NULL;
+    
+    keychainQuery[(__bridge id) kSecReturnData] = (__bridge id) kCFBooleanTrue;
+    keychainQuery[(__bridge id) kSecMatchLimit] = (__bridge id) kSecMatchLimitOne;
+    
     if (SecItemCopyMatching((__bridge CFDictionaryRef)keychainQuery, (CFTypeRef *)&keyData) == noErr) {
         @try {
-            ret = [NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
+            value = [NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
         }
         @catch (NSException *e) {
-            DNErrorLog(@"Unarchive of %@ failed: %@", key, e);
-            [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
+            DNSensitiveLog(@"Unarchive of %@ failed: %@", key, [e description]);
+            value = nil;
         }
         @finally {}
     }
-    if (keyData) CFRelease(keyData);
-    return ret;
+    
+    if (keyData) {
+        CFRelease(keyData);
+    }
+    
+    return value;
 }
 
 @end

@@ -192,8 +192,8 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             //Specific for this call:
-            if (([DNErrorController serviceReturned:401 error:error] && [DNAccountController isRegistered]) || [[error userInfo][DNFailureKey] isEqualToString:DNMissingNetworkID]) {
-                DNErrorLog(@"User is unauthroised for token refresh. User details may have been deleted on the network...\n OR NetworkID is invalid: %@\nRe-registering user...", [DNDonkyNetworkDetails networkId]);
+            if ([DNErrorController serviceReturned:401 error:error]) {
+                DNErrorLog(@"User is unauthroised for token refresh. User details may have been deleted on the network...\n OR NetworkID is invalid.\nRe-registering user...");
                 [DNSignalRInterface closeConnection];
                 [DNDonkyNetworkDetails saveNetworkID:nil];
                 [DNAccountController registerDeviceUser:[[DNAccountController registrationDetails] userDetails]
@@ -202,6 +202,10 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
                                                 success:successBlock
                                                 failure:failureBlock];
             }
+            else if ([DNAccountController isRegistered] || [[error userInfo][DNFailureKey] isEqualToString:DNMissingNetworkID]) {
+                DNErrorLog(@"%@", task);
+            }
+            
             else if ([DNErrorController serviceReturned:403 error:error] && [DNAccountController isRegistered]) {
                 //We are suspended:
                 [DNAccountController setIsSuspended:YES];
@@ -538,7 +542,7 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
                                                 selectedTags:[currentUser selectedTags]
                                         additionalProperties:originalUserProperties];
 
-    [DNAccountController updateUserDetails:updatedUser success:successBlock failure:failureBlock];
+    [DNAccountController updateUserDetails:updatedUser automaticallyHandleUserIDTaken:NO success:successBlock failure:failureBlock];
 
 }
 

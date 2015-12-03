@@ -2,7 +2,7 @@
 //  DNModuleDefinition.h
 //  Core Container
 //
-//  Created by Chris Watson on 18/03/2015.
+//  Created by Donky Networks on 18/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -18,14 +18,14 @@
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *name;
 
 /*!
  The module version number.
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *version;
+@property (nonatomic, readonly) NSString *version;
 
 /*!
  Initialiser to create a new DNModule object.

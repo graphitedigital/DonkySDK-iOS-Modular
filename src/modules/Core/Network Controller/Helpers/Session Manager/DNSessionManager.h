@@ -90,5 +90,4 @@
  */
 - (NSURLSessionDataTask *)performGetWithRoute:(NSString *)route parameteres:(NSDictionary *)parameters success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
 
-
 @end

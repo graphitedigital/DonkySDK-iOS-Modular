@@ -2,8 +2,8 @@
 //  DKDonkyUI+Localization.h
 //  DonkySDK
 //
-//  Created by David Taylor on 14/04/2014.
-//  Copyright (c) 2014 Compsoft. All rights reserved.
+//  Created by Donky Networks on 14/04/2015.
+//  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

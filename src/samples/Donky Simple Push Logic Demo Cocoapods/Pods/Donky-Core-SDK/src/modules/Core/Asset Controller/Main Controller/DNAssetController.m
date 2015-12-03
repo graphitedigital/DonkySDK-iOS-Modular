@@ -2,7 +2,7 @@
 //  DNAssetController.m
 //  Core Container
 //
-//  Created by Chris Watson on 23/03/2015.
+//  Created by Donky Networks on 23/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -16,10 +16,11 @@ static NSString *const DNAssetURLFormat = @"AssetDownloadUrlFormat";
 
 @implementation DNAssetController
 
-+ (UIImage *) avatarAssetForID:(NSString *)avatarAssetID {
++ (UIImage *)avatarAssetForID:(NSString *)avatarAssetID {
 
-    if (!avatarAssetID || !avatarAssetID.length)
+    if (!avatarAssetID || ![avatarAssetID length]) {
         return nil;
+    }
     
     NSString *assetDownloadUrl = [DNConfigurationController configuration][DNAssetURLFormat];
 
@@ -27,11 +28,16 @@ static NSString *const DNAssetURLFormat = @"AssetDownloadUrlFormat";
 
     assetDownloadUrl = [assetDownloadUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
+    if (!assetDownloadUrl) {
+        return nil;
+    }
+
     NSURL *url = [[NSURL alloc] initWithString:assetDownloadUrl];
     NSData *data = [[NSData alloc] initWithContentsOfURL:url];
 
-    if (!data)
+    if (!data) {
         DNErrorLog(@"Couldn't download asset: %@", assetDownloadUrl);
+    }
 
     return [UIImage imageWithData:data];
     

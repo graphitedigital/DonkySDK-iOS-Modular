@@ -62,6 +62,6 @@
  
  @since 2.0.0.0
  */
-- (instancetype) initWithDeviceDetails:(DNDeviceDetails *)deviceDetails clientDetails:(DNClientDetails *)clientDetails userDetails:(DNUserDetails *)userDetails;
+- (instancetype)initWithDeviceDetails:(DNDeviceDetails *)deviceDetails clientDetails:(DNClientDetails *)clientDetails userDetails:(DNUserDetails *)userDetails;
 
 @end

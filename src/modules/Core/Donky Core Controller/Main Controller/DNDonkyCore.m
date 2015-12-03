@@ -21,18 +21,17 @@
 #import "DNDonkyCoreFunctionalHelper.h"
 #import "DNClientNotification.h"
 #import "DNSignalRInterface.h"
+#import "DNQueueManager.h"
 
 @interface DNDonkyCore ()
 @property (nonatomic, strong) DNNotificationSubscriber *notificationSubscriber;
+@property (nonatomic, getter=isSettingBadgeCount) BOOL settingBadgeCount;
+@property (nonatomic, strong) NSMutableArray *pendingBadgeCountUpdates;
 @property (nonatomic, strong) DNRegisteredServices *registeredServices;
 @property (nonatomic, strong) DNEventSubscriber *eventSubscriber;
 @property (nonatomic, strong) DNOutboundModules *outboundModules;
 @property (nonatomic, strong) NSMutableArray *registeredModules;
-@property (nonatomic, getter=isSettingBadgeCount) BOOL settingBadgeCount;
-@property (nonatomic, strong) NSMutableArray *pendingBadgeCountUpdates;
 @end
-
-dispatch_queue_t donkyCoreQueue;
 
 @implementation DNDonkyCore
 
@@ -145,12 +144,10 @@ dispatch_queue_t donkyCoreQueue;
 }
 
 - (void)initialiseWithAPIKey:(NSString *)apiKey userDetails:(DNUserDetails *)userDetails deviceDetails:(DNDeviceDetails *)deviceDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
-    
-    if (!donkyCoreQueue) {
-        donkyCoreQueue = dispatch_queue_create("com.donky.initialiseQueue", NULL);
-    }
-    
-    dispatch_async(donkyCoreQueue, ^{
+
+    __weak __typeof(self) weakSelf = self;
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         if (!apiKey || apiKey.length == 0) {
             DNErrorLog(@"---- No API Key supplied - Bailing out of Donky Initialisation, please check input... ----");
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -161,28 +158,24 @@ dispatch_queue_t donkyCoreQueue;
             return;
         }
 
-        __weak __typeof(self) weakself = self;
-        
         //Save the api key:
         [DNDonkyNetworkDetails saveAPIKey:apiKey];
 
         //Check if registered:ios moving app to background status
         [DNAccountController initialiseUserDetails:userDetails deviceDetails:deviceDetails success:^(NSURLSessionDataTask *task, id responseData) {
 
-            [[NSNotificationCenter defaultCenter] addObserver:weakself selector:@selector(applicationDidEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
-            [[NSNotificationCenter defaultCenter] addObserver:weakself selector:@selector(applicationDidEnterForeground) name:UIApplicationDidBecomeActiveNotification object:nil];
-            [[NSNotificationCenter defaultCenter] addObserver:weakself selector:@selector(applicationWillEnterForegroundNotification) name:UIApplicationWillEnterForegroundNotification object:nil];
-            
-            [DNAccountController updateClientModules:[weakself allRegisteredModules]];
+            [[NSNotificationCenter defaultCenter] addObserver:weakSelf selector:@selector(applicationDidEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:weakSelf selector:@selector(applicationDidEnterForeground) name:UIApplicationDidBecomeActiveNotification object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:weakSelf selector:@selector(applicationWillEnterForegroundNotification) name:UIApplicationWillEnterForegroundNotification object:nil];
 
-            [weakself addCoreSubscribers];
+            [DNAccountController updateClientModules:[weakSelf allRegisteredModules]];
+
+            [weakSelf addCoreSubscribers];
 
             [DNSignalRInterface openConnection];
-
             [[DNNetworkController sharedInstance] synchronise];
-
             [DNNotificationController registerForPushNotifications];
-            
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 DNInfoLog(@"DonkySDK is initialised. All user data has been saved.");
                 if (successBlock) {

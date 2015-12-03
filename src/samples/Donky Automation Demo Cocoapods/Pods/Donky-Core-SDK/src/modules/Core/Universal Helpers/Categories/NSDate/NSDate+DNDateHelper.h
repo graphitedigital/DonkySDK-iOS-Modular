@@ -2,7 +2,7 @@
 //  DKDateHelper.h
 //  Logging
 //
-//  Created by Chris Watson on 13/02/2015.
+//  Created by Donky Networks on 13/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -67,10 +67,31 @@
  
  @param secondDate the date which should be after the current date.
  
- @return BOOL inditcating if the date is before the supplied date.
+ @return BOOL indicating if the date is before the supplied date.
  
  @since 2.0.0.0
  */
 - (BOOL)isDateBeforeDate:(NSDate *)secondDate;
+
+/*!
+ Helper method to return the date in the format of HH:MM
+ 
+ @return a new string formatted from the date.
+ 
+ @since 2.6.5.4
+ */
+- (NSString *)donkyChatMessageDate;
+
+/*!
+ Helper method to determine if the date is older than 24 hours. This is primarily used
+ for the contacts module.
+ 
+ @return BOOL indicating if the date is older than 24 hours.
+ 
+ @since 2.6.5.4
+ */
+- (BOOL)isDateOlderThan24Hours;
+
+- (BOOL)donkyHasReachedDate;
 
 @end

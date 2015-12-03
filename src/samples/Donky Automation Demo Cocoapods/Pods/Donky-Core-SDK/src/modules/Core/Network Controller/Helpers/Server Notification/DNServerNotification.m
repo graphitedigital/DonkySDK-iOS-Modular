@@ -2,7 +2,7 @@
 //  DNServerNotification.m
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 18/02/2015.
+//  Created by Donky Networks on 18/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -33,10 +33,10 @@ static NSString *DNServerNotificationData = @"data";
     if (self) {
 
         @try {
-            self.notificationType = notification[DNServerNotificationType];
-            self.serverNotificationID = notification[DNServerNotificationID];
-            self.createdOn = [NSDate donkyDateFromServer:notification[DNServerNotificationCreatedOn]];
-            self.data = [[notification[DNServerNotificationData] mutableCopy] donkyRemoveNullValues];
+            [self setNotificationType:notification[DNServerNotificationType]];
+            [self setServerNotificationID:notification[DNServerNotificationID]];
+            [self setCreatedOn:[NSDate donkyDateFromServer:notification[DNServerNotificationCreatedOn]]];
+            [self setData:[[notification[DNServerNotificationData] mutableCopy] donkyRemoveNullValues]];
         }
         @catch (NSException *e) {
             DNErrorLog(@"Fatal exception caught %@. Potential break in contract from server notification: %@", [e description], notification);

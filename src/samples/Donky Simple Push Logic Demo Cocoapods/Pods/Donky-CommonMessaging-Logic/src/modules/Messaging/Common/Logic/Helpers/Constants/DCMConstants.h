@@ -2,13 +2,17 @@
 //  DCMConstants.h
 //  RichPopUp
 //
-//  Created by Chris Watson on 15/04/2015.
+//  Created by Donky Networks on 15/04/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    DMVLeftSide = 0,
+    DMVRightSide
+} DonkyMessageViewBarButtonSide;
 
 //
 extern NSString *const DCMMessageID;
@@ -77,5 +81,14 @@ extern NSString * const DCMUrlToShare;
 extern NSString *const DCMSenderInternalUserID;
 
 //
+extern NSString *const DCMRecipientExternalUserID;
+
+//
+extern NSString *const DCMRecipientInternalUserID;
+
+//
 extern NSString * const kDNDonkyEventNotificationTapped;
+
+//
+extern NSString * const kDCMAssets;
 

@@ -22,6 +22,8 @@
 #import "DNNetworkDataHelper.h"
 #import "DNSignalRInterface.h"
 #import "DNNetworkControllerQueue.h"
+#import "DNFileHelpers.h"
+#import "DNQueueManager.h"
 
 static NSString *const DNMaxTimeWithoutSynchronise = @"MaxMinutesWithoutNotificationExchange";
 static NSString *const DNCustomType = @"customType";
@@ -38,8 +40,6 @@ static NSString *const DNCustomType = @"customType";
 @property (nonatomic, strong) NSDate *lastSynchronise;
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @end
-
-dispatch_queue_t networkControllerQueue;
 
 @implementation DNNetworkController
 
@@ -72,10 +72,6 @@ dispatch_queue_t networkControllerQueue;
     if (self)
     {
         
-        if (!networkControllerQueue) {
-            networkControllerQueue = dispatch_queue_create("com.donky.networkController", NULL);
-        }
-        
         [self setContext:[[DNDataController sharedInstance] mainContext]];
         
         [self setControllerQueue:[[DNNetworkControllerQueue alloc] init]];
@@ -96,8 +92,8 @@ dispatch_queue_t networkControllerQueue;
 }
 
 - (void)initialisePendingNotifications {
-    [[self pendingClientNotifications] addObjectsFromArray:[DNNetworkDataHelper clientNotificationsWithTempContext:[self context]]];
-    [[self pendingContentNotifications] addObjectsFromArray:[DNNetworkDataHelper contentNotificationsWithTempContext:[self context]]];
+    [[self pendingClientNotifications] addObjectsFromArray:[DNNetworkDataHelper clientNotificationsWithContext:[self context]]];
+    [[self pendingContentNotifications] addObjectsFromArray:[DNNetworkDataHelper contentNotificationsWithContext:[self context]]];
 }
 
 - (void)startMinimumTimeForSynchroniseBuffer:(NSTimeInterval)buffer {
@@ -125,8 +121,8 @@ dispatch_queue_t networkControllerQueue;
     @try {
         
         __weak __typeof(self) weakSelf = self;
-        
-        dispatch_async(networkControllerQueue, ^{
+
+        dispatch_async(donky_network_processing_queue(), ^{
             
             //We remove all non active tasks from the queue:
             [weakSelf removeAllCompletedTasksFromQueue];
@@ -166,11 +162,11 @@ dispatch_queue_t networkControllerQueue;
                     }
                     
                     NSURLSessionTask *currentTask = [DNNetworkHelper performNetworkTaskForRequest:request sessionManager:sessionManager success:^(NSURLSessionDataTask *task, id responseData) {
-                        dispatch_async(networkControllerQueue, ^{
+                        dispatch_async(donky_network_processing_queue(), ^{
                             [weakSelf handleSuccess:responseData forTask:task request:request];
                         });
                     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                        dispatch_async(networkControllerQueue, ^{
+                        dispatch_async(donky_network_processing_queue(), ^{
                             [weakSelf handleError:error task:task request:request];
                         });
                     }];
@@ -204,6 +200,44 @@ dispatch_queue_t networkControllerQueue;
             failureBlock(nil, nil);
         }
     }
+}
+
+- (void)streamAssetUpload:(NSArray *)assetsToUpload success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
+
+    NSDictionary *asset = [assetsToUpload firstObject];
+    NSError *error2;
+    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:@{@"MimeType" : asset[@"mimeType"], @"Type" : asset[@"type"]} options:0 error:&error2];
+    NSString * myString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST"
+                                                                                 URLString:[[DNDonkyNetworkDetails secureServiceRootUrl] stringByAppendingString:kDNNetworkUploadAsset]
+                                                                                parameters:@{@"Test" : @"Nil"} error:nil];
+
+    [request setValue:myString forHTTPHeaderField:@"AssetMetaData"];
+
+    NSInputStream *stream = [NSInputStream inputStreamWithData:asset[@"data"]];
+    [request setHTTPBodyStream:stream];
+
+    [request setValue:@"DonkyiOSModularSdk" forHTTPHeaderField:@"DonkyClientSystemIdentifier"];
+    [request setValue:asset[@"mimeType"] forHTTPHeaderField:@"Content-Type"];
+    [request setValue:[NSString stringWithFormat:@"Bearer %@", [DNDonkyNetworkDetails accessToken]] forHTTPHeaderField:@"Authorization"];
+
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    NSProgress *progress = nil;
+
+    NSURLSessionUploadTask *uploadTask = [manager uploadTaskWithRequest:request fromData:asset[@"data"] progress:&progress completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+        if (error) {
+            if (failureBlock) {
+                failureBlock(nil, error);
+            }
+        } else {
+            if (successBlock) {
+                successBlock(nil, responseObject);
+            }
+        }
+    }];
+
+    [uploadTask resume];
 }
 
 - (void)handleSuccess:(id)responseData forTask:(NSURLSessionDataTask *)task request:(DNRequest *)request {
@@ -249,8 +283,8 @@ dispatch_queue_t networkControllerQueue;
 - (void)handleError:(NSError *)error task:(NSURLSessionDataTask *)task request:(DNRequest *)request {
     DNErrorLog(@"Network reponse error: %@", [error localizedDescription]);
     [self removeTask:task];
-    
-    dispatch_async(networkControllerQueue, ^{
+
+    dispatch_async(donky_network_processing_queue(), ^{
         if (![DNErrorController serviceReturned:400 error:error] && ![DNErrorController serviceReturned:401 error:error] && ![DNErrorController serviceReturned:403 error:error] && ![DNErrorController serviceReturned:404 error:error])
             [[self retryHelper] retryRequest:request task:task];
         else if ([DNErrorController serviceReturned:401 error:error] && ![[request route] isEqualToString:kDNNetworkAuthentication]) {
@@ -273,7 +307,7 @@ dispatch_queue_t networkControllerQueue;
 - (void)serverNotificationForId:(NSString *)notificationID success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
     NSString *getNotificationRoute = [NSString stringWithFormat:@"%@%@", kDNNetworkGetNotification, notificationID];
     [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:YES route:getNotificationRoute httpMethod:DNGet parameters:nil success:^(NSURLSessionDataTask *task, id responseData) {
-        dispatch_async(networkControllerQueue, ^{
+        dispatch_async(donky_network_processing_queue(), ^{
             DNServerNotification *serverNotification = [[DNServerNotification alloc] initWithNotification:responseData];
             NSMutableDictionary *notifications = [[NSMutableDictionary alloc] init];
             notifications[[serverNotification notificationType]] = @[serverNotification];
@@ -321,23 +355,25 @@ dispatch_queue_t networkControllerQueue;
 
 - (void)synchroniseSuccess:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
     @try {
-        dispatch_async(networkControllerQueue, ^{
-            if (![self synchroniseTimer]) {
+        __weak typeof(self) weakSelf = self;
+
+        dispatch_async(donky_network_processing_queue(), ^{
+            if (![weakSelf synchroniseTimer]) {
                 [self startMinimumTimeForSynchroniseBuffer:0];
             }
             
             //Set the last sync date
-            [self setLastSynchronise:[NSDate date]];
+            [weakSelf setLastSynchronise:[NSDate date]];
             
             //Update the timer as the current timer now has an invalid time.
-            [self synchroniseTimer];
+            [weakSelf synchroniseTimer];
             
             //Remove completed tasks:
-            [self removeAllCompletedTasksFromQueue];
+            [weakSelf removeAllCompletedTasksFromQueue];
             
             //Publish:
-            @synchronized ([self pendingClientNotifications]) {
-                [[self pendingClientNotifications] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            @synchronized ([weakSelf pendingClientNotifications]) {
+                [[weakSelf pendingClientNotifications] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     if (![obj isKindOfClass:[DNClientNotification class]]) {
                         DNErrorLog(@"Whoops, something has gone wrong, expected class DNClientNotification. Got %@", NSStringFromClass([obj class]));
                     }
@@ -348,8 +384,8 @@ dispatch_queue_t networkControllerQueue;
                 }];
             }
             
-            @synchronized ([self pendingContentNotifications]) {
-                [[self pendingContentNotifications] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            @synchronized ([weakSelf pendingContentNotifications]) {
+                [[weakSelf pendingContentNotifications] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     if (![obj isKindOfClass:[DNContentNotification class]]) {
                         DNErrorLog(@"Whoops, something has gone wrong, expected class DNContentNotification. Got %@", NSStringFromClass([obj class]));
                     }
@@ -360,28 +396,27 @@ dispatch_queue_t networkControllerQueue;
                     }
                 }];
             }
-            
-            //This is where duff notifications should be trimmed out
-            NSMutableDictionary *params = [DNNetworkDataHelper networkClientNotifications:[self pendingClientNotifications]
-                                                              networkContentNotifications:[self pendingContentNotifications]
+
+            NSMutableDictionary *params = [DNNetworkDataHelper networkClientNotifications:[weakSelf pendingClientNotifications]
+                                                              networkContentNotifications:[weakSelf pendingContentNotifications]
                                                                               tempContext:YES];
-            NSArray *sentClientNotifications = [DNNetworkHelper clientNotifications:[self pendingClientNotifications]];
-            NSArray *sentContentNotifications = [DNNetworkHelper contentNotifications:[self pendingContentNotifications]];
-            
+            NSArray *sentClientNotifications = [DNNetworkHelper clientNotifications:[weakSelf pendingClientNotifications]];
+            NSArray *sentContentNotifications = [DNNetworkHelper contentNotifications:[weakSelf pendingContentNotifications]];
+
             //Is data too big?
             CGFloat maxByteSize = [DNConfigurationController maximumSignalRByteSize];
-            
+
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params
                                                                options:NSJSONWritingPrettyPrinted
                                                                  error:nil];
-            
+
             NSString *data = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-            
+
             CGFloat byteSize = [data lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-            
+
             if ([DNSignalRInterface signalRServiceIsReady] && (maxByteSize && byteSize < maxByteSize)) {
-                
-                [[self controllerQueue] sendData:params completion:^(id response, NSError *error) {
+
+                [[weakSelf controllerQueue] sendData:params completion:^(id response, NSError *error) {
                     if (!error) {
                         @try {
                             [self cleanUpClientNotifications:sentClientNotifications contentNotifications:sentContentNotifications];
@@ -399,7 +434,7 @@ dispatch_queue_t networkControllerQueue;
                     }
                     else {
                         [DNNetworkDataHelper saveClientNotificationsToStore:sentClientNotifications];
-                        [DNNetworkDataHelper saveClientNotificationsToStore:sentContentNotifications];
+                        [DNNetworkDataHelper saveContentNotificationsToStore:sentContentNotifications];
                         dispatch_async(dispatch_get_main_queue(), ^{
                             if (failureBlock) {
                                 failureBlock(nil, error);
@@ -408,9 +443,9 @@ dispatch_queue_t networkControllerQueue;
                     }
                 }];
             }
-            
+
             else {
-                if ([[self controllerQueue] synchroniseWithParams:params successBlock:^(NSURLSessionDataTask *task, id responseData) {
+                if ([[weakSelf controllerQueue] synchroniseWithParams:params successBlock:^(NSURLSessionDataTask *task, id responseData) {
                     @try {
                         [self cleanUpClientNotifications:sentClientNotifications contentNotifications:sentContentNotifications];
                         [self processNotificationResponse:responseData task:nil success:successBlock failure:failureBlock];
@@ -424,11 +459,11 @@ dispatch_queue_t networkControllerQueue;
                             }
                         });
                     }
-                    
+
                 } failureBlock:^(NSURLSessionDataTask *task, NSError *error) {
                     //Save data:
                     [DNNetworkDataHelper saveClientNotificationsToStore:sentClientNotifications];
-                    [DNNetworkDataHelper saveClientNotificationsToStore:sentContentNotifications];
+                    [DNNetworkDataHelper saveContentNotificationsToStore:sentContentNotifications];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (failureBlock) {
                             failureBlock(task, error);
@@ -444,7 +479,6 @@ dispatch_queue_t networkControllerQueue;
             }
         });
     }
-    
     @catch (NSException *exception) {
         [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -456,21 +490,14 @@ dispatch_queue_t networkControllerQueue;
 }
 
 - (void)cleanUpClientNotifications:(NSArray *)clientNotifications contentNotifications:(NSArray *)contentNotifications {
-    
-    //We need to clear out these types:
+    [[self pendingClientNotifications] removeObjectsInArray:clientNotifications];
+    [[self pendingContentNotifications] removeObjectsInArray:contentNotifications];
+
     if ([clientNotifications count]) {
         [DNNetworkDataHelper deleteNotifications:clientNotifications];
     }
     if ([contentNotifications count]) {
         [DNNetworkDataHelper deleteNotifications:contentNotifications];
-    }
-    
-    @synchronized([self pendingClientNotifications]) {
-        [[self pendingClientNotifications] removeObjectsInArray:clientNotifications];
-    }
-    
-    @synchronized([self pendingContentNotifications]) {
-        [[self pendingContentNotifications] removeObjectsInArray:contentNotifications];
     }
 }
 
@@ -515,9 +542,9 @@ dispatch_queue_t networkControllerQueue;
 }
 
 - (void)removeAllCompletedTasksFromQueue {
-    NSMutableArray *tasksToClear = [[NSMutableArray alloc] init];
     //Clear completed tasks:
     @synchronized ([self exchangeRequests]) {
+        NSMutableArray *tasksToClear = [[NSMutableArray alloc] init];
         [[self exchangeRequests] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             NSURLSessionDataTask *task = obj;
             if ([task state] != NSURLSessionTaskStateRunning) {

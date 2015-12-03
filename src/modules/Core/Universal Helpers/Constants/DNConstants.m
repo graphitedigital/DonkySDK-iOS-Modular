@@ -41,7 +41,9 @@ NSString * const kDNNetworkGetActiveRegions = @"api/locationservices/geofence/ac
 
 NSString * const kDNNetworkGetActiveTriggers = @"api/trigger/clientconfiguration";
 
-NSString * const kDNNetworkUploadAsset = @"api/asset/uploadmany";
+NSString * const kDNNetworkUploadAsset = @"api/asset";
+
+NSString * const kDNNetworkConversationHistory = @"api/messagehistory/conversation";
 
 #pragma mark -
 #pragma mark - Donky Notification Types
@@ -75,6 +77,12 @@ NSString * const kDNDonkyNotificationChatMessageRejected = @"MessageRejected";
 
 //
 NSString * const kDNDonkyNotificationUserIsTyping = @"UserIsTyping";
+
+//
+NSString * const kDNDonkyNotificationLocationRequest = @"LocationRequest";
+
+//
+NSString * const kDNDonkyNotificationLocationReceived = @"UserLocation";
 
 #pragma mark -
 #pragma mark - Donky Event Types
@@ -114,6 +122,12 @@ NSString * const kDNDonkySetBadgeCount = @"DonkySetBadgeCountEevnt";
 
 //
 NSString * const kDNDonkyEventTokenRefreshed = @"DonkyEventTokenRefresh";
+
+//
+NSString * const kDNDonkyEventLocationReceived = @"DonkyEventLocationReceived";
+
+//
+NSString * const kDNDonkyEventLocationRequestReceived = @"DonkyEventLocationRequestReceived";
 
 #pragma mark -
 #pragma mark - Donky Config Items

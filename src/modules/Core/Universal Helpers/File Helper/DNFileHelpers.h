@@ -158,4 +158,16 @@
  */
 + (CGFloat)sizeForFile:(NSString *)path;
 
+/*!
+ Helper method to determine the size of data. The data is base64 encoded into a string. 
+ Returns 0.0 if size cannot be determined.
+ 
+ @param data the data who's size should be calculated (must be base64 string encodable).
+ 
+ @return the size of the data in bytes.
+ 
+ @since 2.6.5.5.
+ */
++ (CGFloat)sizeOfData:(NSData *)data;
+
 @end

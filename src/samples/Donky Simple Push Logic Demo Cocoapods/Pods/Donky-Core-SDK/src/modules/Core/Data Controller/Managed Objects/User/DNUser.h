@@ -2,13 +2,12 @@
 //  DNUser.h
 //  DonkyCore
 //
-//  Created by Chris Watson on 08/04/2015.
+//  Created by Donky Networks on 08/04/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-
 
 @interface DNUser : NSManagedObject
 
@@ -22,5 +21,6 @@
 @property (nonatomic, retain) NSString * userID;
 @property (nonatomic, retain) NSString * firstName;
 @property (nonatomic, retain) NSString * lastName;
+@property (nonatomic, retain) NSString * networkProfileID;
 
 @end

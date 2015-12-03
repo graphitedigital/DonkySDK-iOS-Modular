@@ -2,7 +2,7 @@
 //  DNDataController.h
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 16/02/2015.
+//  Created by Donky Networks on 16/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -22,13 +22,6 @@
 @property (nonatomic, strong, readonly) NSManagedObjectContext *mainContext;
 
 /*!
- The temporary context that is used for managing all managed objects in teh Donky SDK.
- 
- @since 2.0.0.0
- */
-@property (nonatomic, strong, readonly) NSManagedObjectContext *temporaryContext;
-
-/*!
  The persistent store coordinator for the Core Data model used in the Donky SDK.
  
  @since 2.0.0.0
@@ -46,29 +39,30 @@
 + (DNDataController *)sharedInstance;
 
 /*!
- Helper method to save all the pending data transactions in both the main and 
- temporary context.
+ Class method to return a new temporary nsmanaged object context. When saving this context, the changes will be merged into the main context.
+ Use this when amending or accessing data base object on background threads.
+ 
+ @return a new NSManagedObjectContext
+ 
+ @since 2.6.5.4
+ */
++ (NSManagedObjectContext *)temporaryContext;
+
+/*!
+ Helper method to save all the pending data transactions in the main context.
  
  @since 2.0.0.0
  */
 - (void)saveAllData;
 
-#pragma mark -
-#pragma mark - Private... Not for public consumption. Public use is unsupported and may result in undesired SDK behaviour.
-
 /*!
- PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ Method to save a NSManagedObjectContext, use this to save the temporary contexts. This will first checkto see if there
+ are any hcanges before attemping to save so it's save to call regardless.
+ 
+ @param context the context which should be saved.
+ 
+ @since 2.6.5.4
  */
-- (DNUserDetails *)currentDeviceUser;
-
-/*!
- PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
- */
-- (void)saveUserDetails:(DNUserDetails *)details;
-
-/*!
- PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
- */
-- (DNDeviceUser *)newDevice;
+- (void)saveContext:(NSManagedObjectContext *)context;
 
 @end

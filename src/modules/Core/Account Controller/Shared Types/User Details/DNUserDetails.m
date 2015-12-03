@@ -23,18 +23,9 @@ static NSString *const DNUserRegistrationAdditionalProperties = @"additionalProp
 static NSString *const DNRegistrationId = @"id";
 
 @interface DNUserDetails ()
-
 @property(nonatomic, readwrite) NSString *userID;
 @property(nonatomic, readwrite, getter=isAnonymous) BOOL anonymous;
-@property(nonatomic, readwrite) NSString *displayName;
-@property(nonatomic, readwrite) NSString *emailAddress;
-@property(nonatomic, readwrite) NSString *mobileNumber;
-@property(nonatomic, readwrite) NSString * countryCode;
-@property(nonatomic, readwrite) NSString * avatarAssetID;
-@property(nonatomic, readwrite) NSMutableArray *selectedTags;
-@property(nonatomic, readwrite) NSDictionary *additionalProperties;
-@property(nonatomic, readwrite) NSString *firstName;
-@property(nonatomic, readwrite) NSString *lastName;
+@property(nonatomic, readwrite) NSString *networkProfileID;
 @end
 
 @implementation DNUserDetails
@@ -57,6 +48,7 @@ static NSString *const DNRegistrationId = @"id";
     if (self) {
 
         [self setUserID:[deviceUser userID]];
+        [self setNetworkProfileID:[deviceUser networkProfileID]];
         [self setAnonymous:[[deviceUser isAnonymous] boolValue]];
         [self setDisplayName:[deviceUser displayName]];
         [self setEmailAddress:[deviceUser emailAddress]];

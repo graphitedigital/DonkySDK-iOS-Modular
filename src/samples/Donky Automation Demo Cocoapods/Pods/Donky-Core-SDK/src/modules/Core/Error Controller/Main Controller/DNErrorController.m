@@ -2,7 +2,7 @@
 //  DNErrorController.m
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 16/02/2015.
+//  Created by Donky Networks on 16/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -44,6 +44,10 @@
         case DNCoreAutoLoggingDisabled:break;
         case DNCoreFrequentErrorLogs:break;
         case DNCoreContentNotificationSizeLimit:break;
+        case DNCoreErrorDuplicateRequest:
+            return @"Duplicate request, cancelling";
+        case DNCoreSDKErrorDuplicateAsyncCall:
+            return @"Use completion handlers to ensure a synchronous update of user details.";
     }
 
     return @"";
@@ -65,11 +69,15 @@
         case DNCoreSDKSuspendedUser:
             return @"User is suspended. Cannot perform secure network calls.";
         case DNCoreAutoLoggingDisabled:
-            return @"Tried to auto submit debug log in response to exception. Always submit debug logs is false";
+            return @"Tried to auto submit debug log in response to exception. Always submit debug logs is false or notification ID was nil.";
         case DNCoreFrequentErrorLogs:
             return @"Cannot submit debug log. Last submission was too soon.";
         case DNCoreContentNotificationSizeLimit:
             return @"Some of the content notifications were too large to send. These notifications can be found inside the 'AdditionalInformation' object.";
+        case DNCoreErrorDuplicateRequest:
+            return @"This is a duplicate request, Donky does not need to process this and such it will be cancelled.";
+        case DNCoreSDKErrorDuplicateAsyncCall:
+            return @"A call to update user details is already being performed. Network calls are performed asynchronously and we cannot gurantee in which order the network will process them. Queining multiple calls to update state can therfore lead to network and client being out of sync. Please adhere to correct usage of state changing APIs and use completion handlers where appropriate.";
     }
 
     return [NSString stringWithFormat:@"Unkown error... %d", code];

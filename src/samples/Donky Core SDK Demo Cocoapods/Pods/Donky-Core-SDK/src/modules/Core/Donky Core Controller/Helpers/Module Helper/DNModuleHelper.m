@@ -2,7 +2,7 @@
 //  DNModuleHelper.m
 //  Donky Network SDK Container
 //
-//  Created by Chris Watson on 06/03/2015.
+//  Created by Donky Networks on 06/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -16,14 +16,10 @@
 
 + (void)addModule:(DNModuleDefinition *)module toModuleList:(NSMutableDictionary *)moduleList subscription:(DNSubscription *)subscription {
     if (![[moduleList allKeys] containsObject:[subscription notificationType]]) {
-        @synchronized (moduleList) {
-            (moduleList)[[subscription notificationType]] = [[NSMutableDictionary alloc] init];
-        }
+        (moduleList)[[subscription notificationType]] = [[NSMutableDictionary alloc] init];
     }
     if (![[moduleList[[subscription notificationType]] allKeys] containsObject:[module name]]) {
-        @synchronized (moduleList) {
-            [moduleList[[subscription notificationType]] setObject:subscription forKey:[module name]];
-        }
+        [moduleList[[subscription notificationType]] setObject:subscription forKey:[module name]];
     }
     else {
         DNInfoLog(@"Module %@ is already subscriped to %@", [module name], [subscription notificationType]);
@@ -32,9 +28,7 @@
 
 + (void)removeModule:(DNModuleDefinition *)module toModuleList:(NSMutableDictionary *)moduleList subscription:(DNSubscription *)subscription {
     if ([[moduleList[[subscription notificationType]] allKeys] containsObject:[module name]]) {
-        @synchronized (moduleList) {
-            [moduleList[[subscription notificationType]] removeObjectForKey:[module name]];
-        }
+        [moduleList[[subscription notificationType]] removeObjectForKey:[module name]];
     }
 }
 

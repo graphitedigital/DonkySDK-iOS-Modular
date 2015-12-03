@@ -2,7 +2,7 @@
 //  DCAAnalyticsController.m
 //  DonkyCoreAnalytics
 //
-//  Created by Chris Watson on 01/04/2015.
+//  Created by Donky Networks on 01/04/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -26,6 +26,10 @@ static NSString *const DAStartTimeUTC = @"startTimeUtc";
 static NSString *const DAEndTimeUTC = @"endTimeUtc";
 static NSString *const DAAppSession = @"appSession";
 
+
+static NSString *const DCANoneSession = @"None";
+static NSString *const DCANotificationSession = @"Notification";
+
 @interface DCAAnalyticsController ()
 @property(nonatomic, getter=wasInfluenced) BOOL influenced;
 @property(nonatomic, copy) void (^appOpenEvent)(DNLocalEvent *);
@@ -37,19 +41,17 @@ static NSString *const DAAppSession = @"appSession";
 
 +(DCAAnalyticsController *)sharedInstance
 {
-    static dispatch_once_t pred;
     static DCAAnalyticsController *sharedInstance = nil;
-    
+    static dispatch_once_t pred;
+
     dispatch_once(&pred, ^{
         sharedInstance = [[DCAAnalyticsController alloc] initPrivate];
     });
-    
     return sharedInstance;
 }
 
 -(instancetype)initPrivate
 {
-
     self = [super init];
     
     if (self) {
@@ -63,30 +65,32 @@ static NSString *const DAAppSession = @"appSession";
     return [self initPrivate];
 }
 
-- (void) start {
+- (void)start {
     __weak DCAAnalyticsController *weakSelf = self;
 
-    self.appOpenEvent = ^(DNLocalEvent *event) {
-        if (![weakSelf wasInfluenced])
+    [self setAppOpenEvent:^(DNLocalEvent *event) {
+        if (![weakSelf wasInfluenced]) {
             [weakSelf recordInfluencedAppOpen:NO];
+        }
         [weakSelf setInfluenced:NO];
-    };
+    }];
 
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppOpen handler:self.appOpenEvent];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppOpen handler:[self appOpenEvent]];
 
-    self.appCloseEvent = ^(DNLocalEvent *event) {
+    [self setAppCloseEvent:^(DNLocalEvent *event) {
         [weakSelf recordAppClose];
-    };
+        [weakSelf setInfluenced:NO];
+    }];
 
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppClose handler:self.appCloseEvent];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppClose handler:[self appCloseEvent]];
 
-    self.appInfluenceEvent = ^(DNLocalEvent *event) {
+    [self setAppInfluenceEvent:^(DNLocalEvent *event) {
         //We only want to respond to influenced app opens from out Push Controller:
         [weakSelf setInfluenced:YES];
         [weakSelf recordInfluencedAppOpen:YES];
-    };
+    }];
 
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDAEventInfluencedAppOpen handler:self.appInfluenceEvent];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDAEventInfluencedAppOpen handler:[self appInfluenceEvent]];
     
     //Register Module:
     DNModuleDefinition *analyticsModule = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:kDAAnalyticsVersion];
@@ -94,17 +98,19 @@ static NSString *const DAAppSession = @"appSession";
 }
 
 - (void)stop {
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventAppOpen handler:self.appOpenEvent];
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventAppClose handler:self.appCloseEvent];
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDAEventInfluencedAppOpen handler:self.appInfluenceEvent];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventAppOpen handler:[self appOpenEvent]];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventAppClose handler:[self appCloseEvent]];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDAEventInfluencedAppOpen handler:[self appInfluenceEvent]];
 }
 
 - (void)recordInfluencedAppOpen:(BOOL)influenced {
+    DNInfoLog(@"Recording app open. Was influenced == %d", influenced);
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSMutableDictionary *appLaunch = [[NSMutableDictionary alloc] init];
 
         [appLaunch dnSetObject:[[NSDate date] donkyDateForServer] forKey:DALaunchTimeUTC];
-        [appLaunch dnSetObject:influenced ? @"Notification" : @"None" forKey:DASessionTrigger];
+        [appLaunch dnSetObject:influenced ? DCANotificationSession : DCANoneSession forKey:DASessionTrigger];
         [appLaunch dnSetObject:kDNMiscOperatingSystem forKey:DAOperatingSystem];
 
         DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithType:DAAppLaunch
@@ -118,6 +124,7 @@ static NSString *const DAAppSession = @"appSession";
 }
 
 - (void)recordAppClose {
+    DNInfoLog(@"Recording app close.");
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSDate *startTime = [[NSUserDefaults standardUserDefaults] objectForKey:DAAppLaunchDefaults];
         if (startTime) {
@@ -126,7 +133,7 @@ static NSString *const DAAppSession = @"appSession";
             if ([startTime isDateBeforeDate:endDate]) {
                 [appLaunch dnSetObject:[startTime donkyDateForServer] forKey:DAStartTimeUTC];
                 [appLaunch dnSetObject:[endDate donkyDateForServer] forKey:DAEndTimeUTC];
-                [appLaunch dnSetObject:@"None" forKey:DASessionTrigger];
+                [appLaunch dnSetObject:DCANoneSession forKey:DASessionTrigger];
                 [appLaunch dnSetObject:kDNMiscOperatingSystem forKey:DAOperatingSystem];
 
                 DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithType:DAAppSession
@@ -134,10 +141,27 @@ static NSString *const DAAppSession = @"appSession";
                                                                                   acknowledgementData:nil];
                 [[DNNetworkController sharedInstance] queueClientNotifications:@[clientNotification]];
             }
-            else
+            else {
                 DNErrorLog(@"Cannot report app session as Start date is after the end date ... Start: %@ VS End %@", startTime, endDate);
+            }
         }
     });
+}
+
++ (void)recordGeoFenceCrossing:(NSDictionary *)data {
+    
+    DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithType:kDCAnalyticsGeoFenceCrossed
+                                                                                     data:data acknowledgementData:nil];
+    [[DNNetworkController sharedInstance] queueClientNotifications:@[clientNotification]];
+    //[[DNNetworkController sharedInstance] synchronise];
+}
+
++ (void)recordGeoFenceTriggerExecuted:(NSDictionary *)data {
+    
+    DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithType:kDCAnalyticsGeoFenceTriggered
+                                                                                     data:data acknowledgementData:nil];
+    [[DNNetworkController sharedInstance] queueClientNotifications:@[clientNotification]];
+    [[DNNetworkController sharedInstance] synchronise];
 }
 
 @end

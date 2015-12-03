@@ -58,6 +58,7 @@ install_resource()
   esac
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_resource "Donky-CommonMessaging-UI/src/modules/Messaging/Common/UI/Rich Modules/Localisation/DRLocalization.strings"
   install_resource "Donky-CommonMessaging-UI/src/modules/Messaging/Common/UI/Localization/DCUILocalization.strings"
   install_resource "Donky-CommonMessaging-UI/src/modules/Messaging/Common/UI/Donky Banner View/Assets/common_messaging_default_avatar.png"
   install_resource "Donky-CommonMessaging-UI/src/modules/Messaging/Common/UI/Donky Banner View/Assets/common_messaging_default_avatar@2x.png"
@@ -69,6 +70,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "Donky-SimplePush-UI/src/modules/Messaging/SimplePush/UI/Helpers/Images/avatar_default@3x.png"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_resource "Donky-CommonMessaging-UI/src/modules/Messaging/Common/UI/Rich Modules/Localisation/DRLocalization.strings"
   install_resource "Donky-CommonMessaging-UI/src/modules/Messaging/Common/UI/Localization/DCUILocalization.strings"
   install_resource "Donky-CommonMessaging-UI/src/modules/Messaging/Common/UI/Donky Banner View/Assets/common_messaging_default_avatar.png"
   install_resource "Donky-CommonMessaging-UI/src/modules/Messaging/Common/UI/Donky Banner View/Assets/common_messaging_default_avatar@2x.png"

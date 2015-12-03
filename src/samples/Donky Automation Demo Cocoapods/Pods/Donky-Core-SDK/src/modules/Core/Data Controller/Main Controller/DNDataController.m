@@ -2,23 +2,20 @@
 //  DNDataController.m
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 16/02/2015.
+//  Created by Donky Networks on 16/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import "DNDataController.h"
 #import "NSManagedObjectContext+DNHelpers.h"
 #import "DNLoggingController.h"
-#import "NSManagedObject+DNHelper.h"
-#import "DNNetworkDataHelper.h"
-#import "DNAccountController.h"
 
 @interface DNDataController ()
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *mainContext;
-@property (nonatomic, strong, readwrite) NSManagedObjectContext *temporaryContext;
 @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-
 @end
+
+dispatch_queue_t donkyNetworkCore;
 
 @implementation DNDataController
 
@@ -36,12 +33,12 @@
     return sharedInstance;
 }
 
--(id)init
+-(instancetype)init
 {
     return [DNDataController sharedInstance];
 }
 
--(id)initPrivate
+-(instancetype)initPrivate
 {
     self  = [super init];
     if(self)
@@ -62,53 +59,65 @@
 
 #pragma mark - Application lifecycle methods
 
--(void) applicationDidEnterBackground:(NSNotification *)aNotification
-{
+-(void) applicationDidEnterBackground:(NSNotification *)aNotification {
    [self saveAllData];
 }
 
--(void) applicationWillTerminate:(NSNotification *)aNotification
-{
+-(void) applicationWillTerminate:(NSNotification *)aNotification {
     [self saveAllData];
 }
 
 - (void)saveAllData {
-    [self saveMainContext];
-    [self saveTemporaryContext];
+    [self saveContext:[self mainContext]];
+}
+
+- (void)mergeChanges:(NSNotification *)notification {
+    
+    NSManagedObjectContext *mainContext = [self mainContext];
+
+    // Merge changes into the main context on the main thread
+    [mainContext performSelectorOnMainThread:@selector(mergeChangesFromContextDidSaveNotification:)
+                                  withObject:notification
+                               waitUntilDone:YES];
+
+    [mainContext performSelectorOnMainThread:@selector(saveIfHasChanges:) withObject:notification waitUntilDone:YES];
 }
 
 #pragma mark - Core Data methods
 
 // Returns the managed object context for the application.
 // If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
--(NSManagedObjectContext *)mainContext
-{
-    if (_mainContext != nil) {
+-(NSManagedObjectContext *)mainContext {
+    @synchronized (self) {
+        if (!_mainContext) {
+            _mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+            [_mainContext setPersistentStoreCoordinator:[self persistentStoreCoordinator]];
+        }
         return _mainContext;
     }
-
-    _mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-    [_mainContext setPersistentStoreCoordinator:self.persistentStoreCoordinator];
-    return _mainContext;
 }
 
++ (NSManagedObjectContext *)temporaryContext {
+        
+    NSManagedObjectContext *privateContext = nil;
+    @try {
+        privateContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [privateContext setParentContext:[[DNDataController sharedInstance] mainContext]];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:[DNDataController sharedInstance] selector:@selector(mergeChanges:) name:NSManagedObjectContextDidSaveNotification object:privateContext];
 
-- (NSManagedObjectContext *)temporaryContext
-{
-    if (_temporaryContext != nil) {
-        return _temporaryContext;
     }
-
-    _temporaryContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    _temporaryContext.undoManager = nil;
-    _temporaryContext.parentContext = self.mainContext;
-
-    return _temporaryContext;
+    @catch (NSException *exception) {
+         DNErrorLog(@"Fatal exception (%@) when getting managed contexts.... Reporting & Continuing", [exception description]);
+    }
+    @finally {
+       return privateContext;
+    }
 }
 
 -(NSPersistentStoreCoordinator *)persistentStoreCoordinator
 {
-    if (_persistentStoreCoordinator != nil) {
+   if (_persistentStoreCoordinator) {
         return _persistentStoreCoordinator;
     }
 
@@ -123,81 +132,28 @@
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
 
-    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES, NSInferMappingModelAutomaticallyOption : @YES};
+    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES,
+            NSInferMappingModelAutomaticallyOption : @YES};
 
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
-
-#ifdef DEBUG
-        // Remove store
+        DNErrorLog(@"Fatal, could not load persistent store coordinator. Deleting existing store and creating a new one...");
         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
-
-        // Then clear user defaults
-        [NSUserDefaults resetStandardUserDefaults];
-
-        return nil;
-#endif
-        
-        DNErrorLog(@"Fatal error when trying to access the core data store... aborting");
-        abort();
+        _persistentStoreCoordinator = nil;
+        return [self persistentStoreCoordinator];
     }
 
-    return _persistentStoreCoordinator;
+     return _persistentStoreCoordinator;
+
 }
 
--(void)saveMainContext
-{
-    NSError *error = nil;
-    @synchronized (self.mainContext) {
-        [self.mainContext saveIfHasChanges:&error];
+- (void)saveContext:(NSManagedObjectContext *)context {
+    
+    if (![context persistentStoreCoordinator]) {
+        DNErrorLog(@"Fatal, no persistent store coordinator found in context: %@\nThread: %@", context, [NSThread currentThread]);
+        return;
     }
-
-    if (error)
-        DNErrorLog(@"Saving context: %@", [error localizedDescription]);
+    
+    [context saveIfHasChanges:nil];
 }
-
--(void)saveTemporaryContext
-{
-    NSError *error = nil;
-    @synchronized (self.temporaryContext) {
-        [self.temporaryContext saveIfHasChanges:&error];
-    }
-
-    if (error)
-        DNErrorLog(@"Saving context: %@", [error localizedDescription]);
-}
-
-#pragma mark -
-#pragma mark - Helpers
-
-- (DNUserDetails *)currentDeviceUser {
-
-    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"] withContext:self.mainContext] ? : [self newDevice];
-
-    DNUserDetails *dnUserDetails = [[DNUserDetails alloc] initWithDeviceUser:deviceUser];
-
-    return dnUserDetails;
-}
-
-- (void)saveUserDetails:(DNUserDetails *)details {
-    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"] withContext:self.mainContext] ? : [self newDevice];
-    [deviceUser setIsAnonymous:@([details isAnonymous])];
-    [deviceUser setDisplayName:[details displayName]];
-    [deviceUser setMobileNumber:[details mobileNumber]];
-    [deviceUser setEmailAddress:[details emailAddress]];
-    [deviceUser setAvatarAssetID:[details avatarAssetID]];
-    [deviceUser setCountryCode:[details countryCode]];
-    [deviceUser setUserID:[details userID]];
-    [deviceUser setSelectedTags:[details selectedTags]];
-    [deviceUser setAdditionalProperties:[details additionalProperties]];
-    [self saveMainContext];
-}
-
-- (DNDeviceUser *)newDevice {
-    DNDeviceUser *device = [DNDeviceUser insertNewInstanceWithContext:self.mainContext];
-    [device setIsDeviceUser:@(YES)];
-    [device setIsAnonymous:@(YES)];
-    return device;
-}
-
 
 @end

@@ -2,9 +2,14 @@
 //  DNUserAuthentication.m
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 03/03/2015.
+//  Created by Donky Networks on 03/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
+
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
 
 #import "DNUserAuthentication.h"
 #import "NSMutableDictionary+DNDictionary.h"
@@ -33,6 +38,10 @@ static NSString *const DNSDKVersion = @"sdkVersion";
 
 - (NSDictionary *)parameters {
 
+    if (![DNDonkyNetworkDetails networkId]) {
+        return nil;
+    }
+    
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
 
     [params dnSetObject:[DNDonkyNetworkDetails networkId] forKey:DNNetworkID];

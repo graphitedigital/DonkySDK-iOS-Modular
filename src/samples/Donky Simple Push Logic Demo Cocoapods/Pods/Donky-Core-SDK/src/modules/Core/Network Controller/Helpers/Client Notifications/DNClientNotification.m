@@ -2,7 +2,7 @@
 //  DNClientNotification.m
 //  Core Container
 //
-//  Created by Chris Watson on 19/03/2015.
+//  Created by Donky Networks on 19/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -11,6 +11,7 @@
 #import "DNNotification.h"
 #import "NSMutableDictionary+DNDictionary.h"
 #import "NSDate+DNDateHelper.h"
+#import "DNSystemHelpers.h"
 
 static NSString *const DNServerNotificationID = @"serverNotificationId";
 static NSString *const DNSentTime = @"sentTime";
@@ -18,6 +19,7 @@ static NSString *const DNType = @"type";
 static NSString *const DNCustomNotificationType = @"customNotificationType";
 static NSString *const DNCustomType = @"customType";
 static NSString *const DNCustom = @"Custom";
+static NSString *const DNAcknowledgement = @"Acknowledgement";
 
 @interface DNClientNotification ()
 @property(nonatomic, readwrite) NSString *notificationID;
@@ -32,6 +34,7 @@ static NSString *const DNCustom = @"Custom";
     
     if (self) {
 
+        [self setNotificationType:DNAcknowledgement];
         [self setNotificationID:[notification serverNotificationID]];
         [self setSentTime:[notification createdOn]];
         [self setSendTries:@(0)];
@@ -48,6 +51,8 @@ static NSString *const DNCustom = @"Custom";
     self = [super init];
 
     if (self) {
+
+        [self setNotificationID:[notification serverNotificationID] ? : [DNSystemHelpers generateGUID]];
         [self setNotificationType:type];
         [self setData:data];
         [self setSendTries:@(0)];
@@ -63,7 +68,7 @@ static NSString *const DNCustom = @"Custom";
     self = [super init];
     
     if (self) {
-        [self setNotificationID:[notification serverNotificationID]];
+        [self setNotificationID:[notification serverNotificationID] ? : [notification notificationID] ? : [DNSystemHelpers generateGUID]];
         [self setSendTries:[notification sendTries]];
         [self setSentTime:[notification data][DNSentTime]];
         [self setNotificationType:[notification type]];
@@ -81,8 +86,9 @@ static NSString *const DNCustom = @"Custom";
     [acknowledgement dnSetObject:[[notification createdOn] donkyDateForServer] forKey:DNSentTime];
     [acknowledgement dnSetObject:[notification notificationType] forKey:DNType];
     
-    if ([[notification notificationType] isEqualToString:DNCustom])
+    if ([[notification notificationType] isEqualToString:DNCustom]) {
         [acknowledgement dnSetObject:[notification data][DNCustomType] forKey:DNCustomNotificationType];
+    }
     
     return acknowledgement;
 }

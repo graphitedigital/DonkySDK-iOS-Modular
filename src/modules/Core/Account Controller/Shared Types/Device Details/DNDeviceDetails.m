@@ -16,6 +16,7 @@
 #import "NSMutableDictionary+DNDictionary.h"
 #import "DNKeychainHelper.h"
 #import "DNDonkyNetworkDetails.h"
+#import "DNPushNotificationUpdate.h"
 
 static NSString *const DNRegistrationName = @"name";
 static NSString *const DNRegistrationSecret = @"secret";
@@ -25,19 +26,23 @@ static NSString *const DNRegistrationOperatingSystemVersion = @"operatingSystemV
 static NSString *const DNRegistrationOperatingSystem = @"operatingSystem";
 static NSString *const DNRegistrationId = @"id";
 static NSString *const DNRegistrationAdditionalProperties = @"additionalProperties";
+static NSString *const DNRegistrationToken = @"token";
+
+static NSString *const DNPushConfiguration = @"PushConfiguration";
 
 @interface DNDeviceDetails ()
 
-@property(nonatomic, readwrite) NSString *type;
 @property(nonatomic, strong) NSString *model;
-@property(nonatomic, strong) NSString *operatingSystem;
-@property(nonatomic, strong) NSString *osVersion;
-@property(nonatomic, readwrite) NSString *deviceName;
-@property(nonatomic, readwrite) NSDictionary *additionalProperties;
-
 @property(nonatomic, strong) NSString *deviceID;
-@property(nonatomic, readwrite) NSString *deviceSecret;
+@property(nonatomic, strong) NSString *osVersion;
+@property(nonatomic, strong) NSString *operatingSystem;
 
+@property(nonatomic, readwrite) NSString *type;
+@property(nonatomic, readwrite) NSString *deviceName;
+@property(nonatomic, readwrite) NSString *deviceSecret;
+@property(nonatomic, readwrite) NSDictionary *additionalProperties;
+@property(nonatomic, readwrite) NSString *apnsToken;
+@property(nonatomic, readwrite) NSString *apnsAudio;
 @end
 
 @implementation DNDeviceDetails
@@ -58,6 +63,10 @@ static NSString *const DNRegistrationAdditionalProperties = @"additionalProperti
 
         [self setAdditionalProperties:[DNDeviceDetailsHelper additionalProperties]];
         [self setType:[DNDeviceDetailsHelper deviceType]];
+        
+        [self setApnsToken:[DNDonkyNetworkDetails deviceToken]];
+        
+        [self setApnsAudio:[DNDonkyNetworkDetails apnsAudio]];
 
     }
 
@@ -65,7 +74,7 @@ static NSString *const DNRegistrationAdditionalProperties = @"additionalProperti
 
 }
 
-- (instancetype) initWithDeviceType:(NSString *) type name:(NSString *) deviceName additionalProperties:(NSDictionary *) additionalProperties {
+- (instancetype)initWithDeviceType:(NSString *)type name:(NSString *) deviceName additionalProperties:(NSDictionary *) additionalProperties {
 
     self = [self init];
     
@@ -93,7 +102,14 @@ static NSString *const DNRegistrationAdditionalProperties = @"additionalProperti
     [currentDevice dnSetObject:[self deviceID] forKey:DNRegistrationId];
     [currentDevice dnSetObject:[self deviceSecret] forKey:DNRegistrationSecret];
 
+    if ([self apnsToken]) {
+        DNPushNotificationUpdate *update = [[DNPushNotificationUpdate alloc] initWithMessageAlertSound:[self apnsAudio] ? : @"Default"
+                                                                                       deviceToken:[self apnsToken] ? : @""];
+        [currentDevice dnSetObject:[update parameters] forKey:DNPushConfiguration];
+    }
+
     return currentDevice;
+
 }
 
 @end

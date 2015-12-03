@@ -2,7 +2,7 @@
 //  DNNetworkController.h
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 16/02/2015.
+//  Created by Donky Networks on 16/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -78,7 +78,7 @@ typedef enum {
 - (void)synchronise;
 
 /*!
- Method to send content notifications to the network immediately. This will not retrieve server notifications. Perform a syncrhonise to send and receive.
+ Method to send content notifications to the network immediately. This will not retrieve server notifications. Perform a signalRHubProxy to send and receive.
  
  @param notifications an array containing the content notifications.
  @param successBlock block to be called upon a successful request.
@@ -93,7 +93,7 @@ typedef enum {
 /*!
  Method to queue content notifications ready to be send to the network. Call this method if the notifications can be sent at the next Syncronise. If the notification must be sent immediately then please use sendNotification:success:failure
  
- @param notifications an array of notifications that should be queued and saved to the data base. They will be sent at the next syncrhonise.
+ @param notifications an array of notifications that should be queued and saved to the data base. They will be sent at the next signalRHubProxy.
  
  @since 2.0.0.0
  */
@@ -111,16 +111,19 @@ typedef enum {
 - (void)serverNotificationForId:(NSString *)notificationID success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
 
 #pragma mark -
-
 #pragma mark - Private... Not for public consumption. Public use of these API's is unsupported.
 
 /*!
   PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ 
+  @warning Private, please do not use
  */
 - (void)queueClientNotifications:(NSArray *)notifications;
 
 /*!
   PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ 
+  @warning Private, please do not use
  */
 - (void)startMinimumTimeForSynchroniseBuffer:(NSTimeInterval)buffer;
 

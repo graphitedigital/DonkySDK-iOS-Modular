@@ -2,7 +2,7 @@
 //  DNRetryHelper.m
 //  Core Container
 //
-//  Created by Chris Watson on 21/03/2015.
+//  Created by Donky Networks on 21/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -60,18 +60,21 @@ static NSString *const DNRetryPolicy = @"DeviceCommsConnectionRetrySchedule";
         [[self retriedRequests] addObject:retryObject];
     }
 
-    if (retryObject)
+    if (retryObject) {
         [self applyRetry:retryObject];
+    }
 }
 
 - (void)applyRetry:(DNRetryObject *)object {
     //Get retry string:
     NSString *retryString = nil;
     NSUInteger index = [object sectionRetries];
-    if (index < 10)
+    if (index < 10) {
         retryString = [self retryComponents][index];
-    else
+    }
+    else {
         retryString = [[self retryComponents] lastObject];
+    }
 
     if (retryString) {
         NSArray *retryComponents = [retryString componentsSeparatedByString:@","];
@@ -83,9 +86,12 @@ static NSString *const DNRetryPolicy = @"DeviceCommsConnectionRetrySchedule";
             return;
         }
 
-        DNInfoLog(@"request failed %@...Applying retry policy %@", [[object request] route], retryString);
+        DNInfoLog(@"Request failed %@... Applying retry policy %@", [[object request] route], retryString);
         NSInteger retryTime = [[retryComponents firstObject] integerValue];
-        [self performSelector:@selector(retryEvent:) withObject:object afterDelay:retryTime];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self performSelector:@selector(retryEvent:) withObject:object afterDelay:retryTime];
+        });
 
         //Check if retry greater than
         [object incrementRetryCount];
@@ -93,11 +99,13 @@ static NSString *const DNRetryPolicy = @"DeviceCommsConnectionRetrySchedule";
 }
 
 - (void)retryEvent:(DNRetryObject *)retryEvent {
+    DNInfoLog(@"Retrying request %@", [[retryEvent request] route]);
     DNRequest *request = [retryEvent request];
     [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:[request isSecure] route:[request route] httpMethod:[request method] parameters:[request parameters] success:^(NSURLSessionDataTask *task, id responseData) {
         [[self retriedRequests] removeObject:retryEvent];
-        if ([request successBlock])
+        if ([request successBlock]) {
             [request successBlock];
+        }
     } failure:[request failureBlock]];
 }
 

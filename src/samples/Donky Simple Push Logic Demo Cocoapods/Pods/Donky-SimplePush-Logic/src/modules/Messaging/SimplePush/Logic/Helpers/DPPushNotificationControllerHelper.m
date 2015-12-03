@@ -2,7 +2,7 @@
 //  DPPushNotificationControllerHelper.m
 //  Push Container
 //
-//  Created by Chris Watson on 15/03/2015.
+//  Created by Donky Networks on 15/03/2015.
 //  Copyright (c) 2015 Dynmark International Ltd. All rights reserved.
 //
 
@@ -32,6 +32,7 @@
     [notificationCategory setActions:@[secondAction, firstAction] forContext:UIUserNotificationActionContextMinimal];
 
     return notificationCategory;
+
 }
 
 @end

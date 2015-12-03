@@ -2,7 +2,7 @@
 //  DNServerNotification.h
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 18/02/2015.
+//  Created by Donky Networks on 18/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -39,7 +39,7 @@
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSDictionary *data;
+@property (nonatomic, readonly) NSDictionary *data;
 
 /*!
  Initialiser to create a new Server Notification from a Dictionary object.

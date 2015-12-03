@@ -12,6 +12,7 @@
 #import "DNErrorController.h"
 #import "DNDonkyCore.h"
 #import "DNConstants.h"
+#import "DNSystemHelpers.h"
 
 @interface DNNetworkControllerQueue ()
 @property(nonatomic, copy) DNLocalEventHandler appCloseEvent;
@@ -33,7 +34,9 @@
             queue = dispatch_queue_create("com.donky.NetworkQueue", 0);
         });
         
-        [self setUnderlyingQueue:queue];
+        if ([DNSystemHelpers systemVersionAtLeast:8.0]) {
+            [self setUnderlyingQueue:queue];
+        }
         
         __weak __typeof(self) weakSelf = self;
         

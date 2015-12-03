@@ -2,7 +2,7 @@
 //  DNSessionManager.m
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 02/03/2015.
+//  Created by Donky Networks on 02/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -19,24 +19,27 @@
 
 - (instancetype)initWithSecureURl:(BOOL)secure {
 
-    if (secure && ![DNDonkyNetworkDetails secureServiceRootUrl])
+    if (secure && ![DNDonkyNetworkDetails secureServiceRootUrl]) {
         return nil;
+    }
 
     self = [super initWithBaseURL:secure ? [NSURL URLWithString:[DNDonkyNetworkDetails secureServiceRootUrl]] : [NSURL URLWithString:kDNNetworkHostURL]];
 
     if (self) {
 
-        self.usingSecure = secure;
+        [self setUsingSecure:secure];
 
         AFJSONRequestSerializer *serializer = [AFJSONRequestSerializer serializer];
         [serializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
         [serializer setValue:@"DonkyiOSModularSdk" forHTTPHeaderField:@"DonkyClientSystemIdentifier"];
-
-        if (!secure)
+        
+        if (![self isUsingSecure]) {
             [serializer setValue:[DNDonkyNetworkDetails apiKey] forHTTPHeaderField:@"ApiKey"];
+        }
 
-        if (self.isUsingSecure && [DNDonkyNetworkDetails accessToken])
+        if ([self isUsingSecure] && [DNDonkyNetworkDetails accessToken]) {
             [serializer setValue:[NSString stringWithFormat:@"Bearer %@", [DNDonkyNetworkDetails accessToken]] forHTTPHeaderField:@"Authorization"];
+        }
 
         [self setRequestSerializer:serializer];
     }

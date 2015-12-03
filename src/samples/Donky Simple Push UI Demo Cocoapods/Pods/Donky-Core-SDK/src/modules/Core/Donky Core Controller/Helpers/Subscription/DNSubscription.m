@@ -2,7 +2,7 @@
 //  DNSubscription.m
 //  Core Container
 //
-//  Created by Chris Watson on 18/03/2015.
+//  Created by Donky Networks on 18/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -11,7 +11,7 @@
 @interface DNSubscription ()
 @property(nonatomic, readwrite) NSString *notificationType;
 @property(nonatomic, readwrite) DNSubscriptionHandler handler;
-@property(nonatomic, readwrite) DNSubscriptionBachHandler batchHandler;
+@property(nonatomic, readwrite) DNSubscriptionBatchHandler batchHandler;
 @end
 
 @implementation DNSubscription
@@ -21,22 +21,22 @@
     self = [super init];
 
     if (self) {
-        self.handler = handler;
-        self.autoAcknowledge = YES;
-        self.notificationType = notificationType;
+        [self setHandler:handler];
+        [self setAutoAcknowledge:YES];
+        [self setNotificationType:notificationType];
     }
 
     return self;
 }
 
-- (instancetype)initWithNotificationType:(NSString *)notificationType batchHandler:(DNSubscriptionBachHandler)batchHandler {
+- (instancetype)initWithNotificationType:(NSString *)notificationType batchHandler:(DNSubscriptionBatchHandler)batchHandler {
 
     self = [super init];
 
     if (self) {
-        self.batchHandler = batchHandler;
-        self.autoAcknowledge = YES;
-        self.notificationType = notificationType;
+        [self setBatchHandler:batchHandler];
+        [self setAutoAcknowledge:YES];
+        [self setNotificationType:notificationType];
     }
 
     return self;

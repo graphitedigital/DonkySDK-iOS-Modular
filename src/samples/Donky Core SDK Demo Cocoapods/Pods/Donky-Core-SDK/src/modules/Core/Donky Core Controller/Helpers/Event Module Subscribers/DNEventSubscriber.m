@@ -2,7 +2,7 @@
 //  DNEventSubscriber.m
 //  Core Container
 //
-//  Created by Chris Watson on 17/03/2015.
+//  Created by Donky Networks on 17/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -35,10 +35,12 @@
         return;
     }
     
-    if (![[[self eventListeners] allKeys] containsObject:eventType])
+    if (![[[self eventListeners] allKeys] containsObject:eventType]) {
         ([self eventListeners])[eventType] = [[NSMutableArray alloc] init];
-    if (![[self eventListeners][eventType] containsObject:handler])
+    }
+    if (![[self eventListeners][eventType] containsObject:handler]) {
         [[self eventListeners][eventType] addObject:handler];
+    }
 }
 
 - (void)unSubscribeToLocalEvent:(NSString *)eventType handler:(DNLocalEventHandler)handler {
@@ -48,10 +50,12 @@
         return;
     }
 
-    if (![[[self eventListeners] allKeys] containsObject:eventType])
+    if (![[[self eventListeners] allKeys] containsObject:eventType]) {
         ([self eventListeners])[eventType] = [[NSMutableArray alloc] init];
-    if ([[self eventListeners][eventType] containsObject:handler])
+    }
+    if ([[self eventListeners][eventType] containsObject:handler]) {
         [[self eventListeners][eventType] removeObject:handler];
+    }
 }
 
 - (void)publishEvent:(DNLocalEvent *)event {
@@ -59,17 +63,21 @@
         DNErrorLog(@"Error, trying to publish an event without using DNLocalEvent");
         return;
     }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSArray *events = [self eventListeners][[event eventType]];
+        [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            DNLocalEventHandler handler = obj;
+            if (handler) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    handler(event);
+                });
+            }
+        }];
 
-    NSArray *events = [self eventListeners][[event eventType]];
-    [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        DNLocalEventHandler handler = obj;
-        if (handler) {
-            handler(event);
+        if (![events count] && ![[event eventType] isEqualToString:kDNDonkyLogEvent]) { // We don't want to log out Log events otherwise we will get stuck in an infinite loop
+            DNInfoLog(@"No listeners for event: %@", [event eventType]);
         }
-    }];
-
-    if (![events count] && ![[event eventType] isEqualToString:kDNDonkyLogEvent]) // We don't want to log out Log events otherwise we will get stuck in an infinite loop
-        DNInfoLog(@"No listeners for event: %@", [event eventType]);
+    });
 }
 
 @end

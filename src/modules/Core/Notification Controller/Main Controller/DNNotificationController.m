@@ -129,7 +129,6 @@ static NSString *const DNNotificationChatController = @"DChatLogicMainController
     [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:YES route:kDNNetworkRegistrationPush httpMethod:DNPut parameters:[notificationUpdate parameters] success:^(NSURLSessionDataTask *task, id networkData) {
         DNInfoLog(@"Sound file saved on the network.");
         [DNDonkyNetworkDetails saveAPNSAudio:soundFileName];
-        
         if (success) {
             success(nil, nil);
         }

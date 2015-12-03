@@ -10,13 +10,13 @@
 
 @interface DNClientDetails : NSObject
 
-@property(nonatomic, readonly) NSString *currentLocalTime;
+@property (nonatomic, readonly) NSString *currentLocalTime;
 
-@property(nonatomic, readonly) NSString *appVersion;
+@property (nonatomic, readonly) NSString *appVersion;
 
-@property(nonatomic, readonly) NSString *sdkVersion;
+@property (nonatomic, readonly) NSString *sdkVersion;
 
-@property(nonatomic, readonly) NSMutableDictionary *moduleVersions;
+@property (nonatomic, readonly) NSMutableDictionary *moduleVersions;
 
 - (void)saveModuleVersions:(NSMutableDictionary *)moduleVersions;
 

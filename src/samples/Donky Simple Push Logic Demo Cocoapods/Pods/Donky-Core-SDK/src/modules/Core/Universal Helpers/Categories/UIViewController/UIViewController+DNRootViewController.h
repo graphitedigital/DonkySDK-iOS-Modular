@@ -2,7 +2,7 @@
 //  UIViewController+DPUIViewController.h
 //  Push UI Container
 //
-//  Created by Chris Watson on 16/03/2015.
+//  Created by Donky Networks on 16/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 

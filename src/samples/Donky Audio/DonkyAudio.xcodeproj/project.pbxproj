@@ -10,66 +10,70 @@
 		9C1DF16874845733564BD0B3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B04577D31C8A7D9A646125B4 /* libPods.a */; };
 		D72720801B7B2F9D00B77E8E /* donky.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D7271F651B7B2F9D00B77E8E /* donky.mp3 */; };
 		D72720811B7B2F9D00B77E8E /* DAMainController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7271F681B7B2F9D00B77E8E /* DAMainController.m */; };
-		D776E3A21B7C781B00576EA7 /* DNDonkyNetworkDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E2DE1B7C781B00576EA7 /* DNDonkyNetworkDetails.m */; };
-		D776E3A31B7C781B00576EA7 /* DNUserDefaultsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E2E11B7C781B00576EA7 /* DNUserDefaultsHelper.m */; };
-		D776E3A41B7C781B00576EA7 /* DNAccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E2E41B7C781B00576EA7 /* DNAccountController.m */; };
-		D776E3A51B7C781B00576EA7 /* DNUserAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E2E81B7C781B00576EA7 /* DNUserAuthentication.m */; };
-		D776E3A61B7C781B00576EA7 /* DNAccountRegistrationResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E2EC1B7C781B00576EA7 /* DNAccountRegistrationResponse.m */; };
-		D776E3A71B7C781B00576EA7 /* DNConfigurationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E2EF1B7C781B00576EA7 /* DNConfigurationController.m */; };
-		D776E3A81B7C781B00576EA7 /* DNClientDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E2F31B7C781B00576EA7 /* DNClientDetails.m */; };
-		D776E3A91B7C781B00576EA7 /* DNClientDetailsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E2F61B7C781B00576EA7 /* DNClientDetailsHelper.m */; };
-		D776E3AA1B7C781B00576EA7 /* DNDeviceDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E2F91B7C781B00576EA7 /* DNDeviceDetails.m */; };
-		D776E3AB1B7C781B00576EA7 /* DNDeviceDetailsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E2FC1B7C781B00576EA7 /* DNDeviceDetailsHelper.m */; };
-		D776E3AC1B7C781B00576EA7 /* DNRegistrationDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E2FF1B7C781B00576EA7 /* DNRegistrationDetails.m */; };
-		D776E3AD1B7C781B00576EA7 /* DNUserDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3021B7C781B00576EA7 /* DNUserDetails.m */; };
-		D776E3AE1B7C781B00576EA7 /* DNTag.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3051B7C781B00576EA7 /* DNTag.m */; };
-		D776E3AF1B7C781B00576EA7 /* DNAppSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3091B7C781B00576EA7 /* DNAppSettingsController.m */; };
-		D776E3B01B7C781B00576EA7 /* DNConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = D776E30B1B7C781B00576EA7 /* DNConfiguration.plist */; };
-		D776E3B11B7C781B00576EA7 /* DNAssetController.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E30F1B7C781B00576EA7 /* DNAssetController.m */; };
-		D776E3B21B7C781B00576EA7 /* NSManagedObject+DNHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3151B7C781B00576EA7 /* NSManagedObject+DNHelper.m */; };
-		D776E3B31B7C781B00576EA7 /* NSManagedObjectContext+DNDelete.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3171B7C781B00576EA7 /* NSManagedObjectContext+DNDelete.m */; };
-		D776E3B41B7C781B00576EA7 /* NSManagedObjectContext+DNHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3191B7C781B00576EA7 /* NSManagedObjectContext+DNHelpers.m */; };
-		D776E3B51B7C781B00576EA7 /* DNKeychainHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E31D1B7C781B00576EA7 /* DNKeychainHelper.m */; };
-		D776E3B61B7C781B00576EA7 /* DNKeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3201B7C781B00576EA7 /* DNKeychainItemWrapper.m */; };
-		D776E3B71B7C781B00576EA7 /* DNDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3231B7C781B00576EA7 /* DNDataController.m */; };
-		D776E3B81B7C781B00576EA7 /* DNDeviceUser.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3271B7C781B00576EA7 /* DNDeviceUser.m */; };
-		D776E3B91B7C781B00576EA7 /* DNNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E32A1B7C781B00576EA7 /* DNNotification.m */; };
-		D776E3BA1B7C781B00576EA7 /* DNUser.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E32D1B7C781B00576EA7 /* DNUser.m */; };
-		D776E3BB1B7C781B00576EA7 /* DNDonkyDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D776E32F1B7C781B00576EA7 /* DNDonkyDataModel.xcdatamodeld */; };
-		D776E3BC1B7C781B00576EA7 /* DNDonkyCoreFunctionalHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3361B7C781B00576EA7 /* DNDonkyCoreFunctionalHelper.m */; };
-		D776E3BD1B7C781B00576EA7 /* DNEventSubscriber.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3391B7C781B00576EA7 /* DNEventSubscriber.m */; };
-		D776E3BE1B7C781B00576EA7 /* DNLocalEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E33C1B7C781B00576EA7 /* DNLocalEvent.m */; };
-		D776E3BF1B7C781B00576EA7 /* DNModuleDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E33F1B7C781B00576EA7 /* DNModuleDefinition.m */; };
-		D776E3C01B7C781B00576EA7 /* DNModuleHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3421B7C781B00576EA7 /* DNModuleHelper.m */; };
-		D776E3C11B7C781B00576EA7 /* DNNotificationSubscriber.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3451B7C781B00576EA7 /* DNNotificationSubscriber.m */; };
-		D776E3C21B7C781B00576EA7 /* DNOutboundModules.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3481B7C781B00576EA7 /* DNOutboundModules.m */; };
-		D776E3C31B7C781B00576EA7 /* DNRegisteredServices.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E34B1B7C781B00576EA7 /* DNRegisteredServices.m */; };
-		D776E3C41B7C781B00576EA7 /* DNSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E34E1B7C781B00576EA7 /* DNSubscription.m */; };
-		D776E3C51B7C781B00576EA7 /* DNDonkyCore.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3511B7C781B00576EA7 /* DNDonkyCore.m */; };
-		D776E3C61B7C781B00576EA7 /* DNErrorController.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3551B7C781B00576EA7 /* DNErrorController.m */; };
-		D776E3C71B7C781B00576EA7 /* DNLoggingController.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3591B7C781B00576EA7 /* DNLoggingController.m */; };
-		D776E3C81B7C781B00576EA7 /* DNClientNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E35E1B7C781B00576EA7 /* DNClientNotification.m */; };
-		D776E3C91B7C781B00576EA7 /* DNContentNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3611B7C781B00576EA7 /* DNContentNotification.m */; };
-		D776E3CA1B7C781B00576EA7 /* DNNetworkDataHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3641B7C781B00576EA7 /* DNNetworkDataHelper.m */; };
-		D776E3CB1B7C781B00576EA7 /* DNDeviceConnectivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3671B7C781B00576EA7 /* DNDeviceConnectivityController.m */; };
-		D776E3CC1B7C781B00576EA7 /* DNNetworkHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E36A1B7C781B00576EA7 /* DNNetworkHelper.m */; };
-		D776E3CD1B7C781B00576EA7 /* DNRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E36D1B7C781B00576EA7 /* DNRequest.m */; };
-		D776E3CE1B7C781B00576EA7 /* DNRetryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3701B7C781B00576EA7 /* DNRetryHelper.m */; };
-		D776E3CF1B7C781B00576EA7 /* DNRetryObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3731B7C781B00576EA7 /* DNRetryObject.m */; };
-		D776E3D01B7C781B00576EA7 /* DNServerNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3761B7C781B00576EA7 /* DNServerNotification.m */; };
-		D776E3D11B7C781B00576EA7 /* DNSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3791B7C781B00576EA7 /* DNSessionManager.m */; };
-		D776E3D21B7C781B00576EA7 /* DNSynchroniseResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E37C1B7C781B00576EA7 /* DNSynchroniseResponse.m */; };
-		D776E3D31B7C781B00576EA7 /* DNNetworkController.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E37F1B7C781B00576EA7 /* DNNetworkController.m */; };
-		D776E3D41B7C781B00576EA7 /* DNPushNotificationUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3841B7C781B00576EA7 /* DNPushNotificationUpdate.m */; };
-		D776E3D51B7C781B00576EA7 /* DNNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3871B7C781B00576EA7 /* DNNotificationController.m */; };
-		D776E3D61B7C781B00576EA7 /* NSDate+DNDateHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E38E1B7C781B00576EA7 /* NSDate+DNDateHelper.m */; };
-		D776E3D71B7C781B00576EA7 /* NSMutableDictionary+DNDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3911B7C781B00576EA7 /* NSMutableDictionary+DNDictionary.m */; };
-		D776E3D81B7C781B00576EA7 /* UIViewController+DNRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3941B7C781B00576EA7 /* UIViewController+DNRootViewController.m */; };
-		D776E3D91B7C781B00576EA7 /* DNConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3971B7C781B00576EA7 /* DNConstants.m */; };
-		D776E3DA1B7C781B00576EA7 /* DNFileHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E39A1B7C781B00576EA7 /* DNFileHelpers.m */; };
-		D776E3DB1B7C781B00576EA7 /* DNLocalization.strings in Resources */ = {isa = PBXBuildFile; fileRef = D776E39C1B7C781B00576EA7 /* DNLocalization.strings */; };
-		D776E3DC1B7C781B00576EA7 /* DNNetwork+Localization.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E39E1B7C781B00576EA7 /* DNNetwork+Localization.m */; };
-		D776E3DD1B7C781B00576EA7 /* DNSystemHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = D776E3A11B7C781B00576EA7 /* DNSystemHelpers.m */; };
+		D7882C991C0EFBEA00F87E16 /* DNDonkyNetworkDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BC51C0EFBE900F87E16 /* DNDonkyNetworkDetails.m */; };
+		D7882C9A1C0EFBEA00F87E16 /* DNUserDefaultsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BC81C0EFBE900F87E16 /* DNUserDefaultsHelper.m */; };
+		D7882C9B1C0EFBEA00F87E16 /* DNAccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BCB1C0EFBE900F87E16 /* DNAccountController.m */; };
+		D7882C9C1C0EFBEA00F87E16 /* DNUserAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BCF1C0EFBE900F87E16 /* DNUserAuthentication.m */; };
+		D7882C9D1C0EFBEA00F87E16 /* DNAccountRegistrationResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BD31C0EFBEA00F87E16 /* DNAccountRegistrationResponse.m */; };
+		D7882C9E1C0EFBEA00F87E16 /* DNConfigurationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BD61C0EFBEA00F87E16 /* DNConfigurationController.m */; };
+		D7882C9F1C0EFBEA00F87E16 /* DNClientDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BDA1C0EFBEA00F87E16 /* DNClientDetails.m */; };
+		D7882CA01C0EFBEA00F87E16 /* DNClientDetailsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BDD1C0EFBEA00F87E16 /* DNClientDetailsHelper.m */; };
+		D7882CA11C0EFBEA00F87E16 /* DNDeviceDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BE01C0EFBEA00F87E16 /* DNDeviceDetails.m */; };
+		D7882CA21C0EFBEA00F87E16 /* DNDeviceDetailsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BE31C0EFBEA00F87E16 /* DNDeviceDetailsHelper.m */; };
+		D7882CA31C0EFBEA00F87E16 /* DNRegistrationDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BE61C0EFBEA00F87E16 /* DNRegistrationDetails.m */; };
+		D7882CA41C0EFBEA00F87E16 /* DNUserDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BE91C0EFBEA00F87E16 /* DNUserDetails.m */; };
+		D7882CA51C0EFBEA00F87E16 /* DNTag.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BEC1C0EFBEA00F87E16 /* DNTag.m */; };
+		D7882CA61C0EFBEA00F87E16 /* DNAppSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BF01C0EFBEA00F87E16 /* DNAppSettingsController.m */; };
+		D7882CA71C0EFBEA00F87E16 /* DNConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = D7882BF21C0EFBEA00F87E16 /* DNConfiguration.plist */; };
+		D7882CA81C0EFBEA00F87E16 /* DNAssetController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BF61C0EFBEA00F87E16 /* DNAssetController.m */; };
+		D7882CA91C0EFBEA00F87E16 /* NSManagedObject+DNHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BFC1C0EFBEA00F87E16 /* NSManagedObject+DNHelper.m */; };
+		D7882CAA1C0EFBEA00F87E16 /* NSManagedObjectContext+DNDelete.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882BFE1C0EFBEA00F87E16 /* NSManagedObjectContext+DNDelete.m */; };
+		D7882CAB1C0EFBEA00F87E16 /* NSManagedObjectContext+DNHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C001C0EFBEA00F87E16 /* NSManagedObjectContext+DNHelpers.m */; };
+		D7882CAC1C0EFBEA00F87E16 /* DNKeychainHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C041C0EFBEA00F87E16 /* DNKeychainHelper.m */; };
+		D7882CAD1C0EFBEA00F87E16 /* DNKeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C071C0EFBEA00F87E16 /* DNKeychainItemWrapper.m */; };
+		D7882CAE1C0EFBEA00F87E16 /* DNDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C0A1C0EFBEA00F87E16 /* DNDataController.m */; };
+		D7882CAF1C0EFBEA00F87E16 /* DNDeviceUser.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C0E1C0EFBEA00F87E16 /* DNDeviceUser.m */; };
+		D7882CB01C0EFBEA00F87E16 /* DNNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C111C0EFBEA00F87E16 /* DNNotification.m */; };
+		D7882CB11C0EFBEA00F87E16 /* DNUser.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C141C0EFBEA00F87E16 /* DNUser.m */; };
+		D7882CB21C0EFBEA00F87E16 /* DNDonkyDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D7882C161C0EFBEA00F87E16 /* DNDonkyDataModel.xcdatamodeld */; };
+		D7882CB31C0EFBEA00F87E16 /* DNDonkyCoreFunctionalHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C1F1C0EFBEA00F87E16 /* DNDonkyCoreFunctionalHelper.m */; };
+		D7882CB41C0EFBEA00F87E16 /* DNEventSubscriber.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C221C0EFBEA00F87E16 /* DNEventSubscriber.m */; };
+		D7882CB51C0EFBEA00F87E16 /* DNLocalEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C251C0EFBEA00F87E16 /* DNLocalEvent.m */; };
+		D7882CB61C0EFBEA00F87E16 /* DNModuleDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C281C0EFBEA00F87E16 /* DNModuleDefinition.m */; };
+		D7882CB71C0EFBEA00F87E16 /* DNModuleHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C2B1C0EFBEA00F87E16 /* DNModuleHelper.m */; };
+		D7882CB81C0EFBEA00F87E16 /* DNNotificationSubscriber.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C2E1C0EFBEA00F87E16 /* DNNotificationSubscriber.m */; };
+		D7882CB91C0EFBEA00F87E16 /* DNOutboundModules.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C311C0EFBEA00F87E16 /* DNOutboundModules.m */; };
+		D7882CBA1C0EFBEA00F87E16 /* DNRegisteredServices.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C341C0EFBEA00F87E16 /* DNRegisteredServices.m */; };
+		D7882CBB1C0EFBEA00F87E16 /* DNSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C371C0EFBEA00F87E16 /* DNSubscription.m */; };
+		D7882CBC1C0EFBEA00F87E16 /* DNDonkyCore.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C3A1C0EFBEA00F87E16 /* DNDonkyCore.m */; };
+		D7882CBD1C0EFBEA00F87E16 /* DNErrorController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C3E1C0EFBEA00F87E16 /* DNErrorController.m */; };
+		D7882CBE1C0EFBEA00F87E16 /* DNLoggingController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C421C0EFBEA00F87E16 /* DNLoggingController.m */; };
+		D7882CBF1C0EFBEA00F87E16 /* DNClientNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C471C0EFBEA00F87E16 /* DNClientNotification.m */; };
+		D7882CC01C0EFBEA00F87E16 /* DNContentNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C4A1C0EFBEA00F87E16 /* DNContentNotification.m */; };
+		D7882CC11C0EFBEA00F87E16 /* DNNetworkDataHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C4D1C0EFBEA00F87E16 /* DNNetworkDataHelper.m */; };
+		D7882CC21C0EFBEA00F87E16 /* DNDeviceConnectivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C501C0EFBEA00F87E16 /* DNDeviceConnectivityController.m */; };
+		D7882CC31C0EFBEA00F87E16 /* DNNetworkHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C531C0EFBEA00F87E16 /* DNNetworkHelper.m */; };
+		D7882CC41C0EFBEA00F87E16 /* DNRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C561C0EFBEA00F87E16 /* DNRequest.m */; };
+		D7882CC51C0EFBEA00F87E16 /* DNRetryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C591C0EFBEA00F87E16 /* DNRetryHelper.m */; };
+		D7882CC61C0EFBEA00F87E16 /* DNRetryObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C5C1C0EFBEA00F87E16 /* DNRetryObject.m */; };
+		D7882CC71C0EFBEA00F87E16 /* DNServerNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C5F1C0EFBEA00F87E16 /* DNServerNotification.m */; };
+		D7882CC81C0EFBEA00F87E16 /* DNSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C621C0EFBEA00F87E16 /* DNSessionManager.m */; };
+		D7882CC91C0EFBEA00F87E16 /* DNNetworkControllerQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C651C0EFBEA00F87E16 /* DNNetworkControllerQueue.m */; };
+		D7882CCA1C0EFBEA00F87E16 /* DNNetworkOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C681C0EFBEA00F87E16 /* DNNetworkOperation.m */; };
+		D7882CCB1C0EFBEA00F87E16 /* DNSynchroniseResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C6B1C0EFBEA00F87E16 /* DNSynchroniseResponse.m */; };
+		D7882CCC1C0EFBEA00F87E16 /* DNNetworkController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C6E1C0EFBEA00F87E16 /* DNNetworkController.m */; };
+		D7882CCD1C0EFBEA00F87E16 /* DNPushNotificationUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C731C0EFBEA00F87E16 /* DNPushNotificationUpdate.m */; };
+		D7882CCE1C0EFBEA00F87E16 /* DNNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C761C0EFBEA00F87E16 /* DNNotificationController.m */; };
+		D7882CCF1C0EFBEA00F87E16 /* DNSignalRInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C791C0EFBEA00F87E16 /* DNSignalRInterface.m */; };
+		D7882CD01C0EFBEA00F87E16 /* NSDate+DNDateHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C801C0EFBEA00F87E16 /* NSDate+DNDateHelper.m */; };
+		D7882CD11C0EFBEA00F87E16 /* NSMutableDictionary+DNDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C831C0EFBEA00F87E16 /* NSMutableDictionary+DNDictionary.m */; };
+		D7882CD21C0EFBEA00F87E16 /* UIViewController+DNRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C861C0EFBEA00F87E16 /* UIViewController+DNRootViewController.m */; };
+		D7882CD31C0EFBEA00F87E16 /* DNConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C891C0EFBEA00F87E16 /* DNConstants.m */; };
+		D7882CD41C0EFBEA00F87E16 /* DNFileHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C8C1C0EFBEA00F87E16 /* DNFileHelpers.m */; };
+		D7882CD51C0EFBEA00F87E16 /* DNLocalization.strings in Resources */ = {isa = PBXBuildFile; fileRef = D7882C8E1C0EFBEA00F87E16 /* DNLocalization.strings */; };
+		D7882CD61C0EFBEA00F87E16 /* DNNetwork+Localization.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C901C0EFBEA00F87E16 /* DNNetwork+Localization.m */; };
+		D7882CD71C0EFBEA00F87E16 /* DNApplicationShortCutHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C951C0EFBEA00F87E16 /* DNApplicationShortCutHelper.m */; };
+		D7882CD81C0EFBEA00F87E16 /* DNSystemHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882C981C0EFBEA00F87E16 /* DNSystemHelpers.m */; };
 		D79769071B6B6C8300756F42 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D79769061B6B6C8300756F42 /* main.m */; };
 		D797690A1B6B6C8300756F42 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D79769091B6B6C8300756F42 /* AppDelegate.m */; };
 		D797690D1B6B6C8300756F42 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D797690C1B6B6C8300756F42 /* ViewController.m */; };
@@ -96,125 +100,136 @@
 		D7271F651B7B2F9D00B77E8E /* donky.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = donky.mp3; sourceTree = "<group>"; };
 		D7271F671B7B2F9D00B77E8E /* DAMainController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DAMainController.h; sourceTree = "<group>"; };
 		D7271F681B7B2F9D00B77E8E /* DAMainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DAMainController.m; sourceTree = "<group>"; };
-		D776E2DD1B7C781B00576EA7 /* DNDonkyNetworkDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDonkyNetworkDetails.h; sourceTree = "<group>"; };
-		D776E2DE1B7C781B00576EA7 /* DNDonkyNetworkDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDonkyNetworkDetails.m; sourceTree = "<group>"; };
-		D776E2E01B7C781B00576EA7 /* DNUserDefaultsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNUserDefaultsHelper.h; sourceTree = "<group>"; };
-		D776E2E11B7C781B00576EA7 /* DNUserDefaultsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNUserDefaultsHelper.m; sourceTree = "<group>"; };
-		D776E2E31B7C781B00576EA7 /* DNAccountController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNAccountController.h; sourceTree = "<group>"; };
-		D776E2E41B7C781B00576EA7 /* DNAccountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNAccountController.m; sourceTree = "<group>"; };
-		D776E2E71B7C781B00576EA7 /* DNUserAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNUserAuthentication.h; sourceTree = "<group>"; };
-		D776E2E81B7C781B00576EA7 /* DNUserAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNUserAuthentication.m; sourceTree = "<group>"; };
-		D776E2EB1B7C781B00576EA7 /* DNAccountRegistrationResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNAccountRegistrationResponse.h; sourceTree = "<group>"; };
-		D776E2EC1B7C781B00576EA7 /* DNAccountRegistrationResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNAccountRegistrationResponse.m; sourceTree = "<group>"; };
-		D776E2EE1B7C781B00576EA7 /* DNConfigurationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNConfigurationController.h; sourceTree = "<group>"; };
-		D776E2EF1B7C781B00576EA7 /* DNConfigurationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNConfigurationController.m; sourceTree = "<group>"; };
-		D776E2F21B7C781B00576EA7 /* DNClientDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNClientDetails.h; sourceTree = "<group>"; };
-		D776E2F31B7C781B00576EA7 /* DNClientDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNClientDetails.m; sourceTree = "<group>"; };
-		D776E2F51B7C781B00576EA7 /* DNClientDetailsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNClientDetailsHelper.h; sourceTree = "<group>"; };
-		D776E2F61B7C781B00576EA7 /* DNClientDetailsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNClientDetailsHelper.m; sourceTree = "<group>"; };
-		D776E2F81B7C781B00576EA7 /* DNDeviceDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDeviceDetails.h; sourceTree = "<group>"; };
-		D776E2F91B7C781B00576EA7 /* DNDeviceDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDeviceDetails.m; sourceTree = "<group>"; };
-		D776E2FB1B7C781B00576EA7 /* DNDeviceDetailsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDeviceDetailsHelper.h; sourceTree = "<group>"; };
-		D776E2FC1B7C781B00576EA7 /* DNDeviceDetailsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDeviceDetailsHelper.m; sourceTree = "<group>"; };
-		D776E2FE1B7C781B00576EA7 /* DNRegistrationDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNRegistrationDetails.h; sourceTree = "<group>"; };
-		D776E2FF1B7C781B00576EA7 /* DNRegistrationDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNRegistrationDetails.m; sourceTree = "<group>"; };
-		D776E3011B7C781B00576EA7 /* DNUserDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNUserDetails.h; sourceTree = "<group>"; };
-		D776E3021B7C781B00576EA7 /* DNUserDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNUserDetails.m; sourceTree = "<group>"; };
-		D776E3041B7C781B00576EA7 /* DNTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNTag.h; sourceTree = "<group>"; };
-		D776E3051B7C781B00576EA7 /* DNTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNTag.m; sourceTree = "<group>"; };
-		D776E3081B7C781B00576EA7 /* DNAppSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNAppSettingsController.h; sourceTree = "<group>"; };
-		D776E3091B7C781B00576EA7 /* DNAppSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNAppSettingsController.m; sourceTree = "<group>"; };
-		D776E30B1B7C781B00576EA7 /* DNConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DNConfiguration.plist; sourceTree = "<group>"; };
-		D776E30E1B7C781B00576EA7 /* DNAssetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNAssetController.h; sourceTree = "<group>"; };
-		D776E30F1B7C781B00576EA7 /* DNAssetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNAssetController.m; sourceTree = "<group>"; };
-		D776E3141B7C781B00576EA7 /* NSManagedObject+DNHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+DNHelper.h"; sourceTree = "<group>"; };
-		D776E3151B7C781B00576EA7 /* NSManagedObject+DNHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+DNHelper.m"; sourceTree = "<group>"; };
-		D776E3161B7C781B00576EA7 /* NSManagedObjectContext+DNDelete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+DNDelete.h"; sourceTree = "<group>"; };
-		D776E3171B7C781B00576EA7 /* NSManagedObjectContext+DNDelete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+DNDelete.m"; sourceTree = "<group>"; };
-		D776E3181B7C781B00576EA7 /* NSManagedObjectContext+DNHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+DNHelpers.h"; sourceTree = "<group>"; };
-		D776E3191B7C781B00576EA7 /* NSManagedObjectContext+DNHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+DNHelpers.m"; sourceTree = "<group>"; };
-		D776E31C1B7C781B00576EA7 /* DNKeychainHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNKeychainHelper.h; sourceTree = "<group>"; };
-		D776E31D1B7C781B00576EA7 /* DNKeychainHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNKeychainHelper.m; sourceTree = "<group>"; };
-		D776E31F1B7C781B00576EA7 /* DNKeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNKeychainItemWrapper.h; sourceTree = "<group>"; };
-		D776E3201B7C781B00576EA7 /* DNKeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNKeychainItemWrapper.m; sourceTree = "<group>"; };
-		D776E3221B7C781B00576EA7 /* DNDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDataController.h; sourceTree = "<group>"; };
-		D776E3231B7C781B00576EA7 /* DNDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDataController.m; sourceTree = "<group>"; };
-		D776E3261B7C781B00576EA7 /* DNDeviceUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDeviceUser.h; sourceTree = "<group>"; };
-		D776E3271B7C781B00576EA7 /* DNDeviceUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDeviceUser.m; sourceTree = "<group>"; };
-		D776E3291B7C781B00576EA7 /* DNNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNNotification.h; sourceTree = "<group>"; };
-		D776E32A1B7C781B00576EA7 /* DNNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNotification.m; sourceTree = "<group>"; };
-		D776E32C1B7C781B00576EA7 /* DNUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNUser.h; sourceTree = "<group>"; };
-		D776E32D1B7C781B00576EA7 /* DNUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNUser.m; sourceTree = "<group>"; };
-		D776E3301B7C781B00576EA7 /* DNDonkyDataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DNDonkyDataModel 2.xcdatamodel"; sourceTree = "<group>"; };
-		D776E3311B7C781B00576EA7 /* DNDonkyDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DNDonkyDataModel.xcdatamodel; sourceTree = "<group>"; };
-		D776E3351B7C781B00576EA7 /* DNDonkyCoreFunctionalHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDonkyCoreFunctionalHelper.h; sourceTree = "<group>"; };
-		D776E3361B7C781B00576EA7 /* DNDonkyCoreFunctionalHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDonkyCoreFunctionalHelper.m; sourceTree = "<group>"; };
-		D776E3381B7C781B00576EA7 /* DNEventSubscriber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNEventSubscriber.h; sourceTree = "<group>"; };
-		D776E3391B7C781B00576EA7 /* DNEventSubscriber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNEventSubscriber.m; sourceTree = "<group>"; };
-		D776E33B1B7C781B00576EA7 /* DNLocalEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNLocalEvent.h; sourceTree = "<group>"; };
-		D776E33C1B7C781B00576EA7 /* DNLocalEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNLocalEvent.m; sourceTree = "<group>"; };
-		D776E33E1B7C781B00576EA7 /* DNModuleDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNModuleDefinition.h; sourceTree = "<group>"; };
-		D776E33F1B7C781B00576EA7 /* DNModuleDefinition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNModuleDefinition.m; sourceTree = "<group>"; };
-		D776E3411B7C781B00576EA7 /* DNModuleHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNModuleHelper.h; sourceTree = "<group>"; };
-		D776E3421B7C781B00576EA7 /* DNModuleHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNModuleHelper.m; sourceTree = "<group>"; };
-		D776E3441B7C781B00576EA7 /* DNNotificationSubscriber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNNotificationSubscriber.h; sourceTree = "<group>"; };
-		D776E3451B7C781B00576EA7 /* DNNotificationSubscriber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNotificationSubscriber.m; sourceTree = "<group>"; };
-		D776E3471B7C781B00576EA7 /* DNOutboundModules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNOutboundModules.h; sourceTree = "<group>"; };
-		D776E3481B7C781B00576EA7 /* DNOutboundModules.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNOutboundModules.m; sourceTree = "<group>"; };
-		D776E34A1B7C781B00576EA7 /* DNRegisteredServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNRegisteredServices.h; sourceTree = "<group>"; };
-		D776E34B1B7C781B00576EA7 /* DNRegisteredServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNRegisteredServices.m; sourceTree = "<group>"; };
-		D776E34D1B7C781B00576EA7 /* DNSubscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNSubscription.h; sourceTree = "<group>"; };
-		D776E34E1B7C781B00576EA7 /* DNSubscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNSubscription.m; sourceTree = "<group>"; };
-		D776E3501B7C781B00576EA7 /* DNDonkyCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDonkyCore.h; sourceTree = "<group>"; };
-		D776E3511B7C781B00576EA7 /* DNDonkyCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDonkyCore.m; sourceTree = "<group>"; };
-		D776E3541B7C781B00576EA7 /* DNErrorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNErrorController.h; sourceTree = "<group>"; };
-		D776E3551B7C781B00576EA7 /* DNErrorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNErrorController.m; sourceTree = "<group>"; };
-		D776E3581B7C781B00576EA7 /* DNLoggingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNLoggingController.h; sourceTree = "<group>"; };
-		D776E3591B7C781B00576EA7 /* DNLoggingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNLoggingController.m; sourceTree = "<group>"; };
-		D776E35D1B7C781B00576EA7 /* DNClientNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNClientNotification.h; sourceTree = "<group>"; };
-		D776E35E1B7C781B00576EA7 /* DNClientNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNClientNotification.m; sourceTree = "<group>"; };
-		D776E3601B7C781B00576EA7 /* DNContentNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNContentNotification.h; sourceTree = "<group>"; };
-		D776E3611B7C781B00576EA7 /* DNContentNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNContentNotification.m; sourceTree = "<group>"; };
-		D776E3631B7C781B00576EA7 /* DNNetworkDataHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNNetworkDataHelper.h; sourceTree = "<group>"; };
-		D776E3641B7C781B00576EA7 /* DNNetworkDataHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNetworkDataHelper.m; sourceTree = "<group>"; };
-		D776E3661B7C781B00576EA7 /* DNDeviceConnectivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDeviceConnectivityController.h; sourceTree = "<group>"; };
-		D776E3671B7C781B00576EA7 /* DNDeviceConnectivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDeviceConnectivityController.m; sourceTree = "<group>"; };
-		D776E3691B7C781B00576EA7 /* DNNetworkHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNNetworkHelper.h; sourceTree = "<group>"; };
-		D776E36A1B7C781B00576EA7 /* DNNetworkHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNetworkHelper.m; sourceTree = "<group>"; };
-		D776E36C1B7C781B00576EA7 /* DNRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNRequest.h; sourceTree = "<group>"; };
-		D776E36D1B7C781B00576EA7 /* DNRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNRequest.m; sourceTree = "<group>"; };
-		D776E36F1B7C781B00576EA7 /* DNRetryHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNRetryHelper.h; sourceTree = "<group>"; };
-		D776E3701B7C781B00576EA7 /* DNRetryHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNRetryHelper.m; sourceTree = "<group>"; };
-		D776E3721B7C781B00576EA7 /* DNRetryObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNRetryObject.h; sourceTree = "<group>"; };
-		D776E3731B7C781B00576EA7 /* DNRetryObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNRetryObject.m; sourceTree = "<group>"; };
-		D776E3751B7C781B00576EA7 /* DNServerNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNServerNotification.h; sourceTree = "<group>"; };
-		D776E3761B7C781B00576EA7 /* DNServerNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNServerNotification.m; sourceTree = "<group>"; };
-		D776E3781B7C781B00576EA7 /* DNSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNSessionManager.h; sourceTree = "<group>"; };
-		D776E3791B7C781B00576EA7 /* DNSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNSessionManager.m; sourceTree = "<group>"; };
-		D776E37B1B7C781B00576EA7 /* DNSynchroniseResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNSynchroniseResponse.h; sourceTree = "<group>"; };
-		D776E37C1B7C781B00576EA7 /* DNSynchroniseResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNSynchroniseResponse.m; sourceTree = "<group>"; };
-		D776E37E1B7C781B00576EA7 /* DNNetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNNetworkController.h; sourceTree = "<group>"; };
-		D776E37F1B7C781B00576EA7 /* DNNetworkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNetworkController.m; sourceTree = "<group>"; };
-		D776E3831B7C781B00576EA7 /* DNPushNotificationUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNPushNotificationUpdate.h; sourceTree = "<group>"; };
-		D776E3841B7C781B00576EA7 /* DNPushNotificationUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNPushNotificationUpdate.m; sourceTree = "<group>"; };
-		D776E3861B7C781B00576EA7 /* DNNotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNNotificationController.h; sourceTree = "<group>"; };
-		D776E3871B7C781B00576EA7 /* DNNotificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNotificationController.m; sourceTree = "<group>"; };
-		D776E38A1B7C781B00576EA7 /* DNBlockDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNBlockDefinitions.h; sourceTree = "<group>"; };
-		D776E38D1B7C781B00576EA7 /* NSDate+DNDateHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+DNDateHelper.h"; sourceTree = "<group>"; };
-		D776E38E1B7C781B00576EA7 /* NSDate+DNDateHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+DNDateHelper.m"; sourceTree = "<group>"; };
-		D776E3901B7C781B00576EA7 /* NSMutableDictionary+DNDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+DNDictionary.h"; sourceTree = "<group>"; };
-		D776E3911B7C781B00576EA7 /* NSMutableDictionary+DNDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+DNDictionary.m"; sourceTree = "<group>"; };
-		D776E3931B7C781B00576EA7 /* UIViewController+DNRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+DNRootViewController.h"; sourceTree = "<group>"; };
-		D776E3941B7C781B00576EA7 /* UIViewController+DNRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+DNRootViewController.m"; sourceTree = "<group>"; };
-		D776E3961B7C781B00576EA7 /* DNConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNConstants.h; sourceTree = "<group>"; };
-		D776E3971B7C781B00576EA7 /* DNConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNConstants.m; sourceTree = "<group>"; };
-		D776E3991B7C781B00576EA7 /* DNFileHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNFileHelpers.h; sourceTree = "<group>"; };
-		D776E39A1B7C781B00576EA7 /* DNFileHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNFileHelpers.m; sourceTree = "<group>"; };
-		D776E39C1B7C781B00576EA7 /* DNLocalization.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = DNLocalization.strings; sourceTree = "<group>"; };
-		D776E39D1B7C781B00576EA7 /* DNNetwork+Localization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DNNetwork+Localization.h"; sourceTree = "<group>"; };
-		D776E39E1B7C781B00576EA7 /* DNNetwork+Localization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DNNetwork+Localization.m"; sourceTree = "<group>"; };
-		D776E3A01B7C781B00576EA7 /* DNSystemHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNSystemHelpers.h; sourceTree = "<group>"; };
-		D776E3A11B7C781B00576EA7 /* DNSystemHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNSystemHelpers.m; sourceTree = "<group>"; };
+		D7882BC41C0EFBE900F87E16 /* DNDonkyNetworkDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDonkyNetworkDetails.h; sourceTree = "<group>"; };
+		D7882BC51C0EFBE900F87E16 /* DNDonkyNetworkDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDonkyNetworkDetails.m; sourceTree = "<group>"; };
+		D7882BC71C0EFBE900F87E16 /* DNUserDefaultsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNUserDefaultsHelper.h; sourceTree = "<group>"; };
+		D7882BC81C0EFBE900F87E16 /* DNUserDefaultsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNUserDefaultsHelper.m; sourceTree = "<group>"; };
+		D7882BCA1C0EFBE900F87E16 /* DNAccountController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNAccountController.h; sourceTree = "<group>"; };
+		D7882BCB1C0EFBE900F87E16 /* DNAccountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNAccountController.m; sourceTree = "<group>"; };
+		D7882BCE1C0EFBE900F87E16 /* DNUserAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNUserAuthentication.h; sourceTree = "<group>"; };
+		D7882BCF1C0EFBE900F87E16 /* DNUserAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNUserAuthentication.m; sourceTree = "<group>"; };
+		D7882BD21C0EFBEA00F87E16 /* DNAccountRegistrationResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNAccountRegistrationResponse.h; sourceTree = "<group>"; };
+		D7882BD31C0EFBEA00F87E16 /* DNAccountRegistrationResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNAccountRegistrationResponse.m; sourceTree = "<group>"; };
+		D7882BD51C0EFBEA00F87E16 /* DNConfigurationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNConfigurationController.h; sourceTree = "<group>"; };
+		D7882BD61C0EFBEA00F87E16 /* DNConfigurationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNConfigurationController.m; sourceTree = "<group>"; };
+		D7882BD91C0EFBEA00F87E16 /* DNClientDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNClientDetails.h; sourceTree = "<group>"; };
+		D7882BDA1C0EFBEA00F87E16 /* DNClientDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNClientDetails.m; sourceTree = "<group>"; };
+		D7882BDC1C0EFBEA00F87E16 /* DNClientDetailsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNClientDetailsHelper.h; sourceTree = "<group>"; };
+		D7882BDD1C0EFBEA00F87E16 /* DNClientDetailsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNClientDetailsHelper.m; sourceTree = "<group>"; };
+		D7882BDF1C0EFBEA00F87E16 /* DNDeviceDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDeviceDetails.h; sourceTree = "<group>"; };
+		D7882BE01C0EFBEA00F87E16 /* DNDeviceDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDeviceDetails.m; sourceTree = "<group>"; };
+		D7882BE21C0EFBEA00F87E16 /* DNDeviceDetailsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDeviceDetailsHelper.h; sourceTree = "<group>"; };
+		D7882BE31C0EFBEA00F87E16 /* DNDeviceDetailsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDeviceDetailsHelper.m; sourceTree = "<group>"; };
+		D7882BE51C0EFBEA00F87E16 /* DNRegistrationDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNRegistrationDetails.h; sourceTree = "<group>"; };
+		D7882BE61C0EFBEA00F87E16 /* DNRegistrationDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNRegistrationDetails.m; sourceTree = "<group>"; };
+		D7882BE81C0EFBEA00F87E16 /* DNUserDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNUserDetails.h; sourceTree = "<group>"; };
+		D7882BE91C0EFBEA00F87E16 /* DNUserDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNUserDetails.m; sourceTree = "<group>"; };
+		D7882BEB1C0EFBEA00F87E16 /* DNTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNTag.h; sourceTree = "<group>"; };
+		D7882BEC1C0EFBEA00F87E16 /* DNTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNTag.m; sourceTree = "<group>"; };
+		D7882BEF1C0EFBEA00F87E16 /* DNAppSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNAppSettingsController.h; sourceTree = "<group>"; };
+		D7882BF01C0EFBEA00F87E16 /* DNAppSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNAppSettingsController.m; sourceTree = "<group>"; };
+		D7882BF21C0EFBEA00F87E16 /* DNConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DNConfiguration.plist; sourceTree = "<group>"; };
+		D7882BF51C0EFBEA00F87E16 /* DNAssetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNAssetController.h; sourceTree = "<group>"; };
+		D7882BF61C0EFBEA00F87E16 /* DNAssetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNAssetController.m; sourceTree = "<group>"; };
+		D7882BFB1C0EFBEA00F87E16 /* NSManagedObject+DNHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+DNHelper.h"; sourceTree = "<group>"; };
+		D7882BFC1C0EFBEA00F87E16 /* NSManagedObject+DNHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+DNHelper.m"; sourceTree = "<group>"; };
+		D7882BFD1C0EFBEA00F87E16 /* NSManagedObjectContext+DNDelete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+DNDelete.h"; sourceTree = "<group>"; };
+		D7882BFE1C0EFBEA00F87E16 /* NSManagedObjectContext+DNDelete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+DNDelete.m"; sourceTree = "<group>"; };
+		D7882BFF1C0EFBEA00F87E16 /* NSManagedObjectContext+DNHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+DNHelpers.h"; sourceTree = "<group>"; };
+		D7882C001C0EFBEA00F87E16 /* NSManagedObjectContext+DNHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+DNHelpers.m"; sourceTree = "<group>"; };
+		D7882C031C0EFBEA00F87E16 /* DNKeychainHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNKeychainHelper.h; sourceTree = "<group>"; };
+		D7882C041C0EFBEA00F87E16 /* DNKeychainHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNKeychainHelper.m; sourceTree = "<group>"; };
+		D7882C061C0EFBEA00F87E16 /* DNKeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNKeychainItemWrapper.h; sourceTree = "<group>"; };
+		D7882C071C0EFBEA00F87E16 /* DNKeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNKeychainItemWrapper.m; sourceTree = "<group>"; };
+		D7882C091C0EFBEA00F87E16 /* DNDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDataController.h; sourceTree = "<group>"; };
+		D7882C0A1C0EFBEA00F87E16 /* DNDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDataController.m; sourceTree = "<group>"; };
+		D7882C0D1C0EFBEA00F87E16 /* DNDeviceUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDeviceUser.h; sourceTree = "<group>"; };
+		D7882C0E1C0EFBEA00F87E16 /* DNDeviceUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDeviceUser.m; sourceTree = "<group>"; };
+		D7882C101C0EFBEA00F87E16 /* DNNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNNotification.h; sourceTree = "<group>"; };
+		D7882C111C0EFBEA00F87E16 /* DNNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNotification.m; sourceTree = "<group>"; };
+		D7882C131C0EFBEA00F87E16 /* DNUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNUser.h; sourceTree = "<group>"; };
+		D7882C141C0EFBEA00F87E16 /* DNUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNUser.m; sourceTree = "<group>"; };
+		D7882C171C0EFBEA00F87E16 /* DNDonkyDataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DNDonkyDataModel 2.xcdatamodel"; sourceTree = "<group>"; };
+		D7882C181C0EFBEA00F87E16 /* DNDonkyDataModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DNDonkyDataModel 3.xcdatamodel"; sourceTree = "<group>"; };
+		D7882C191C0EFBEA00F87E16 /* DNDonkyDataModel 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DNDonkyDataModel 4.xcdatamodel"; sourceTree = "<group>"; };
+		D7882C1A1C0EFBEA00F87E16 /* DNDonkyDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DNDonkyDataModel.xcdatamodel; sourceTree = "<group>"; };
+		D7882C1E1C0EFBEA00F87E16 /* DNDonkyCoreFunctionalHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDonkyCoreFunctionalHelper.h; sourceTree = "<group>"; };
+		D7882C1F1C0EFBEA00F87E16 /* DNDonkyCoreFunctionalHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDonkyCoreFunctionalHelper.m; sourceTree = "<group>"; };
+		D7882C211C0EFBEA00F87E16 /* DNEventSubscriber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNEventSubscriber.h; sourceTree = "<group>"; };
+		D7882C221C0EFBEA00F87E16 /* DNEventSubscriber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNEventSubscriber.m; sourceTree = "<group>"; };
+		D7882C241C0EFBEA00F87E16 /* DNLocalEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNLocalEvent.h; sourceTree = "<group>"; };
+		D7882C251C0EFBEA00F87E16 /* DNLocalEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNLocalEvent.m; sourceTree = "<group>"; };
+		D7882C271C0EFBEA00F87E16 /* DNModuleDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNModuleDefinition.h; sourceTree = "<group>"; };
+		D7882C281C0EFBEA00F87E16 /* DNModuleDefinition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNModuleDefinition.m; sourceTree = "<group>"; };
+		D7882C2A1C0EFBEA00F87E16 /* DNModuleHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNModuleHelper.h; sourceTree = "<group>"; };
+		D7882C2B1C0EFBEA00F87E16 /* DNModuleHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNModuleHelper.m; sourceTree = "<group>"; };
+		D7882C2D1C0EFBEA00F87E16 /* DNNotificationSubscriber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNNotificationSubscriber.h; sourceTree = "<group>"; };
+		D7882C2E1C0EFBEA00F87E16 /* DNNotificationSubscriber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNotificationSubscriber.m; sourceTree = "<group>"; };
+		D7882C301C0EFBEA00F87E16 /* DNOutboundModules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNOutboundModules.h; sourceTree = "<group>"; };
+		D7882C311C0EFBEA00F87E16 /* DNOutboundModules.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNOutboundModules.m; sourceTree = "<group>"; };
+		D7882C331C0EFBEA00F87E16 /* DNRegisteredServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNRegisteredServices.h; sourceTree = "<group>"; };
+		D7882C341C0EFBEA00F87E16 /* DNRegisteredServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNRegisteredServices.m; sourceTree = "<group>"; };
+		D7882C361C0EFBEA00F87E16 /* DNSubscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNSubscription.h; sourceTree = "<group>"; };
+		D7882C371C0EFBEA00F87E16 /* DNSubscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNSubscription.m; sourceTree = "<group>"; };
+		D7882C391C0EFBEA00F87E16 /* DNDonkyCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDonkyCore.h; sourceTree = "<group>"; };
+		D7882C3A1C0EFBEA00F87E16 /* DNDonkyCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDonkyCore.m; sourceTree = "<group>"; };
+		D7882C3D1C0EFBEA00F87E16 /* DNErrorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNErrorController.h; sourceTree = "<group>"; };
+		D7882C3E1C0EFBEA00F87E16 /* DNErrorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNErrorController.m; sourceTree = "<group>"; };
+		D7882C411C0EFBEA00F87E16 /* DNLoggingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNLoggingController.h; sourceTree = "<group>"; };
+		D7882C421C0EFBEA00F87E16 /* DNLoggingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNLoggingController.m; sourceTree = "<group>"; };
+		D7882C461C0EFBEA00F87E16 /* DNClientNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNClientNotification.h; sourceTree = "<group>"; };
+		D7882C471C0EFBEA00F87E16 /* DNClientNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNClientNotification.m; sourceTree = "<group>"; };
+		D7882C491C0EFBEA00F87E16 /* DNContentNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNContentNotification.h; sourceTree = "<group>"; };
+		D7882C4A1C0EFBEA00F87E16 /* DNContentNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNContentNotification.m; sourceTree = "<group>"; };
+		D7882C4C1C0EFBEA00F87E16 /* DNNetworkDataHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNNetworkDataHelper.h; sourceTree = "<group>"; };
+		D7882C4D1C0EFBEA00F87E16 /* DNNetworkDataHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNetworkDataHelper.m; sourceTree = "<group>"; };
+		D7882C4F1C0EFBEA00F87E16 /* DNDeviceConnectivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDeviceConnectivityController.h; sourceTree = "<group>"; };
+		D7882C501C0EFBEA00F87E16 /* DNDeviceConnectivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDeviceConnectivityController.m; sourceTree = "<group>"; };
+		D7882C521C0EFBEA00F87E16 /* DNNetworkHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNNetworkHelper.h; sourceTree = "<group>"; };
+		D7882C531C0EFBEA00F87E16 /* DNNetworkHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNetworkHelper.m; sourceTree = "<group>"; };
+		D7882C551C0EFBEA00F87E16 /* DNRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNRequest.h; sourceTree = "<group>"; };
+		D7882C561C0EFBEA00F87E16 /* DNRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNRequest.m; sourceTree = "<group>"; };
+		D7882C581C0EFBEA00F87E16 /* DNRetryHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNRetryHelper.h; sourceTree = "<group>"; };
+		D7882C591C0EFBEA00F87E16 /* DNRetryHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNRetryHelper.m; sourceTree = "<group>"; };
+		D7882C5B1C0EFBEA00F87E16 /* DNRetryObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNRetryObject.h; sourceTree = "<group>"; };
+		D7882C5C1C0EFBEA00F87E16 /* DNRetryObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNRetryObject.m; sourceTree = "<group>"; };
+		D7882C5E1C0EFBEA00F87E16 /* DNServerNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNServerNotification.h; sourceTree = "<group>"; };
+		D7882C5F1C0EFBEA00F87E16 /* DNServerNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNServerNotification.m; sourceTree = "<group>"; };
+		D7882C611C0EFBEA00F87E16 /* DNSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNSessionManager.h; sourceTree = "<group>"; };
+		D7882C621C0EFBEA00F87E16 /* DNSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNSessionManager.m; sourceTree = "<group>"; };
+		D7882C641C0EFBEA00F87E16 /* DNNetworkControllerQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNNetworkControllerQueue.h; sourceTree = "<group>"; };
+		D7882C651C0EFBEA00F87E16 /* DNNetworkControllerQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNetworkControllerQueue.m; sourceTree = "<group>"; };
+		D7882C671C0EFBEA00F87E16 /* DNNetworkOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNNetworkOperation.h; sourceTree = "<group>"; };
+		D7882C681C0EFBEA00F87E16 /* DNNetworkOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNetworkOperation.m; sourceTree = "<group>"; };
+		D7882C6A1C0EFBEA00F87E16 /* DNSynchroniseResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNSynchroniseResponse.h; sourceTree = "<group>"; };
+		D7882C6B1C0EFBEA00F87E16 /* DNSynchroniseResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNSynchroniseResponse.m; sourceTree = "<group>"; };
+		D7882C6D1C0EFBEA00F87E16 /* DNNetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNNetworkController.h; sourceTree = "<group>"; };
+		D7882C6E1C0EFBEA00F87E16 /* DNNetworkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNetworkController.m; sourceTree = "<group>"; };
+		D7882C721C0EFBEA00F87E16 /* DNPushNotificationUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNPushNotificationUpdate.h; sourceTree = "<group>"; };
+		D7882C731C0EFBEA00F87E16 /* DNPushNotificationUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNPushNotificationUpdate.m; sourceTree = "<group>"; };
+		D7882C751C0EFBEA00F87E16 /* DNNotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNNotificationController.h; sourceTree = "<group>"; };
+		D7882C761C0EFBEA00F87E16 /* DNNotificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNotificationController.m; sourceTree = "<group>"; };
+		D7882C781C0EFBEA00F87E16 /* DNSignalRInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNSignalRInterface.h; sourceTree = "<group>"; };
+		D7882C791C0EFBEA00F87E16 /* DNSignalRInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNSignalRInterface.m; sourceTree = "<group>"; };
+		D7882C7C1C0EFBEA00F87E16 /* DNBlockDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNBlockDefinitions.h; sourceTree = "<group>"; };
+		D7882C7F1C0EFBEA00F87E16 /* NSDate+DNDateHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+DNDateHelper.h"; sourceTree = "<group>"; };
+		D7882C801C0EFBEA00F87E16 /* NSDate+DNDateHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+DNDateHelper.m"; sourceTree = "<group>"; };
+		D7882C821C0EFBEA00F87E16 /* NSMutableDictionary+DNDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+DNDictionary.h"; sourceTree = "<group>"; };
+		D7882C831C0EFBEA00F87E16 /* NSMutableDictionary+DNDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+DNDictionary.m"; sourceTree = "<group>"; };
+		D7882C851C0EFBEA00F87E16 /* UIViewController+DNRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+DNRootViewController.h"; sourceTree = "<group>"; };
+		D7882C861C0EFBEA00F87E16 /* UIViewController+DNRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+DNRootViewController.m"; sourceTree = "<group>"; };
+		D7882C881C0EFBEA00F87E16 /* DNConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNConstants.h; sourceTree = "<group>"; };
+		D7882C891C0EFBEA00F87E16 /* DNConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNConstants.m; sourceTree = "<group>"; };
+		D7882C8B1C0EFBEA00F87E16 /* DNFileHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNFileHelpers.h; sourceTree = "<group>"; };
+		D7882C8C1C0EFBEA00F87E16 /* DNFileHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNFileHelpers.m; sourceTree = "<group>"; };
+		D7882C8E1C0EFBEA00F87E16 /* DNLocalization.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = DNLocalization.strings; sourceTree = "<group>"; };
+		D7882C8F1C0EFBEA00F87E16 /* DNNetwork+Localization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DNNetwork+Localization.h"; sourceTree = "<group>"; };
+		D7882C901C0EFBEA00F87E16 /* DNNetwork+Localization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DNNetwork+Localization.m"; sourceTree = "<group>"; };
+		D7882C921C0EFBEA00F87E16 /* DNQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNQueueManager.h; sourceTree = "<group>"; };
+		D7882C941C0EFBEA00F87E16 /* DNApplicationShortCutHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNApplicationShortCutHelper.h; sourceTree = "<group>"; };
+		D7882C951C0EFBEA00F87E16 /* DNApplicationShortCutHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNApplicationShortCutHelper.m; sourceTree = "<group>"; };
+		D7882C971C0EFBEA00F87E16 /* DNSystemHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNSystemHelpers.h; sourceTree = "<group>"; };
+		D7882C981C0EFBEA00F87E16 /* DNSystemHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNSystemHelpers.m; sourceTree = "<group>"; };
 		D79769011B6B6C8300756F42 /* DonkyAudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DonkyAudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D79769051B6B6C8300756F42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		D79769061B6B6C8300756F42 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -300,768 +315,817 @@
 			path = "Main Controller";
 			sourceTree = "<group>";
 		};
-		D776E2D91B7C781B00576EA7 /* Core */ = {
+		D7882BC01C0EFBE900F87E16 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2DA1B7C781B00576EA7 /* Account Controller */,
-				D776E3061B7C781B00576EA7 /* App Settings Controller */,
-				D776E30C1B7C781B00576EA7 /* Asset Controller */,
-				D776E3101B7C781B00576EA7 /* Data Controller */,
-				D776E3321B7C781B00576EA7 /* Donky Core Controller */,
-				D776E3521B7C781B00576EA7 /* Error Controller */,
-				D776E3561B7C781B00576EA7 /* Logging Controller */,
-				D776E35A1B7C781B00576EA7 /* Network Controller */,
-				D776E3801B7C781B00576EA7 /* Notification Controller */,
-				D776E3881B7C781B00576EA7 /* Universal Helpers */,
+				D7882BC11C0EFBE900F87E16 /* Account Controller */,
+				D7882BED1C0EFBEA00F87E16 /* App Settings Controller */,
+				D7882BF31C0EFBEA00F87E16 /* Asset Controller */,
+				D7882BF71C0EFBEA00F87E16 /* Data Controller */,
+				D7882C1B1C0EFBEA00F87E16 /* Donky Core Controller */,
+				D7882C3B1C0EFBEA00F87E16 /* Error Controller */,
+				D7882C3F1C0EFBEA00F87E16 /* Logging Controller */,
+				D7882C431C0EFBEA00F87E16 /* Network Controller */,
+				D7882C6F1C0EFBEA00F87E16 /* Notification Controller */,
+				D7882C771C0EFBEA00F87E16 /* SignalR Interface Helper */,
+				D7882C7A1C0EFBEA00F87E16 /* Universal Helpers */,
 			);
 			name = Core;
 			path = ../../../modules/Core;
 			sourceTree = "<group>";
 		};
-		D776E2DA1B7C781B00576EA7 /* Account Controller */ = {
+		D7882BC11C0EFBE900F87E16 /* Account Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2DB1B7C781B00576EA7 /* Helpers */,
-				D776E2E21B7C781B00576EA7 /* Main Controller */,
-				D776E2E51B7C781B00576EA7 /* Requests */,
-				D776E2E91B7C781B00576EA7 /* Responses */,
-				D776E2F01B7C781B00576EA7 /* Shared Types */,
-				D776E3031B7C781B00576EA7 /* Tags */,
+				D7882BC21C0EFBE900F87E16 /* Helpers */,
+				D7882BC91C0EFBE900F87E16 /* Main Controller */,
+				D7882BCC1C0EFBE900F87E16 /* Requests */,
+				D7882BD01C0EFBE900F87E16 /* Responses */,
+				D7882BD71C0EFBEA00F87E16 /* Shared Types */,
+				D7882BEA1C0EFBEA00F87E16 /* Tags */,
 			);
 			path = "Account Controller";
 			sourceTree = "<group>";
 		};
-		D776E2DB1B7C781B00576EA7 /* Helpers */ = {
+		D7882BC21C0EFBE900F87E16 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2DC1B7C781B00576EA7 /* Donky Network Details */,
-				D776E2DF1B7C781B00576EA7 /* User Defaults */,
+				D7882BC31C0EFBE900F87E16 /* Donky Network Details */,
+				D7882BC61C0EFBE900F87E16 /* User Defaults */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		D776E2DC1B7C781B00576EA7 /* Donky Network Details */ = {
+		D7882BC31C0EFBE900F87E16 /* Donky Network Details */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2DD1B7C781B00576EA7 /* DNDonkyNetworkDetails.h */,
-				D776E2DE1B7C781B00576EA7 /* DNDonkyNetworkDetails.m */,
+				D7882BC41C0EFBE900F87E16 /* DNDonkyNetworkDetails.h */,
+				D7882BC51C0EFBE900F87E16 /* DNDonkyNetworkDetails.m */,
 			);
 			path = "Donky Network Details";
 			sourceTree = "<group>";
 		};
-		D776E2DF1B7C781B00576EA7 /* User Defaults */ = {
+		D7882BC61C0EFBE900F87E16 /* User Defaults */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2E01B7C781B00576EA7 /* DNUserDefaultsHelper.h */,
-				D776E2E11B7C781B00576EA7 /* DNUserDefaultsHelper.m */,
+				D7882BC71C0EFBE900F87E16 /* DNUserDefaultsHelper.h */,
+				D7882BC81C0EFBE900F87E16 /* DNUserDefaultsHelper.m */,
 			);
 			path = "User Defaults";
 			sourceTree = "<group>";
 		};
-		D776E2E21B7C781B00576EA7 /* Main Controller */ = {
+		D7882BC91C0EFBE900F87E16 /* Main Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2E31B7C781B00576EA7 /* DNAccountController.h */,
-				D776E2E41B7C781B00576EA7 /* DNAccountController.m */,
+				D7882BCA1C0EFBE900F87E16 /* DNAccountController.h */,
+				D7882BCB1C0EFBE900F87E16 /* DNAccountController.m */,
 			);
 			path = "Main Controller";
 			sourceTree = "<group>";
 		};
-		D776E2E51B7C781B00576EA7 /* Requests */ = {
+		D7882BCC1C0EFBE900F87E16 /* Requests */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2E61B7C781B00576EA7 /* User Authentication */,
+				D7882BCD1C0EFBE900F87E16 /* User Authentication */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
 		};
-		D776E2E61B7C781B00576EA7 /* User Authentication */ = {
+		D7882BCD1C0EFBE900F87E16 /* User Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2E71B7C781B00576EA7 /* DNUserAuthentication.h */,
-				D776E2E81B7C781B00576EA7 /* DNUserAuthentication.m */,
+				D7882BCE1C0EFBE900F87E16 /* DNUserAuthentication.h */,
+				D7882BCF1C0EFBE900F87E16 /* DNUserAuthentication.m */,
 			);
 			path = "User Authentication";
 			sourceTree = "<group>";
 		};
-		D776E2E91B7C781B00576EA7 /* Responses */ = {
+		D7882BD01C0EFBE900F87E16 /* Responses */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2EA1B7C781B00576EA7 /* Account Response */,
-				D776E2ED1B7C781B00576EA7 /* Configuration Response */,
+				D7882BD11C0EFBE900F87E16 /* Account Response */,
+				D7882BD41C0EFBEA00F87E16 /* Configuration Response */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
 		};
-		D776E2EA1B7C781B00576EA7 /* Account Response */ = {
+		D7882BD11C0EFBE900F87E16 /* Account Response */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2EB1B7C781B00576EA7 /* DNAccountRegistrationResponse.h */,
-				D776E2EC1B7C781B00576EA7 /* DNAccountRegistrationResponse.m */,
+				D7882BD21C0EFBEA00F87E16 /* DNAccountRegistrationResponse.h */,
+				D7882BD31C0EFBEA00F87E16 /* DNAccountRegistrationResponse.m */,
 			);
 			path = "Account Response";
 			sourceTree = "<group>";
 		};
-		D776E2ED1B7C781B00576EA7 /* Configuration Response */ = {
+		D7882BD41C0EFBEA00F87E16 /* Configuration Response */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2EE1B7C781B00576EA7 /* DNConfigurationController.h */,
-				D776E2EF1B7C781B00576EA7 /* DNConfigurationController.m */,
+				D7882BD51C0EFBEA00F87E16 /* DNConfigurationController.h */,
+				D7882BD61C0EFBEA00F87E16 /* DNConfigurationController.m */,
 			);
 			path = "Configuration Response";
 			sourceTree = "<group>";
 		};
-		D776E2F01B7C781B00576EA7 /* Shared Types */ = {
+		D7882BD71C0EFBEA00F87E16 /* Shared Types */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2F11B7C781B00576EA7 /* Client */,
-				D776E2F71B7C781B00576EA7 /* Device Details */,
-				D776E2FD1B7C781B00576EA7 /* Registration Details */,
-				D776E3001B7C781B00576EA7 /* User Details */,
+				D7882BD81C0EFBEA00F87E16 /* Client */,
+				D7882BDE1C0EFBEA00F87E16 /* Device Details */,
+				D7882BE41C0EFBEA00F87E16 /* Registration Details */,
+				D7882BE71C0EFBEA00F87E16 /* User Details */,
 			);
 			path = "Shared Types";
 			sourceTree = "<group>";
 		};
-		D776E2F11B7C781B00576EA7 /* Client */ = {
+		D7882BD81C0EFBEA00F87E16 /* Client */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2F21B7C781B00576EA7 /* DNClientDetails.h */,
-				D776E2F31B7C781B00576EA7 /* DNClientDetails.m */,
-				D776E2F41B7C781B00576EA7 /* Helper */,
+				D7882BD91C0EFBEA00F87E16 /* DNClientDetails.h */,
+				D7882BDA1C0EFBEA00F87E16 /* DNClientDetails.m */,
+				D7882BDB1C0EFBEA00F87E16 /* Helper */,
 			);
 			path = Client;
 			sourceTree = "<group>";
 		};
-		D776E2F41B7C781B00576EA7 /* Helper */ = {
+		D7882BDB1C0EFBEA00F87E16 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2F51B7C781B00576EA7 /* DNClientDetailsHelper.h */,
-				D776E2F61B7C781B00576EA7 /* DNClientDetailsHelper.m */,
+				D7882BDC1C0EFBEA00F87E16 /* DNClientDetailsHelper.h */,
+				D7882BDD1C0EFBEA00F87E16 /* DNClientDetailsHelper.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
 		};
-		D776E2F71B7C781B00576EA7 /* Device Details */ = {
+		D7882BDE1C0EFBEA00F87E16 /* Device Details */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2F81B7C781B00576EA7 /* DNDeviceDetails.h */,
-				D776E2F91B7C781B00576EA7 /* DNDeviceDetails.m */,
-				D776E2FA1B7C781B00576EA7 /* Helper */,
+				D7882BDF1C0EFBEA00F87E16 /* DNDeviceDetails.h */,
+				D7882BE01C0EFBEA00F87E16 /* DNDeviceDetails.m */,
+				D7882BE11C0EFBEA00F87E16 /* Helper */,
 			);
 			path = "Device Details";
 			sourceTree = "<group>";
 		};
-		D776E2FA1B7C781B00576EA7 /* Helper */ = {
+		D7882BE11C0EFBEA00F87E16 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2FB1B7C781B00576EA7 /* DNDeviceDetailsHelper.h */,
-				D776E2FC1B7C781B00576EA7 /* DNDeviceDetailsHelper.m */,
+				D7882BE21C0EFBEA00F87E16 /* DNDeviceDetailsHelper.h */,
+				D7882BE31C0EFBEA00F87E16 /* DNDeviceDetailsHelper.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
 		};
-		D776E2FD1B7C781B00576EA7 /* Registration Details */ = {
+		D7882BE41C0EFBEA00F87E16 /* Registration Details */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2FE1B7C781B00576EA7 /* DNRegistrationDetails.h */,
-				D776E2FF1B7C781B00576EA7 /* DNRegistrationDetails.m */,
+				D7882BE51C0EFBEA00F87E16 /* DNRegistrationDetails.h */,
+				D7882BE61C0EFBEA00F87E16 /* DNRegistrationDetails.m */,
 			);
 			path = "Registration Details";
 			sourceTree = "<group>";
 		};
-		D776E3001B7C781B00576EA7 /* User Details */ = {
+		D7882BE71C0EFBEA00F87E16 /* User Details */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3011B7C781B00576EA7 /* DNUserDetails.h */,
-				D776E3021B7C781B00576EA7 /* DNUserDetails.m */,
+				D7882BE81C0EFBEA00F87E16 /* DNUserDetails.h */,
+				D7882BE91C0EFBEA00F87E16 /* DNUserDetails.m */,
 			);
 			path = "User Details";
 			sourceTree = "<group>";
 		};
-		D776E3031B7C781B00576EA7 /* Tags */ = {
+		D7882BEA1C0EFBEA00F87E16 /* Tags */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3041B7C781B00576EA7 /* DNTag.h */,
-				D776E3051B7C781B00576EA7 /* DNTag.m */,
+				D7882BEB1C0EFBEA00F87E16 /* DNTag.h */,
+				D7882BEC1C0EFBEA00F87E16 /* DNTag.m */,
 			);
 			path = Tags;
 			sourceTree = "<group>";
 		};
-		D776E3061B7C781B00576EA7 /* App Settings Controller */ = {
+		D7882BED1C0EFBEA00F87E16 /* App Settings Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3071B7C781B00576EA7 /* Main Controller */,
-				D776E30A1B7C781B00576EA7 /* Resources */,
+				D7882BEE1C0EFBEA00F87E16 /* Main Controller */,
+				D7882BF11C0EFBEA00F87E16 /* Resources */,
 			);
 			path = "App Settings Controller";
 			sourceTree = "<group>";
 		};
-		D776E3071B7C781B00576EA7 /* Main Controller */ = {
+		D7882BEE1C0EFBEA00F87E16 /* Main Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3081B7C781B00576EA7 /* DNAppSettingsController.h */,
-				D776E3091B7C781B00576EA7 /* DNAppSettingsController.m */,
+				D7882BEF1C0EFBEA00F87E16 /* DNAppSettingsController.h */,
+				D7882BF01C0EFBEA00F87E16 /* DNAppSettingsController.m */,
 			);
 			path = "Main Controller";
 			sourceTree = "<group>";
 		};
-		D776E30A1B7C781B00576EA7 /* Resources */ = {
+		D7882BF11C0EFBEA00F87E16 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D776E30B1B7C781B00576EA7 /* DNConfiguration.plist */,
+				D7882BF21C0EFBEA00F87E16 /* DNConfiguration.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		D776E30C1B7C781B00576EA7 /* Asset Controller */ = {
+		D7882BF31C0EFBEA00F87E16 /* Asset Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E30D1B7C781B00576EA7 /* Main Controller */,
+				D7882BF41C0EFBEA00F87E16 /* Main Controller */,
 			);
 			path = "Asset Controller";
 			sourceTree = "<group>";
 		};
-		D776E30D1B7C781B00576EA7 /* Main Controller */ = {
+		D7882BF41C0EFBEA00F87E16 /* Main Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E30E1B7C781B00576EA7 /* DNAssetController.h */,
-				D776E30F1B7C781B00576EA7 /* DNAssetController.m */,
+				D7882BF51C0EFBEA00F87E16 /* DNAssetController.h */,
+				D7882BF61C0EFBEA00F87E16 /* DNAssetController.m */,
 			);
 			path = "Main Controller";
 			sourceTree = "<group>";
 		};
-		D776E3101B7C781B00576EA7 /* Data Controller */ = {
+		D7882BF71C0EFBEA00F87E16 /* Data Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3111B7C781B00576EA7 /* Helpers */,
-				D776E3211B7C781B00576EA7 /* Main Controller */,
-				D776E3241B7C781B00576EA7 /* Managed Objects */,
-				D776E32E1B7C781B00576EA7 /* Resources */,
+				D7882BF81C0EFBEA00F87E16 /* Helpers */,
+				D7882C081C0EFBEA00F87E16 /* Main Controller */,
+				D7882C0B1C0EFBEA00F87E16 /* Managed Objects */,
+				D7882C151C0EFBEA00F87E16 /* Resources */,
 			);
 			path = "Data Controller";
 			sourceTree = "<group>";
 		};
-		D776E3111B7C781B00576EA7 /* Helpers */ = {
+		D7882BF81C0EFBEA00F87E16 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3121B7C781B00576EA7 /* Core Data */,
-				D776E31A1B7C781B00576EA7 /* Keychain */,
+				D7882BF91C0EFBEA00F87E16 /* Core Data */,
+				D7882C011C0EFBEA00F87E16 /* Keychain */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		D776E3121B7C781B00576EA7 /* Core Data */ = {
+		D7882BF91C0EFBEA00F87E16 /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3131B7C781B00576EA7 /* Categories */,
+				D7882BFA1C0EFBEA00F87E16 /* Categories */,
 			);
 			path = "Core Data";
 			sourceTree = "<group>";
 		};
-		D776E3131B7C781B00576EA7 /* Categories */ = {
+		D7882BFA1C0EFBEA00F87E16 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3141B7C781B00576EA7 /* NSManagedObject+DNHelper.h */,
-				D776E3151B7C781B00576EA7 /* NSManagedObject+DNHelper.m */,
-				D776E3161B7C781B00576EA7 /* NSManagedObjectContext+DNDelete.h */,
-				D776E3171B7C781B00576EA7 /* NSManagedObjectContext+DNDelete.m */,
-				D776E3181B7C781B00576EA7 /* NSManagedObjectContext+DNHelpers.h */,
-				D776E3191B7C781B00576EA7 /* NSManagedObjectContext+DNHelpers.m */,
+				D7882BFB1C0EFBEA00F87E16 /* NSManagedObject+DNHelper.h */,
+				D7882BFC1C0EFBEA00F87E16 /* NSManagedObject+DNHelper.m */,
+				D7882BFD1C0EFBEA00F87E16 /* NSManagedObjectContext+DNDelete.h */,
+				D7882BFE1C0EFBEA00F87E16 /* NSManagedObjectContext+DNDelete.m */,
+				D7882BFF1C0EFBEA00F87E16 /* NSManagedObjectContext+DNHelpers.h */,
+				D7882C001C0EFBEA00F87E16 /* NSManagedObjectContext+DNHelpers.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
 		};
-		D776E31A1B7C781B00576EA7 /* Keychain */ = {
+		D7882C011C0EFBEA00F87E16 /* Keychain */ = {
 			isa = PBXGroup;
 			children = (
-				D776E31B1B7C781B00576EA7 /* Helper */,
-				D776E31E1B7C781B00576EA7 /* Wrapper */,
+				D7882C021C0EFBEA00F87E16 /* Helper */,
+				D7882C051C0EFBEA00F87E16 /* Wrapper */,
 			);
 			path = Keychain;
 			sourceTree = "<group>";
 		};
-		D776E31B1B7C781B00576EA7 /* Helper */ = {
+		D7882C021C0EFBEA00F87E16 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				D776E31C1B7C781B00576EA7 /* DNKeychainHelper.h */,
-				D776E31D1B7C781B00576EA7 /* DNKeychainHelper.m */,
+				D7882C031C0EFBEA00F87E16 /* DNKeychainHelper.h */,
+				D7882C041C0EFBEA00F87E16 /* DNKeychainHelper.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
 		};
-		D776E31E1B7C781B00576EA7 /* Wrapper */ = {
+		D7882C051C0EFBEA00F87E16 /* Wrapper */ = {
 			isa = PBXGroup;
 			children = (
-				D776E31F1B7C781B00576EA7 /* DNKeychainItemWrapper.h */,
-				D776E3201B7C781B00576EA7 /* DNKeychainItemWrapper.m */,
+				D7882C061C0EFBEA00F87E16 /* DNKeychainItemWrapper.h */,
+				D7882C071C0EFBEA00F87E16 /* DNKeychainItemWrapper.m */,
 			);
 			path = Wrapper;
 			sourceTree = "<group>";
 		};
-		D776E3211B7C781B00576EA7 /* Main Controller */ = {
+		D7882C081C0EFBEA00F87E16 /* Main Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3221B7C781B00576EA7 /* DNDataController.h */,
-				D776E3231B7C781B00576EA7 /* DNDataController.m */,
+				D7882C091C0EFBEA00F87E16 /* DNDataController.h */,
+				D7882C0A1C0EFBEA00F87E16 /* DNDataController.m */,
 			);
 			path = "Main Controller";
 			sourceTree = "<group>";
 		};
-		D776E3241B7C781B00576EA7 /* Managed Objects */ = {
+		D7882C0B1C0EFBEA00F87E16 /* Managed Objects */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3251B7C781B00576EA7 /* Device User */,
-				D776E3281B7C781B00576EA7 /* Notifications */,
-				D776E32B1B7C781B00576EA7 /* User */,
+				D7882C0C1C0EFBEA00F87E16 /* Device User */,
+				D7882C0F1C0EFBEA00F87E16 /* Notifications */,
+				D7882C121C0EFBEA00F87E16 /* User */,
 			);
 			path = "Managed Objects";
 			sourceTree = "<group>";
 		};
-		D776E3251B7C781B00576EA7 /* Device User */ = {
+		D7882C0C1C0EFBEA00F87E16 /* Device User */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3261B7C781B00576EA7 /* DNDeviceUser.h */,
-				D776E3271B7C781B00576EA7 /* DNDeviceUser.m */,
+				D7882C0D1C0EFBEA00F87E16 /* DNDeviceUser.h */,
+				D7882C0E1C0EFBEA00F87E16 /* DNDeviceUser.m */,
 			);
 			path = "Device User";
 			sourceTree = "<group>";
 		};
-		D776E3281B7C781B00576EA7 /* Notifications */ = {
+		D7882C0F1C0EFBEA00F87E16 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3291B7C781B00576EA7 /* DNNotification.h */,
-				D776E32A1B7C781B00576EA7 /* DNNotification.m */,
+				D7882C101C0EFBEA00F87E16 /* DNNotification.h */,
+				D7882C111C0EFBEA00F87E16 /* DNNotification.m */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
 		};
-		D776E32B1B7C781B00576EA7 /* User */ = {
+		D7882C121C0EFBEA00F87E16 /* User */ = {
 			isa = PBXGroup;
 			children = (
-				D776E32C1B7C781B00576EA7 /* DNUser.h */,
-				D776E32D1B7C781B00576EA7 /* DNUser.m */,
+				D7882C131C0EFBEA00F87E16 /* DNUser.h */,
+				D7882C141C0EFBEA00F87E16 /* DNUser.m */,
 			);
 			path = User;
 			sourceTree = "<group>";
 		};
-		D776E32E1B7C781B00576EA7 /* Resources */ = {
+		D7882C151C0EFBEA00F87E16 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D776E32F1B7C781B00576EA7 /* DNDonkyDataModel.xcdatamodeld */,
+				D7882C161C0EFBEA00F87E16 /* DNDonkyDataModel.xcdatamodeld */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		D776E3321B7C781B00576EA7 /* Donky Core Controller */ = {
+		D7882C1B1C0EFBEA00F87E16 /* Donky Core Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3331B7C781B00576EA7 /* Helpers */,
-				D776E34F1B7C781B00576EA7 /* Main Controller */,
+				D7882C1C1C0EFBEA00F87E16 /* Helpers */,
+				D7882C381C0EFBEA00F87E16 /* Main Controller */,
 			);
 			path = "Donky Core Controller";
 			sourceTree = "<group>";
 		};
-		D776E3331B7C781B00576EA7 /* Helpers */ = {
+		D7882C1C1C0EFBEA00F87E16 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3341B7C781B00576EA7 /* Donky Core Functional Helper */,
-				D776E3371B7C781B00576EA7 /* Event Module Subscribers */,
-				D776E33D1B7C781B00576EA7 /* Module Definition */,
-				D776E3401B7C781B00576EA7 /* Module Helper */,
-				D776E3431B7C781B00576EA7 /* Notification Module Subscribers */,
-				D776E3461B7C781B00576EA7 /* Outbound Module Subscribers */,
-				D776E3491B7C781B00576EA7 /* Registered Services */,
-				D776E34C1B7C781B00576EA7 /* Subscription */,
+				D7882C1D1C0EFBEA00F87E16 /* Donky Core Functional Helper */,
+				D7882C201C0EFBEA00F87E16 /* Event Module Subscribers */,
+				D7882C261C0EFBEA00F87E16 /* Module Definition */,
+				D7882C291C0EFBEA00F87E16 /* Module Helper */,
+				D7882C2C1C0EFBEA00F87E16 /* Notification Module Subscribers */,
+				D7882C2F1C0EFBEA00F87E16 /* Outbound Module Subscribers */,
+				D7882C321C0EFBEA00F87E16 /* Registered Services */,
+				D7882C351C0EFBEA00F87E16 /* Subscription */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		D776E3341B7C781B00576EA7 /* Donky Core Functional Helper */ = {
+		D7882C1D1C0EFBEA00F87E16 /* Donky Core Functional Helper */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3351B7C781B00576EA7 /* DNDonkyCoreFunctionalHelper.h */,
-				D776E3361B7C781B00576EA7 /* DNDonkyCoreFunctionalHelper.m */,
+				D7882C1E1C0EFBEA00F87E16 /* DNDonkyCoreFunctionalHelper.h */,
+				D7882C1F1C0EFBEA00F87E16 /* DNDonkyCoreFunctionalHelper.m */,
 			);
 			path = "Donky Core Functional Helper";
 			sourceTree = "<group>";
 		};
-		D776E3371B7C781B00576EA7 /* Event Module Subscribers */ = {
+		D7882C201C0EFBEA00F87E16 /* Event Module Subscribers */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3381B7C781B00576EA7 /* DNEventSubscriber.h */,
-				D776E3391B7C781B00576EA7 /* DNEventSubscriber.m */,
-				D776E33A1B7C781B00576EA7 /* Local Event */,
+				D7882C211C0EFBEA00F87E16 /* DNEventSubscriber.h */,
+				D7882C221C0EFBEA00F87E16 /* DNEventSubscriber.m */,
+				D7882C231C0EFBEA00F87E16 /* Local Event */,
 			);
 			path = "Event Module Subscribers";
 			sourceTree = "<group>";
 		};
-		D776E33A1B7C781B00576EA7 /* Local Event */ = {
+		D7882C231C0EFBEA00F87E16 /* Local Event */ = {
 			isa = PBXGroup;
 			children = (
-				D776E33B1B7C781B00576EA7 /* DNLocalEvent.h */,
-				D776E33C1B7C781B00576EA7 /* DNLocalEvent.m */,
+				D7882C241C0EFBEA00F87E16 /* DNLocalEvent.h */,
+				D7882C251C0EFBEA00F87E16 /* DNLocalEvent.m */,
 			);
 			path = "Local Event";
 			sourceTree = "<group>";
 		};
-		D776E33D1B7C781B00576EA7 /* Module Definition */ = {
+		D7882C261C0EFBEA00F87E16 /* Module Definition */ = {
 			isa = PBXGroup;
 			children = (
-				D776E33E1B7C781B00576EA7 /* DNModuleDefinition.h */,
-				D776E33F1B7C781B00576EA7 /* DNModuleDefinition.m */,
+				D7882C271C0EFBEA00F87E16 /* DNModuleDefinition.h */,
+				D7882C281C0EFBEA00F87E16 /* DNModuleDefinition.m */,
 			);
 			path = "Module Definition";
 			sourceTree = "<group>";
 		};
-		D776E3401B7C781B00576EA7 /* Module Helper */ = {
+		D7882C291C0EFBEA00F87E16 /* Module Helper */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3411B7C781B00576EA7 /* DNModuleHelper.h */,
-				D776E3421B7C781B00576EA7 /* DNModuleHelper.m */,
+				D7882C2A1C0EFBEA00F87E16 /* DNModuleHelper.h */,
+				D7882C2B1C0EFBEA00F87E16 /* DNModuleHelper.m */,
 			);
 			path = "Module Helper";
 			sourceTree = "<group>";
 		};
-		D776E3431B7C781B00576EA7 /* Notification Module Subscribers */ = {
+		D7882C2C1C0EFBEA00F87E16 /* Notification Module Subscribers */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3441B7C781B00576EA7 /* DNNotificationSubscriber.h */,
-				D776E3451B7C781B00576EA7 /* DNNotificationSubscriber.m */,
+				D7882C2D1C0EFBEA00F87E16 /* DNNotificationSubscriber.h */,
+				D7882C2E1C0EFBEA00F87E16 /* DNNotificationSubscriber.m */,
 			);
 			path = "Notification Module Subscribers";
 			sourceTree = "<group>";
 		};
-		D776E3461B7C781B00576EA7 /* Outbound Module Subscribers */ = {
+		D7882C2F1C0EFBEA00F87E16 /* Outbound Module Subscribers */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3471B7C781B00576EA7 /* DNOutboundModules.h */,
-				D776E3481B7C781B00576EA7 /* DNOutboundModules.m */,
+				D7882C301C0EFBEA00F87E16 /* DNOutboundModules.h */,
+				D7882C311C0EFBEA00F87E16 /* DNOutboundModules.m */,
 			);
 			path = "Outbound Module Subscribers";
 			sourceTree = "<group>";
 		};
-		D776E3491B7C781B00576EA7 /* Registered Services */ = {
+		D7882C321C0EFBEA00F87E16 /* Registered Services */ = {
 			isa = PBXGroup;
 			children = (
-				D776E34A1B7C781B00576EA7 /* DNRegisteredServices.h */,
-				D776E34B1B7C781B00576EA7 /* DNRegisteredServices.m */,
+				D7882C331C0EFBEA00F87E16 /* DNRegisteredServices.h */,
+				D7882C341C0EFBEA00F87E16 /* DNRegisteredServices.m */,
 			);
 			path = "Registered Services";
 			sourceTree = "<group>";
 		};
-		D776E34C1B7C781B00576EA7 /* Subscription */ = {
+		D7882C351C0EFBEA00F87E16 /* Subscription */ = {
 			isa = PBXGroup;
 			children = (
-				D776E34D1B7C781B00576EA7 /* DNSubscription.h */,
-				D776E34E1B7C781B00576EA7 /* DNSubscription.m */,
+				D7882C361C0EFBEA00F87E16 /* DNSubscription.h */,
+				D7882C371C0EFBEA00F87E16 /* DNSubscription.m */,
 			);
 			path = Subscription;
 			sourceTree = "<group>";
 		};
-		D776E34F1B7C781B00576EA7 /* Main Controller */ = {
+		D7882C381C0EFBEA00F87E16 /* Main Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3501B7C781B00576EA7 /* DNDonkyCore.h */,
-				D776E3511B7C781B00576EA7 /* DNDonkyCore.m */,
+				D7882C391C0EFBEA00F87E16 /* DNDonkyCore.h */,
+				D7882C3A1C0EFBEA00F87E16 /* DNDonkyCore.m */,
 			);
 			path = "Main Controller";
 			sourceTree = "<group>";
 		};
-		D776E3521B7C781B00576EA7 /* Error Controller */ = {
+		D7882C3B1C0EFBEA00F87E16 /* Error Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3531B7C781B00576EA7 /* Main Controller */,
+				D7882C3C1C0EFBEA00F87E16 /* Main Controller */,
 			);
 			path = "Error Controller";
 			sourceTree = "<group>";
 		};
-		D776E3531B7C781B00576EA7 /* Main Controller */ = {
+		D7882C3C1C0EFBEA00F87E16 /* Main Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3541B7C781B00576EA7 /* DNErrorController.h */,
-				D776E3551B7C781B00576EA7 /* DNErrorController.m */,
+				D7882C3D1C0EFBEA00F87E16 /* DNErrorController.h */,
+				D7882C3E1C0EFBEA00F87E16 /* DNErrorController.m */,
 			);
 			path = "Main Controller";
 			sourceTree = "<group>";
 		};
-		D776E3561B7C781B00576EA7 /* Logging Controller */ = {
+		D7882C3F1C0EFBEA00F87E16 /* Logging Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3571B7C781B00576EA7 /* Main Controller */,
+				D7882C401C0EFBEA00F87E16 /* Main Controller */,
 			);
 			path = "Logging Controller";
 			sourceTree = "<group>";
 		};
-		D776E3571B7C781B00576EA7 /* Main Controller */ = {
+		D7882C401C0EFBEA00F87E16 /* Main Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3581B7C781B00576EA7 /* DNLoggingController.h */,
-				D776E3591B7C781B00576EA7 /* DNLoggingController.m */,
+				D7882C411C0EFBEA00F87E16 /* DNLoggingController.h */,
+				D7882C421C0EFBEA00F87E16 /* DNLoggingController.m */,
 			);
 			path = "Main Controller";
 			sourceTree = "<group>";
 		};
-		D776E35A1B7C781B00576EA7 /* Network Controller */ = {
+		D7882C431C0EFBEA00F87E16 /* Network Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E35B1B7C781B00576EA7 /* Helpers */,
-				D776E37D1B7C781B00576EA7 /* Main Controller */,
+				D7882C441C0EFBEA00F87E16 /* Helpers */,
+				D7882C6C1C0EFBEA00F87E16 /* Main Controller */,
 			);
 			path = "Network Controller";
 			sourceTree = "<group>";
 		};
-		D776E35B1B7C781B00576EA7 /* Helpers */ = {
+		D7882C441C0EFBEA00F87E16 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				D776E35C1B7C781B00576EA7 /* Client Notifications */,
-				D776E35F1B7C781B00576EA7 /* Content Notifications */,
-				D776E3621B7C781B00576EA7 /* Data Helper */,
-				D776E3651B7C781B00576EA7 /* Device Connectivity */,
-				D776E3681B7C781B00576EA7 /* Network Helper */,
-				D776E36B1B7C781B00576EA7 /* Requests Helper */,
-				D776E36E1B7C781B00576EA7 /* Retry Helper */,
-				D776E3741B7C781B00576EA7 /* Server Notification */,
-				D776E3771B7C781B00576EA7 /* Session Manager */,
-				D776E37A1B7C781B00576EA7 /* Synchroniss Response */,
+				D7882C451C0EFBEA00F87E16 /* Client Notifications */,
+				D7882C481C0EFBEA00F87E16 /* Content Notifications */,
+				D7882C4B1C0EFBEA00F87E16 /* Data Helper */,
+				D7882C4E1C0EFBEA00F87E16 /* Device Connectivity */,
+				D7882C511C0EFBEA00F87E16 /* Network Helper */,
+				D7882C541C0EFBEA00F87E16 /* Requests Helper */,
+				D7882C571C0EFBEA00F87E16 /* Retry Helper */,
+				D7882C5D1C0EFBEA00F87E16 /* Server Notification */,
+				D7882C601C0EFBEA00F87E16 /* Session Manager */,
+				D7882C631C0EFBEA00F87E16 /* Synchronise Operation Queue */,
+				D7882C691C0EFBEA00F87E16 /* Synchroniss Response */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		D776E35C1B7C781B00576EA7 /* Client Notifications */ = {
+		D7882C451C0EFBEA00F87E16 /* Client Notifications */ = {
 			isa = PBXGroup;
 			children = (
-				D776E35D1B7C781B00576EA7 /* DNClientNotification.h */,
-				D776E35E1B7C781B00576EA7 /* DNClientNotification.m */,
+				D7882C461C0EFBEA00F87E16 /* DNClientNotification.h */,
+				D7882C471C0EFBEA00F87E16 /* DNClientNotification.m */,
 			);
 			path = "Client Notifications";
 			sourceTree = "<group>";
 		};
-		D776E35F1B7C781B00576EA7 /* Content Notifications */ = {
+		D7882C481C0EFBEA00F87E16 /* Content Notifications */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3601B7C781B00576EA7 /* DNContentNotification.h */,
-				D776E3611B7C781B00576EA7 /* DNContentNotification.m */,
+				D7882C491C0EFBEA00F87E16 /* DNContentNotification.h */,
+				D7882C4A1C0EFBEA00F87E16 /* DNContentNotification.m */,
 			);
 			path = "Content Notifications";
 			sourceTree = "<group>";
 		};
-		D776E3621B7C781B00576EA7 /* Data Helper */ = {
+		D7882C4B1C0EFBEA00F87E16 /* Data Helper */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3631B7C781B00576EA7 /* DNNetworkDataHelper.h */,
-				D776E3641B7C781B00576EA7 /* DNNetworkDataHelper.m */,
+				D7882C4C1C0EFBEA00F87E16 /* DNNetworkDataHelper.h */,
+				D7882C4D1C0EFBEA00F87E16 /* DNNetworkDataHelper.m */,
 			);
 			path = "Data Helper";
 			sourceTree = "<group>";
 		};
-		D776E3651B7C781B00576EA7 /* Device Connectivity */ = {
+		D7882C4E1C0EFBEA00F87E16 /* Device Connectivity */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3661B7C781B00576EA7 /* DNDeviceConnectivityController.h */,
-				D776E3671B7C781B00576EA7 /* DNDeviceConnectivityController.m */,
+				D7882C4F1C0EFBEA00F87E16 /* DNDeviceConnectivityController.h */,
+				D7882C501C0EFBEA00F87E16 /* DNDeviceConnectivityController.m */,
 			);
 			path = "Device Connectivity";
 			sourceTree = "<group>";
 		};
-		D776E3681B7C781B00576EA7 /* Network Helper */ = {
+		D7882C511C0EFBEA00F87E16 /* Network Helper */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3691B7C781B00576EA7 /* DNNetworkHelper.h */,
-				D776E36A1B7C781B00576EA7 /* DNNetworkHelper.m */,
+				D7882C521C0EFBEA00F87E16 /* DNNetworkHelper.h */,
+				D7882C531C0EFBEA00F87E16 /* DNNetworkHelper.m */,
 			);
 			path = "Network Helper";
 			sourceTree = "<group>";
 		};
-		D776E36B1B7C781B00576EA7 /* Requests Helper */ = {
+		D7882C541C0EFBEA00F87E16 /* Requests Helper */ = {
 			isa = PBXGroup;
 			children = (
-				D776E36C1B7C781B00576EA7 /* DNRequest.h */,
-				D776E36D1B7C781B00576EA7 /* DNRequest.m */,
+				D7882C551C0EFBEA00F87E16 /* DNRequest.h */,
+				D7882C561C0EFBEA00F87E16 /* DNRequest.m */,
 			);
 			path = "Requests Helper";
 			sourceTree = "<group>";
 		};
-		D776E36E1B7C781B00576EA7 /* Retry Helper */ = {
+		D7882C571C0EFBEA00F87E16 /* Retry Helper */ = {
 			isa = PBXGroup;
 			children = (
-				D776E36F1B7C781B00576EA7 /* DNRetryHelper.h */,
-				D776E3701B7C781B00576EA7 /* DNRetryHelper.m */,
-				D776E3711B7C781B00576EA7 /* Retry Object */,
+				D7882C581C0EFBEA00F87E16 /* DNRetryHelper.h */,
+				D7882C591C0EFBEA00F87E16 /* DNRetryHelper.m */,
+				D7882C5A1C0EFBEA00F87E16 /* Retry Object */,
 			);
 			path = "Retry Helper";
 			sourceTree = "<group>";
 		};
-		D776E3711B7C781B00576EA7 /* Retry Object */ = {
+		D7882C5A1C0EFBEA00F87E16 /* Retry Object */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3721B7C781B00576EA7 /* DNRetryObject.h */,
-				D776E3731B7C781B00576EA7 /* DNRetryObject.m */,
+				D7882C5B1C0EFBEA00F87E16 /* DNRetryObject.h */,
+				D7882C5C1C0EFBEA00F87E16 /* DNRetryObject.m */,
 			);
 			path = "Retry Object";
 			sourceTree = "<group>";
 		};
-		D776E3741B7C781B00576EA7 /* Server Notification */ = {
+		D7882C5D1C0EFBEA00F87E16 /* Server Notification */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3751B7C781B00576EA7 /* DNServerNotification.h */,
-				D776E3761B7C781B00576EA7 /* DNServerNotification.m */,
+				D7882C5E1C0EFBEA00F87E16 /* DNServerNotification.h */,
+				D7882C5F1C0EFBEA00F87E16 /* DNServerNotification.m */,
 			);
 			path = "Server Notification";
 			sourceTree = "<group>";
 		};
-		D776E3771B7C781B00576EA7 /* Session Manager */ = {
+		D7882C601C0EFBEA00F87E16 /* Session Manager */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3781B7C781B00576EA7 /* DNSessionManager.h */,
-				D776E3791B7C781B00576EA7 /* DNSessionManager.m */,
+				D7882C611C0EFBEA00F87E16 /* DNSessionManager.h */,
+				D7882C621C0EFBEA00F87E16 /* DNSessionManager.m */,
 			);
 			path = "Session Manager";
 			sourceTree = "<group>";
 		};
-		D776E37A1B7C781B00576EA7 /* Synchroniss Response */ = {
+		D7882C631C0EFBEA00F87E16 /* Synchronise Operation Queue */ = {
 			isa = PBXGroup;
 			children = (
-				D776E37B1B7C781B00576EA7 /* DNSynchroniseResponse.h */,
-				D776E37C1B7C781B00576EA7 /* DNSynchroniseResponse.m */,
+				D7882C641C0EFBEA00F87E16 /* DNNetworkControllerQueue.h */,
+				D7882C651C0EFBEA00F87E16 /* DNNetworkControllerQueue.m */,
+				D7882C661C0EFBEA00F87E16 /* DNNetworkOperation */,
+			);
+			path = "Synchronise Operation Queue";
+			sourceTree = "<group>";
+		};
+		D7882C661C0EFBEA00F87E16 /* DNNetworkOperation */ = {
+			isa = PBXGroup;
+			children = (
+				D7882C671C0EFBEA00F87E16 /* DNNetworkOperation.h */,
+				D7882C681C0EFBEA00F87E16 /* DNNetworkOperation.m */,
+			);
+			path = DNNetworkOperation;
+			sourceTree = "<group>";
+		};
+		D7882C691C0EFBEA00F87E16 /* Synchroniss Response */ = {
+			isa = PBXGroup;
+			children = (
+				D7882C6A1C0EFBEA00F87E16 /* DNSynchroniseResponse.h */,
+				D7882C6B1C0EFBEA00F87E16 /* DNSynchroniseResponse.m */,
 			);
 			path = "Synchroniss Response";
 			sourceTree = "<group>";
 		};
-		D776E37D1B7C781B00576EA7 /* Main Controller */ = {
+		D7882C6C1C0EFBEA00F87E16 /* Main Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E37E1B7C781B00576EA7 /* DNNetworkController.h */,
-				D776E37F1B7C781B00576EA7 /* DNNetworkController.m */,
+				D7882C6D1C0EFBEA00F87E16 /* DNNetworkController.h */,
+				D7882C6E1C0EFBEA00F87E16 /* DNNetworkController.m */,
 			);
 			path = "Main Controller";
 			sourceTree = "<group>";
 		};
-		D776E3801B7C781B00576EA7 /* Notification Controller */ = {
+		D7882C6F1C0EFBEA00F87E16 /* Notification Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3811B7C781B00576EA7 /* Helpers */,
-				D776E3851B7C781B00576EA7 /* Main Controller */,
+				D7882C701C0EFBEA00F87E16 /* Helpers */,
+				D7882C741C0EFBEA00F87E16 /* Main Controller */,
 			);
 			path = "Notification Controller";
 			sourceTree = "<group>";
 		};
-		D776E3811B7C781B00576EA7 /* Helpers */ = {
+		D7882C701C0EFBEA00F87E16 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3821B7C781B00576EA7 /* Token Update */,
+				D7882C711C0EFBEA00F87E16 /* Token Update */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		D776E3821B7C781B00576EA7 /* Token Update */ = {
+		D7882C711C0EFBEA00F87E16 /* Token Update */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3831B7C781B00576EA7 /* DNPushNotificationUpdate.h */,
-				D776E3841B7C781B00576EA7 /* DNPushNotificationUpdate.m */,
+				D7882C721C0EFBEA00F87E16 /* DNPushNotificationUpdate.h */,
+				D7882C731C0EFBEA00F87E16 /* DNPushNotificationUpdate.m */,
 			);
 			path = "Token Update";
 			sourceTree = "<group>";
 		};
-		D776E3851B7C781B00576EA7 /* Main Controller */ = {
+		D7882C741C0EFBEA00F87E16 /* Main Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3861B7C781B00576EA7 /* DNNotificationController.h */,
-				D776E3871B7C781B00576EA7 /* DNNotificationController.m */,
+				D7882C751C0EFBEA00F87E16 /* DNNotificationController.h */,
+				D7882C761C0EFBEA00F87E16 /* DNNotificationController.m */,
 			);
 			path = "Main Controller";
 			sourceTree = "<group>";
 		};
-		D776E3881B7C781B00576EA7 /* Universal Helpers */ = {
+		D7882C771C0EFBEA00F87E16 /* SignalR Interface Helper */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3891B7C781B00576EA7 /* Block Definitions */,
-				D776E38B1B7C781B00576EA7 /* Categories */,
-				D776E3951B7C781B00576EA7 /* Constants */,
-				D776E3981B7C781B00576EA7 /* File Helper */,
-				D776E39B1B7C781B00576EA7 /* Localization */,
-				D776E39F1B7C781B00576EA7 /* System Helpers */,
+				D7882C781C0EFBEA00F87E16 /* DNSignalRInterface.h */,
+				D7882C791C0EFBEA00F87E16 /* DNSignalRInterface.m */,
+			);
+			path = "SignalR Interface Helper";
+			sourceTree = "<group>";
+		};
+		D7882C7A1C0EFBEA00F87E16 /* Universal Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				D7882C7B1C0EFBEA00F87E16 /* Block Definitions */,
+				D7882C7D1C0EFBEA00F87E16 /* Categories */,
+				D7882C871C0EFBEA00F87E16 /* Constants */,
+				D7882C8A1C0EFBEA00F87E16 /* File Helper */,
+				D7882C8D1C0EFBEA00F87E16 /* Localization */,
+				D7882C911C0EFBEA00F87E16 /* Queue Manager */,
+				D7882C931C0EFBEA00F87E16 /* Short Cut Helpers */,
+				D7882C961C0EFBEA00F87E16 /* System Helpers */,
 			);
 			path = "Universal Helpers";
 			sourceTree = "<group>";
 		};
-		D776E3891B7C781B00576EA7 /* Block Definitions */ = {
+		D7882C7B1C0EFBEA00F87E16 /* Block Definitions */ = {
 			isa = PBXGroup;
 			children = (
-				D776E38A1B7C781B00576EA7 /* DNBlockDefinitions.h */,
+				D7882C7C1C0EFBEA00F87E16 /* DNBlockDefinitions.h */,
 			);
 			path = "Block Definitions";
 			sourceTree = "<group>";
 		};
-		D776E38B1B7C781B00576EA7 /* Categories */ = {
+		D7882C7D1C0EFBEA00F87E16 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				D776E38C1B7C781B00576EA7 /* NSDate */,
-				D776E38F1B7C781B00576EA7 /* NSDictionary */,
-				D776E3921B7C781B00576EA7 /* UIViewController */,
+				D7882C7E1C0EFBEA00F87E16 /* NSDate */,
+				D7882C811C0EFBEA00F87E16 /* NSDictionary */,
+				D7882C841C0EFBEA00F87E16 /* UIViewController */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
 		};
-		D776E38C1B7C781B00576EA7 /* NSDate */ = {
+		D7882C7E1C0EFBEA00F87E16 /* NSDate */ = {
 			isa = PBXGroup;
 			children = (
-				D776E38D1B7C781B00576EA7 /* NSDate+DNDateHelper.h */,
-				D776E38E1B7C781B00576EA7 /* NSDate+DNDateHelper.m */,
+				D7882C7F1C0EFBEA00F87E16 /* NSDate+DNDateHelper.h */,
+				D7882C801C0EFBEA00F87E16 /* NSDate+DNDateHelper.m */,
 			);
 			path = NSDate;
 			sourceTree = "<group>";
 		};
-		D776E38F1B7C781B00576EA7 /* NSDictionary */ = {
+		D7882C811C0EFBEA00F87E16 /* NSDictionary */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3901B7C781B00576EA7 /* NSMutableDictionary+DNDictionary.h */,
-				D776E3911B7C781B00576EA7 /* NSMutableDictionary+DNDictionary.m */,
+				D7882C821C0EFBEA00F87E16 /* NSMutableDictionary+DNDictionary.h */,
+				D7882C831C0EFBEA00F87E16 /* NSMutableDictionary+DNDictionary.m */,
 			);
 			path = NSDictionary;
 			sourceTree = "<group>";
 		};
-		D776E3921B7C781B00576EA7 /* UIViewController */ = {
+		D7882C841C0EFBEA00F87E16 /* UIViewController */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3931B7C781B00576EA7 /* UIViewController+DNRootViewController.h */,
-				D776E3941B7C781B00576EA7 /* UIViewController+DNRootViewController.m */,
+				D7882C851C0EFBEA00F87E16 /* UIViewController+DNRootViewController.h */,
+				D7882C861C0EFBEA00F87E16 /* UIViewController+DNRootViewController.m */,
 			);
 			path = UIViewController;
 			sourceTree = "<group>";
 		};
-		D776E3951B7C781B00576EA7 /* Constants */ = {
+		D7882C871C0EFBEA00F87E16 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3961B7C781B00576EA7 /* DNConstants.h */,
-				D776E3971B7C781B00576EA7 /* DNConstants.m */,
+				D7882C881C0EFBEA00F87E16 /* DNConstants.h */,
+				D7882C891C0EFBEA00F87E16 /* DNConstants.m */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
 		};
-		D776E3981B7C781B00576EA7 /* File Helper */ = {
+		D7882C8A1C0EFBEA00F87E16 /* File Helper */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3991B7C781B00576EA7 /* DNFileHelpers.h */,
-				D776E39A1B7C781B00576EA7 /* DNFileHelpers.m */,
+				D7882C8B1C0EFBEA00F87E16 /* DNFileHelpers.h */,
+				D7882C8C1C0EFBEA00F87E16 /* DNFileHelpers.m */,
 			);
 			path = "File Helper";
 			sourceTree = "<group>";
 		};
-		D776E39B1B7C781B00576EA7 /* Localization */ = {
+		D7882C8D1C0EFBEA00F87E16 /* Localization */ = {
 			isa = PBXGroup;
 			children = (
-				D776E39C1B7C781B00576EA7 /* DNLocalization.strings */,
-				D776E39D1B7C781B00576EA7 /* DNNetwork+Localization.h */,
-				D776E39E1B7C781B00576EA7 /* DNNetwork+Localization.m */,
+				D7882C8E1C0EFBEA00F87E16 /* DNLocalization.strings */,
+				D7882C8F1C0EFBEA00F87E16 /* DNNetwork+Localization.h */,
+				D7882C901C0EFBEA00F87E16 /* DNNetwork+Localization.m */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
 		};
-		D776E39F1B7C781B00576EA7 /* System Helpers */ = {
+		D7882C911C0EFBEA00F87E16 /* Queue Manager */ = {
 			isa = PBXGroup;
 			children = (
-				D776E3A01B7C781B00576EA7 /* DNSystemHelpers.h */,
-				D776E3A11B7C781B00576EA7 /* DNSystemHelpers.m */,
+				D7882C921C0EFBEA00F87E16 /* DNQueueManager.h */,
+			);
+			path = "Queue Manager";
+			sourceTree = "<group>";
+		};
+		D7882C931C0EFBEA00F87E16 /* Short Cut Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				D7882C941C0EFBEA00F87E16 /* DNApplicationShortCutHelper.h */,
+				D7882C951C0EFBEA00F87E16 /* DNApplicationShortCutHelper.m */,
+			);
+			path = "Short Cut Helpers";
+			sourceTree = "<group>";
+		};
+		D7882C961C0EFBEA00F87E16 /* System Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				D7882C971C0EFBEA00F87E16 /* DNSystemHelpers.h */,
+				D7882C981C0EFBEA00F87E16 /* DNSystemHelpers.m */,
 			);
 			path = "System Helpers";
 			sourceTree = "<group>";
@@ -1089,7 +1153,7 @@
 		D79769031B6B6C8300756F42 /* DonkyAudio */ = {
 			isa = PBXGroup;
 			children = (
-				D776E2D91B7C781B00576EA7 /* Core */,
+				D7882BC01C0EFBE900F87E16 /* Core */,
 				D7271F611B7B2F9D00B77E8E /* Messaging */,
 				D79769081B6B6C8300756F42 /* AppDelegate.h */,
 				D79769091B6B6C8300756F42 /* AppDelegate.m */,
@@ -1184,7 +1248,7 @@
 		D79768F91B6B6C8300756F42 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Chris Wunsch";
 				TargetAttributes = {
 					D79769001B6B6C8300756F42 = {
@@ -1222,8 +1286,8 @@
 			files = (
 				D79769101B6B6C8300756F42 /* Main.storyboard in Resources */,
 				D79769151B6B6C8300756F42 /* LaunchScreen.xib in Resources */,
-				D776E3B01B7C781B00576EA7 /* DNConfiguration.plist in Resources */,
-				D776E3DB1B7C781B00576EA7 /* DNLocalization.strings in Resources */,
+				D7882CA71C0EFBEA00F87E16 /* DNConfiguration.plist in Resources */,
+				D7882CD51C0EFBEA00F87E16 /* DNLocalization.strings in Resources */,
 				D79769121B6B6C8300756F42 /* Images.xcassets in Resources */,
 				D72720801B7B2F9D00B77E8E /* donky.mp3 in Resources */,
 			);
@@ -1276,68 +1340,72 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D776E3CC1B7C781B00576EA7 /* DNNetworkHelper.m in Sources */,
-				D776E3CF1B7C781B00576EA7 /* DNRetryObject.m in Sources */,
-				D776E3DD1B7C781B00576EA7 /* DNSystemHelpers.m in Sources */,
-				D776E3AE1B7C781B00576EA7 /* DNTag.m in Sources */,
+				D7882CC31C0EFBEA00F87E16 /* DNNetworkHelper.m in Sources */,
+				D7882CD11C0EFBEA00F87E16 /* NSMutableDictionary+DNDictionary.m in Sources */,
+				D7882CC61C0EFBEA00F87E16 /* DNRetryObject.m in Sources */,
+				D7882CD61C0EFBEA00F87E16 /* DNNetwork+Localization.m in Sources */,
+				D7882CA51C0EFBEA00F87E16 /* DNTag.m in Sources */,
 				D797690D1B6B6C8300756F42 /* ViewController.m in Sources */,
-				D776E3C41B7C781B00576EA7 /* DNSubscription.m in Sources */,
-				D776E3CB1B7C781B00576EA7 /* DNDeviceConnectivityController.m in Sources */,
-				D776E3BF1B7C781B00576EA7 /* DNModuleDefinition.m in Sources */,
-				D776E3AD1B7C781B00576EA7 /* DNUserDetails.m in Sources */,
-				D776E3B21B7C781B00576EA7 /* NSManagedObject+DNHelper.m in Sources */,
-				D776E3D81B7C781B00576EA7 /* UIViewController+DNRootViewController.m in Sources */,
-				D776E3D91B7C781B00576EA7 /* DNConstants.m in Sources */,
+				D7882CBB1C0EFBEA00F87E16 /* DNSubscription.m in Sources */,
+				D7882CC21C0EFBEA00F87E16 /* DNDeviceConnectivityController.m in Sources */,
+				D7882CD41C0EFBEA00F87E16 /* DNFileHelpers.m in Sources */,
+				D7882CB61C0EFBEA00F87E16 /* DNModuleDefinition.m in Sources */,
+				D7882CA41C0EFBEA00F87E16 /* DNUserDetails.m in Sources */,
+				D7882CA91C0EFBEA00F87E16 /* NSManagedObject+DNHelper.m in Sources */,
+				D7882CCD1C0EFBEA00F87E16 /* DNPushNotificationUpdate.m in Sources */,
 				D72720811B7B2F9D00B77E8E /* DAMainController.m in Sources */,
-				D776E3AA1B7C781B00576EA7 /* DNDeviceDetails.m in Sources */,
-				D776E3B31B7C781B00576EA7 /* NSManagedObjectContext+DNDelete.m in Sources */,
-				D776E3BD1B7C781B00576EA7 /* DNEventSubscriber.m in Sources */,
-				D776E3BE1B7C781B00576EA7 /* DNLocalEvent.m in Sources */,
-				D776E3BB1B7C781B00576EA7 /* DNDonkyDataModel.xcdatamodeld in Sources */,
-				D776E3A61B7C781B00576EA7 /* DNAccountRegistrationResponse.m in Sources */,
-				D776E3D71B7C781B00576EA7 /* NSMutableDictionary+DNDictionary.m in Sources */,
-				D776E3DA1B7C781B00576EA7 /* DNFileHelpers.m in Sources */,
-				D776E3C11B7C781B00576EA7 /* DNNotificationSubscriber.m in Sources */,
-				D776E3B11B7C781B00576EA7 /* DNAssetController.m in Sources */,
-				D776E3A51B7C781B00576EA7 /* DNUserAuthentication.m in Sources */,
-				D776E3C91B7C781B00576EA7 /* DNContentNotification.m in Sources */,
-				D776E3C71B7C781B00576EA7 /* DNLoggingController.m in Sources */,
-				D776E3CA1B7C781B00576EA7 /* DNNetworkDataHelper.m in Sources */,
-				D776E3A21B7C781B00576EA7 /* DNDonkyNetworkDetails.m in Sources */,
-				D776E3AB1B7C781B00576EA7 /* DNDeviceDetailsHelper.m in Sources */,
-				D776E3A91B7C781B00576EA7 /* DNClientDetailsHelper.m in Sources */,
-				D776E3C01B7C781B00576EA7 /* DNModuleHelper.m in Sources */,
-				D776E3D61B7C781B00576EA7 /* NSDate+DNDateHelper.m in Sources */,
-				D776E3D51B7C781B00576EA7 /* DNNotificationController.m in Sources */,
-				D776E3C31B7C781B00576EA7 /* DNRegisteredServices.m in Sources */,
-				D776E3B41B7C781B00576EA7 /* NSManagedObjectContext+DNHelpers.m in Sources */,
-				D776E3DC1B7C781B00576EA7 /* DNNetwork+Localization.m in Sources */,
-				D776E3C61B7C781B00576EA7 /* DNErrorController.m in Sources */,
-				D776E3D01B7C781B00576EA7 /* DNServerNotification.m in Sources */,
-				D776E3C51B7C781B00576EA7 /* DNDonkyCore.m in Sources */,
-				D776E3D41B7C781B00576EA7 /* DNPushNotificationUpdate.m in Sources */,
-				D776E3C81B7C781B00576EA7 /* DNClientNotification.m in Sources */,
-				D776E3D21B7C781B00576EA7 /* DNSynchroniseResponse.m in Sources */,
-				D776E3AC1B7C781B00576EA7 /* DNRegistrationDetails.m in Sources */,
-				D776E3C21B7C781B00576EA7 /* DNOutboundModules.m in Sources */,
+				D7882CA11C0EFBEA00F87E16 /* DNDeviceDetails.m in Sources */,
+				D7882CAA1C0EFBEA00F87E16 /* NSManagedObjectContext+DNDelete.m in Sources */,
+				D7882CB41C0EFBEA00F87E16 /* DNEventSubscriber.m in Sources */,
+				D7882CB51C0EFBEA00F87E16 /* DNLocalEvent.m in Sources */,
+				D7882CB21C0EFBEA00F87E16 /* DNDonkyDataModel.xcdatamodeld in Sources */,
+				D7882C9D1C0EFBEA00F87E16 /* DNAccountRegistrationResponse.m in Sources */,
+				D7882CB81C0EFBEA00F87E16 /* DNNotificationSubscriber.m in Sources */,
+				D7882CA81C0EFBEA00F87E16 /* DNAssetController.m in Sources */,
+				D7882C9C1C0EFBEA00F87E16 /* DNUserAuthentication.m in Sources */,
+				D7882CC01C0EFBEA00F87E16 /* DNContentNotification.m in Sources */,
+				D7882CBE1C0EFBEA00F87E16 /* DNLoggingController.m in Sources */,
+				D7882CCF1C0EFBEA00F87E16 /* DNSignalRInterface.m in Sources */,
+				D7882CD81C0EFBEA00F87E16 /* DNSystemHelpers.m in Sources */,
+				D7882CC11C0EFBEA00F87E16 /* DNNetworkDataHelper.m in Sources */,
+				D7882C991C0EFBEA00F87E16 /* DNDonkyNetworkDetails.m in Sources */,
+				D7882CA21C0EFBEA00F87E16 /* DNDeviceDetailsHelper.m in Sources */,
+				D7882CD31C0EFBEA00F87E16 /* DNConstants.m in Sources */,
+				D7882CA01C0EFBEA00F87E16 /* DNClientDetailsHelper.m in Sources */,
+				D7882CB71C0EFBEA00F87E16 /* DNModuleHelper.m in Sources */,
+				D7882CC91C0EFBEA00F87E16 /* DNNetworkControllerQueue.m in Sources */,
+				D7882CBA1C0EFBEA00F87E16 /* DNRegisteredServices.m in Sources */,
+				D7882CAB1C0EFBEA00F87E16 /* NSManagedObjectContext+DNHelpers.m in Sources */,
+				D7882CBD1C0EFBEA00F87E16 /* DNErrorController.m in Sources */,
+				D7882CC71C0EFBEA00F87E16 /* DNServerNotification.m in Sources */,
+				D7882CBC1C0EFBEA00F87E16 /* DNDonkyCore.m in Sources */,
+				D7882CBF1C0EFBEA00F87E16 /* DNClientNotification.m in Sources */,
+				D7882CA31C0EFBEA00F87E16 /* DNRegistrationDetails.m in Sources */,
+				D7882CB91C0EFBEA00F87E16 /* DNOutboundModules.m in Sources */,
 				D797690A1B6B6C8300756F42 /* AppDelegate.m in Sources */,
-				D776E3BA1B7C781B00576EA7 /* DNUser.m in Sources */,
-				D776E3CE1B7C781B00576EA7 /* DNRetryHelper.m in Sources */,
-				D776E3B61B7C781B00576EA7 /* DNKeychainItemWrapper.m in Sources */,
-				D776E3B51B7C781B00576EA7 /* DNKeychainHelper.m in Sources */,
-				D776E3A81B7C781B00576EA7 /* DNClientDetails.m in Sources */,
-				D776E3BC1B7C781B00576EA7 /* DNDonkyCoreFunctionalHelper.m in Sources */,
-				D776E3A31B7C781B00576EA7 /* DNUserDefaultsHelper.m in Sources */,
-				D776E3AF1B7C781B00576EA7 /* DNAppSettingsController.m in Sources */,
+				D7882CB11C0EFBEA00F87E16 /* DNUser.m in Sources */,
+				D7882CC51C0EFBEA00F87E16 /* DNRetryHelper.m in Sources */,
+				D7882CAD1C0EFBEA00F87E16 /* DNKeychainItemWrapper.m in Sources */,
+				D7882CAC1C0EFBEA00F87E16 /* DNKeychainHelper.m in Sources */,
+				D7882CCB1C0EFBEA00F87E16 /* DNSynchroniseResponse.m in Sources */,
+				D7882C9F1C0EFBEA00F87E16 /* DNClientDetails.m in Sources */,
+				D7882CCA1C0EFBEA00F87E16 /* DNNetworkOperation.m in Sources */,
+				D7882CB31C0EFBEA00F87E16 /* DNDonkyCoreFunctionalHelper.m in Sources */,
+				D7882CD71C0EFBEA00F87E16 /* DNApplicationShortCutHelper.m in Sources */,
+				D7882C9A1C0EFBEA00F87E16 /* DNUserDefaultsHelper.m in Sources */,
+				D7882CA61C0EFBEA00F87E16 /* DNAppSettingsController.m in Sources */,
+				D7882CD21C0EFBEA00F87E16 /* UIViewController+DNRootViewController.m in Sources */,
 				D79769071B6B6C8300756F42 /* main.m in Sources */,
-				D776E3B81B7C781B00576EA7 /* DNDeviceUser.m in Sources */,
-				D776E3B91B7C781B00576EA7 /* DNNotification.m in Sources */,
-				D776E3A71B7C781B00576EA7 /* DNConfigurationController.m in Sources */,
-				D776E3B71B7C781B00576EA7 /* DNDataController.m in Sources */,
-				D776E3CD1B7C781B00576EA7 /* DNRequest.m in Sources */,
-				D776E3A41B7C781B00576EA7 /* DNAccountController.m in Sources */,
-				D776E3D11B7C781B00576EA7 /* DNSessionManager.m in Sources */,
-				D776E3D31B7C781B00576EA7 /* DNNetworkController.m in Sources */,
+				D7882CAF1C0EFBEA00F87E16 /* DNDeviceUser.m in Sources */,
+				D7882CCC1C0EFBEA00F87E16 /* DNNetworkController.m in Sources */,
+				D7882CB01C0EFBEA00F87E16 /* DNNotification.m in Sources */,
+				D7882C9E1C0EFBEA00F87E16 /* DNConfigurationController.m in Sources */,
+				D7882CAE1C0EFBEA00F87E16 /* DNDataController.m in Sources */,
+				D7882CC41C0EFBEA00F87E16 /* DNRequest.m in Sources */,
+				D7882CCE1C0EFBEA00F87E16 /* DNNotificationController.m in Sources */,
+				D7882C9B1C0EFBEA00F87E16 /* DNAccountController.m in Sources */,
+				D7882CC81C0EFBEA00F87E16 /* DNSessionManager.m in Sources */,
+				D7882CD01C0EFBEA00F87E16 /* NSDate+DNDateHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1401,6 +1469,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1474,6 +1543,7 @@
 				INFOPLIST_FILE = DonkyAudio/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dynmark.donkynetworksdk;
 				PRODUCT_NAME = DonkyAudio;
 				PROVISIONING_PROFILE = "fa912888-2139-4f02-80b9-dd59bff958f9";
 			};
@@ -1488,6 +1558,7 @@
 				INFOPLIST_FILE = DonkyAudio/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dynmark.donkynetworksdk;
 				PRODUCT_NAME = DonkyAudio;
 				PROVISIONING_PROFILE = "fa912888-2139-4f02-80b9-dd59bff958f9";
 			};
@@ -1507,6 +1578,7 @@
 				);
 				INFOPLIST_FILE = DonkyCommonAudioTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.donkynetworks.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = DonkyAudioTests;
 				PROVISIONING_PROFILE = "4578d95c-7093-494d-ba00-93f97d54cdb1";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DonkyCommonAudio.app/DonkyCommonAudio";
@@ -1523,6 +1595,7 @@
 				);
 				INFOPLIST_FILE = DonkyCommonAudioTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.donkynetworks.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = DonkyAudioTests;
 				PROVISIONING_PROFILE = "4578d95c-7093-494d-ba00-93f97d54cdb1";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DonkyCommonAudio.app/DonkyCommonAudio";
@@ -1562,13 +1635,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		D776E32F1B7C781B00576EA7 /* DNDonkyDataModel.xcdatamodeld */ = {
+		D7882C161C0EFBEA00F87E16 /* DNDonkyDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				D776E3301B7C781B00576EA7 /* DNDonkyDataModel 2.xcdatamodel */,
-				D776E3311B7C781B00576EA7 /* DNDonkyDataModel.xcdatamodel */,
+				D7882C171C0EFBEA00F87E16 /* DNDonkyDataModel 2.xcdatamodel */,
+				D7882C181C0EFBEA00F87E16 /* DNDonkyDataModel 3.xcdatamodel */,
+				D7882C191C0EFBEA00F87E16 /* DNDonkyDataModel 4.xcdatamodel */,
+				D7882C1A1C0EFBEA00F87E16 /* DNDonkyDataModel.xcdatamodel */,
 			);
-			currentVersion = D776E3301B7C781B00576EA7 /* DNDonkyDataModel 2.xcdatamodel */;
+			currentVersion = D7882C171C0EFBEA00F87E16 /* DNDonkyDataModel 2.xcdatamodel */;
 			path = DNDonkyDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

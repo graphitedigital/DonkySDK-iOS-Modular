@@ -38,6 +38,7 @@ static NSString *const DNAPNSAudio = @"APNSAudio";
 static NSString *const DNNetworkProfileID = @"networkProfileID";
 static NSString *const DNSignalRURL = @"DNSignalRURL";
 static NSString *const DNMaximumNumberOfSavedChatMessages = @"MaximumNumberOfSavedChatMessages";
+static NSString *const DNAPNSToken = @"APNSToken";
 
 @implementation DNDonkyNetworkDetails
 

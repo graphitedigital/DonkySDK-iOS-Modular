@@ -2,7 +2,7 @@
 //  DNSubscription.h
 //  Core Container
 //
-//  Created by Chris Watson on 18/03/2015.
+//  Created by Donky Networks on 18/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -16,11 +16,11 @@
 typedef void (^DNSubscriptionHandler) (id data);
 
 /*!
- @param batch an array of data that is returned from the inboking method.
+ @param batch an array of data that is returned from the invoking method.
  
  @since 2.2.2.7
  */
-typedef void (^DNSubscriptionBachHandler) (NSArray *batch);
+typedef void (^DNSubscriptionBatchHandler) (NSArray *batch);
 
 /*!
   Class create a Subscription object. This is used when subscribing for notifications & Outbound Notification.
@@ -34,14 +34,14 @@ typedef void (^DNSubscriptionBachHandler) (NSArray *batch);
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *notificationType;
+@property (nonatomic, readonly) NSString *notificationType;
 
 /*!
  The handler that is to be invoked when this subscriber is triggered.
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) DNSubscriptionHandler handler;
+@property (nonatomic, readonly) DNSubscriptionHandler handler;
 
 /*!
  The handler that is to be invoked when this subscriber is triggered, this differs from the
@@ -51,7 +51,7 @@ typedef void (^DNSubscriptionBachHandler) (NSArray *batch);
  
  @since 2.2.2.7
  */
-@property(nonatomic, readonly) DNSubscriptionBachHandler batchHandler;
+@property (nonatomic, readonly) DNSubscriptionBatchHandler batchHandler;
 
 /*!
  Initialiser method to create the DNSubscription object with the user configurable options.
@@ -75,13 +75,15 @@ typedef void (^DNSubscriptionBachHandler) (NSArray *batch);
  
  @since 2.2.2.7
  */
-- (instancetype)initWithNotificationType:(NSString *)notificationType batchHandler:(DNSubscriptionBachHandler)batchHandler;
+- (instancetype)initWithNotificationType:(NSString *)notificationType batchHandler:(DNSubscriptionBatchHandler)batchHandler;
 
 #pragma mark -
 #pragma mark - Private... Not for public consumption. Public use is unsupported and may result in undesired SDK behaviour.
 
 /*!
-  PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ 
+ @warning Private, please do not use
  */
 @property (nonatomic, getter=shouldAutoAcknowledge) BOOL autoAcknowledge;
 

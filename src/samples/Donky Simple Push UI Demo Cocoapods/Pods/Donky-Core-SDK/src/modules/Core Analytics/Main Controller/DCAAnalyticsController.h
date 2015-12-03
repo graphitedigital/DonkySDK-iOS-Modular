@@ -2,14 +2,14 @@
 //  DCAAnalyticsController.h
 //  DonkyCoreAnalytics
 //
-//  Created by Chris Watson on 01/04/2015.
+//  Created by Donky Networks on 01/04/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import "DNLocalEvent.h"
 
-@class DNLocalEvent;
-
+// (PAP) (TODO) Update all the comments in here
 /*!
  The controller for reporting various analytics back to Donky Network.
  
@@ -54,5 +54,22 @@
  */
 - (void)recordAppClose;
 
+/*!
+ Record and the Crossing of a GeoFence.
+
+ (PAP) (TOOD) Fix
+ @since ?.?.?.?
+ */
++ (void)recordGeoFenceCrossing:(NSDictionary *)data;
+
+/*!
+ Record and the Triggering of a GeoFence.
+ 
+ (PAP) (TOOD) Fix
+ @since ?.?.?.?
+ 
+ (PAP) Example @see DGFModule
+ */
++ (void)recordGeoFenceTriggerExecuted:(NSDictionary *)data;
 
 @end

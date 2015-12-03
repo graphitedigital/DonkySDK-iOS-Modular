@@ -9,7 +9,6 @@
 #import "DNSessionManager.h"
 #import "DNConstants.h"
 #import "DNDonkyNetworkDetails.h"
-#import "DNLoggingController.h"
 
 @interface DNSessionManager ()
 @property (nonatomic, getter=isUsingSecure, readwrite) BOOL usingSecure;
@@ -62,6 +61,5 @@
 - (NSURLSessionDataTask *)performGetWithRoute:(NSString *)route parameteres:(NSDictionary *)parameters success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
     return [self GET:route parameters:parameters success:successBlock failure:failureBlock];
 }
-
 
 @end

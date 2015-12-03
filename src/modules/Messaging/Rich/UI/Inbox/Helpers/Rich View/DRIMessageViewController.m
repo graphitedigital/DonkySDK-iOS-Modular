@@ -81,6 +81,8 @@
 
     [self loadRichMessage];
 
+//    [DRLogicMainController rich]
+
 }
 
 - (void)viewDidLoad {

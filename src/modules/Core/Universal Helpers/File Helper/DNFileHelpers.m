@@ -46,6 +46,14 @@
 }
 
 + (NSURL *)audioFileURLForName:(NSString *)fileName extension:(NSString *)fileExtension inDirectory:(NSString *)directory {
+
+    NSString *resourcePath = [[NSBundle mainBundle] pathForResource:fileName ofType:fileExtension inDirectory:directory];
+
+    if (!resourcePath) {
+        DNErrorLog(@"cannot find the resource requested %@ with extension %@ in directory %@", fileName, fileExtension, directory);
+        return nil;
+    }
+
     return [[NSURL alloc] initFileURLWithPath:[[NSBundle mainBundle] pathForResource:fileName ofType:fileExtension inDirectory:directory]];
 }
 
@@ -116,6 +124,13 @@
 
 + (CGFloat)sizeForFile:(NSString *)path {
     return [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil][NSFileSize] floatValue];
+}
+
++ (CGFloat)sizeOfData:(NSData *)data {
+
+    NSString *dataString = [data base64EncodedStringWithOptions:0];
+
+    return [dataString lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 }
 
 @end

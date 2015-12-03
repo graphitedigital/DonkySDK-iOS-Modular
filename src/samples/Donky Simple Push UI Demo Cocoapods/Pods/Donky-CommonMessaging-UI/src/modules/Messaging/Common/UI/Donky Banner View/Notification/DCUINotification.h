@@ -2,8 +2,8 @@
 //  DCUINotification.h
 //  RichInbox
 //
-//  Created by Chris Watson on 16/06/2015.
-//  Copyright © 2015 Chris Wunsch. All rights reserved.
+//  Created by Donky Networks on 16/06/2015.
+//  Copyright © 2015 Donky Networks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -108,6 +108,19 @@
  @since 2.2.2.7
  */
 - (instancetype)initWithNotification:(DNServerNotification *)notification;
+
+/*!
+ The initialiser method used to create a new notification but supply a custom body. By default, the 'body' value of the notifications is used
+ however, there are times where this may not be appropriate.
+ 
+ @param notification the notification that has been received.
+ @param customBody   the custom body to be displayed in the notification.
+ 
+ @return a new instance of DCUINotification.
+ 
+ @since 2.4.3.1
+ */
+- (instancetype)initWithNotification:(DNServerNotification *)notification customBody:(NSString *)customBody;
 
 /*!
  Helper method to retrieve values from the DNServerNotification object.

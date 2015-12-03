@@ -28,18 +28,18 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
 @implementation DNNetworkDataHelper
 
-+ (NSManagedObjectID *)clientNotifications:(DNClientNotification *)notification insertObject:(BOOL)insert {
++ (void)clientNotifications:(DNClientNotification *)notification insertObject:(BOOL)insert completion:(DNNetworkControllerSuccessBlock)completion {
 
     __block DNNotification *clientNotification = nil;
     NSManagedObjectContext *context = [DNDataController temporaryContext];
     @try {
         [context performBlockAndWait:^{
-            NSManagedObjectID *objectID = [[DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@ || notificationID == %@", [notification notificationID], [notification notificationID]] withContext:context includesPendingChanges:NO] objectID];
+            NSManagedObjectID *objectID = [[DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@ || notificationID == %@", [notification notificationID], [notification notificationID]] withContext:context includesPendingChanges:YES] objectID];
             NSError *error;
             if (objectID) {
                 clientNotification = (DNNotification *) [context existingObjectWithID:objectID error:&error];
             }
-            
+
             if (!clientNotification && insert) {
                 clientNotification = [DNNotification insertNewInstanceWithContext:context];
                 [clientNotification setServerNotificationID:[notification notificationID] ?: [DNSystemHelpers generateGUID]];
@@ -50,7 +50,11 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
             
             [clientNotification setSendTries:[notification sendTries]];
 
-            [[DNDataController sharedInstance] saveContext:context];
+            [[DNDataController sharedInstance] saveContext:context completion:^(id data) {
+                if (completion) {
+                    completion([clientNotification objectID]);
+                }
+            }];
         }];
     }
 
@@ -58,13 +62,9 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
         DNErrorLog(@"Fatal exception (%@) when processing client notification.... Reporting & Continuing", [exception description]);
         [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil];
     }
-
-    @finally {
-        return [clientNotification objectID];
-    }
 }
 
-+ (NSArray *)clientNotificationsWithTempContext:(NSManagedObjectContext *)context {
++ (NSArray *)clientNotificationsWithContext:(NSManagedObjectContext *)context {
     NSArray *allNotifications = [DNNotification fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"type != %@", DNCustomNotificationType]
                                            sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:DNType ascending:YES]]
                                                withContext:context];
@@ -93,16 +93,24 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
     return formattedArray;
 }
 
-+ (NSManagedObjectID *)contentNotifications:(DNContentNotification *)notification insertObject:(BOOL)insert {
++ (void)contentNotifications:(DNContentNotification *)notification insertObject:(BOOL)insert completion:(DNNetworkControllerSuccessBlock)completion {
 
-    NSManagedObjectContext *context = [DNDataController temporaryContext];
+    NSManagedObjectContext * context = nil;
+    if ([[NSThread currentThread] isMainThread]) {
+        context = [[DNDataController sharedInstance] mainContext];
+    }
+    else {
+        context = [DNDataController temporaryContext];
+    }
 
     //Check if we already have a client notification for this id:
     __block DNNotification *contentNotification = nil;
 
     [context performBlockAndWait:^{
 
-        contentNotification = [DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"notificationID == %@ || serverNotificationID == %@", [notification notificationID], [notification notificationID]] withContext:context includesPendingChanges:NO];
+        contentNotification = [DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"notificationID == %@ || serverNotificationID == %@", [notification notificationID], [notification notificationID]]
+                                                                 withContext:context
+                                                      includesPendingChanges:NO];
 
         if (!contentNotification && insert) {
             contentNotification = [DNNotification insertNewInstanceWithContext:context];
@@ -118,12 +126,14 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
         [contentNotification setSendTries:[notification sendTries]];
         
         [[DNDataController sharedInstance] saveContext:context];
+
+        if (completion) {
+            completion([contentNotification objectID]);
+        }
     }];
-     
-    return [contentNotification objectID];
 }
 
-+ (NSArray *)contentNotificationsWithTempContext:(NSManagedObjectContext *)context {
++ (NSArray *)contentNotificationsWithContext:(NSManagedObjectContext *)context {
     NSArray *allNotifications = [DNNotification fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"type == %@", DNCustomNotificationType]
                                                           sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:DNType ascending:YES]]
                                                               withContext:context];
@@ -190,36 +200,31 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
             }
         }
     }];
+
+    __block NSManagedObjectContext * context = nil;
+    if ([[NSThread currentThread] isMainThread]) {
+        context = [[DNDataController sharedInstance] mainContext];
+    }
+    else {
+        context = [DNDataController temporaryContext];
+    }
     
-//    if ([brokenNotifications count]) {
-//        NSManagedObjectContext *context = [[DNDataController sharedInstance] temporaryContext];
-//        [brokenNotifications enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//            [context performBlockAndWait:^{
-//                NSManagedObjectID *objectID = [self clientNotifications:obj insertObject:NO];
-//                if (objectID) {
-//                    NSManagedObject *fetchedObject = [context existingObjectWithID:objectID error:nil];
-//                    if (fetchedObject) {
-//                        [context deleteObject:fetchedObject];
-//                        [[DNDataController sharedInstance] saveContext:context];
-//                    }
-//                }
-//            }];
-//        }];
-//        [brokenNotifications removeAllObjects];
-//    }
-
-
-    NSManagedObjectContext *context = [DNDataController temporaryContext];
-    [context performBlock:^{
-        [brokenNotifications enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            DNClientNotification *brokenClient = obj;
-            NSManagedObjectID *brokenID = [self clientNotifications:brokenClient insertObject:NO];
-            if (brokenID) {
-                [context deleteObject:[context existingObjectWithID:brokenID error:nil]];
-            }
+    if ([brokenNotifications count]) {
+        [context performBlock:^{
+            [brokenNotifications enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                DNClientNotification *brokenClient = obj;
+                [self clientNotifications:brokenClient insertObject:NO completion:^(id data) {
+                    NSManagedObjectID *brokenID = data;
+                    if (brokenID) {
+                        [context deleteObject:[context existingObjectWithID:brokenID error:nil]];
+                    }
+                }];
+            }];
+            [[DNDataController sharedInstance] saveContext:context];
         }];
-        [[DNDataController sharedInstance] saveContext:context];
-    }];
+        
+        [brokenNotifications removeAllObjects];
+    }
     
     [contentNotifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if (![obj isKindOfClass:[DNContentNotification class]]) {
@@ -247,17 +252,21 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
         }
     }];
 
-    [context performBlock:^{
-        [brokenNotifications enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            DNContentNotification *brokenContent = obj;
-            NSManagedObjectID *brokenID = [self contentNotifications:brokenContent insertObject:NO];
-            if (brokenID) {
-                [context deleteObject:[context existingObjectWithID:brokenID error:nil]];
-            }
-        }];
+    if ([brokenNotifications count]) {
+        [context performBlock:^{
+            [brokenNotifications enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                DNContentNotification *brokenContent = obj;
+               [self contentNotifications:brokenContent insertObject:NO completion:^(id data) {
+                   NSManagedObjectID *brokenID = data;
+                   if (brokenID) {
+                       [context deleteObject:[context existingObjectWithID:brokenID error:nil]];
+                   }
+               }];
+            }];
 
-        [[DNDataController sharedInstance] saveContext:context];
-    }];
+            [[DNDataController sharedInstance] saveContext:context];
+        }];
+    }
 
     //Prepare return:
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
@@ -281,7 +290,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
         }
         else {
             DNClientNotification *clientNotification = obj;
-            [self clientNotifications:clientNotification insertObject:YES];
+            [self clientNotifications:clientNotification insertObject:YES completion:nil];
         }
     }];
 }
@@ -320,39 +329,56 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
         }
         else {
             DNContentNotification *contentNotification = obj;
-            [self contentNotifications:contentNotification insertObject:YES];
+            [self contentNotifications:contentNotification insertObject:YES completion:nil];
         }
     }];
 }
 
 + (void)deleteNotifications:(NSArray *)notifications {
-    [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        __block DNNotification *notification = nil;
-        __block NSManagedObjectContext * context = [DNDataController temporaryContext];
-        [context performBlockAndWait:^{
+    __block DNNotification *notification = nil;
+    __block NSManagedObjectContext * context = nil;
+    if ([[NSThread currentThread] isMainThread]) {
+        context = [[DNDataController sharedInstance] mainContext];
+    }
+    else {
+        context = [DNDataController temporaryContext];
+    }
+
+    __block NSMutableArray *notificationsToDelete = [[NSMutableArray alloc] init];
+    [context performBlockAndWait:^{
+        [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            DNClientNotification *clientNotification = obj;
             if ([obj isKindOfClass:[DNClientNotification class]]) {
-                NSManagedObjectID *objectID = [self clientNotifications:obj insertObject:NO];
+                NSManagedObjectID *objectID = [DNNetworkDataHelper notificationWithID:[clientNotification notificationID] context:context];
                 if (objectID) {
                     notification = (DNNotification *) [context existingObjectWithID:objectID error:nil];
                 }
             }
             else {
-                NSManagedObjectID *objectID = [self contentNotifications:obj insertObject:NO];
-                if (objectID) {
-                    notification = (DNNotification *) [context existingObjectWithID:objectID error:nil];
-                }
+               NSManagedObjectID *objectID = [DNNetworkDataHelper notificationWithID:[clientNotification notificationID] context:context];
+               if (objectID) {
+                   notification = (DNNotification *) [context existingObjectWithID:objectID error:nil];
+               }
             }
 
             if (notification) {
-                [context deleteObject:notification];
-                [[DNDataController sharedInstance] saveContext:context];
+                [notificationsToDelete addObject:notification];
             }
         }];
+
+        [context deleteAllObjectsInArray:notificationsToDelete];
+        [[DNDataController sharedInstance] saveContext:context];
     }];
 }
 
 + (void)clearBrokenNotifications {
-    NSManagedObjectContext *context = [DNDataController temporaryContext];
+    __block NSManagedObjectContext * context = nil;
+    if ([[NSThread currentThread] isMainThread]) {
+        context = [[DNDataController sharedInstance] mainContext];
+    }
+    else {
+        context = [DNDataController temporaryContext];
+    }
     [context performBlock:^{
         //Get all broken types i.e. send tries > 10 && with no valid type:
         NSArray *brokenDonkyNotifications = [DNNotification fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"sendTries >= %d", DNMaximumSendTries]
@@ -368,9 +394,17 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 }
 
 + (void)deleteNotificationForID:(NSString *)serverID {
-    NSManagedObjectContext *context = [DNDataController temporaryContext];
+    __block NSManagedObjectContext * context = nil;
+    if ([[NSThread currentThread] isMainThread]) {
+        context = [[DNDataController sharedInstance] mainContext];
+    }
+    else {
+        context = [DNDataController temporaryContext];
+    }
     [context performBlock:^{
-        DNNotification *clientNotification = [DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@", serverID] withContext:context includesPendingChanges:NO];
+        DNNotification *clientNotification = [DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@", serverID]
+                                                                                withContext:context
+                                                                     includesPendingChanges:NO];
         if (clientNotification) {
             [context deleteObject:clientNotification];
             [[DNDataController sharedInstance] saveContext:context];
@@ -378,8 +412,13 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
     }];
 }
 
-+ (NSManagedObjectID *)notificationWithID:(NSString *)notificationID {
-    return [[DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@", notificationID] withContext:[[DNDataController sharedInstance] mainContext] includesPendingChanges:NO] objectID];
++ (NSManagedObjectID *)notificationWithID:(NSString *)notificationID context:(NSManagedObjectContext *)context {
+    if (!notificationID) {
+        DNErrorLog(@"Cannot look for notificaiotns without an ID");
+    }
+    return [[DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@ || notificationID == %@", notificationID, notificationID]
+                                               withContext:context
+                                    includesPendingChanges:YES] objectID];
 }
 
 @end

@@ -2,7 +2,7 @@
 //  NSManagedObjectContext+DNHelpers.m
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 23/02/2015.
+//  Created by Donky Networks on 23/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -12,16 +12,19 @@
 @implementation NSManagedObjectContext (DNHelpers)
 
 -(BOOL)saveIfHasChanges:(NSError *__autoreleasing*)error {
-    @try {
-        if ([self hasChanges])
-            return [self save:error];
-        return YES;
+        @synchronized (self) {
+            @try {
+            if ([self hasChanges]) {
+                return [self save:error];
+            }
+            return YES;
+        }
+        @catch (NSException * exception)
+        {
+            DNErrorLog(@"Fatal exception caught: %@", [exception description]);
+            [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil];
+        }
     }
-    @catch (NSException *exception) {
-        DNErrorLog(@"Fatal exception caught: %@", [exception description]);
-        [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil];
-    }
-
     return NO;
 }
 

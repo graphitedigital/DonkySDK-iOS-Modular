@@ -12,9 +12,9 @@
 
 @interface DNNetworkDataHelper : NSObject
 
-+ (NSArray *)clientNotificationsWithTempContext:(NSManagedObjectContext *)context;
++ (NSArray *)clientNotificationsWithContext:(NSManagedObjectContext *)context;
 
-+ (NSArray *)contentNotificationsWithTempContext:(NSManagedObjectContext *)context;
++ (NSArray *)contentNotificationsWithContext:(NSManagedObjectContext *)context;
 
 + (NSMutableDictionary *)networkClientNotifications:(NSMutableArray *)clientNotifications networkContentNotifications:(NSMutableArray *)contentNotifications tempContext:(BOOL)temp;
 
@@ -30,6 +30,6 @@
 
 + (void)deleteNotificationForID:(NSString *)serverID;
 
-+ (NSManagedObjectID *)notificationWithID:(NSString *)notificationID;
++ (NSManagedObjectID *)notificationWithID:(NSString *)notificationID context:(NSManagedObjectContext *)context;
 
 @end

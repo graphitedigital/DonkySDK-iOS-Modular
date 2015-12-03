@@ -80,9 +80,6 @@
 
     [[self view] setBackgroundColor:[[self theme] themeColours][kDRUIInboxCellBackgroundColour]];
 
-    [self setExtendedLayoutIncludesOpaqueBars:NO];
-    [self setEdgesForExtendedLayout:UIRectEdgeNone];
-
     [[DCUIThemeController sharedInstance] addTheme:[self theme]];
 
     [self setRichInboxDataController:[[DRIDataController alloc] initWithTableView:[self tableView] theme:[self theme]]];

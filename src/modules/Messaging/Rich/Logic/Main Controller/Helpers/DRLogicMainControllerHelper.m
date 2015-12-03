@@ -34,7 +34,7 @@
                     if (![mainController doesRichMessageExistForID:[notification serverNotificationID]]) {
                         NSManagedObjectID *objectID = [[DRLogicHelper saveRichMessage:obj context:temp] objectID];
                         if (objectID) {
-                            DNRichMessage *richMessage = [temp existingObjectWithID:objectID error:nil];
+                            DNRichMessage *richMessage = (DNRichMessage *) [temp existingObjectWithID:objectID error:nil];
                             if (richMessage) {
                                 [DCMMainController markMessageAsReceived:obj];
                                 [newNotifications addObject:richMessage];

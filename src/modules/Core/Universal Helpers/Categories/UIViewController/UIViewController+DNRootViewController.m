@@ -19,7 +19,12 @@
         UIViewController *topViewController = [[[DNDonkyCore sharedInstance] applicationWindow] rootViewController] ? : [[[UIApplication sharedApplication] delegate] window].rootViewController;
 
         while (topViewController.presentedViewController) {
-            topViewController = topViewController.presentedViewController;
+            topViewController = [topViewController presentedViewController];
+        }
+
+        if ([topViewController isKindOfClass:[UITabBarController class]]) {
+            UITabBarController *tab = (UITabBarController *) topViewController;
+            topViewController = [tab selectedViewController];
         }
 
         return topViewController;

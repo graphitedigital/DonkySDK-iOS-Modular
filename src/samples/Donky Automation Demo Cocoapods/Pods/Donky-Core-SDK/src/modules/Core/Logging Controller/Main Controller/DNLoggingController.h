@@ -2,7 +2,7 @@
 //  DNLoggingController.h
 //  Logging
 //
-//  Created by Chris Watson on 12/02/2015.
+//  Created by Donky Networks on 12/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -18,6 +18,7 @@ typedef enum {
 } DonkyLogType;
 
 static NSString *const DNDebugLogSubmissionTime = @"DebugLogSubmissionTime";
+
 #define DNDebugLog(fmt, ...) [DNLoggingController log:[NSString stringWithFormat:@"DEBUG: " fmt, ##__VA_ARGS__] function:[NSString stringWithFormat:@"%s", __PRETTY_FUNCTION__] line:__LINE__ logType:DNDebugLog]
 #define DNErrorLog(fmt, ...) [DNLoggingController log:[NSString stringWithFormat:@"ERROR: " fmt, ##__VA_ARGS__] function:[NSString stringWithFormat:@"%s", __PRETTY_FUNCTION__] line:__LINE__ logType:DNErrorLog]
 #define DNSensitiveLog(fmt, ...) [DNLoggingController log:[NSString stringWithFormat:@"SENSITIVE: " fmt, ##__VA_ARGS__] function:[NSString stringWithFormat:@"%s", __PRETTY_FUNCTION__] line:__LINE__ logType:DNSensitiveLog]

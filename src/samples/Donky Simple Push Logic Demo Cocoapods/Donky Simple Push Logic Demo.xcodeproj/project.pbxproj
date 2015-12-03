@@ -163,6 +163,7 @@
 				D08023A21B64D760005B999F /* Frameworks */,
 				D08023A31B64D760005B999F /* Resources */,
 				A2407D1583E919DC12357679 /* Copy Pods Resources */,
+				17EA9C4D092FE0D6A504A61C /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -249,6 +250,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		17EA9C4D092FE0D6A504A61C /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Donky Simple Push Logic Demo/Pods-Donky Simple Push Logic Demo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A2407D1583E919DC12357679 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

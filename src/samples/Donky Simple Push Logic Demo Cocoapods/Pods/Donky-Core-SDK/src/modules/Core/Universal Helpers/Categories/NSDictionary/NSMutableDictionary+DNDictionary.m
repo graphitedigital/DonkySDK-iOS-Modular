@@ -2,14 +2,14 @@
 //  NSDictionary+DKDictionary.m
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 19/02/2015.
+//  Created by Donky Networks on 19/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
 #import "NSMutableDictionary+DNDictionary.h"
 #import "DNLoggingController.h"
 
-@implementation NSMutableDictionary (DKDictionary)
+@implementation NSMutableDictionary (DNDictionary)
 
 - (void)dnSetObject:(id)object forKey:(id<NSCopying>)key
 {

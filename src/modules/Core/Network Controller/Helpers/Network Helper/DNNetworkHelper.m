@@ -17,7 +17,6 @@
 #import "DNNetwork+Localization.h"
 #import "UIViewController+DNRootViewController.h"
 #import "DNContentNotification.h"
-#import "DNDataController.h"
 #import "DNConfigurationController.h"
 #import "DNAccountController.h"
 #import "DNDonkyNetworkDetails.h"
@@ -212,15 +211,13 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
 
         //The network sends a maximum of 100 notifications at a time, in this case we need to perform the request again before completing:
         if ([response moreNotificationsAvailable] || [pendingClientNotifications count] || [pendingContentNotifications count]) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[DNNetworkController sharedInstance] synchroniseSuccess:successBlock failure:failureBlock];
-            });
+            [[DNNetworkController sharedInstance] synchroniseSuccess:successBlock failure:failureBlock];
         }
         else {
             if (successBlock) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (successBlock) {
-                        successBlock(task, nil); //We don't return the response data as the core library handles this.
+                        successBlock(task, nil); //We don't return the response data as the core module handles this.
                     }
                 });
             }

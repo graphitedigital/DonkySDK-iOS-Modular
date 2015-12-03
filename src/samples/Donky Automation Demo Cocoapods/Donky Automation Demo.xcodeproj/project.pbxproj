@@ -163,6 +163,7 @@
 				D01416C51B64E0B400DCF004 /* Frameworks */,
 				D01416C61B64E0B400DCF004 /* Resources */,
 				965A28B3358C88F00909958F /* Copy Pods Resources */,
+				4DFC561E09799B9C8D184B2B /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -249,6 +250,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4DFC561E09799B9C8D184B2B /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Donky Automation Demo/Pods-Donky Automation Demo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		8EA944CB496D3474DA689CCE /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

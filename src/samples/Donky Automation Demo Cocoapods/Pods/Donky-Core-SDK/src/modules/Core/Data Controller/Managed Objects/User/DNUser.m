@@ -2,7 +2,7 @@
 //  DNUser.m
 //  DonkyCore
 //
-//  Created by Chris Watson on 08/04/2015.
+//  Created by Donky Networks on 08/04/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -21,5 +21,6 @@
 @dynamic userID;
 @dynamic firstName;
 @dynamic lastName;
+@dynamic networkProfileID;
 
 @end

@@ -92,6 +92,13 @@
  */
 - (BOOL)isDateOlderThan24Hours;
 
+/*!
+ Helper method to determine if a date has been reached.
+ 
+ @return BOOL indicating if the date has been reached.
+ 
+ @since 2.6.5.5.
+ */
 - (BOOL)donkyHasReachedDate;
 
 @end

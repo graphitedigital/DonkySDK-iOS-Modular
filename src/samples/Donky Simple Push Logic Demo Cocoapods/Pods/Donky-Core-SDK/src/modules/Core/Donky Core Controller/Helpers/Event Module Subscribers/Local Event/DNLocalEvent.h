@@ -2,7 +2,7 @@
 //  DNLocalEvent.h
 //  Core Container
 //
-//  Created by Chris Watson on 18/03/2015.
+//  Created by Donky Networks on 18/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -19,14 +19,14 @@
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *eventType;
+@property (nonatomic, readonly) NSString *eventType;
 
 /*!
  The time that the event was published.
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSDate *timeStamp;
+@property (nonatomic, readonly) NSDate *timeStamp;
 
 /*!
  The publisher of the event. Use this if you are only interested in events 
@@ -34,14 +34,14 @@
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *publisher;
+@property (nonatomic, readonly) NSString *publisher;
 
 /*!
  The data to be passed with this event.
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) id data;
+@property (nonatomic, readonly) id data;
 
 /*!
  Initialiser to create a new DNLocalEvent object.

@@ -2,7 +2,7 @@
 //  DCMConstants.m
 //  RichPopUp
 //
-//  Created by Chris Watson on 15/04/2015.
+//  Created by Donky Networks on 15/04/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -75,4 +75,13 @@ NSString *const DCMUrlToShare = @"urlToShare";
 NSString *const DCMSenderInternalUserID = @"senderInternalUserId";
 
 //
+NSString *const DCMRecipientExternalUserID = @"senderInternalUserId";
+
+//
+NSString *const DCMRecipientInternalUserID = @"recipientInternalUserId";
+
+//
 NSString * const kDNDonkyEventNotificationTapped = @"DonkyEventNotificationTapped";
+
+//
+NSString * const kDCMAssets = @"assets";

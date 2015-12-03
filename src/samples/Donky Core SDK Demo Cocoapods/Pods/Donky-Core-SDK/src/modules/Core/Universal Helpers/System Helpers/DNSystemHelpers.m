@@ -2,7 +2,7 @@
 //  DNSystemHelpers.m
 //  NAAS Core SDK Container
 //
-//  Created by Chris Watson on 27/02/2015.
+//  Created by Donky Networks on 27/02/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -69,13 +69,16 @@
     uname(&systemInfo);
     platform = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
 
-    return ([platform isEqualToString:@"iPhone7,1"]);
+    
+    return ([platform isEqualToString:@"iPhone7,1"] || [platform isEqualToString:@"iPhone8,2"]);
 }
 
 + (BOOL)isDeviceSixPlusLandscape {
-
     return [DNSystemHelpers isDeviceSixPlus] && UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]);
+}
 
++ (NSString *)combineString:(NSString *)firstString toString:(NSString *)secondString {
+    return [NSString stringWithFormat:@"%@_%@", firstString, secondString];
 }
 
 @end

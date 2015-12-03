@@ -2,7 +2,7 @@
 //  DPUINotificationController.m
 //  Push UI Container
 //
-//  Created by Chris Watson on 15/03/2015.
+//  Created by Donky Networks on 15/03/2015.
 //  Copyright (c) 2015 Dynmark International Ltd. All rights reserved.
 //
 
@@ -13,13 +13,14 @@
 #import "NSDate+DNDateHelper.h"
 #import "DPUIBannerView.h"
 #import "DCMConstants.h"
+#import "DNLoggingController.h"
 
 @interface DPUINotificationController ()
 @property(nonatomic, strong) DPPushNotificationController *pushNotificationController;
-@property(nonatomic, copy) void (^pushReceivedHandler)(DNLocalEvent *);
-@property(nonatomic, copy) void (^bannerTappedHandler)(DNLocalEvent *);
-@property(nonatomic, strong) DNServerNotification *notification;
 @property(nonatomic, strong) DCUINotificationController *notificationController;
+@property(nonatomic, strong ) DNLocalEventHandler pushReceivedHandler;
+@property(nonatomic, strong) DNLocalEventHandler bannerTappedHandler;
+@property(nonatomic, strong) DNServerNotification *notification;
 @end
 
 @implementation DPUINotificationController
@@ -48,47 +49,51 @@
     self  = [super init];
     if (self) {
         //Start Push Logic:
-        self.pushNotificationController = [[DPPushNotificationController alloc] init];
-        [self.pushNotificationController start];
+        [self setPushNotificationController:[[DPPushNotificationController alloc] init]];
+        [[self pushNotificationController] start];
+
+        [self setPlayAduio:YES];
     }
 
     return self;
 }
 
-- (void)dealloc {
-    [self stop];
-}
-
 - (void)start {
 
     __weak DPUINotificationController *weakSelf = self;
-    self.pushReceivedHandler = ^(DNLocalEvent *event) {
+
+    [self setPushReceivedHandler:^(DNLocalEvent *event) {
         if ([event isKindOfClass:[DNLocalEvent class]]) {
             [weakSelf pushNotificationReceived:[event data]];
         }
-    };
+    }];
 
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyNotificationSimplePush handler:self.pushReceivedHandler];
-    
-    self.bannerTappedHandler = ^(DNLocalEvent *event) {
-        if ([[event data][@"type"] isEqualToString:kDNDonkyNotificationSimplePush]) {
-            [weakSelf.notificationController bannerDismissTimerDidTick];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyNotificationSimplePush handler:[self pushReceivedHandler]];
+
+    [self setBannerTappedHandler:^(DNLocalEvent *event) {
+        if ([[event data] isKindOfClass:[NSDictionary class]]) {
+            DPUINotification *notification = [event data][@"Notification"];
+            if ([[notification messageType] isEqualToString:@"SimplePush"]) {
+                NSDictionary *userTapped = [event data][@"UserTapped"];
+                DNDebugLog(@"User tapped: %@\nSubscribe to kDNDonkyNotificationSimplePush to receive this event too.", userTapped);
+                [[weakSelf notificationController] bannerDismissTimerDidTick];
+            }
         }
-    };
+    }];
 
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventNotificationTapped handler:self.bannerTappedHandler];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventNotificationTapped handler:[self bannerTappedHandler]];
     
-    DNModuleDefinition *simplePushUIController = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.1.0.0"];
+    DNModuleDefinition *simplePushUIController = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.1.2.2"];
     [[DNDonkyCore sharedInstance] registerModule:simplePushUIController];
     
 }
 
 - (void)stop {
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyNotificationSimplePush handler:self.pushReceivedHandler];
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyNotificationSimplePush handler:self.bannerTappedHandler];
-    
-    self.bannerTappedHandler = nil;
-    self.pushNotificationController = nil;
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyNotificationSimplePush handler:[self pushReceivedHandler]];
+    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyNotificationSimplePush handler:[self bannerTappedHandler]];
+
+    [self setBannerTappedHandler:nil];
+    [self setPushNotificationController:nil];
 }
 
 #pragma mark -
@@ -96,42 +101,45 @@
 
 - (void)pushNotificationReceived:(NSDictionary *)notificationData {
 
-    if (!self.notificationController) {
-        self.notificationController = [[DCUINotificationController alloc] init];
+    if (![self notificationController]) {
+        [self setNotificationController:[[DCUINotificationController alloc] init]];
     }
 
     __block BOOL duplicate = NO;
 
-    NSArray *backgroundNotifications = notificationData[@"PendingPushNotifications"];
+    NSString *backgroundNotification = notificationData[@"PendingPushNotifications"];
 
-    self.notification = notificationData[kDNDonkyNotificationSimplePush];
-
-    [backgroundNotifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSString *notificationID = obj;
-        if ([notificationID isEqualToString:[self.notification serverNotificationID]]) {
-            duplicate = YES;
-            *stop = YES;
-        }
-    }];
-
-    NSDate *expired = [NSDate donkyDateFromServer:[self.notification data][@"expiryTimeStamp"]];
+    if ([backgroundNotification isEqualToString:[[self notification] serverNotificationID]]) {
+        duplicate = YES;
+    }
+    
+    NSDate *expired = [NSDate donkyDateFromServer:[[self notification] data][@"expiryTimeStamp"]];
 
     BOOL messageExpired = NO;
-    if (expired)
+    if (expired) {
         messageExpired = [expired donkyHasDateExpired];
+    }
     
     if (!duplicate && !messageExpired) {
-        DPUINotification *donkyNotification = [[DPUINotification alloc] initWithNotification:self.notification];
+        [self setNotification:notificationData[kDNDonkyNotificationSimplePush]];
+        
+        DPUINotification *donkyNotification = [[DPUINotification alloc] initWithNotification:[self notification]];
         DPUIBannerView *bannerView = [[DPUIBannerView alloc] initWithNotification:donkyNotification];
-        [self.notificationController presentNotification:bannerView];
+        [[self notificationController] presentNotification:bannerView];
+
+        if ([self shouldPlayAudio]) {
+            DNLocalEvent *event = [[DNLocalEvent alloc] initWithEventType:@"DAudioPlayAudioFile" publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(0)];
+            [[DNDonkyCore sharedInstance] publishEvent:event];
+        }
 
         //If we are on simple push, we add the other gestures:
         if (![bannerView buttonView]) {
-            [self.notificationController.notificationBannerView configureGestures];
+            [[[self notificationController] notificationBannerView] configureGestures];
         }
     }
-    else
+    else {
         [self reduceAppBadge:1];
+    }
 }
 
 - (void)reduceAppBadge:(NSInteger)count {

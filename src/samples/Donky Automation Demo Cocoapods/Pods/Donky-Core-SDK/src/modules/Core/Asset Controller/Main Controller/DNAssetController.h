@@ -2,7 +2,7 @@
 //  DNAssetController.h
 //  Core Container
 //
-//  Created by Chris Watson on 23/03/2015.
+//  Created by Donky Networks on 23/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -14,7 +14,7 @@
 /*!
  Method to retrieve avatars from the Donky Network. This is performed synchronously and on the main thread.
  
- @param avatarAssetID the asset id for the avatar that should be donwloaded.
+ @param avatarAssetID the asset id for the avatar that should be downloaded.
  
  @return the avatar asset as a UIImage, will return nil if not found.
  
@@ -24,12 +24,12 @@
 
 /*!
  Method to same an image to a temporary directory inside the application documents folder. 
- Use this if you wish to temporatily store some images.
+ Use this if you wish to temporarily store some images.
  
  @param image     the image to be saved.
  @param imageName the name of the image.
  
- @return BOOL indicating if it was successfull
+ @return BOOL indicating if it was successful
  
  @since 2.2.2.7
  */

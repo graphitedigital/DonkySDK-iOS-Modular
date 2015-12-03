@@ -11,6 +11,7 @@
 #import <CoreData/CoreData.h>
 #import "DNUserDetails.h"
 #import "DNDeviceUser.h"
+#import "DNBlockDefinitions.h"
 
 @interface DNDataController : NSObject
 
@@ -65,4 +66,14 @@
  */
 - (void)saveContext:(NSManagedObjectContext *)context;
 
+/*!
+ Method to save a NSManagedObjectContext, use this and implement the completion block to handle
+ when the temp context changes have been merged back into the main context.
+ 
+ @param context    the context to save
+ @param completion block inboked when changes have been merged back into the main context.
+ 
+ @since 2.6.5.5
+ */
+- (void)saveContext:(NSManagedObjectContext *)context completion:(DNCompletionBlock)completion;
 @end

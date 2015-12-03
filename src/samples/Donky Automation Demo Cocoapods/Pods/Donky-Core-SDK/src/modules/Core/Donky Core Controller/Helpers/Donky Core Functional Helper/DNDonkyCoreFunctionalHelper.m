@@ -2,7 +2,7 @@
 //  DNDonkyCoreFunctionalHelper.m
 //  DonkyCore
 //
-//  Created by Chris Watson on 28/04/2015.
+//  Created by Donky Networks on 28/04/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -17,31 +17,30 @@
 
 
 + (void)handleNewDeviceMessage:(DNServerNotification *)notification {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *model = [notification data][@"model"];
+        NSString *operatingSystem = [notification data][@"operatingSystem"];
 
-
-    NSString *model = [notification data][@"model"];
-    NSString *operatingSystem = [notification data][@"operatingSystem"];
-
-    if ([DNSystemHelpers systemVersionAtLeast:8.0]) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:DNNetworkLocalizedString(@"dn_donky_core_new_device_title")
-                                                                                 message:[NSString stringWithFormat:DNNetworkLocalizedString(@"dn_donky_core_new_device_message"), model, operatingSystem]
-                                                                          preferredStyle:UIAlertControllerStyleAlert];
-        [alertController addAction:[UIAlertAction actionWithTitle:DNNetworkLocalizedString(@"dn_donky_core_new_device_button") style:UIAlertActionStyleDefault handler:nil]];
-        UIViewController *rootView = [UIViewController applicationRootViewController];
-        if (!rootView)
-            DNErrorLog(@"Couldn't present alert view, root view is nil.");
-        else
-            [rootView presentViewController:alertController animated:YES completion:nil];
-    }
-    else {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:DNNetworkLocalizedString(@"dn_donky_core_new_device_tile")
-                                                            message:[NSString stringWithFormat:DNNetworkLocalizedString(@"dn_donky_core_new_device_message"), model, operatingSystem]
-                                                           delegate:nil
-                                                  cancelButtonTitle:DNNetworkLocalizedString(@"dn_donky_core_new_device_button")
-                                                  otherButtonTitles:nil];
-        [alertView performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-    }
-
+        if ([DNSystemHelpers systemVersionAtLeast:8.0]) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:DNNetworkLocalizedString(@"dn_donky_core_new_device_title")
+                                                                                     message:[NSString stringWithFormat:DNNetworkLocalizedString(@"dn_donky_core_new_device_message"), model, operatingSystem]
+                                                                              preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addAction:[UIAlertAction actionWithTitle:DNNetworkLocalizedString(@"dn_donky_core_new_device_button") style:UIAlertActionStyleDefault handler:nil]];
+            UIViewController *rootView = [UIViewController applicationRootViewController];
+            if (!rootView)
+                DNErrorLog(@"Couldn't present alert view, root view is nil.");
+            else
+                [rootView presentViewController:alertController animated:YES completion:nil];
+        }
+        else {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:DNNetworkLocalizedString(@"dn_donky_core_new_device_tile")
+                                                                message:[NSString stringWithFormat:DNNetworkLocalizedString(@"dn_donky_core_new_device_message"), model, operatingSystem]
+                                                               delegate:nil
+                                                      cancelButtonTitle:DNNetworkLocalizedString(@"dn_donky_core_new_device_button")
+                                                      otherButtonTitles:nil];
+            [alertView performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+        }
+    });
 }
 
 

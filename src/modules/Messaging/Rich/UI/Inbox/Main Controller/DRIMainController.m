@@ -264,6 +264,7 @@
 
     [[viewController tabBarItem] setTitle:DCUILocalizedString(@"common_ui_generic_inbox")];
     [[viewController tabBarItem] setImage:[theme imageForKey:kDRUIInboxIconImage]];
+    [[viewController tabBarItem] setSelectedImage:[theme imageForKey:kDRUIInboxSelectedIconImage]];
 
 }
 @end

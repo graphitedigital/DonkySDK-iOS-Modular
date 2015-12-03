@@ -2,9 +2,14 @@
 //  DNClientDetails.m
 //  Core Container
 //
-//  Created by Chris Watson on 17/03/2015.
+//  Created by Donky Networks on 17/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
+
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
 
 #import "DNClientDetails.h"
 #import "NSDate+DNDateHelper.h"
@@ -30,11 +35,11 @@ static NSString *const DNDeviceSdkVersion = @"sdkVersion";
     self = [super init];
     
     if (self) {
-        
-        self.sdkVersion = [DNClientDetailsHelper sdkVersion];
-        self.appVersion = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey];
-        self.currentLocalTime = [[NSDate date] donkyDateForServer];
-        self.moduleVersions = [DNClientDetailsHelper moduleVersions] ? : [[NSMutableDictionary alloc] init];
+
+        [self setSdkVersion:[DNClientDetailsHelper sdkVersion]];
+        [self setAppVersion:[[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey]];
+        [self setCurrentLocalTime:[[NSDate date] donkyDateForServer]];
+        [self setModuleVersions:[DNClientDetailsHelper moduleVersions] ? : [[NSMutableDictionary alloc] init]];
     }
 
     return self;

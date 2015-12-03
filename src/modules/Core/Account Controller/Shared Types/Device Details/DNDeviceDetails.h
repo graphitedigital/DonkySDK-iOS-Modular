@@ -20,35 +20,49 @@
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSDictionary *additionalProperties;
+@property (nonatomic, readonly) NSDictionary *additionalProperties;
 
 /*!
  The name of the current device.
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *deviceName;
+@property (nonatomic, readonly) NSString *deviceName;
 
 /*!
  The type of device.
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *type;
+@property (nonatomic, readonly) NSString *type;
 
 /*!
  The device secret for the network.
  
  @since 2.0.0.0
  */
-@property(nonatomic, readonly) NSString *deviceSecret;
+@property (nonatomic, readonly) NSString *deviceSecret;
 
 /*!
  The operating system of the current device.
  
  @since 2.4.3.1
  */
-@property(nonatomic, readonly) NSString *operatingSystem;
+@property (nonatomic, readonly) NSString *operatingSystem;
+
+/*!
+ The devices current APNS token.
+
+ @since 2.6.5.5
+ */
+@property (nonatomic, readonly) NSString *apnsToken;
+
+/*!
+ The devices current APNS audio file
+
+ @since 2.6.5.5
+ */
+@property (nonatomic, readonly) NSString *apnsAudio;
 
 /*!
  Initialiser method to create a new DNDeviceDetails object with the provided user configurable properties.

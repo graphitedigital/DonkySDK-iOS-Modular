@@ -2,7 +2,7 @@
 //  DNRegistrationDetails.h
 //  Core Container
 //
-//  Created by Chris Watson on 17/03/2015.
+//  Created by Donky Networks on 17/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
@@ -41,6 +41,8 @@
 
 /*!
  The details of the client SDK. See DNClientDetails for readwrite properties.
+ 
+ @see DNClientDetails
  
  @since 2.0.0.0
  */
