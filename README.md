@@ -598,7 +598,7 @@ Including this in your podfile will automatically pull in the following other mo
 
 # Donky-CommonMessaging-Logic
 
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-CommonMessaging-Logic.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/CommonMessaging-Logic)
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-CommonMessaging-Logic.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-CommonMessaging-Logic)
 [![Version](https://img.shields.io/cocoapods/v/Donky-CommonMessaging-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-Logic)
 [![License](https://img.shields.io/cocoapods/l/Donky-CommonMessaging-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-Logic)
 [![Platform](https://img.shields.io/cocoapods/p/Donky-CommonMessaging-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-Logic)
@@ -611,7 +611,7 @@ PodFile.
 # Donky-CommonMessaging-UI
 
 
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-CommonMessaging-UI.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/CommonMessaging-UI)
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-CommonMessaging-UI.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-CommonMessaging-UI)
 [![Version](https://img.shields.io/cocoapods/v/Donky-CommonMessaging-UI.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-UI)
 [![License](https://img.shields.io/cocoapods/l/Donky-CommonMessaging-UI.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-UI)
 [![Platform](https://img.shields.io/cocoapods/p/Donky-CommonMessaging-UI.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-UI)
@@ -620,4 +620,15 @@ PodFile.
 
 You will never need to manually add the common UI module into your application, it is a PodSpec dependency and therefore isn't required to be manually added to your 
 PodFile.
+
+# Donky-CoreLocation
+
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-CoreLocation.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-CoreLocation)
+[![Version](https://img.shields.io/cocoapods/v/Donky-CoreLocation.svg?style=flat)](https://cocoapods.org/pods/Donky-CoreLocation)
+[![License](https://img.shields.io/cocoapods/l/Donky-CoreLocation.svg?style=flat)](https://cocoapods.org/pods/Donky-CoreLocation)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-CoreLocation.svg?style=flat)](https://cocoapods.org/pods/Donky-CoreLocation)
+
+## Usage
+
+Adding this will allow you to use Donkys location and reporting, please see [here](http://docs.mobiledonky.com/v1.4/docs/core-location-ios)
 
