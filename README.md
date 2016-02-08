@@ -165,12 +165,12 @@ pod "Donky-Core-SDK"
 ```
 
 
-# Donky-SimplePush-Logic
+# Donky-Push
 
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-SimplePush-Logic.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-SimplePush-Logic)
-[![Version](https://img.shields.io/cocoapods/v/Donky-SimplePush-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-Logic)
-[![License](https://img.shields.io/cocoapods/l/Donky-SimplePush-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-Logic)
-[![Platform](https://img.shields.io/cocoapods/p/Donky-SimplePush-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-SimplePush-Logic)
+[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-Push.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-Push)
+[![Version](https://img.shields.io/cocoapods/v/Donky-Push.svg?style=flat)](http://cocoapods.org/pods/Donky-Push)
+[![License](https://img.shields.io/cocoapods/l/Donky-Push.svg?style=flat)](http://cocoapods.org/pods/Donky-Push)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-Push.svg?style=flat)](http://cocoapods.org/pods/Donky-Push)
 
 ## Usage
 
@@ -244,7 +244,7 @@ The sample project can be found:
 
 
 ```ruby
-pod "Donky-SimplePush-Logic"
+pod "Donky-Push"
 ```
 
 ## Pod Dependencies
