@@ -1,1 +1,0 @@
-../../../Donky-RichMessage-Logic/src/modules/Messaging/Rich/Logic/Main Controller/DRLogicMainController.h

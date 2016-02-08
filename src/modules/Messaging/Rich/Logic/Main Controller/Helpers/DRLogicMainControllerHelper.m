@@ -6,6 +6,10 @@
 //  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
 
 #import "DRLogicMainControllerHelper.h"
 #import "DNServerNotification.h"
@@ -17,11 +21,11 @@
 #import "DNDataController.h"
 #import "DRConstants.h"
 #import "NSMutableDictionary+DNDictionary.h"
-
+#import "DRLogicMainController.h"
 
 @implementation DRLogicMainControllerHelper
 
-+ (DNSubscriptionBatchHandler)richMessageHandler:(DRLogicMainController *)mainController {
++ (DNSubscriptionBatchHandler)richMessageHandler {
 
     DNSubscriptionBatchHandler richMessageHandler = ^(NSArray *batch) {
         NSMutableArray *newNotifications = [[NSMutableArray alloc] init];
@@ -31,12 +35,11 @@
             if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
                 [allRichMessages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     DNServerNotification *notification = obj;
-                    if (![mainController doesRichMessageExistForID:[notification serverNotificationID]]) {
+                    if (![DRLogicMainController doesRichMessageExistForID:[notification serverNotificationID]]) {
                         NSManagedObjectID *objectID = [[DRLogicHelper saveRichMessage:obj context:temp] objectID];
                         if (objectID) {
-                            DNRichMessage *richMessage = (DNRichMessage *) [temp existingObjectWithID:objectID error:nil];
+                            DNRichMessage *richMessage =  [temp existingObjectWithID:objectID error:nil];
                             if (richMessage) {
-                                [DCMMainController markMessageAsReceived:obj];
                                 [newNotifications addObject:richMessage];
                                 if ([batch count] == 1) {
                                     DNLocalEvent *event = [[DNLocalEvent alloc] initWithEventType:@"DAudioPlayAudioFile" publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(1)];
@@ -54,27 +57,29 @@
                 }];
             }
 
+            [DCMMainController markAllMessagesAsReceived:allRichMessages];
+
             [[DNDataController sharedInstance] saveContext:temp];
 
-            [mainController richMessageNotificationsReceived:newNotifications];
+            [DRLogicMainController richMessageNotificationsReceived:newNotifications];
 
             if ([batch count] > 1) {
                 DNLocalEvent *event = [[DNLocalEvent alloc] initWithEventType:@"DAudioPlayAudioFile" publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(1)];
                 [[DNDonkyCore sharedInstance] publishEvent:event];
             }
-
-            DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageNotificationEvent
-                                                                     publisher:NSStringFromClass([mainController class])
-                                                                     timeStamp:[NSDate date]
-                                                                          data:newNotifications];
-            [[DNDonkyCore sharedInstance] publishEvent:localEvent];
+//
+//            DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageNotificationEvent
+//                                                                     publisher:NSStringFromClass([mainController class])
+//                                                                     timeStamp:[NSDate date]
+//                                                                          data:newNotifications];
+//            [[DNDonkyCore sharedInstance] publishEvent:localEvent];
         }];
     };
 
     return richMessageHandler;
 }
 
-+ (DNLocalEventHandler)notificationLoaded:(DRLogicMainController *)mainController {
++ (DNLocalEventHandler)notificationLoaded {
 
     DNLocalEventHandler notificationLoaded = ^(DNLocalEvent *event) {
 
@@ -89,7 +94,7 @@
         
         NSDictionary *data = [notification data];
 
-        BOOL messageExists = [mainController doesRichMessageExistForID:data[@"messageId"]];
+        BOOL messageExists = [DRLogicMainController doesRichMessageExistForID:data[@"messageId"]];
 
         NSManagedObjectContext *tempContext = [DNDataController temporaryContext];
 
@@ -115,7 +120,7 @@
 
             if (richMessage) {
                 DNLocalEvent *richEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageNotificationTapped
-                                                                        publisher:NSStringFromClass([mainController class])
+                                                                        publisher:NSStringFromClass([DRLogicMainController class])
                                                                         timeStamp:[NSDate date]
                                                                              data:richMessage];
                 [[DNDonkyCore sharedInstance] publishEvent:richEvent];
@@ -138,20 +143,15 @@
     return notificationLoaded;
 }
 
-+ (DNLocalEventHandler)backgroundNotificationsReceived:(NSMutableArray *)notifications {
-    DNLocalEventHandler backgroundNotifications = ^(DNLocalEvent *event) {
-        [notifications addObject:[event data][@"NotificationID"]];
-    };
-    return backgroundNotifications;
-}
-
 + (void)richMessageNotificationReceived:(NSArray *)notifications backgroundNotifications:(NSMutableArray *)backgroundNotifications {
 
     __block NSMutableArray *backgroundNotificationsToKeep = [[NSMutableArray alloc] init];
     __block NSMutableArray *notificationsToKeep = [notifications mutableCopy];
+    __block NSMutableArray *richMessageIDs = [[NSMutableArray alloc] init];
 
     [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         DNRichMessage *richMessage = obj;
+        [richMessageIDs addObject:[richMessage messageID]];
         [backgroundNotifications enumerateObjectsUsingBlock:^(id obj2, NSUInteger idx2, BOOL *stop2) {
             if ([obj2 isEqualToString:[richMessage notificationID]]) {
                 [backgroundNotificationsToKeep addObject:richMessage];
@@ -172,7 +172,7 @@
     //Publish event:
     NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
     [data dnSetObject:backgroundNotificationsToKeep forKey:kDRPendingRichNotifications];
-    [data dnSetObject:notificationsToKeep forKey:kDNDonkyNotificationRichMessage];
+    [data dnSetObject:richMessageIDs forKey:kDNDonkyNotificationRichMessage];
 
     DNLocalEvent *pushEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageNotificationEvent
                                                             publisher:NSStringFromClass([self class])

@@ -22,7 +22,7 @@
 + (void)markMessageAsReceived:(DNServerNotification *)notification;
 
 /*!
- Class method to mark more than one converastion as received at the same time.
+ Class method to mark more than one conversation as received at the same time.
  
  @param notifications the notifications that should be marked as received.
  
@@ -40,7 +40,7 @@
 + (void)markMessageAsRead:(DNMessage *)message;
 
 /*!
- Class method to mark more than one converastion as read at the same time.
+ Class method to mark more than one conversation as read at the same time.
  
  @param messages the messages that should be marked as read.
  

@@ -36,7 +36,9 @@ typedef enum {
 + (DNNetworkController *)sharedInstance;
 
 /*!
- Method used to contact the Donky Network. This passes the network request to the Third Party AFNetworking library which is responsible for queueing, performing and receiving data from the network. This is the method to replace if using  AFNetworking is not possible.
+ Method used to contact the Donky Network.
+ This passes the network request to the Third Party AFNetworking library which is responsible for queueing, performing and receiving data from the network.
+ This is the method to replace if using  AFNetworking is not possible.
  
  @param secure       if this call should use the secure API, this is only available after a device has been registered.
  @param route        the end point of the Donky Network API. These are all in DKConstants.h.
@@ -73,7 +75,8 @@ typedef enum {
 - (void)synchroniseSuccess:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
 
 /*!
- Method to retrieve all the pending server notifications on the network for this device. NOTE: This method will not send any pending DNContentNotifications to the server. To do this, please use synchronise/sendNotification:success:failure:
+ Method to retrieve all the pending server notifications on the network for this device. NOTE: This method will not send any pending DNContentNotifications to the server.
+ To do this, please use synchronise/sendNotification:success:failure:
  
  @param successBlock block to be called upon a successful request.
  @param failureBlock block to be called upon a failure to perform the specified request.
@@ -83,7 +86,8 @@ typedef enum {
 - (void)allServerNotificationsSuccess:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
 
 /*!
- Method to perform a full Donky Network synchronisation. This gathers and prepares all DNContentNotifications and sends those to the network. The response will contain all pending server notifications. All received notifications will be sent to DNDonkyCore, processed and delivered to the relevant subscribers.
+ Method to perform a full Donky Network synchronisation. This gathers and prepares all DNContentNotifications and sends those to the network.
+ The response will contain all pending server notifications. All received notifications will be sent to DNDonkyCore, processed and delivered to the relevant subscribers.
  
  @since 2.0.0.0
  */
@@ -103,13 +107,25 @@ typedef enum {
 - (NSError *)sendContentNotifications:(NSArray *)notifications success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
 
 /*!
- Method to queue content notifications ready to be send to the network. Call this method if the notifications can be sent at the next Syncronise. If the notification must be sent immediately then please use sendNotification:success:failure
+ Method to queue content notifications ready to be send to the network. Call this method if the notifications can be sent at the next Syncronise.
+ If the notification must be sent immediately then please use sendNotification:success:failure
  
  @param notifications an array of notifications that should be queued and saved to the data base. They will be sent at the next signalRHubProxy.
  
  @since 2.0.0.0
  */
 - (NSError *)queueContentNotifications:(NSArray *)notifications;
+
+/*!
+ Method to queue content notifications ready to be send to the network. Call this method if the notifications can be sent at the next Syncronise.
+ If the notification must be sent immediately then please use sendNotification:success:failure
+
+ @param notifications an array of notifications that should be queued and saved to the data base. They will be sent at the next signalRHubProxy.
+ @param completionBlock block that is called once the notifications have been saved to the DB and queued.
+
+ @since 2.0.0.0
+ */
+- (void)queueContentNotifications:(NSArray *)notifications completion:(DNCompletionBlock)completionBlock;
 
 /*!
  Method to retrieve a specific pending server notification from the network.
@@ -127,10 +143,17 @@ typedef enum {
 
 /*!
   PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
- 
+
   @warning Private, please do not use
  */
 - (void)queueClientNotifications:(NSArray *)notifications;
+
+/*!
+  PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+
+  @warning Private, please do not use
+ */
+- (void)queueClientNotifications:(NSArray *)notifications completion:(DNCompletionBlock)completionBlock;
 
 /*!
   PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour

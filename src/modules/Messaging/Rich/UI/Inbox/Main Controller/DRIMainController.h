@@ -11,7 +11,6 @@
 #import "DRLogicMainController.h"
 #import "DCUISplitViewController.h"
 #import "DRITableViewController.h"
-#import "DCUIBannerView.h"
 
 @interface DRIMainController : NSObject
 

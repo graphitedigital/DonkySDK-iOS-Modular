@@ -6,6 +6,11 @@
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DCAAnalyticsController.h"
 #import "DNLocalEvent.h"
 #import "DNConstants.h"
@@ -16,6 +21,7 @@
 #import "DNNetworkController.h"
 #import "DNLoggingController.h"
 #import "DCAConstants.h"
+#import "DNQueueManager.h"
 
 static NSString *const DALaunchTimeUTC = @"launchTimeUtc";
 static NSString *const DASessionTrigger = @"sessionTrigger";
@@ -25,8 +31,6 @@ static NSString *const DAAppLaunchDefaults = @"DonkyAppLaunch";
 static NSString *const DAStartTimeUTC = @"startTimeUtc";
 static NSString *const DAEndTimeUTC = @"endTimeUtc";
 static NSString *const DAAppSession = @"appSession";
-
-
 static NSString *const DCANoneSession = @"None";
 static NSString *const DCANotificationSession = @"Notification";
 
@@ -39,8 +43,7 @@ static NSString *const DCANotificationSession = @"Notification";
 
 @implementation DCAAnalyticsController
 
-+(DCAAnalyticsController *)sharedInstance
-{
++(DCAAnalyticsController *)sharedInstance {
     static DCAAnalyticsController *sharedInstance = nil;
     static dispatch_once_t pred;
 
@@ -50,8 +53,7 @@ static NSString *const DCANotificationSession = @"Notification";
     return sharedInstance;
 }
 
--(instancetype)initPrivate
-{
+-(instancetype)initPrivate {
     self = [super init];
     
     if (self) {
@@ -91,10 +93,11 @@ static NSString *const DCANotificationSession = @"Notification";
     }];
 
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDAEventInfluencedAppOpen handler:[self appInfluenceEvent]];
-    
+
     //Register Module:
     DNModuleDefinition *analyticsModule = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:kDAAnalyticsVersion];
     [[DNDonkyCore sharedInstance] registerModule:analyticsModule];
+
 }
 
 - (void)stop {
@@ -105,8 +108,7 @@ static NSString *const DCANotificationSession = @"Notification";
 
 - (void)recordInfluencedAppOpen:(BOOL)influenced {
     DNInfoLog(@"Recording app open. Was influenced == %d", influenced);
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(donky_logic_processing_queue(), ^{
         NSMutableDictionary *appLaunch = [[NSMutableDictionary alloc] init];
 
         [appLaunch dnSetObject:[[NSDate date] donkyDateForServer] forKey:DALaunchTimeUTC];
@@ -125,7 +127,7 @@ static NSString *const DCANotificationSession = @"Notification";
 
 - (void)recordAppClose {
     DNInfoLog(@"Recording app close.");
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(donky_logic_processing_queue(), ^{
         NSDate *startTime = [[NSUserDefaults standardUserDefaults] objectForKey:DAAppLaunchDefaults];
         if (startTime) {
             NSMutableDictionary *appLaunch = [[NSMutableDictionary alloc] init];
@@ -149,19 +151,17 @@ static NSString *const DCANotificationSession = @"Notification";
 }
 
 + (void)recordGeoFenceCrossing:(NSDictionary *)data {
-    
     DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithType:kDCAnalyticsGeoFenceCrossed
-                                                                                     data:data acknowledgementData:nil];
+                                                                                     data:data
+                                                                      acknowledgementData:nil];
     [[DNNetworkController sharedInstance] queueClientNotifications:@[clientNotification]];
-    //[[DNNetworkController sharedInstance] synchronise];
 }
 
 + (void)recordGeoFenceTriggerExecuted:(NSDictionary *)data {
-    
     DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithType:kDCAnalyticsGeoFenceTriggered
-                                                                                     data:data acknowledgementData:nil];
+                                                                                     data:data
+                                                                      acknowledgementData:nil];
     [[DNNetworkController sharedInstance] queueClientNotifications:@[clientNotification]];
-    [[DNNetworkController sharedInstance] synchronise];
 }
 
 @end

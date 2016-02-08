@@ -28,6 +28,7 @@
 #import "DNTag.h"
 #import "NSManagedObject+DNHelper.h"
 #import "DNSignalRInterface.h"
+#import "NSDate+DNDateHelper.h"
 
 static NSString *const DNUserParameters = @"user";
 static NSString *const DNClientParameters = @"client";
@@ -143,7 +144,12 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 }
 
 + (void)refreshAccessTokenSuccess:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
-    //Has the token expired ?
+
+    if (![DNDonkyNetworkDetails isDeviceRegistered]) {
+        failureBlock(nil, [DNErrorController errorCode:9000 userInfo:@{@"Reason" : @"Device isn't registered so cannot refresh token"}]);
+        return;
+    }
+
     if (![DNDonkyNetworkDetails hasValidAccessToken]) {
 
         //We close the connection as our token is now invalid:
@@ -245,63 +251,63 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
                                                              httpMethod:DNPut
                                                              parameters:[userDetails parameters]
                                                                 success:^(NSURLSessionDataTask *task, id responseData) {
-    @try {
-        
-        [DNDonkyNetworkDetails saveAccessToken:nil];
-        
-        [DNAccountController saveUserDetails:userDetails];
-        
-        if (successBlock) {
-            successBlock(task, responseData);
+        @try {
+
+            [DNDonkyNetworkDetails saveAccessToken:nil];
+
+            [DNAccountController saveUserDetails:userDetails];
+
+            if (successBlock) {
+                successBlock(task, responseData);
+            }
+
+            DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventRegistrationChangedUser
+                                                                     publisher:NSStringFromClass([DNAccountController class])
+                                                                     timeStamp:[NSDate date]
+                                                                          data:userDetails];
+            [[DNDonkyCore sharedInstance] publishEvent:localEvent];
         }
-        
-        DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventRegistrationChangedUser
-                                                                 publisher:NSStringFromClass([DNAccountController class])
-                                                                 timeStamp:[NSDate date]
-                                                                      data:userDetails];
-        [[DNDonkyCore sharedInstance] publishEvent:localEvent];
-    }
-    
-    @catch (NSException *exception) {
-        DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
-        [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
-        if(failureBlock) {
-            failureBlock(task, [DNErrorController errorCode:DNCoreSDKFatalException userInfo:@{@"Exception: " : [exception description]}]);
+
+        @catch (NSException *exception) {
+            DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
+            [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
+            if(failureBlock) {
+                failureBlock(task, [DNErrorController errorCode:DNCoreSDKFatalException userInfo:@{@"Exception: " : [exception description]}]);
+            }
         }
-    }
-} failure:^(NSURLSessionDataTask *task, NSError *error) {
-    if ([DNErrorController serviceReturnedFailureKey:@"UserIdAlreadyTaken" error:error] && autoHandleIDTaken) {
-        DNDebugLog(@"User ID already taken... automatically recovering...");
-        [[DNNetworkController sharedInstance] synchroniseSuccess:^(NSURLSessionDataTask *task1, id responseData1) {
-            [DNAccountController replaceRegistrationDetailsWithUserDetails:userDetails deviceDetails:[[DNAccountController registrationDetails] deviceDetails] success:^(NSURLSessionDataTask *task2, id responseData) {
-                @try {
-                    
-                    [DNAccountController saveUserDetails:userDetails];
-                    
-                    if (successBlock) {
-                        successBlock(task, responseData);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if ([DNErrorController serviceReturnedFailureKey:@"UserIdAlreadyTaken" error:error] && autoHandleIDTaken) {
+            DNDebugLog(@"User ID already taken... automatically recovering...");
+            [[DNNetworkController sharedInstance] synchroniseSuccess:^(NSURLSessionDataTask *task1, id responseData1) {
+                [DNAccountController replaceRegistrationDetailsWithUserDetails:userDetails deviceDetails:[[DNAccountController registrationDetails] deviceDetails] success:^(NSURLSessionDataTask *task2, id responseData) {
+                    @try {
+
+                        [DNAccountController saveUserDetails:userDetails];
+
+                        if (successBlock) {
+                            successBlock(task, responseData);
+                        }
+
+                        DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventRegistrationChangedUser
+                                                                                 publisher:NSStringFromClass([DNAccountController class])
+                                                                                 timeStamp:[NSDate date]
+                                                                                      data:userDetails];
+                        [[DNDonkyCore sharedInstance] publishEvent:localEvent];
                     }
-                    
-                    DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventRegistrationChangedUser
-                                                                             publisher:NSStringFromClass([DNAccountController class])
-                                                                             timeStamp:[NSDate date]
-                                                                                  data:userDetails];
-                    [[DNDonkyCore sharedInstance] publishEvent:localEvent];
-                }
-                @catch (NSException *exception) {
-                    DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
-                    [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
-                    if (failureBlock) {
-                        failureBlock(task, [DNErrorController errorCode:DNCoreSDKFatalException userInfo:@{@"Exception: " : [exception description]}]);
+                    @catch (NSException *exception) {
+                        DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
+                        [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
+                        if (failureBlock) {
+                            failureBlock(task, [DNErrorController errorCode:DNCoreSDKFatalException userInfo:@{@"Exception: " : [exception description]}]);
+                        }
                     }
-                }
+                } failure:failureBlock];
             } failure:failureBlock];
-        } failure:failureBlock];
-    }
-    else if (failureBlock) {
-        failureBlock(task, error);
-    }
-}];
+        }
+        else if (failureBlock) {
+            failureBlock(task, error);
+        }
+    }];
 }
 
 + (void)updateDeviceDetails:(DNDeviceDetails *)deviceDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
@@ -548,8 +554,10 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 
 + (DNUserDetails *)currentDeviceUser {
     NSManagedObjectContext *context = [[DNDataController sharedInstance] mainContext];
-   
-    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"] withContext:context includesPendingChanges:NO];
+
+    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"]
+                                                                withContext:context
+                                                     includesPendingChanges:NO];
     if (!deviceUser) {
         deviceUser = [self newDevice];
     }
@@ -559,28 +567,54 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 }
 
 + (void)saveUserDetails:(DNUserDetails *)details {
-    NSManagedObjectContext *context = [[DNDataController sharedInstance] mainContext];
-    DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"] withContext:context includesPendingChanges:NO] ? : [self newDevice];
-    [deviceUser setIsAnonymous:@([details isAnonymous])];
-    [deviceUser setFirstName:[details firstName]];
-    [deviceUser setLastName:[details lastName]];
-    [deviceUser setDisplayName:[details displayName]];
-    [deviceUser setMobileNumber:[details mobileNumber]];
-    [deviceUser setEmailAddress:[details emailAddress]];
-    [deviceUser setAvatarAssetID:[details avatarAssetID]];
-    [deviceUser setCountryCode:[details countryCode]];
-    [deviceUser setUserID:[details userID]];
-    [deviceUser setSelectedTags:[details selectedTags]];
-    [deviceUser setAdditionalProperties:[details additionalProperties]];
-    [[DNDataController sharedInstance] saveContext:context];
+    NSManagedObjectContext *context = nil;
+
+    if ([[NSThread currentThread] isMainThread]) {
+        context = [[DNDataController sharedInstance] mainContext];
+    }
+    else {
+        context = [DNDataController temporaryContext];
+    }
+
+    [context performBlockAndWait:^{
+        DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"]
+                                                                    withContext:context
+                                                         includesPendingChanges:NO] ? : [self newDevice];
+        if (deviceUser && (![deviceUser lastUpdated] || [[deviceUser lastUpdated] donkyHasDateExpired])) {
+            [deviceUser setIsAnonymous:@([details isAnonymous])];
+            [deviceUser setFirstName:[details firstName]];
+            [deviceUser setLastName:[details lastName]];
+            [deviceUser setDisplayName:[details displayName]];
+            [deviceUser setMobileNumber:[details mobileNumber]];
+            [deviceUser setEmailAddress:[details emailAddress]];
+            [deviceUser setAvatarAssetID:[details avatarAssetID]];
+            [deviceUser setCountryCode:[details countryCode]];
+            [deviceUser setUserID:[details userID]];
+            [deviceUser setSelectedTags:[details selectedTags]];
+            [deviceUser setAdditionalProperties:[details additionalProperties]];
+
+            [deviceUser setLastUpdated:[NSDate date]];
+            [[DNDataController sharedInstance] saveContext:context];
+        }
+    }];
 }
 
 + (DNDeviceUser *)newDevice {
-    NSManagedObjectContext *context = [[DNDataController sharedInstance] mainContext];
-    DNDeviceUser *device = [DNDeviceUser insertNewInstanceWithContext:context];
+    NSManagedObjectContext *context = nil;
+
+    if ([[NSThread currentThread] isMainThread]) {
+        context = [[DNDataController sharedInstance] mainContext];
+    }
+    else {
+        context = [DNDataController temporaryContext];
+    }
+
+    DNDeviceUser *device = nil;
+    device = [DNDeviceUser insertNewInstanceWithContext:context];
     [device setIsDeviceUser:@(YES)];
     [device setIsAnonymous:@(YES)];
     [[DNDataController sharedInstance] saveContext:context];
+
     return device;
 }
 

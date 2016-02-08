@@ -9,16 +9,13 @@
 #import <Foundation/Foundation.h>
 #import "DNSubscription.h"
 #import "DNBlockDefinitions.h"
-#import "DRLogicMainController.h"
 
 @interface DRLogicMainControllerHelper : NSObject
 
-+ (DNSubscriptionBatchHandler)richMessageHandler:(DRLogicMainController *)mainController;
++ (DNSubscriptionBatchHandler)richMessageHandler;
 
-+ (DNLocalEventHandler)notificationLoaded:(DRLogicMainController *)mainController;
++ (DNLocalEventHandler)notificationLoaded;
 
 + (void)richMessageNotificationReceived:(NSArray *)notifications backgroundNotifications:(NSMutableArray *)backgroundNotifications;
-
-+ (DNLocalEventHandler)backgroundNotificationsReceived:(NSMutableArray *)notifications;
 
 @end

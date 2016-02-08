@@ -6,6 +6,11 @@
 //  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DSOperation.h"
 #import "DNAccountController.h"
 
@@ -18,16 +23,14 @@ typedef enum {
 } DSSequenceCalls;
 
 @interface DSOperation ()
-@property (nonatomic, readwrite, getter = isFinished)  BOOL finished;
-@property (nonatomic, readwrite, getter = isExecuting) BOOL executing;
 @property (nonatomic, strong) NSDictionary *additionalProperties;
 @property (nonatomic, copy) DNNetworkSuccessBlock successBlock;
 @property (nonatomic, copy) DNNetworkFailureBlock failureBlock;
-@property (nonatomic, strong) NSMutableArray *tags;
-@property (nonatomic, strong) DNUserDetails *userDetails;
-@property (nonatomic, strong) DNDeviceDetails *deviceDetails;
-@property (nonatomic) DSSequenceCalls callType;
 @property (nonatomic, getter=shouldAutoHandle) BOOL autoHandle;
+@property (nonatomic, strong) DNDeviceDetails *deviceDetails;
+@property (nonatomic, strong) DNUserDetails *userDetails;
+@property (nonatomic, strong) NSMutableArray *tags;
+@property (nonatomic) DSSequenceCalls callType;
 @end
 
 @implementation DSOperation
@@ -104,6 +107,7 @@ typedef enum {
 }
 
 - (instancetype)initWithRegistrationDetails:(DNUserDetails *)userDetails deviceDetails:(DNDeviceDetails *)deviceDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
+
     self = [self init];
 
     if (self) {
@@ -118,8 +122,7 @@ typedef enum {
     return self;
 }
 
-- (void)start
-{
+- (void)start {
     if ([self isCancelled]) {
         [self setFinished:YES];
         return;
@@ -130,9 +133,7 @@ typedef enum {
     [self main];
 }
 
-- (void)completeOperation
-{
-    
+- (void)completeOperation {
     [self setExecuting:NO];
     [self setFinished:YES];
 }

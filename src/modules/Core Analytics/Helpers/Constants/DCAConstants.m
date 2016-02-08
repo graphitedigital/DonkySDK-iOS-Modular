@@ -13,7 +13,7 @@
 
 NSString * const kDAEventInfluencedAppOpen = @"DonkyAnalyticsInfluencedAppOpen";
 
-NSString * const kDAAnalyticsVersion = @"1.0.0.0";
+NSString * const kDAAnalyticsVersion = @"1.0.1.0";
 
 #pragma mark -
 #pragma mark - Donky GeoFence Module Analytics
@@ -21,4 +21,3 @@ NSString * const kDAAnalyticsVersion = @"1.0.0.0";
 NSString * const kDCAnalyticsGeoFenceCrossed = @"GEOFENCECROSSED";
 
 NSString * const kDCAnalyticsGeoFenceTriggered = @"TRIGGEREXECUTED";
-

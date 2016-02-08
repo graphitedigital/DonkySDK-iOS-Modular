@@ -5,6 +5,12 @@
 //  Created by Donky Networks on 17/03/2015.
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
+
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DNNetworkHelper.h"
 #import "DNConstants.h"
 #import "DNLoggingController.h"
@@ -21,7 +27,6 @@
 #import "DNAccountController.h"
 #import "DNDonkyNetworkDetails.h"
 #import "DNNetworkDataHelper.h"
-
 
 static NSString *const DNDeviceNotFound = @"DeviceNotFound";
 
@@ -109,7 +114,7 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
     }
 }
 
-+ (NSArray *)queueClientNotifications:(NSArray *)notifications pendingNotifications:(NSMutableArray *)pendingNotifications {
++ (void)queueClientNotifications:(NSArray *)notifications pendingNotifications:(NSMutableArray *)pendingNotifications completion:(DNCompletionBlock)completionBlock {
     //Enumerate through the array:
     @synchronized(notifications) {
         [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -124,13 +129,19 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
                 }
             }
         }];
-        [DNNetworkDataHelper saveClientNotificationsToStore:notifications];
-        return pendingNotifications;
+        [DNNetworkDataHelper saveClientNotificationsToStore:notifications completion:completionBlock];
     }
 }
 
 + (NSError *)queueContentNotifications:(NSArray *)notifications pendingNotifications:(NSMutableArray *)pendingNotifications{
 
+
+    [DNNetworkHelper queueContentNotifications:notifications pendingNotifications:pendingNotifications completon:nil];
+
+    return nil;
+}
+
++ (void)queueContentNotifications:(NSArray *)notifications pendingNotifications:(NSMutableArray *)pendingNotifications completon:(DNCompletionBlock)completionBlock {
     NSMutableArray *acceptableNotifications = [[NSMutableArray alloc] init];
     NSMutableArray *unAcceptableNotifications = [[NSMutableArray alloc] init];
 
@@ -167,12 +178,11 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
 
     if ([unAcceptableNotifications count]) {
         NSError *error = [DNErrorController errorCode:DNCoreContentNotificationSizeLimit additionalData:unAcceptableNotifications];
-        return error;
+        if (completionBlock) {
+            completionBlock(error);
+        }
     }
-
-    [DNNetworkDataHelper saveContentNotificationsToStore:acceptableNotifications];
-
-    return nil;
+    [DNNetworkDataHelper saveContentNotificationsToStore:notifications completion:completionBlock];
 }
 
 + (void)processNotificationResponse:(id)responseData task:(NSURLSessionDataTask *)task pendingClientNotifications:(NSMutableArray *)pendingClientNotifications pendingContentNotifications:(NSMutableArray *)pendingContentNotifications success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
@@ -200,7 +210,6 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
             }
             else {
                 [batch addObject:serverNotification];
-
                 responseBatches[[serverNotification notificationType]] = batch;
             }
         }];
@@ -209,7 +218,6 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
             [[DNDonkyCore sharedInstance] notificationsReceived:responseBatches];
         }
 
-        //The network sends a maximum of 100 notifications at a time, in this case we need to perform the request again before completing:
         if ([response moreNotificationsAvailable] || [pendingClientNotifications count] || [pendingContentNotifications count]) {
             [[DNNetworkController sharedInstance] synchroniseSuccess:successBlock failure:failureBlock];
         }

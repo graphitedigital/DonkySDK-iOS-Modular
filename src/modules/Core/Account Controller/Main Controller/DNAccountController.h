@@ -164,23 +164,23 @@
 
 /*!
  Method to determine if the current device holds a valid registration.
- 
+
  @return BOOL indicating if the device has an authorised user.
- 
+
  @since 2.0.0.0
  */
 + (BOOL)isRegistered;
 
 /*!
  Helper class method to determine if the user has been suspended.
- 
+
  @return BOOL indicating if the current user is suspended.
- 
+
  @since 2.6.5.4
  */
 + (BOOL)isSuspended;
 
-#pragma mark - 
+#pragma mark -
 #pragma mark - Private... Not for public consumption. Public use of these API's is unsupported. 
 
 /*!
@@ -217,5 +217,12 @@
  @warning Private, please do not use
  */
 + (void)setIsSuspended:(BOOL)suspended;
+
+/*!
+ PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+
+ @warning Private, please do not use
+ */
++ (void)saveUserDetails:(DNUserDetails *)details;
 
 @end

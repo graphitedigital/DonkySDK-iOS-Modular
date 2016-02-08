@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "DRIDataController.h"
-#import "DRIOptionsView.h"
 #import "DRIDataController.h"
 #import "DRISearchController.h"
 #import "DRIOptionsView.h"

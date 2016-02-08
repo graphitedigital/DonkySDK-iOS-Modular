@@ -93,16 +93,4 @@
  */
 + (void)addCategoriesToRemoteNotifications:(NSMutableSet *)categories;
 
-/*!
- Method to handle the custom action attached to a remote mention. Invoke this from the Application Delegate method of the same signature.
- 
- @param identifier        the identifier for the button set whoms button has been tapped.
- @param userInfo          the user info from the notification.
- @param responseInfo      any repsonse info, this is typically from a text field on a remote notification.
- @param completionHandler the completion handler that is to be invoked.
- 
- @since 2.6.5.4
- */
-+ (void)handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo withResponseInfo:(NSDictionary *)responseInfo completionHandler:(void (^)())completionHandler;
-
 @end

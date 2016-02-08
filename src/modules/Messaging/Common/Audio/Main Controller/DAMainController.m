@@ -6,6 +6,11 @@
 //  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import <AVFoundation/AVFoundation.h>
 #import "DAMainController.h"
 #import "DNConstants.h"
@@ -131,6 +136,12 @@ static NSString *const DAPlayFile = @"DAudioPlayAudioFile";
 }
 
 - (void)setAudioFile:(NSURL *)audioFile forMessageType:(DonkyAudioMessageTypes)messageType {
+
+    if (!audioFile) {
+        DNErrorLog(@"Cannot save a nil file URL, please check input: %@", audioFile);
+        return;
+    }
+
     if (messageType & DASimplePushMessage) {
         [self audioFiles][kDNDonkyNotificationSimplePush] = audioFile;
     }

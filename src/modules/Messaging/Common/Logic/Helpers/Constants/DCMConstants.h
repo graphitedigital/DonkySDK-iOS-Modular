@@ -92,3 +92,8 @@ extern NSString * const kDNDonkyEventNotificationTapped;
 //
 extern NSString * const kDCMAssets;
 
+//
+extern NSString * const kDCMAvatarAssetID;
+
+//
+extern NSString * const kDCMButtonSets;

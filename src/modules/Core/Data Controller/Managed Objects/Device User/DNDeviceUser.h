@@ -16,4 +16,6 @@
 
 @property (nonatomic, retain) NSNumber * isDeviceUser;
 
+@property (nonatomic, retain) NSDate * lastUpdated;
+
 @end

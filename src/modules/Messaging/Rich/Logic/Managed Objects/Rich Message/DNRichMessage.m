@@ -8,7 +8,6 @@
 
 #import "DNRichMessage.h"
 
-
 @implementation DNRichMessage
 
 @dynamic canShare;

@@ -29,6 +29,7 @@
 		D01416D91B64E0B400DCF004 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D01416D81B64E0B400DCF004 /* Images.xcassets */; };
 		D01416DC1B64E0B400DCF004 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D01416DA1B64E0B400DCF004 /* LaunchScreen.xib */; };
 		D01416E81B64E0B400DCF004 /* Donky_Automation_DemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D01416E71B64E0B400DCF004 /* Donky_Automation_DemoTests.m */; };
+		D731D99E1C68888400A8250E /* DNDonkyDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D731D9971C68888400A8250E /* DNDonkyDataModel.xcdatamodeld */; };
 		D7882DB21C0EFC3600F87E16 /* DNDonkyNetworkDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882CDE1C0EFC3600F87E16 /* DNDonkyNetworkDetails.m */; };
 		D7882DB31C0EFC3600F87E16 /* DNUserDefaultsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882CE11C0EFC3600F87E16 /* DNUserDefaultsHelper.m */; };
 		D7882DB41C0EFC3600F87E16 /* DNAccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882CE41C0EFC3600F87E16 /* DNAccountController.m */; };
@@ -54,7 +55,6 @@
 		D7882DC81C0EFC3600F87E16 /* DNDeviceUser.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882D271C0EFC3600F87E16 /* DNDeviceUser.m */; };
 		D7882DC91C0EFC3600F87E16 /* DNNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882D2A1C0EFC3600F87E16 /* DNNotification.m */; };
 		D7882DCA1C0EFC3600F87E16 /* DNUser.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882D2D1C0EFC3600F87E16 /* DNUser.m */; };
-		D7882DCB1C0EFC3600F87E16 /* DNDonkyDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D7882D2F1C0EFC3600F87E16 /* DNDonkyDataModel.xcdatamodeld */; };
 		D7882DCC1C0EFC3600F87E16 /* DNDonkyCoreFunctionalHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882D381C0EFC3600F87E16 /* DNDonkyCoreFunctionalHelper.m */; };
 		D7882DCD1C0EFC3600F87E16 /* DNEventSubscriber.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882D3B1C0EFC3600F87E16 /* DNEventSubscriber.m */; };
 		D7882DCE1C0EFC3600F87E16 /* DNLocalEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = D7882D3E1C0EFC3600F87E16 /* DNLocalEvent.m */; };
@@ -148,6 +148,12 @@
 		D01416E11B64E0B400DCF004 /* Donky Automation DemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Donky Automation DemoTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D01416E61B64E0B400DCF004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D01416E71B64E0B400DCF004 /* Donky_Automation_DemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Donky_Automation_DemoTests.m; sourceTree = "<group>"; };
+		D731D9981C68888400A8250E /* DNDonkyDataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DNDonkyDataModel 2.xcdatamodel"; sourceTree = "<group>"; };
+		D731D9991C68888400A8250E /* DNDonkyDataModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DNDonkyDataModel 3.xcdatamodel"; sourceTree = "<group>"; };
+		D731D99A1C68888400A8250E /* DNDonkyDataModel 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DNDonkyDataModel 4.xcdatamodel"; sourceTree = "<group>"; };
+		D731D99B1C68888400A8250E /* DNDonkyDataModel 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DNDonkyDataModel 5.xcdatamodel"; sourceTree = "<group>"; };
+		D731D99C1C68888400A8250E /* DNDonkyDataModel 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DNDonkyDataModel 6.xcdatamodel"; sourceTree = "<group>"; };
+		D731D99D1C68888400A8250E /* DNDonkyDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DNDonkyDataModel.xcdatamodel; sourceTree = "<group>"; };
 		D7882CDD1C0EFC3600F87E16 /* DNDonkyNetworkDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDonkyNetworkDetails.h; sourceTree = "<group>"; };
 		D7882CDE1C0EFC3600F87E16 /* DNDonkyNetworkDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDonkyNetworkDetails.m; sourceTree = "<group>"; };
 		D7882CE01C0EFC3600F87E16 /* DNUserDefaultsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNUserDefaultsHelper.h; sourceTree = "<group>"; };
@@ -197,10 +203,6 @@
 		D7882D2A1C0EFC3600F87E16 /* DNNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNNotification.m; sourceTree = "<group>"; };
 		D7882D2C1C0EFC3600F87E16 /* DNUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNUser.h; sourceTree = "<group>"; };
 		D7882D2D1C0EFC3600F87E16 /* DNUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNUser.m; sourceTree = "<group>"; };
-		D7882D301C0EFC3600F87E16 /* DNDonkyDataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DNDonkyDataModel 2.xcdatamodel"; sourceTree = "<group>"; };
-		D7882D311C0EFC3600F87E16 /* DNDonkyDataModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DNDonkyDataModel 3.xcdatamodel"; sourceTree = "<group>"; };
-		D7882D321C0EFC3600F87E16 /* DNDonkyDataModel 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DNDonkyDataModel 4.xcdatamodel"; sourceTree = "<group>"; };
-		D7882D331C0EFC3600F87E16 /* DNDonkyDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DNDonkyDataModel.xcdatamodel; sourceTree = "<group>"; };
 		D7882D371C0EFC3600F87E16 /* DNDonkyCoreFunctionalHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNDonkyCoreFunctionalHelper.h; sourceTree = "<group>"; };
 		D7882D381C0EFC3600F87E16 /* DNDonkyCoreFunctionalHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNDonkyCoreFunctionalHelper.m; sourceTree = "<group>"; };
 		D7882D3A1C0EFC3600F87E16 /* DNEventSubscriber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNEventSubscriber.h; sourceTree = "<group>"; };
@@ -825,7 +827,7 @@
 		D7882D2E1C0EFC3600F87E16 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D7882D2F1C0EFC3600F87E16 /* DNDonkyDataModel.xcdatamodeld */,
+				D731D9971C68888400A8250E /* DNDonkyDataModel.xcdatamodeld */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1437,6 +1439,7 @@
 				D7882DF11C0EFC3600F87E16 /* DNSystemHelpers.m in Sources */,
 				D7882DE31C0EFC3600F87E16 /* DNNetworkOperation.m in Sources */,
 				34F5288DFF7433423447E292 /* AFURLRequestSerialization.m in Sources */,
+				D731D99E1C68888400A8250E /* DNDonkyDataModel.xcdatamodeld in Sources */,
 				34F52EE06D599F1EBA17B005 /* AFURLResponseSerialization.m in Sources */,
 				D7882DDB1C0EFC3600F87E16 /* DNDeviceConnectivityController.m in Sources */,
 				D7882DDA1C0EFC3600F87E16 /* DNNetworkDataHelper.m in Sources */,
@@ -1472,7 +1475,6 @@
 				D7882DB21C0EFC3600F87E16 /* DNDonkyNetworkDetails.m in Sources */,
 				D7882DF01C0EFC3600F87E16 /* DNApplicationShortCutHelper.m in Sources */,
 				34F52FB239FA2D2E56BB1055 /* DAAutomationController.m in Sources */,
-				D7882DCB1C0EFC3600F87E16 /* DNDonkyDataModel.xcdatamodeld in Sources */,
 				D7882DB61C0EFC3600F87E16 /* DNAccountRegistrationResponse.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1691,15 +1693,17 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		D7882D2F1C0EFC3600F87E16 /* DNDonkyDataModel.xcdatamodeld */ = {
+		D731D9971C68888400A8250E /* DNDonkyDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				D7882D301C0EFC3600F87E16 /* DNDonkyDataModel 2.xcdatamodel */,
-				D7882D311C0EFC3600F87E16 /* DNDonkyDataModel 3.xcdatamodel */,
-				D7882D321C0EFC3600F87E16 /* DNDonkyDataModel 4.xcdatamodel */,
-				D7882D331C0EFC3600F87E16 /* DNDonkyDataModel.xcdatamodel */,
+				D731D9981C68888400A8250E /* DNDonkyDataModel 2.xcdatamodel */,
+				D731D9991C68888400A8250E /* DNDonkyDataModel 3.xcdatamodel */,
+				D731D99A1C68888400A8250E /* DNDonkyDataModel 4.xcdatamodel */,
+				D731D99B1C68888400A8250E /* DNDonkyDataModel 5.xcdatamodel */,
+				D731D99C1C68888400A8250E /* DNDonkyDataModel 6.xcdatamodel */,
+				D731D99D1C68888400A8250E /* DNDonkyDataModel.xcdatamodel */,
 			);
-			currentVersion = D7882D301C0EFC3600F87E16 /* DNDonkyDataModel 2.xcdatamodel */;
+			currentVersion = D731D99C1C68888400A8250E /* DNDonkyDataModel 6.xcdatamodel */;
 			path = DNDonkyDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

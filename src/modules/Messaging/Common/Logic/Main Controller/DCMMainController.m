@@ -6,6 +6,11 @@
 //  Copyright (c) 2015 Dynmark International Ltd. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DCMMainController.h"
 #import "DNClientNotification.h"
 #import "DNNetworkController.h"
@@ -30,28 +35,7 @@ static NSString *const DCMTimeToReadSeconds = @"timeToReadSeconds";
 @implementation DCMMainController
 
 + (void)markMessageAsReceived:(DNServerNotification *)notification {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSDictionary *notificationData = [notification data];
-
-        NSMutableDictionary *messageReceived = [[NSMutableDictionary alloc] init];
-
-        BOOL messageExpired = [[NSDate donkyDateFromServer:notificationData[DCMExpiryTimeStamp]] donkyHasDateExpired];
-
-        [messageReceived dnSetObject:DCMMessageReceived forKey:DCMType];
-        [messageReceived dnSetObject:notificationData[DCMSenderInternalUserID] forKey:DCMSenderInternalUserID];
-        [messageReceived dnSetObject:notificationData[DCMMessageID] forKey:DCMMessageID];
-        [messageReceived dnSetObject:notificationData[DCMSenderMessageID] forKey:DCMSenderMessageID];
-        [messageReceived dnSetObject:messageExpired ? @"true" : @"false" forKey:DCMReceivedExpired];
-        [messageReceived dnSetObject:notificationData[DCMessageType] forKey:DCMMessageType];
-        [messageReceived dnSetObject:notificationData[DCMMessageScope] forKey:DCMMessageScope];
-        [messageReceived dnSetObject:notificationData[DCMSentTimestamp] forKey:DCMSentTimestamp];
-        [messageReceived dnSetObject:notificationData[DCMContextItems] forKey:DCMContextItems];
-
-        DNClientNotification *msgReceived = [[DNClientNotification alloc] initWithType:DCMMessageReceived data:messageReceived acknowledgementData:notification];
-        [[msgReceived acknowledgementDetails] dnSetObject:DCMDelivered forKey:DCMResult];
-
-        [[DNNetworkController sharedInstance] queueClientNotifications:@[msgReceived]];
-    });
+    [DCMMainController markAllMessagesAsReceived:@[notification]];
 }
 
 + (void)markAllMessagesAsReceived:(NSArray *)notifications {
@@ -83,7 +67,9 @@ static NSString *const DCMTimeToReadSeconds = @"timeToReadSeconds";
             [clientNotifications addObject:msgReceived];
         }];
 
-        [[DNNetworkController sharedInstance] queueClientNotifications:clientNotifications];
+        [[DNNetworkController sharedInstance] queueClientNotifications:clientNotifications completion:^(id data) {
+            [[DNNetworkController sharedInstance] synchronise];
+        }];
     });
 }
 
@@ -94,20 +80,7 @@ static NSString *const DCMTimeToReadSeconds = @"timeToReadSeconds";
         return;
     }
 
-    NSManagedObjectContext *tempContext = [DNDataController temporaryContext];
-    [tempContext performBlock:^{
-        NSManagedObjectID *objectID = [message objectID];
-        if (objectID) {
-            DNMessage *fetchedMessaged = (DNMessage *) [tempContext existingObjectWithID:objectID error:nil];
-
-            [fetchedMessaged setRead:@(YES)];
-
-            DNClientNotification *messageReadNotification = [[DNClientNotification alloc] initWithType:DCMessageRead data:[DCMMainController messageRead:fetchedMessaged] acknowledgementData:nil];
-            [[DNNetworkController sharedInstance] queueClientNotifications:@[messageReadNotification]];
-
-            [[DNDataController sharedInstance] saveContext:tempContext];
-        }
-    }];
+    [DCMMainController markAllMessagesAsRead:@[message]];
 }
 
 + (void)markAllMessagesAsRead:(NSArray *)messages {
@@ -118,7 +91,7 @@ static NSString *const DCMTimeToReadSeconds = @"timeToReadSeconds";
             DNMessage *message = obj;
             NSManagedObjectID *objectID =  [message objectID];
             if (objectID) {
-                DNMessage *fetchedMessage = (DNMessage *) [tempContext existingObjectWithID:objectID error:nil];
+                DNMessage *fetchedMessage = [tempContext existingObjectWithID:objectID error:nil];
                 if (![[fetchedMessage read] boolValue]) {
                     [fetchedMessage setRead:@(YES)];
                     DNClientNotification *messageReadNotification = [[DNClientNotification alloc] initWithType:DCMessageRead data:[DCMMainController messageRead:fetchedMessage] acknowledgementData:nil];
@@ -126,8 +99,11 @@ static NSString *const DCMTimeToReadSeconds = @"timeToReadSeconds";
                 }
             }
         }];
+
         [[DNDataController sharedInstance] saveContext:tempContext];
-        [[DNNetworkController sharedInstance] queueClientNotifications:clientNotifications];
+        [[DNNetworkController sharedInstance] queueClientNotifications:clientNotifications completion:^(id data) {
+            [[DNNetworkController sharedInstance] synchronise];
+        }];
     }];
 }
 

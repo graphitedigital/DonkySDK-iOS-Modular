@@ -1,1 +1,0 @@
-../../../Donky-RichMessage-Logic/src/modules/Messaging/Rich/Logic/Managed Objects/Rich Message/DNRichMessage.h

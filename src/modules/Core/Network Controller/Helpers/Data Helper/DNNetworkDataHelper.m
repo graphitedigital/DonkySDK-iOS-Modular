@@ -6,6 +6,11 @@
 //  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DNSystemHelpers.h"
 #import "DNContentNotification.h"
 #import "NSManagedObject+DNHelper.h"
@@ -93,6 +98,43 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
     return formattedArray;
 }
 
++ (void)contentNotificationsArray:(NSArray *)notifications insertObject:(BOOL)insert completion:(DNNetworkControllerSuccessBlock)completion  {
+    NSManagedObjectContext * context = nil;
+    if ([[NSThread currentThread] isMainThread]) {
+        context = [[DNDataController sharedInstance] mainContext];
+    }
+    else {
+        context = [DNDataController temporaryContext];
+    }
+
+    [context performBlock:^{
+        [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            DNNotification *contentNotification = [DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"notificationID == %@ || serverNotificationID == %@", [obj notificationID], [obj notificationID]]
+                                                                     withContext:context
+                                                          includesPendingChanges:NO];
+
+            if (!contentNotification && insert) {
+                contentNotification = [DNNotification insertNewInstanceWithContext:context];
+                [contentNotification setServerNotificationID:[obj notificationID] ? : [DNSystemHelpers generateGUID]];
+                [contentNotification setType:DNCustomNotificationType];
+                [contentNotification setData:(id) [obj acknowledgementDetails]];
+                [contentNotification setAudience:[obj audience]];
+                [contentNotification setContent:[obj content]];
+                [contentNotification setFilters:[obj filters]];
+                [contentNotification setNativePush:[obj nativePush]];
+            }
+
+            [contentNotification setSendTries:[obj sendTries]];
+        }];
+
+        [[DNDataController sharedInstance] saveContext:context completion:^(id data) {
+            if (completion) {
+                completion(nil);
+            }
+        }];
+    }];
+}
+
 + (void)contentNotifications:(DNContentNotification *)notification insertObject:(BOOL)insert completion:(DNNetworkControllerSuccessBlock)completion {
 
     NSManagedObjectContext * context = nil;
@@ -124,12 +166,8 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
         }
         
         [contentNotification setSendTries:[notification sendTries]];
-        
-        [[DNDataController sharedInstance] saveContext:context];
 
-        if (completion) {
-            completion([contentNotification objectID]);
-        }
+        [[DNDataController sharedInstance] saveContext:context completion:completion];
     }];
 }
 
@@ -184,7 +222,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
             NSMutableDictionary *formattedNotification = [[NSMutableDictionary alloc] init];
             [formattedNotification dnSetObject:[originalNotification notificationType] forKey:DNType];
 
-            if ([originalNotification acknowledgementDetails]) {
+            if ([[originalNotification acknowledgementDetails] count]) {
                 [formattedNotification dnSetObject:[originalNotification acknowledgementDetails] forKey:DNAcknowledgementDetails];
             }
 
@@ -283,14 +321,14 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
     return !type;
 }
 
-+ (void)saveClientNotificationsToStore:(NSArray *)array {
++ (void)saveClientNotificationsToStore:(NSArray *)array completion:(DNCompletionBlock)completionBlock {
     [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if (![obj isKindOfClass:[DNClientNotification class]]) {
             DNErrorLog(@"WHoops, something has gone wrong with this client notification. Expected class DNClientNotification, got: %@", NSStringFromClass([obj class]));
         }
         else {
             DNClientNotification *clientNotification = obj;
-            [self clientNotifications:clientNotification insertObject:YES completion:nil];
+            [self clientNotifications:clientNotification insertObject:YES completion:completionBlock];
         }
     }];
 }
@@ -317,24 +355,25 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
         }
     }];
 
-    [self deleteNotifications:brokenNotifications];
+    [self deleteNotifications:brokenNotifications completion:^(id data) {
+    }];
 
     return allNotifications;
 }
 
-+ (void)saveContentNotificationsToStore:(NSArray *)array {
-    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
++ (void)saveContentNotificationsToStore:(NSArray *)notifications completion:(DNCompletionBlock)completionBlock {
+    [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if (![obj isKindOfClass:[DNContentNotification class]]) {
             DNErrorLog(@"WHoops, something has gone wrong with this client notification. Expected class DNContentNotification, got: %@", NSStringFromClass([obj class]));
         }
         else {
             DNContentNotification *contentNotification = obj;
-            [self contentNotifications:contentNotification insertObject:YES completion:nil];
+            [self contentNotifications:contentNotification insertObject:YES completion:completionBlock];
         }
     }];
 }
 
-+ (void)deleteNotifications:(NSArray *)notifications {
++ (void)deleteNotifications:(NSArray *)notifications completion:(DNCompletionBlock)completionBlock {
     __block DNNotification *notification = nil;
     __block NSManagedObjectContext * context = nil;
     if ([[NSThread currentThread] isMainThread]) {
@@ -345,7 +384,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
     }
 
     __block NSMutableArray *notificationsToDelete = [[NSMutableArray alloc] init];
-    [context performBlockAndWait:^{
+    [context performBlock:^{
         [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             DNClientNotification *clientNotification = obj;
             if ([obj isKindOfClass:[DNClientNotification class]]) {
@@ -366,8 +405,15 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
             }
         }];
 
-        [context deleteAllObjectsInArray:notificationsToDelete];
-        [[DNDataController sharedInstance] saveContext:context];
+        if ([notificationsToDelete count]) {
+            [context deleteAllObjectsInArray:notificationsToDelete];
+            [[DNDataController sharedInstance] saveContext:context completion:completionBlock];
+        }
+        else {
+            if (completionBlock) {
+                completionBlock(nil);
+            }
+        }
     }];
 }
 
@@ -414,7 +460,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
 + (NSManagedObjectID *)notificationWithID:(NSString *)notificationID context:(NSManagedObjectContext *)context {
     if (!notificationID) {
-        DNErrorLog(@"Cannot look for notificaiotns without an ID");
+        DNErrorLog(@"Cannot look for notifications without an ID");
     }
     return [[DNNotification fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"serverNotificationID == %@ || notificationID == %@", notificationID, notificationID]
                                                withContext:context

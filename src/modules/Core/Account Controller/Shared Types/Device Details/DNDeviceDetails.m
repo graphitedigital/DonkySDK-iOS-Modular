@@ -24,7 +24,7 @@ static NSString *const DNRegistrationModel = @"model";
 static NSString *const DNRegistrationType = @"type";
 static NSString *const DNRegistrationOperatingSystemVersion = @"operatingSystemVersion";
 static NSString *const DNRegistrationOperatingSystem = @"operatingSystem";
-static NSString *const DNRegistrationId = @"id";
+static NSString *const DNRegistrationID = @"id";
 static NSString *const DNRegistrationAdditionalProperties = @"additionalProperties";
 static NSString *const DNRegistrationToken = @"token";
 
@@ -99,7 +99,7 @@ static NSString *const DNPushConfiguration = @"PushConfiguration";
     [currentDevice dnSetObject:[self model] forKey:DNRegistrationModel];
     [currentDevice dnSetObject:[self deviceName] forKey:DNRegistrationName];
     [currentDevice dnSetObject:[self additionalProperties] forKey:DNRegistrationAdditionalProperties];
-    [currentDevice dnSetObject:[self deviceID] forKey:DNRegistrationId];
+    [currentDevice dnSetObject:[self deviceID] forKey:DNRegistrationID];
     [currentDevice dnSetObject:[self deviceSecret] forKey:DNRegistrationSecret];
 
     if ([self apnsToken]) {

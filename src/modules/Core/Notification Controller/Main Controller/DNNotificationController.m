@@ -6,6 +6,11 @@
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DNAccountController.h"
 #import "DNNotificationController.h"
 #import "DNLoggingController.h"
@@ -27,7 +32,6 @@ static NSString *const DNEventInteractivePushData = @"DonkyEventInteractivePushD
 static NSString *const DPPushNotificationID = @"notificationId";
 static NSString *const DNInteractionResult = @"InteractionResult";
 static NSString *const DNNotificationRichController = @"DRLogicMainController";
-static NSString *const DNNotificationChatController = @"DChatLogicMainController";
 
 @implementation DNNotificationController
 
@@ -56,10 +60,14 @@ static NSString *const DNNotificationChatController = @"DChatLogicMainController
 }
 
 + (void)addCategoriesToRemoteNotifications:(NSMutableSet *)categories {
-    
+
+    if (![DNSystemHelpers systemVersionAtLeast:8.0]) {
+        DNErrorLog(@"Can only add categories in iOS 8.0 and above...");
+        return;
+    }
+
     NSSet *existingCategories = [[[UIApplication sharedApplication] currentUserNotificationSettings] categories];
-    
-    
+
     NSMutableSet *newCategories = [[NSMutableSet alloc] initWithSet:existingCategories];
     
     [categories enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
@@ -147,9 +155,7 @@ static NSString *const DNNotificationChatController = @"DChatLogicMainController
 }
 
 + (void)didReceiveNotification:(NSDictionary *)userInfo handleActionIdentifier:(NSString *)identifier completionHandler:(void (^)(NSString *))handler {
-    
-    BOOL background = [[UIApplication sharedApplication] applicationState] != UIApplicationStateActive;
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         if (![[DNDonkyCore sharedInstance] serviceForType:DNEventInteractivePushData]) {
             [[DNDonkyCore sharedInstance] subscribeToLocalEvent:DNEventInteractivePushData handler:^(DNLocalEvent *event) {
@@ -170,20 +176,6 @@ static NSString *const DNNotificationChatController = @"DChatLogicMainController
         }
 
         NSString *notificationID = userInfo[DPPushNotificationID];
-        //Publish background notification event:
-
-        if (background) {
-            
-            NSString * pushNotificationId = [NSString stringWithFormat:@"com.donky.push.%@", notificationID];
-            [[NSUserDefaults standardUserDefaults] setObject:notificationID forKey:pushNotificationId];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-            DNLocalEvent *backgroundNotificationEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventBackgroundNotificationReceived
-                                                                                      publisher:NSStringFromClass([self class])
-                                                                                      timeStamp:[NSDate date]
-                                                                                           data:@{@"NotificationID" : notificationID}];
-            [[DNDonkyCore sharedInstance] publishEvent:backgroundNotificationEvent];
-        }
 
         [[DNNetworkController sharedInstance] serverNotificationForId:notificationID success:^(NSURLSessionDataTask *task, id responseData) {
             if (identifier) {
@@ -193,10 +185,6 @@ static NSString *const DNNotificationChatController = @"DChatLogicMainController
                                                                                      data:[DNNotificationController reportButtonInteraction:identifier
                                                                                                                                    userInfo:responseData]];
                 [[DNDonkyCore sharedInstance] publishEvent:interactionResult];
-            }
-            
-            if (background) {
-                [DNNotificationController loadNotificationMessage:responseData];
             }
 
             if (handler) {
@@ -208,50 +196,6 @@ static NSString *const DNNotificationChatController = @"DChatLogicMainController
             }
         }];
     });
-}
-
-+ (void)loadNotificationMessage:(DNServerNotification *)notification {
-    DNLocalEvent *loadedNotificationEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventNotificationLoaded
-                                                             publisher:NSStringFromClass([self class])
-                                                             timeStamp:[NSDate date]
-                                                                  data:notification];
-    [[DNDonkyCore sharedInstance] publishEvent:loadedNotificationEvent];
-}
-
-+ (void)handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo withResponseInfo:(NSDictionary *)responseInfo completionHandler:(void (^)())completionHandler {
-    
-    if ([identifier isEqualToString:@"DonkyChatMessageReply"]) {
-        
-        NSString *message = responseInfo[UIUserNotificationActionResponseTypedTextKey];
-        NSString *converastionID = userInfo[@"converastionID"];
-        NSArray *users = nil;// userInfo[@"Users"];
-        
-        SEL sendMessage = NSSelectorFromString(@"replyToChatMessageInConverastion:withMessage:toUsers:");
-        id serviceInstance = NSClassFromString(@"DChatUIMainController");
-        IMP imp = [serviceInstance methodForSelector:sendMessage];
-        if ([serviceInstance respondsToSelector:sendMessage]) {
-            void (*func)(id, SEL, NSString *, NSString *, NSArray *) = (void*)imp;
-            func(serviceInstance, sendMessage, converastionID, message, users);
-        }
-        
-        else {
-            DNErrorLog(@"Couldn't load a new chat converastion, DCChatUIMainController class could not be found. Please ensure you have included the Donky-ChatMessage-Inbox module");
-        }
-    }
-    else if ([identifier isEqualToString:@"DonkyChatOpen"]) {
-        
-        NSString *converastionID = userInfo[@"converastionID"];
-        SEL openMessage = NSSelectorFromString(@"openConversationWithID:");
-        id serviceInstance = NSClassFromString(@"DChatUIMainController");
-        IMP imp = [serviceInstance methodForSelector:openMessage];
-        if ([serviceInstance respondsToSelector:openMessage]) {
-            UINavigationController* (*func)(id, SEL, NSString *) = (void*)imp;
-            UINavigationController *conversationView = func(serviceInstance, openMessage, converastionID);
-            if (conversationView) {
-                [[UIViewController applicationRootViewController] presentViewController:conversationView animated:YES completion:nil];
-            }
-        }
-    }
 }
 
 + (NSMutableDictionary *)reportButtonInteraction:(NSString *)identifier userInfo:(DNServerNotification *)notification {
@@ -281,8 +225,9 @@ static NSString *const DNNotificationChatController = @"DChatLogicMainController
     
     double timeToInteract = [interactionDate timeIntervalSinceDate:[notification createdOn]];
     
-    if (isnan(timeToInteract))
+    if (isnan(timeToInteract)) {
         timeToInteract = 0;
+    }
     
     [params dnSetObject:@(timeToInteract) forKey:@"timeToInteractionSeconds"];
     [params dnSetObject:[buttonSetAction count] == 2 ? @"twoButton" : @"oneButton" forKey:@"interactionType"];
@@ -301,16 +246,6 @@ static NSString *const DNNotificationChatController = @"DChatLogicMainController
             SEL unreadCount = NSSelectorFromString(@"unreadMessageCount");
 
             id serviceInstance = [[DNDonkyCore sharedInstance] serviceForType:DNNotificationRichController];
-
-            if ([serviceInstance respondsToSelector:unreadCount]) {
-                count += ((NSInteger (*)(id, SEL))[serviceInstance methodForSelector:unreadCount])(serviceInstance, unreadCount);
-                DNInfoLog(@"Resetting to Master count: %ld", (long)count);
-            }
-        }
-
-        if ([[DNDonkyCore sharedInstance] serviceForType:DNNotificationChatController]) {
-            SEL unreadCount = NSSelectorFromString(@"unreadMessageCount");
-            id serviceInstance = [[DNDonkyCore sharedInstance] serviceForType:DNNotificationChatController];
 
             if ([serviceInstance respondsToSelector:unreadCount]) {
                 count += ((NSInteger (*)(id, SEL))[serviceInstance methodForSelector:unreadCount])(serviceInstance, unreadCount);

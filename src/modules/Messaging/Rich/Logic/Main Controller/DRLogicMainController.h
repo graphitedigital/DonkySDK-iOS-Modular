@@ -52,7 +52,9 @@
  
  @since 2.0.0.0
  */
-- (void)deleteMessage:(DNRichMessage *)richMessage;
+- (void)deleteMessage:(DNRichMessage *)richMessage  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+
++ (void)deleteMessage:(DNRichMessage *)richMessage;
 
 /*!
  Helper method to delete more than one notification at once.
@@ -61,7 +63,9 @@
  
  @since 2.2.2.7
  */
-- (void)deleteAllMessages:(NSArray *)richMessages;
+- (void)deleteAllMessages:(NSArray *)richMessages  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+
++ (void)deleteAllMessages:(NSArray *)richMessages;
 
 /*!
  Helper method to mark a Rich Message as read. NOTE: this must be called by the integrator when NOT using the UI. This ensures that statistics around Rich Messages is recorded and that they are not displayed more than once.
@@ -70,7 +74,9 @@
  
  @since 2.0.0.0
  */
-- (void)markMessageAsRead:(DNRichMessage *)message;
+- (void)markMessageAsRead:(DNRichMessage *)message  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+
++ (void)markMessageAsRead:(DNRichMessage *)message;
 
 /*!
  Helper method to get all rich messages who's description contains the supplied string.
@@ -83,7 +89,9 @@
  
  @see DNRichMessage
  */
-- (NSArray *)filterRichMessages:(NSString *)filter ascending:(BOOL)ascending;
+- (NSArray *)filterRichMessages:(NSString *)filter ascending:(BOOL)ascending  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+
++ (NSArray *)filterRichMessages:(NSString *)filter ascending:(BOOL)ascending;
 
 /*!
  Helper method to determine whether a rich message exists for the supplied message ID.
@@ -94,7 +102,9 @@
  
  @since 2.2.2.7
  */
-- (BOOL)doesRichMessageExistForID:(NSString *)messageID;
+- (BOOL)doesRichMessageExistForID:(NSString *)messageID  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+
++ (BOOL)doesRichMessageExistForID:(NSString *)messageID;
 
 /*!
  Helper method to retrieve a rich message from the database given a provided message ID.
@@ -105,7 +115,9 @@
  
  @since 2.2.2.7
  */
-- (DNRichMessage *)richMessageWithID:(NSString *)messageID;
+- (DNRichMessage *)richMessageWithID:(NSString *)messageID  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+
++ (DNRichMessage *)richMessageWithID:(NSString *)messageID;
 
 /*!
  Helper method to process all the rich messages that have been received from APNS.
@@ -117,6 +129,8 @@
  */
 - (void)richMessageNotificationsReceived:(NSArray *)notifications;
 
++ (void)richMessageNotificationsReceived:(NSArray *)notifications;
+
 /*!
  Helper method to get all rich messages.
  
@@ -126,7 +140,9 @@
  
  @see DNRichMessage
  */
-- (NSArray *)allRichMessagesAscending:(BOOL)ascending;
+- (NSArray *)allRichMessagesAscending:(BOOL)ascending  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+
++ (NSArray *)allRichMessagesAscending:(BOOL)ascending;
 
 /*!
  Helper method to retrieve rich messages with an offset. This is used to to load x amount of messages at once.
@@ -139,7 +155,9 @@
  
  @since 2.2.2.7
  */
-- (NSArray *)richMessagesWithOffset:(NSUInteger)offset limit:(NSUInteger)limit ascending:(BOOL)ascending;
+- (NSArray *)richMessagesWithOffset:(NSUInteger)offset limit:(NSUInteger)limit ascending:(BOOL)ascending  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+
++ (NSArray *)richMessagesWithOffset:(NSUInteger)offset limit:(NSUInteger)limit ascending:(BOOL)ascending;
 
 /*!
  Helper method to get all un-read rich messages.
@@ -150,20 +168,26 @@
  
  @see DNRichMessage
  */
-- (NSArray *)allUnreadRichMessages;
+- (NSArray *)allUnreadRichMessages  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+
++ (NSArray *)allUnreadRichMessages;
 
 /*!
  Helper method to delete all the expired messages from the database.
  
  @since 2.2.2.7
  */
-- (void)deleteAllExpiredMessages;
+- (void)deleteAllExpiredMessages  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+
++ (void)deleteAllExpiredMessages;
 
 /*!
  Helper method to delete all those messages that have reached their lifetime limit (30 days).
  
  @since 2.5.4.3
  */
-- (void)deleteMaxLifeRichMessages;
+- (void)deleteMaxLifeRichMessages  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+
++ (void)deleteMaxLifeRichMessages;
 
 @end

@@ -75,7 +75,7 @@ NSString *const DCMUrlToShare = @"urlToShare";
 NSString *const DCMSenderInternalUserID = @"senderInternalUserId";
 
 //
-NSString *const DCMRecipientExternalUserID = @"senderInternalUserId";
+NSString *const DCMRecipientExternalUserID = @"recipientExternalUserId";
 
 //
 NSString *const DCMRecipientInternalUserID = @"recipientInternalUserId";
@@ -85,3 +85,10 @@ NSString * const kDNDonkyEventNotificationTapped = @"DonkyEventNotificationTappe
 
 //
 NSString * const kDCMAssets = @"assets";
+
+//
+NSString * const kDCMAvatarAssetID = @"avatarAssetId";
+
+//
+NSString * const kDCMButtonSets = @"buttonSets";
+

@@ -6,6 +6,11 @@
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DNDonkyCore.h"
 #import "DNConstants.h"
 #import "DNAccountController.h"
@@ -38,8 +43,7 @@
 #pragma mark -
 #pragma mark - Setup Singleton
 
-+(DNDonkyCore *)sharedInstance
-{
++(DNDonkyCore *)sharedInstance {
     static dispatch_once_t pred;
     static DNDonkyCore *sharedInstance = nil;
 
@@ -56,6 +60,7 @@
 -(instancetype)initPrivate
 {
     self  = [super init];
+
     if (self) {
         [self setNotificationSubscriber:[[DNNotificationSubscriber alloc] init]];
         [self setEventSubscriber:[[DNEventSubscriber alloc] init]];
@@ -81,31 +86,34 @@
 }
 
 - (void)applicationWillEnterForegroundNotification {
-    DNLocalEvent *openAppEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppWillEnterForegroundNotification publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:nil];
-    [self publishEvent:openAppEvent];
+    dispatch_async(donky_logic_processing_queue(), ^{
+        DNLocalEvent *openAppEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppWillEnterForegroundNotification publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:nil];
+        [self publishEvent:openAppEvent];
 
-    //Open signalR connection
-    if ([DNAccountController isRegistered]) {
-        [DNSignalRInterface openConnection];
-    }
+        //Open signalR connection
+        if ([DNAccountController isRegistered]) {
+            [DNSignalRInterface openConnection];
+        }
+    });
 }
 
 - (void)applicationDidEnterForeground {
-    DNLocalEvent *openAppEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppOpen publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:nil];
-    [self publishEvent:openAppEvent];
-    if ([DNAccountController isRegistered]) {
-        [[DNNetworkController sharedInstance] synchroniseSuccess:^(NSURLSessionDataTask *task, id responseData) {
-            [DNNotificationController resetApplicationBadgeCount];
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            
-        }];
-    }
+    dispatch_async(donky_logic_processing_queue(), ^{
+        DNLocalEvent *openAppEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppOpen publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:nil];
+        [self publishEvent:openAppEvent];
+        if ([DNAccountController isRegistered]) {
+            [[DNNetworkController sharedInstance] synchroniseSuccess:^(NSURLSessionDataTask *task, id responseData) {
+                [DNNotificationController resetApplicationBadgeCount];
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+
+            }];
+        }
+    });
 }
 
 - (void)applicationDidEnterBackground {
-    DNLocalEvent *openAppEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppClose publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:nil];
-    [self publishEvent:openAppEvent];
-
+    DNLocalEvent *appCloseEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppClose publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:nil];
+    [self publishEvent:appCloseEvent];
     if ([DNAccountController isRegistered]) {
         [DNSignalRInterface closeConnection];
     }
@@ -125,7 +133,6 @@
 + (void)initialiseWithAPIKey:(NSString *)apiKey succcess:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
     [[DNDonkyCore sharedInstance] initialiseWithAPIKey:apiKey succcess:successBlock failure:failureBlock];
 }
-
 
 - (void)initialiseWithAPIKey:(NSString *)apiKey {
     [self initialiseWithAPIKey:apiKey userDetails:[[DNAccountController registrationDetails] userDetails] deviceDetails:[[DNAccountController registrationDetails] deviceDetails] success:nil failure:nil];
@@ -148,7 +155,7 @@
     __weak __typeof(self) weakSelf = self;
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        if (!apiKey || apiKey.length == 0) {
+        if (!apiKey || [apiKey length] == 0) {
             DNErrorLog(@"---- No API Key supplied - Bailing out of Donky Initialisation, please check input... ----");
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (failureBlock) {
@@ -175,6 +182,9 @@
             [DNSignalRInterface openConnection];
             [[DNNetworkController sharedInstance] synchronise];
             [DNNotificationController registerForPushNotifications];
+
+            DNLocalEvent *openAppEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppOpen publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:nil];
+            [self publishEvent:openAppEvent];
 
             dispatch_async(dispatch_get_main_queue(), ^{
                 DNInfoLog(@"DonkySDK is initialised. All user data has been saved.");
@@ -309,7 +319,28 @@
         }];
     }];
 
-    [self subscribeToDonkyNotifications:moduleDefinition subscriptions:@[transmitDebugLog, newDeviceMessage]];
+    DNSubscription *userUpdatedSubscription = [[DNSubscription alloc] initWithNotificationType:@"UserUpdated" batchHandler:^(NSArray *batch) {
+        [batch enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+
+            DNServerNotification *userUpdated = obj;
+
+            NSLog(@"%@", userUpdated);
+            DNUserDetails *newUserDetails = [[DNUserDetails alloc] initWithUserID:[userUpdated data][@"externalUserId"]
+                                                                      displayName:[userUpdated data][@"displayName"]
+                                                                     emailAddress:[userUpdated data][@"emailAddress"]
+                                                                     mobileNumber:[userUpdated data][@"phoneNumber"]
+                                                                      countryCode:[userUpdated data][@"countryIsoCode"]
+                                                                        firstName:[userUpdated data][@"firstName"]
+                                                                         lastName:[userUpdated data][@"lastName"]
+                                                                         avatarID:[userUpdated data][@"avatarId"]
+                                                                     selectedTags:[userUpdated data][@"selectedTags"]
+                                                             additionalProperties:[userUpdated data][@"additionalProperties"]
+                                                                        anonymous:[[userUpdated data][@"isAnonymous"] boolValue]];
+            [DNAccountController saveUserDetails:newUserDetails];
+        }];
+    }];
+
+    [self subscribeToDonkyNotifications:moduleDefinition subscriptions:@[transmitDebugLog, newDeviceMessage, userUpdatedSubscription]];
 
     if ([self useDonkyBadgeCounts]) {
 
@@ -323,9 +354,8 @@
 
                 [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeCount];
 
-                DNInfoLog(@"Setting local and network badge count to: %ld", (long)badgeCount);
+                DNInfoLog(@"Setting local and network badge count to: %ld", (long) badgeCount);
 
-                //We need to updatresetApplicationBadgeCounte the server side badge count:
                 DNClientNotification *badgeCountNotification = [[DNClientNotification alloc] initWithType:@"SetBadgeCount" data:@{@"BadgeCount" : @(badgeCount)} acknowledgementData:nil];
 
                 if ([weakSelf isSettingBadgeCount]) {
@@ -343,9 +373,6 @@
 
         [DNNotificationController resetApplicationBadgeCount];
     }
-    
-    DNLocalEvent *openAppEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppOpen publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:nil];
-    [self publishEvent:openAppEvent];
 }
 
 - (void)syncBadgeCount {

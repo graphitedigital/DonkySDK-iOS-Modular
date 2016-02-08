@@ -6,6 +6,11 @@
 //  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DRIDataController.h"
 #import "DNSystemHelpers.h"
 #import "DNLoggingController.h"
@@ -22,12 +27,12 @@
 static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
 
 @interface DRIDataController ()
-@property(nonatomic, strong) DRLFetchedResultsController *richLogicFetchedResultsController;
-@property(nonatomic, strong) NSIndexPath *originalIndexPath;
-@property(nonatomic, strong) NSMutableArray *openedCells;
-@property(nonatomic, getter=wasUpdated) BOOL updated;
-@property(nonatomic, strong) UITableView *tableView;
-@property(nonatomic, strong) DRUITheme *theme;
+@property (nonatomic, strong) DRLFetchedResultsController *richLogicFetchedResultsController;
+@property (nonatomic, strong) NSIndexPath *originalIndexPath;
+@property (nonatomic, strong) NSMutableArray *openedCells;
+@property (nonatomic, getter=wasUpdated) BOOL updated;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) DRUITheme *theme;
 @end
 
 @implementation DRIDataController
@@ -43,8 +48,6 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
         [self setTheme:theme];
 
         [self createLocalEventHandlers];
-
-        [self setDrLogicMainController:[[DRLogicMainController alloc] init]];
         
         [self setRichLogicFetchedResultsController:[[DRLFetchedResultsController alloc] initWithTableView:tableView]];
         [[self richLogicFetchedResultsController] setDelegate:self];
@@ -127,7 +130,7 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
         [selectedMessages addObject:message];
     }];
 
-    [[self drLogicMainController] deleteAllMessages:selectedMessages];
+    [DRLogicMainController deleteAllMessages:selectedMessages];
 
     //We exit the edit mode:
     if ([[self delegate] respondsToSelector:@selector(toggleEditMode)]) {
@@ -138,7 +141,7 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
 }
 
 - (void)deleteAllExpiredMessages {
-    [[self drLogicMainController] deleteAllExpiredMessages];
+    [DRLogicMainController deleteAllExpiredMessages];
     [self updateSelectedIndex:[self originalIndexPath]];
 }
 
@@ -199,7 +202,7 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
 - (void)deleteRichMessage:(DNRichMessage *)richMessage {
     NSIndexPath *deletedIndex = [[[self richLogicFetchedResultsController] fetchedResultsController] indexPathForObject:richMessage];
     [DNAssetController deleteImageAtTempDir:[richMessage messageID]];
-    [[self drLogicMainController] deleteAllMessages:@[richMessage]];
+    [DRLogicMainController deleteAllMessages:@[richMessage]];
     [[self tableView] setScrollEnabled:YES];
     [self closeAllCells];
     [self updateSelectedIndex:deletedIndex];
@@ -257,7 +260,7 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
 }
 
 - (NSNumber *)unreadRichMessageCount {
-    return @([[[self drLogicMainController] allUnreadRichMessages] count]);
+    return @([[DRLogicMainController allUnreadRichMessages] count]);
 }
 
 #pragma mark -

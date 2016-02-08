@@ -6,15 +6,21 @@
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DNDataController.h"
 #import "NSManagedObjectContext+DNHelpers.h"
 #import "DNLoggingController.h"
 #import "DNSystemHelpers.h"
+#import "DNQueueManager.h"
 
 @interface DNDataController ()
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *mainContext;
 @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (nonatomic, strong) NSMutableArray *completionArray;
+@property (nonatomic, strong) NSMutableDictionary *completionBlocks;
 @end
 
 @implementation DNDataController
@@ -47,7 +53,7 @@
         [notificationCenter addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
         [notificationCenter addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
 
-        [self setCompletionArray:[[NSMutableArray alloc] init]];
+        [self setCompletionBlocks:[[NSMutableDictionary alloc] init]];
     }
     return self;
 }
@@ -76,7 +82,7 @@
 - (void)mergeChanges:(NSNotification *)notification {
     
     NSManagedObjectContext *mainContext = [self mainContext];
-
+    
     // Merge changes into the main context on the main thread
     [mainContext performSelectorOnMainThread:@selector(mergeChangesFromContextDidSaveNotification:)
                                   withObject:notification
@@ -85,6 +91,8 @@
     [mainContext performSelectorOnMainThread:@selector(saveIfHasChanges:)
                                   withObject:notification
                                waitUntilDone:YES];
+
+    [self invokeSaveBlock:notification];
 }
 
 #pragma mark - Core Data methods
@@ -96,8 +104,6 @@
         if (!_mainContext) {
             _mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
             [_mainContext setPersistentStoreCoordinator:[self persistentStoreCoordinator]];
-
-            [[NSNotificationCenter defaultCenter] addObserver:[DNDataController sharedInstance] selector:@selector(invokeSaveBlock:) name:NSManagedObjectContextDidSaveNotification object:_mainContext];
         }
         return _mainContext;
     }
@@ -178,7 +184,7 @@
 
     @synchronized (self) {
         if (completion) {
-            [[self completionArray] addObject:completion];
+            [[self completionBlocks] setObject:completion forKey:[context description]];
         }
     }
 
@@ -187,13 +193,15 @@
 
 - (void)invokeSaveBlock:(NSNotification *)notification {
     //This needs refinement:
-    DNCompletionBlock completionBlock = [[self completionArray] firstObject];
-    if (completionBlock) {
-        completionBlock(notification);
-        @synchronized (self) {
-            [[self completionArray] removeObject:completionBlock];
+    dispatch_async(donky_logic_processing_queue(), ^{
+        DNCompletionBlock completionBlock = [self completionBlocks][[[notification object] description]];
+        if (completionBlock) {
+            completionBlock(notification);
+            @synchronized (self) {
+                [[self completionBlocks] removeObjectForKey:[[notification object] description]];
+            }
         }
-    }
+    });
 }
 
 @end

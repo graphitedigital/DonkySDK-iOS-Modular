@@ -24,6 +24,8 @@
  */
 - (NSString *)donkyDateForServer;
 
+- (NSString *)donkyDateForServerWithoutZone;
+
 /*!
  Method to create an NSDate object from the date string received from the network.
  

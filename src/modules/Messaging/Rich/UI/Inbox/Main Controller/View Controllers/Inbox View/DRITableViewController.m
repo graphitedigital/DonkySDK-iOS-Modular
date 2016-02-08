@@ -6,6 +6,11 @@
 //  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DRITableViewController.h"
 #import "UIView+AutoLayout.h"
 #import "DNSystemHelpers.h"
@@ -243,7 +248,6 @@
 #pragma mark - Internal helper methods:
 
 - (void)toggleOptionsView {
-
     if (![self optionsView]) {
         [self setOptionsView:[DRIViewHelper optionsViewForView:self]];
         [self setOptionsViewConstraint:[[self optionsView] pinAttribute:NSLayoutAttributeTop toAttribute:NSLayoutAttributeBottom ofItem:[[self tableView] superview] withConstant:0.0]];
@@ -252,14 +256,12 @@
 
     [[[self tableView] superview] layoutIfNeeded];
 
+    BOOL isInsideTabBar = [self tabBarController] != nil;
+
     [UIView animateWithDuration:0.25 animations:^{
         [[[self tableView] superview] removeConstraint:[self optionsViewConstraint]];
-        [self setOptionsViewConstraint:![self isShowingOptionsView] ? [[self optionsView]
-                pinAttribute:NSLayoutAttributeTop
-                 toAttribute:NSLayoutAttributeBottom
-                      ofItem:[self tableView] withConstant:0.0] : [[self optionsView]
-                pinAttribute:NSLayoutAttributeBottom
-       toSameAttributeOfItem:[self tableView]]];
+        [self setOptionsViewConstraint:![self isShowingOptionsView] ? [[self optionsView] pinAttribute:NSLayoutAttributeTop toAttribute:NSLayoutAttributeBottom ofItem:[self tableView] withConstant:0.0] :
+                [[self optionsView] pinAttribute:NSLayoutAttributeBottom toSameAttributeOfItem:[self tableView] withConstant:isInsideTabBar ? -[[self optionsView] frame].size.height : 0]];
         [[[self tableView] superview] layoutIfNeeded];
         [[self tableView] setContentInset:UIEdgeInsetsMake([[self tableView] contentInset].top, 0, [[self tableView] isEditing] && [[[self tableView] indexPathsForSelectedRows] count] ? 50 : [self originalOffset].bottom, 0)];
     } completion:^(BOOL finished) {

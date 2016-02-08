@@ -8,7 +8,6 @@
 
 #import "DNMessage.h"
 
-
 @implementation DNMessage
 
 @dynamic avatarAssetID;

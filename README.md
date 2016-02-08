@@ -2,19 +2,9 @@
   <img src="https://avatars2.githubusercontent.com/u/11334935?v=3&s=200" alt="Donky Networks LTD" title="Donky Network SDK">
 </p>
 
-# Donky Modular SDK (V2.6.5.6)
+# Donky Modular SDK (V2.7.0.0)
 
-The modular SDK exposes all of the network functionality in a way that means developers can consume only the pieces they need in order to:
-
-<ul>
-<li>Send custom notifications</li>
-<li>Use Donky's messaging features</li>
-<li>Automate actions and messaging</li>
-<li>Track in app analytics</li>
-<li>Build complex M2M, A2P and P2P applications</li>
-</ul>
-
-Using Donky as a data network allows developers to focus on writing the apps code rather than having to worry about building a reliable and secure network. The complexities of transferring data across the internet are taken care of, allowing developers to just build their applications.
+The Donky iOS SDK is a kit for adding push notifications and rich content services to your application. For detailed documentation, tutorials and guides, visit our online [documentation](http://docs.mobiledonky.com).
 
 ##Requirements
 

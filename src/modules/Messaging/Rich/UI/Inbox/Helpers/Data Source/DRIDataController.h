@@ -46,8 +46,6 @@
 
 @property (nonatomic, weak) id <DRIDataControllerDelegate> delegate;
 
-@property(nonatomic, strong) DRLogicMainController *drLogicMainController;
-
 - (instancetype)initWithTableView:(UITableView *)tableView theme:(DRUITheme *)theme;
 
 - (DNRichMessage *)richMessageAtRow:(NSInteger)indexPathRow;

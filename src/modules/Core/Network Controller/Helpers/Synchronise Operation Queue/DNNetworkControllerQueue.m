@@ -6,6 +6,11 @@
 //  Copyright © 2015 Donky Networks. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DNNetworkControllerQueue.h"
 #import "DNNetworkOperation.h"
 #import "DNLoggingController.h"
@@ -61,7 +66,7 @@
         if ([[operation identifier] isEqualToString:@"Synchronise"] && [operation isExecuting]) {
             DNDebugLog(@"Operation started at: %@", [operation timeStarted]);
             //Compare time:
-            if ((![operation isFinished] && ![operation isExecuting]) || [[operation timeStarted] timeIntervalSinceDate:[NSDate date]] * -1 < 20) {
+            if ((![operation isFinished] && ![operation isExecuting]) || ([[operation timeStarted] timeIntervalSinceDate:[NSDate date]] * -1 < 20 && [self operationCount] > 1)) {
                 [operation cancel];
             }
             else {

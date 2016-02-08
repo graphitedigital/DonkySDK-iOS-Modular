@@ -318,7 +318,7 @@ extern NSString * const kDNDonkyEventNotificationLoaded;
 extern NSString * const kDNDonkyEventBackgroundNotificationReceived;
 
 /*!
- Publish this event when you want to cahnge the badge count of your appplication AND set the 
+ Publish this event when you want to cahnge the badge count of your application AND set the
  new badge count on the network.
  
  @since 2.2.2.7

@@ -6,6 +6,11 @@
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DRLogicHelper.h"
 #import "DNDataController.h"
 #import "DNLoggingController.h"
@@ -56,22 +61,43 @@ static NSString *const DRMessageTimeStampDescriptor = @"sentTimestamp";
 }
 
 + (NSArray *)allUnreadRichMessages {
+    NSManagedObjectContext *context = nil;
+    if ([NSThread currentThread] == [NSThread mainThread]) {
+        context = [[DNDataController sharedInstance] mainContext];
+    }
+    else {
+        context = [DNDataController temporaryContext];
+    }
     return [DNRichMessage fetchObjectsWithPredicate:[NSPredicate predicateWithFormat:@"read == NO"]
                                    sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:DRMessageIDSortDescriptor ascending:YES]]
-                                       withContext:[[DNDataController sharedInstance] mainContext]];
+                                       withContext:context];
 }
 
 + (NSArray *)allRichMessagesAscending:(BOOL)ascending {
+    NSManagedObjectContext *context = nil;
+    if ([NSThread currentThread] == [NSThread mainThread]) {
+        context = [[DNDataController sharedInstance] mainContext];
+    }
+    else {
+        context = [DNDataController temporaryContext];
+    }
     return [DNRichMessage fetchObjectsWithPredicate:nil
                                     sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:DRMessageTimeStampDescriptor ascending:ascending]]
-                                        withContext:[[DNDataController sharedInstance] mainContext]];
+                                        withContext:context];
 }
 
 + (NSArray *)richMessagesWithOffset:(NSUInteger)offset limit:(NSUInteger)limit ascending:(BOOL)ascending {
+    NSManagedObjectContext *context = nil;
+    if ([NSThread currentThread] == [NSThread mainThread]) {
+        context = [[DNDataController sharedInstance] mainContext];
+    }
+    else {
+        context = [DNDataController temporaryContext];
+    }
     return [DNRichMessage fetchObjectsWithOffset:offset
                                            limit:limit
                                   sortDescriptor:@[[NSSortDescriptor sortDescriptorWithKey:DRMessageTimeStampDescriptor ascending:ascending]]
-                                     withContext:[[DNDataController sharedInstance] mainContext]];
+                                     withContext:context];
 }
 
 + (NSArray *)filteredRichMessage:(NSString *)filter ascendingOrder:(BOOL)ascending {
@@ -138,13 +164,33 @@ static NSString *const DRMessageTimeStampDescriptor = @"sentTimestamp";
 }
 
 + (BOOL)richMessageExistsForID:(NSString *)messageID {
+    NSManagedObjectContext *context = nil;
+    if ([NSThread currentThread] == [NSThread mainThread]) {
+        context = [[DNDataController sharedInstance] mainContext];
+    }
+    else {
+        context = [DNDataController temporaryContext];
+    }
     return [DNRichMessage fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"messageID == %@ || notificationID == %@", messageID, messageID]
-                                                      withContext:[[DNDataController sharedInstance] mainContext] includesPendingChanges:YES] != nil;
+                                             withContext:context includesPendingChanges:YES] != nil;
 }
 
 + (DNRichMessage *)richMessageWithID:(NSString *)messageID {
-    return [DNRichMessage fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"messageID == %@ || notificationID == %@", messageID, messageID]
-                                             withContext:[[DNDataController sharedInstance] mainContext] includesPendingChanges:YES];
+    NSManagedObjectContext *context = nil;
+    if ([NSThread currentThread] == [NSThread mainThread]) {
+        context = [[DNDataController sharedInstance] mainContext];
+    }
+    else {
+        context = [DNDataController temporaryContext];
+    }
+
+    __block DNRichMessage *richMessage = nil;
+    [context performBlockAndWait:^{
+        richMessage = [DNRichMessage fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"messageID == %@ || notificationID == %@", messageID, messageID]
+                                                        withContext:context includesPendingChanges:YES];
+    }];
+
+    return richMessage;
 }
 
 + (void)deleteAllExpiredMessages {

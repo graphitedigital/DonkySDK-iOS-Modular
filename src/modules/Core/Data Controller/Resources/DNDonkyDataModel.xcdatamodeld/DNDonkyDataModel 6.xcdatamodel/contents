@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D21" minimumToolsVersion="Xcode 4.3">
+    <entity name="DNAttachment" representedClassName="DNAttachment" syncable="YES">
+        <attribute name="assetID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mimeType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="size" optional="YES" attributeType="Float" defaultValueString="0" syncable="YES"/>
+        <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DNChatMessage" inverseName="attachment" inverseEntity="DNChatMessage" syncable="YES"/>
+    </entity>
+    <entity name="DNChatConversation" representedClassName="DNChatConversation" syncable="YES">
+        <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="conversationID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="conversationType" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="lastMessageSentTimestamp" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="recipients" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="unreadCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="chatMessage" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DNChatMessage" inverseName="chatConversation" inverseEntity="DNChatMessage" syncable="YES"/>
+    </entity>
+    <entity name="DNChatMessage" representedClassName="DNChatMessage" parentEntity="DNMessage" syncable="YES">
+        <attribute name="createdOn" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="deleted" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="messageStatus" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="recipientExternalUserID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sectionIdentifier" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="attachment" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DNAttachment" inverseName="message" inverseEntity="DNAttachment" syncable="YES"/>
+        <relationship name="chatConversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DNChatConversation" inverseName="chatMessage" inverseEntity="DNChatConversation" syncable="YES"/>
+    </entity>
+    <entity name="DNContact" representedClassName="DNContact" parentEntity="DNUser" syncable="YES">
+        <attribute name="canDelete" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="dateAdded" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="displaySortKey" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isNew" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isStandardContact" optional="YES" attributeType="Boolean" syncable="YES"/>
+    </entity>
+    <entity name="DNDeviceUser" representedClassName="DNDeviceUser" parentEntity="DNUser" syncable="YES">
+        <attribute name="isAnonymous" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isDeviceUser" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="lastUpdated" optional="YES" attributeType="Date" syncable="YES"/>
+    </entity>
+    <entity name="DNMessage" representedClassName="DNMessage" syncable="YES">
+        <attribute name="avatarAssetID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="canForward" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="canReply" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="contextItems" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="conversationID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="expiryTimestamp" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="externalID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="externalRef" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageReceivedTimestamp" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="messageScope" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="notificationID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="read" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="senderAccountType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="senderDisplayName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="senderExternalUserID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="senderInternalUserID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="senderMessageID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sentTimestamp" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="silentNotification" optional="YES" attributeType="Boolean" syncable="YES"/>
+    </entity>
+    <entity name="DNNotification" representedClassName="DNNotification" syncable="YES">
+        <attribute name="acknowledgementDetails" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="audience" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="content" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="data" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="filters" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="nativePush" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="notificationID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sendTries" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="serverNotificationID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="DNRegion" representedClassName="DNRegion" syncable="YES">
+        <attribute name="activatedOn" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="activationid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="applicationId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="labels" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="notificationId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="processedOn" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="radiusMetres" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="regionID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="relatedTriggers" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="timeEntered" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="timeLeft" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="trackingReported" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="triggerId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="triggers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DNTrigger" inverseName="region" inverseEntity="DNTrigger" syncable="YES"/>
+    </entity>
+    <entity name="DNRichMessage" representedClassName="DNRichMessage" parentEntity="DNMessage" syncable="YES">
+        <attribute name="canShare" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="expiredBody" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="urlToShare" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="DNTrigger" representedClassName="DNTrigger" syncable="YES">
+        <attribute name="actionData" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="direction" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="executionsInInterval" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="lastExecuted" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="numberOfExecutions" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="restrictions" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="timeInRegion" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="triggerData" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="triggerId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="validFrom" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="validity" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="validTo" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="region" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DNRegion" inverseName="triggers" inverseEntity="DNRegion" syncable="YES"/>
+    </entity>
+    <entity name="DNUser" representedClassName="DNUser" syncable="YES">
+        <attribute name="additionalProperties" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="avatarAssetID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="countryCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="displayName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="emailAddress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mobileNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="networkProfileID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="selectedTags" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="userID" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="DNAttachment" positionX="423" positionY="-487" width="128" height="118"/>
+        <element name="DNChatConversation" positionX="-155" positionY="-978" width="128" height="150"/>
+        <element name="DNChatMessage" positionX="331" positionY="-756" width="128" height="150"/>
+        <element name="DNContact" positionX="18" positionY="-759" width="128" height="120"/>
+        <element name="DNDeviceUser" positionX="-146" positionY="-576" width="128" height="90"/>
+        <element name="DNMessage" positionX="504" positionY="-1035" width="128" height="375"/>
+        <element name="DNNotification" positionX="241" positionY="-519" width="128" height="195"/>
+        <element name="DNRegion" positionX="331" positionY="-1116" width="128" height="328"/>
+        <element name="DNRichMessage" positionX="504" positionY="-603" width="128" height="30"/>
+        <element name="DNTrigger" positionX="-0" positionY="-1098" width="128" height="238"/>
+        <element name="DNUser" positionX="-144" positionY="-432" width="128" height="210"/>
+    </elements>
+</model>

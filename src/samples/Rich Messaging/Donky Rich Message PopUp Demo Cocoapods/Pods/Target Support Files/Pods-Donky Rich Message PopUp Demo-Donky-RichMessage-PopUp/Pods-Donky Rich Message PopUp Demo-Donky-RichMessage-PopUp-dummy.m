@@ -1,5 +1,0 @@
-#import <Foundation/Foundation.h>
-@interface PodsDummy_Pods_Donky_Rich_Message_PopUp_Demo_Donky_RichMessage_PopUp : NSObject
-@end
-@implementation PodsDummy_Pods_Donky_Rich_Message_PopUp_Demo_Donky_RichMessage_PopUp
-@end

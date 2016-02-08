@@ -6,17 +6,19 @@
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DRLogicMainController.h"
 #import "DNDonkyCore.h"
 #import "DNConstants.h"
 #import "DRLogicHelper.h"
 #import "DRLogicMainControllerHelper.h"
-#import "DCAConstants.h"
 
 @interface DRLogicMainController ()
-@property(nonatomic, strong) DNLocalEventHandler backgroundNotificationsReceived;
 @property(nonatomic, strong) DNSubscriptionBatchHandler richMessageHandler;
-@property(nonatomic, strong) NSMutableArray *backgroundNotifications;
 @property(nonatomic, strong) DNLocalEventHandler notificationLoaded;
 @property(nonatomic, strong) DNModuleDefinition *moduleDefinition;
 @property(nonatomic, strong) DNSubscription *subscription;
@@ -47,8 +49,6 @@
 
     if (self) {
 
-        [self setBackgroundNotifications:[[NSMutableArray alloc] init]];
-
         [self setVibrate:YES];
 
     }
@@ -58,35 +58,19 @@
 
 - (void)start {
 
-    [self deleteMaxLifeRichMessages];
+    [DRLogicMainController deleteMaxLifeRichMessages];
 
-    [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.1.1.1"]];
+    [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.2.0.0"]];
 
     [self setSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationRichMessage batchHandler:[self richMessageHandler]]];
 
     [[DNDonkyCore sharedInstance] subscribeToDonkyNotifications:[self moduleDefinition] subscriptions:@[[self subscription]]];
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventNotificationLoaded handler:[self notificationLoaded]];
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventBackgroundNotificationReceived handler:[self backgroundNotificationsReceived]];
-
-    __weak DRLogicMainController *weakSelf = self;
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppWillEnterForegroundNotification handler:^(DNLocalEvent *event) {
-        @synchronized ([weakSelf backgroundNotifications]) {
-            if ([[weakSelf backgroundNotifications] count]) {
-                //Report influenced open:
-                DNLocalEvent *pushOpenEvent = [[DNLocalEvent alloc] initWithEventType:kDAEventInfluencedAppOpen
-                                                                        publisher:NSStringFromClass([weakSelf class])
-                                                                        timeStamp:[NSDate date]
-                                                                             data:[weakSelf backgroundNotifications]];
-                [[DNDonkyCore sharedInstance] publishEvent:pushOpenEvent];
-                [[weakSelf backgroundNotifications] removeAllObjects];
-            }
-        }
-    }];
 
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNEventRegistration handler:^(DNLocalEvent *event) {
         BOOL wasUpdate = [[event data][@"IsUpdate"] boolValue];
         if (!wasUpdate) {
-            [weakSelf deleteAllMessages:[weakSelf allRichMessagesAscending:YES]];
+            [DRLogicMainController deleteAllMessages:[DRLogicMainController allRichMessagesAscending:YES]];
         }
     }];
 
@@ -95,61 +79,111 @@
 }
 
 - (void)stop {
-    [[DNDonkyCore sharedInstance] unSubscribeToDonkyNotifications:[self moduleDefinition] subscriptions:@[[self subscription]]];
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventNotificationLoaded handler:[self notificationLoaded]];
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventBackgroundNotificationReceived handler:[self backgroundNotificationsReceived]];
+    if ([self moduleDefinition]) {
+        [[DNDonkyCore sharedInstance] unSubscribeToDonkyNotifications:[self moduleDefinition] subscriptions:@[[self subscription]]];
+        [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventNotificationLoaded handler:[self notificationLoaded]];
+    }
 }
 
 #pragma mark -
 #pragma mark - Helper Methods
 
 - (NSArray *)allRichMessagesAscending:(BOOL)ascending {
-    return [DRLogicHelper allRichMessagesAscending:ascending];
+    return [DRLogicMainController allRichMessagesAscending:ascending];
 }
 
 - (NSArray *)richMessagesWithOffset:(NSUInteger)offset limit:(NSUInteger)limit ascending:(BOOL)ascending {
-    return [DRLogicHelper richMessagesWithOffset:offset limit:limit ascending:ascending];
+    return [DRLogicMainController richMessagesWithOffset:offset limit:limit ascending:ascending];
 }
 
 - (NSArray *)allUnreadRichMessages {
-    return [DRLogicHelper allUnreadRichMessages];
+    return [DRLogicMainController allUnreadRichMessages];
 }
 
 - (void)deleteMessage:(DNRichMessage *)richMessage {
-    [DRLogicHelper deleteRichMessage:richMessage];
+    [DRLogicMainController deleteMessage:richMessage];
 }
 
 - (void)deleteAllMessages:(NSArray *)richMessages {
-    [DRLogicHelper deleteAllRichMessages:richMessages];
+    [DRLogicMainController deleteAllMessages:richMessages];
 }
 
 - (void)markMessageAsRead:(DNRichMessage *)message {
-    [DRLogicHelper markMessageAsRead:message];
+    [DRLogicMainController markMessageAsRead:message];
 }
 
 - (NSArray *)filterRichMessages:(NSString *)filter ascending:(BOOL)ascending {
-    return [DRLogicHelper filteredRichMessage:filter ascendingOrder:ascending];
+    return [DRLogicMainController filterRichMessages:filter ascending:ascending];
 }
 
 - (BOOL)doesRichMessageExistForID:(NSString *)messageID {
-    return [DRLogicHelper richMessageExistsForID:messageID];
+    return [DRLogicMainController doesRichMessageExistForID:messageID];
 }
 
 - (DNRichMessage *)richMessageWithID:(NSString *)messageID {
-    return [DRLogicHelper richMessageWithID:messageID];
+    return [DRLogicMainController richMessageWithID:messageID];
 }
 
 - (void)richMessageNotificationsReceived:(NSArray *)notifications {
-    @synchronized ([self backgroundNotifications]) {
-        [DRLogicMainControllerHelper richMessageNotificationReceived:notifications backgroundNotifications:[self backgroundNotifications]];
-    }
+    [DRLogicMainController richMessageNotificationsReceived:notifications];
+}
+
++ (void)richMessageNotificationsReceived:(NSArray *)notifications {
+    [DRLogicMainControllerHelper richMessageNotificationReceived:notifications
+                                             backgroundNotifications:nil];
 }
 
 - (void)deleteAllExpiredMessages {
-    [DRLogicHelper deleteAllExpiredMessages];
+    [DRLogicMainController deleteAllExpiredMessages];
 }
 
 - (void)deleteMaxLifeRichMessages {
+    [DRLogicMainController deleteMaxLifeRichMessages];
+}
+
+//Class methods:
+
++ (NSArray *)allRichMessagesAscending:(BOOL)ascending {
+    return [DRLogicHelper allRichMessagesAscending:ascending];
+}
+
++ (NSArray *)richMessagesWithOffset:(NSUInteger)offset limit:(NSUInteger)limit ascending:(BOOL)ascending {
+    return [DRLogicHelper richMessagesWithOffset:offset limit:limit ascending:ascending];
+}
+
++ (NSArray *)allUnreadRichMessages {
+    return [DRLogicHelper allUnreadRichMessages];
+}
+
++ (void)deleteMessage:(DNRichMessage *)richMessage {
+    [DRLogicHelper deleteRichMessage:richMessage];
+}
+
++ (void)deleteAllMessages:(NSArray *)richMessages {
+    [DRLogicHelper deleteAllRichMessages:richMessages];
+}
+
++ (void)markMessageAsRead:(DNRichMessage *)message {
+    [DRLogicHelper markMessageAsRead:message];
+}
+
++ (NSArray *)filterRichMessages:(NSString *)filter ascending:(BOOL)ascending {
+    return [DRLogicHelper filteredRichMessage:filter ascendingOrder:ascending];
+}
+
++ (BOOL)doesRichMessageExistForID:(NSString *)messageID {
+    return [DRLogicHelper richMessageExistsForID:messageID];
+}
+
++ (DNRichMessage *)richMessageWithID:(NSString *)messageID {
+    return [DRLogicHelper richMessageWithID:messageID];
+}
+
++ (void)deleteAllExpiredMessages {
+    [DRLogicHelper deleteAllExpiredMessages];
+}
+
++ (void)deleteMaxLifeRichMessages {
     [DRLogicHelper deleteMaxLifeRichMessages];
 }
 
@@ -158,32 +192,23 @@
 
 - (DNSubscriptionBatchHandler)richMessageHandler {
     if (!_richMessageHandler) {
-        __weak DRLogicMainController *weakSelf = self;
-        _richMessageHandler = [DRLogicMainControllerHelper richMessageHandler:weakSelf];
+        _richMessageHandler = [DRLogicMainControllerHelper richMessageHandler];
     }
     return _richMessageHandler;
 }
 
 - (DNLocalEventHandler)notificationLoaded {
     if (!_notificationLoaded) {
-        __weak DRLogicMainController *weakSelf = self;
-        _notificationLoaded = [DRLogicMainControllerHelper notificationLoaded:weakSelf];
+        _notificationLoaded = [DRLogicMainControllerHelper notificationLoaded];
     }
     return _notificationLoaded;
-}
-
-- (DNLocalEventHandler)backgroundNotificationsReceived {
-    if (!_backgroundNotificationsReceived) {
-        _backgroundNotificationsReceived = [DRLogicMainControllerHelper backgroundNotificationsReceived:[self backgroundNotifications]];
-    }
-    return _backgroundNotificationsReceived;
 }
 
 #pragma mark -
 #pragma mark - Private Services
 
 - (NSInteger)unreadMessageCount {
-    return [[self allUnreadRichMessages] count];
+    return [[DRLogicMainController allUnreadRichMessages] count];
 }
 
 @end

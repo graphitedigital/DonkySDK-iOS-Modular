@@ -6,6 +6,11 @@
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DNLoggingController.h"
 #import "DNFileHelpers.h"
 #import "NSDate+DNDateHelper.h"
@@ -13,7 +18,6 @@
 #import "DNAppSettingsController.h"
 #import "DNSystemHelpers.h"
 #import "DNNetworkController.h"
-#import "DNDonkyCore.h"
 #import "NSMutableDictionary+DNDictionary.h"
 #import "DNConfigurationController.h"
 #import "DNUserDefaultsHelper.h"
@@ -152,7 +156,6 @@ static NSString *const DNPascalAlwaysSubmitErrors = @"alwaysSubmitErrors";
             DNInfoLog(@"Log sent. Deleting logs ...");
             [DNConfigurationController saveConfigurationObject:@([responseData[DNPascalAlwaysSubmitErrors] boolValue]) forKey:DNAlwaysSubmitErrors];
             [DNLoggingController deleteLogs];
-            
             //Save time:
             [DNUserDefaultsHelper saveObject:[NSDate date] withKey:DNDebugLogSubmissionTime];
             if (successBlock) {

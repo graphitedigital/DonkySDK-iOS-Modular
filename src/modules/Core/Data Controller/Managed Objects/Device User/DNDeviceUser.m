@@ -6,12 +6,17 @@
 //  Copyright (c) 2015 Donky Networks Ltd. All rights reserved.
 //
 
-#import "DNDeviceUser.h"
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
 
+#import "DNDeviceUser.h"
 
 @implementation DNDeviceUser
 
 @dynamic isAnonymous;
 @dynamic isDeviceUser;
+@dynamic lastUpdated;
 
 @end

@@ -3,7 +3,7 @@
 //  ChatUI
 //
 //  Created by Chris Watson on 23/11/2015.
-//  Copyright © 2015 Chris Wunsch. All rights reserved.
+//  Copyright © 2015 Donky Networks. All rights reserved.
 //
 
 #ifndef DNQueueManager_h

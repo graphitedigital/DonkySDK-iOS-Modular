@@ -55,20 +55,20 @@
 - (void)recordAppClose;
 
 /*!
- Record and the Crossing of a GeoFence.
-
- (PAP) (TOOD) Fix
- @since ?.?.?.?
+ Record when a Geo fence has been crossed.
+ 
+ @param data the data about the GeoFence.
+ 
+ @since 2.6.5.5
  */
 + (void)recordGeoFenceCrossing:(NSDictionary *)data;
 
 /*!
- Record and the Triggering of a GeoFence.
+ Record when a trigger has been executed by a GeoFence crossing event.
  
- (PAP) (TOOD) Fix
- @since ?.?.?.?
+ @param data the data about the trigger.
  
- (PAP) Example @see DGFModule
+ @since 2.6.5.5
  */
 + (void)recordGeoFenceTriggerExecuted:(NSDictionary *)data;
 

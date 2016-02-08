@@ -73,7 +73,7 @@ typedef void (^DAAssetUploadFailureBlock) (NSError *error);
 typedef void (^DNNetworkControllerSuccessBlock) (id data);
 
 /*!
- A gerneric completion block used across the SDK. Please check the method comments for the 
+ A generic completion block used across the SDK. Please check the method comments for the
  data return type.
  
  @param data generic, changeable data type returned, can be nil.

@@ -6,6 +6,11 @@
 //  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
+#if !__has_feature(objc_arc)
+#error Donky SDK must be built with ARC.
+// You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
+#endif
+
 #import "DRIMainController.h"
 #import "DNSystemHelpers.h"
 #import "DNDonkyCore.h"
@@ -17,14 +22,10 @@
 #import "DRichMessage+Localization.h"
 #import "DCUIThemeController.h"
 #import "DRUIThemeConstants.h"
+#import "DNQueueManager.h"
 
 @interface DRIMainController ()
-@property(nonatomic, strong) DNLocalEventHandler richMessageTapped;
-@property(nonatomic, strong) DNLocalEventHandler richMessageNotificationHandler;
-@property(nonatomic, strong) DNLocalEventHandler bannerTappedHandler;
-@property(nonatomic, strong) DNLocalEventHandler richMessageBadgeCount;
-@property(nonatomic, strong) DCUIBannerView *multiBannerView;
-@property(nonatomic, strong) DCUINotificationController *notificationController;
+@property (nonatomic, strong) DNLocalEventHandler richMessageBadgeCount;
 @end
 
 @implementation DRIMainController
@@ -53,7 +54,6 @@
     if (self) {
 
         [self setRichLogicController:[[DRLogicMainController alloc] init]];
-        [self setNotificationController:[[DCUINotificationController alloc] init]];
 
         DNModuleDefinition *richInboxMainController = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.0.0"];
         [[DNDonkyCore sharedInstance] registerModule:richInboxMainController];
@@ -72,18 +72,6 @@
 
     [[self richLogicController] start];
 
-    __weak DRIMainController *weakSelf = self;
-
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDRichMessageNotificationTapped handler:[self richMessageTapped]];
-
-    [self setRichMessageNotificationHandler:^(DNLocalEvent *event) {
-        if ([event isKindOfClass:[DNLocalEvent class]]) {
-            [weakSelf richMessageNotificationsReceived:[event data]];
-        }
-    }];
-
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDRichMessageNotificationEvent handler:[self richMessageNotificationHandler]];
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventNotificationTapped handler:[self bannerTappedHandler]];
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDRichMessageBadgeCount handler:[self richMessageBadgeCount]];
 }
 
@@ -91,14 +79,8 @@
     
     [[self richLogicController] stop];
 
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDRichMessageNotificationTapped handler:[self richMessageTapped]];
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDRichMessageNotificationEvent handler:[self richMessageNotificationHandler]];
-    [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventNotificationTapped handler:[self bannerTappedHandler]];
     [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDRichMessageBadgeCount handler:[self richMessageBadgeCount]];
 
-    [self setRichMessageTapped:nil];
-    [self setRichMessageNotificationHandler:nil];
-    [self setBannerTappedHandler:nil];
 }
 
 - (UINavigationController *)richInboxTableViewWithNavigationController {
@@ -130,40 +112,6 @@
 
 }
 
-- (void)richMessageNotificationsReceived:(NSDictionary *)notificationData {
-
-    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-        if ([notificationData isKindOfClass:[NSArray class]]) {
-            return;
-        }
-        
-        NSArray *notifications = notificationData[kDNDonkyNotificationRichMessage];
-
-        if ([notifications count] >= 2) {
-
-            //Show multi banner text:
-            if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-                if ([self shouldShowBannerView] && ![self multiBannerView]) {
-                    [self setMultiBannerView:[[DCUIBannerView alloc] initWithSenderDisplayName:@"Donky"
-                                                                                        body:[NSString stringWithFormat:DRichMessageLocalizedString(@"rich_box_multiple_messages_received"), [notifications count]]
-                                                                             messageSentTime:[NSDate date]
-                                                                               avatarAssetID:nil
-                                                                            notificationType:@"MultiRichMessage"
-                                                                                   messageID:nil]];
-                    [[self notificationController] presentNotification:[self multiBannerView]];
-                    [[self notificationController] loadDefaultAvatar];
-                }
-            }
-        }
-        else {
-           [DRIMainControllerHelper processNotifications:notificationData
-                                  notificationController:[self notificationController]
-                                     richLogicController:[self richLogicController]
-                                          showBannerView:[self shouldShowBannerView]];
-        }
-    }
-}
-
 - (void)enableLeftBarDoneButtonForViewController:(id)viewController {
     if ([viewController isKindOfClass:[UINavigationController class]]) {
         [(DRITableViewController *)[[viewController viewControllers] firstObject] enableLeftBarDoneButton:YES];
@@ -175,26 +123,6 @@
 
 #pragma mark -
 #pragma mark - Getters
-
-- (DNLocalEventHandler)richMessageTapped {
-
-    if (!_richMessageTapped) {
-        __weak DRIMainController *weakSelf = self;
-        _richMessageTapped = [DRIMainControllerHelper richMessageTapped:weakSelf];
-    }
-
-    return _richMessageTapped;
-}
-
-- (DNLocalEventHandler)bannerTappedHandler {
-
-    if (!_bannerTappedHandler) {
-        __weak DRIMainController *weakSelf = self;
-        _bannerTappedHandler = [DRIMainControllerHelper bannerTapped:weakSelf notificationController:self.notificationController];
-    }
-
-    return _bannerTappedHandler;
-}
 
 - (DNLocalEventHandler)richMessageBadgeCount {
 
@@ -255,16 +183,13 @@
 }
 
 + (void)setTabBarItemProperties:(id)viewController {
-
     DRUITheme *theme = (DRUITheme *) [[DCUIThemeController sharedInstance] themeForName:kDRUIThemeName];
-
     if (!theme) {
         theme = [[DRUITheme alloc] initWithDefaultTheme];
     }
-
     [[viewController tabBarItem] setTitle:DCUILocalizedString(@"common_ui_generic_inbox")];
     [[viewController tabBarItem] setImage:[theme imageForKey:kDRUIInboxIconImage]];
     [[viewController tabBarItem] setSelectedImage:[theme imageForKey:kDRUIInboxSelectedIconImage]];
-
 }
+
 @end
