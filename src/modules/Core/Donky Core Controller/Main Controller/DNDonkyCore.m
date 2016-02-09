@@ -325,7 +325,7 @@
             DNServerNotification *userUpdated = obj;
 
             NSLog(@"%@", userUpdated);
-            DNUserDetails *newUserDetails = [[DNUserDetails alloc] initWithUserID:[userUpdated data][@"externalUserId"]
+            DNUserDetails *newUserDetails = [[DNUserDetails alloc] initWithUserID:[userUpdated data][@"newExternalUserId"] ? : [userUpdated data][@"externalUserId"]
                                                                       displayName:[userUpdated data][@"displayName"]
                                                                      emailAddress:[userUpdated data][@"emailAddress"]
                                                                      mobileNumber:[userUpdated data][@"phoneNumber"]
