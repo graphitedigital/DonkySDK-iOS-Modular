@@ -49,7 +49,7 @@
     self = [super init];
 
     if (self) {
-        [self initialiseView:richMessage];
+        [self setRichMessage:richMessage];
     }
 
     return self;
@@ -60,7 +60,8 @@
     self = [super initWithCoder:aDecoder];
 
     if (self) {
-        [self initialiseView:nil];
+
+        
     }
 
     return self;
@@ -76,8 +77,8 @@
         [self setTheme:[[DRUITheme alloc] initWithDefaultTheme]];
     }
 
-    [[self view] setBackgroundColor:[UIColor whiteColor]];
-
+    [self setAutomaticallyAdjustsScrollViewInsets:NO];
+    
     [self setHideViewController:YES];
 
     [self setRichMessage:richMessage];
@@ -85,16 +86,17 @@
     [self setTitle:[[self richMessage] senderDisplayName]];
 
     [self loadRichMessage];
-
-//    [DRLogicMainController rich]
-
 }
 
 - (void)viewDidLoad {
 
     [super viewDidLoad];
 
+    [self initialiseView:[self richMessage]];
+
     [self setupWebView];
+    
+    [[self view] setBackgroundColor:[UIColor whiteColor]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -120,7 +122,7 @@
     [[self webView] setAllowsInlineMediaPlayback:YES];
     [[[self webView] scrollView] setMinimumZoomScale:0.0];
     [[self view] addSubview:[self webView]];
-    [[self webView] pinToSuperviewEdges:JRTViewPinAllEdges inset:0.0];
+    [[self webView] pinToSuperviewEdges:JRTViewPinAllEdges inset:0.0 usingLayoutGuidesFrom:self];
 
 }
 

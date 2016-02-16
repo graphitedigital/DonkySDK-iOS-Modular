@@ -60,6 +60,8 @@
     self = [super initWithCoder:aDecoder];
     
     if (self) {
+        
+        [self setTitle:DCUILocalizedString(@"common_ui_generic_inbox")];
       
     }
     
@@ -78,7 +80,8 @@
             [self setDetailViewController:(DRIMessageViewController *) [[[self splitViewController] viewControllers] lastObject]];
         }
         [[self detailViewController] setDelegate:self];
-    }
+        [[self splitViewController] setDelegate:[self detailViewController]];
+    }   
 
     //Get the theme:
     [self setTheme:(DRUITheme *) [[DCUIThemeController sharedInstance] themeForName:kDRUIThemeName]];
@@ -261,7 +264,7 @@
     [UIView animateWithDuration:0.25 animations:^{
         [[[self tableView] superview] removeConstraint:[self optionsViewConstraint]];
         [self setOptionsViewConstraint:![self isShowingOptionsView] ? [[self optionsView] pinAttribute:NSLayoutAttributeTop toAttribute:NSLayoutAttributeBottom ofItem:[self tableView] withConstant:0.0] :
-                [[self optionsView] pinAttribute:NSLayoutAttributeBottom toSameAttributeOfItem:[self tableView] withConstant:isInsideTabBar ? -[[self optionsView] frame].size.height : 0]];
+                [[self optionsView] pinAttribute:NSLayoutAttributeBottom toSameAttributeOfItem:[self tableView] withConstant:isInsideTabBar ? -[[self optionsView] frame].size.height + 2 : 0]]; //+2 as there is a slight gap?
         [[[self tableView] superview] layoutIfNeeded];
         [[self tableView] setContentInset:UIEdgeInsetsMake([[self tableView] contentInset].top, 0, [[self tableView] isEditing] && [[[self tableView] indexPathsForSelectedRows] count] ? 50 : [self originalOffset].bottom, 0)];
     } completion:^(BOOL finished) {
