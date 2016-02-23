@@ -24,6 +24,7 @@
 #import "DRUITheme.h"
 #import "DRLogicMainController.h"
 #import "DNRichMessage+DNRichMessageHelper.h"
+#import "DNLoggingController.h"
 
 @interface DRIMessageViewController ()
 @property(nonatomic, readwrite, getter=shouldHideViewController) BOOL hideViewController;
@@ -49,7 +50,7 @@
     self = [super init];
 
     if (self) {
-        [self initialiseView:richMessage];
+        [self setRichMessage:richMessage];
     }
 
     return self;
@@ -60,7 +61,8 @@
     self = [super initWithCoder:aDecoder];
 
     if (self) {
-        [self initialiseView:nil];
+
+        
     }
 
     return self;
@@ -76,8 +78,8 @@
         [self setTheme:[[DRUITheme alloc] initWithDefaultTheme]];
     }
 
-    [[self view] setBackgroundColor:[UIColor whiteColor]];
-
+    [self setAutomaticallyAdjustsScrollViewInsets:NO];
+    
     [self setHideViewController:YES];
 
     [self setRichMessage:richMessage];
@@ -85,16 +87,17 @@
     [self setTitle:[[self richMessage] senderDisplayName]];
 
     [self loadRichMessage];
-
-//    [DRLogicMainController rich]
-
 }
 
 - (void)viewDidLoad {
 
     [super viewDidLoad];
-
+    
     [self setupWebView];
+
+    [self initialiseView:[self richMessage]];
+    
+    [[self view] setBackgroundColor:[UIColor whiteColor]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -120,7 +123,7 @@
     [[self webView] setAllowsInlineMediaPlayback:YES];
     [[[self webView] scrollView] setMinimumZoomScale:0.0];
     [[self view] addSubview:[self webView]];
-    [[self webView] pinToSuperviewEdges:JRTViewPinAllEdges inset:0.0];
+    [[self webView] pinToSuperviewEdges:JRTViewPinAllEdges inset:0.0 usingLayoutGuidesFrom:self];
 
 }
 
@@ -140,6 +143,10 @@
     }
 }
 
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+    DNErrorLog(@"Rich message error: %@", [error localizedDescription]);
+}
+
 #pragma mark -
 #pragma mark - Helper Methods
 
@@ -156,11 +163,11 @@
 }
 
 - (void)addBarButtonItem:(UIBarButtonItem *)buttonItem buttonSide:(DonkyMessageViewBarButtonSide)side {
-    [DRIMessageViewControllerHelper addBarButtonItem:buttonItem buttonSide:side navigationController:self.navigationItem];
+    [DRIMessageViewControllerHelper addBarButtonItem:buttonItem buttonSide:side navigationController:[self navigationItem]];
 }
 
 - (void)removeBarButtonItem:(UIBarButtonItem *)buttonItem buttonSide:(DonkyMessageViewBarButtonSide)side {
-    [DRIMessageViewControllerHelper removeBarButtonItem:buttonItem buttonSide:side navigationItem:self.navigationItem];
+    [DRIMessageViewControllerHelper removeBarButtonItem:buttonItem buttonSide:side navigationItem:[self navigationItem]];
 }
 
 - (void)toggleEnabled:(BOOL)isEnabled {
@@ -249,7 +256,7 @@
             [[self view] addSubview:[self noMessagesView]];
 
             [[self noMessagesView] constrainToSize:CGSizeMake(250, 150)];
-            [[self noMessagesView] centerInView:self.view];
+            [[self noMessagesView] centerInView:[self view]];
 
             UILabel *noRichMessages = [DRIMessageViewControllerHelper noRichMessageViewWithTheme:[self theme]];
             [[self noMessagesView] addSubview:noRichMessages];

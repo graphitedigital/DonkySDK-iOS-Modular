@@ -23,6 +23,7 @@
 #import "DNAssetController.h"
 #import "DRIDataControllerHelper.h"
 #import "DRLFetchedResultsController.h"
+#import "DNAccountController.h"
 
 static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
 
@@ -82,7 +83,7 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
     [[self tableView] reloadData];
 
     if ([self richMessageCount] > 0 && ([DNSystemHelpers isDeviceIPad] || [DNSystemHelpers isDeviceSixPlusLandscape])) {
-        DRITableViewCell *cell = (DRITableViewCell *) [[self tableView] cellForRowAtIndexPath:[self originalIndexPath]];
+        DRITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[self originalIndexPath]];
         [self toggleSelectedCell:cell];
     }
 }

@@ -127,7 +127,7 @@
  
  @since 2.2.2.7
  */
-- (void)richMessageNotificationsReceived:(NSArray *)notifications;
+- (void)richMessageNotificationsReceived:(NSArray *)notifications __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
 
 + (void)richMessageNotificationsReceived:(NSArray *)notifications;
 

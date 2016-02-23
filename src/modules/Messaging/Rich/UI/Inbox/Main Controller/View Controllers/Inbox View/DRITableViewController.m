@@ -60,6 +60,8 @@
     self = [super initWithCoder:aDecoder];
     
     if (self) {
+        
+        [self setTitle:DCUILocalizedString(@"common_ui_generic_inbox")];
       
     }
     
@@ -78,7 +80,8 @@
             [self setDetailViewController:(DRIMessageViewController *) [[[self splitViewController] viewControllers] lastObject]];
         }
         [[self detailViewController] setDelegate:self];
-    }
+        [[self splitViewController] setDelegate:[self detailViewController]];
+    }   
 
     //Get the theme:
     [self setTheme:(DRUITheme *) [[DCUIThemeController sharedInstance] themeForName:kDRUIThemeName]];
@@ -261,7 +264,7 @@
     [UIView animateWithDuration:0.25 animations:^{
         [[[self tableView] superview] removeConstraint:[self optionsViewConstraint]];
         [self setOptionsViewConstraint:![self isShowingOptionsView] ? [[self optionsView] pinAttribute:NSLayoutAttributeTop toAttribute:NSLayoutAttributeBottom ofItem:[self tableView] withConstant:0.0] :
-                [[self optionsView] pinAttribute:NSLayoutAttributeBottom toSameAttributeOfItem:[self tableView] withConstant:isInsideTabBar ? -[[self optionsView] frame].size.height : 0]];
+                [[self optionsView] pinAttribute:NSLayoutAttributeBottom toSameAttributeOfItem:[self tableView] withConstant:isInsideTabBar ? -[[self optionsView] frame].size.height + 2 : 0]]; //+2 as there is a slight gap?
         [[[self tableView] superview] layoutIfNeeded];
         [[self tableView] setContentInset:UIEdgeInsetsMake([[self tableView] contentInset].top, 0, [[self tableView] isEditing] && [[[self tableView] indexPathsForSelectedRows] count] ? 50 : [self originalOffset].bottom, 0)];
     } completion:^(BOOL finished) {
@@ -410,9 +413,7 @@
     UIBarButtonItem *leftBarButtonItem = selected ? [[UIBarButtonItem alloc] initWithTitle:DCUILocalizedString(@"deselect_all_navigation_title")
                                                                                      style:UIBarButtonItemStyleDone
                                                                                     target:self
-                                                                                    action:@selector(selectAllRichMessages:)] : [[UIBarButtonItem alloc] initWithTitle:DCUILocalizedString(@"select_all_navigation_title")
-                                                                                                                                                                 style:UIBarButtonItemStyleDone
-                                                                                                                                                                target:self action:@selector(selectAllRichMessages:)];
+                                                                                    action:@selector(selectAllRichMessages:)] : [[UIBarButtonItem alloc] initWithTitle:DCUILocalizedString(@"select_all_navigation_title") style:UIBarButtonItemStyleDone target:self action:@selector(selectAllRichMessages:)];
     [[self navigationItem] setLeftBarButtonItem:leftBarButtonItem];
 
     if (selected && ![self optionsView]) {
@@ -447,12 +448,18 @@
 - (void)shareRichMessage:(DNRichMessage *)richMessage {
     if ([[richMessage urlToShare] length]) {
         [[self richInboxDataController] closeAllCells];
-        UIViewController *controller = [DCUIActionHelper presentShareActionSheet:self messageURL:[richMessage urlToShare] presentFromPopOver:[DNSystemHelpers isDeviceIPad] message:richMessage];
+        UIViewController *controller = [DCUIActionHelper presentShareActionSheet:self
+                                                                      messageURL:[richMessage urlToShare]
+                                                              presentFromPopOver:[DNSystemHelpers isDeviceIPad]
+                                                                         message:richMessage];
         if (controller) {
             //Get index path:
-            DRITableViewCell *cell = (DRITableViewCell *) [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[[self richInboxDataController] indexOfMessage:richMessage] inSection:0]];
+            DRITableViewCell *cell = (DRITableViewCell *) [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[[self richInboxDataController] indexOfMessage:richMessage]
+                                                                                                                     inSection:0]];
             [self setShareItemPopOverController:[[UIPopoverController alloc] initWithContentViewController:controller]];
-            [[self shareItemPopOverController] presentPopoverFromRect:[cell frame] inView:[self tableView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+            [[self shareItemPopOverController] presentPopoverFromRect:[cell frame] inView:[self tableView]
+                                             permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                             animated:YES];
         }
     }
 }
