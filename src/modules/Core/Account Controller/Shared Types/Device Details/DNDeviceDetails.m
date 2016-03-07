@@ -32,17 +32,18 @@ static NSString *const DNPushConfiguration = @"PushConfiguration";
 
 @interface DNDeviceDetails ()
 
-@property(nonatomic, strong) NSString *model;
-@property(nonatomic, strong) NSString *deviceID;
-@property(nonatomic, strong) NSString *osVersion;
-@property(nonatomic, strong) NSString *operatingSystem;
+@property (nonatomic, strong) NSString *model;
+@property (nonatomic, strong) NSString *deviceID;
+@property (nonatomic, strong) NSString *osVersion;
+@property (nonatomic, strong) NSString *operatingSystem;
 
-@property(nonatomic, readwrite) NSString *type;
-@property(nonatomic, readwrite) NSString *deviceName;
-@property(nonatomic, readwrite) NSString *deviceSecret;
-@property(nonatomic, readwrite) NSDictionary *additionalProperties;
-@property(nonatomic, readwrite) NSString *apnsToken;
-@property(nonatomic, readwrite) NSString *apnsAudio;
+@property (nonatomic, readwrite) NSString *type;
+@property (nonatomic, readwrite) NSString *deviceName;
+@property (nonatomic, readwrite) NSString *deviceSecret;
+@property (nonatomic, readwrite) NSDictionary *additionalProperties;
+@property (nonatomic, readwrite) NSString *apnsToken;
+@property (nonatomic, readwrite) NSString *apnsAudio;
+
 @end
 
 @implementation DNDeviceDetails

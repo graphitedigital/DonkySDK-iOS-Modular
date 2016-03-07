@@ -34,6 +34,27 @@ extern NSString * const kDNNetworkHostURL;
 extern NSString * const kDNNetworkRegistration;
 
 /*!
+ Start the authentication process.
+ 
+ @since 2.7.1.3
+ */
+extern NSString * const kDNNetworkAuthenticationStart;
+
+/*!
+ Register with authentication.
+ 
+ @since 2.7.1.3
+ */
+extern NSString * const kDNNetworkAuthenticationRegistration;
+
+/*!
+ Refresh access token in authentication mode.
+ 
+ @since 2.7.1.3
+ */
+extern NSString * const kDNNetworkAuthenticationAuthenticate;
+
+/*!
  Account Registration route.
  
  @since 2.0.0.0
@@ -143,14 +164,14 @@ extern NSString * const kDNNetworkConversationHistory;
 #pragma mark - Donky Notification Types
 
 /*!
- Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound requests for debug logs.
+ Donky Server notification, use this Notification Subscriber type if you wish to receive inbound requests for debug logs.
  
  @since 2.0.0.0
  */
 extern NSString * const kDNDonkyNotificationTransmitDebugLog;
 
 /*!
- Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound Simple Push Messages.
+ Donky Server notification, use this Notification Subscriber type if you wish to receive inbound Simple Push Messages.
  
  @since 2.0.0.0
  */
@@ -158,7 +179,7 @@ extern NSString * const kDNDonkyNotificationTransmitDebugLog;
 extern NSString * const kDNDonkyNotificationSimplePush;
 
 /*!
- Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound Rich Messages.
+ Donky Server notification, use this Notification Subscriber type if you wish to receive inbound Rich Messages.
 
  @since 2.0.0.0
  */
@@ -166,53 +187,25 @@ extern NSString * const kDNDonkyNotificationSimplePush;
 extern NSString * const kDNDonkyNotificationRichMessage;
 
 /*!
- Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound Rich Messages.
+ Donky server notification, use this Notification subscriber type if you wish to receive inboud Rich Message read notifications.
+ 
+ @since 2.7.1.3
+ */
+extern NSString * const kDNDonkyNotificationSyncMessageRead;
+
+/*!
+  Donky server notification, use this Notification subscriber type if you wish to receive inboud Rich Message deleted notifications.
+ 
+ @since 2.7.1.3
+ */
+extern NSString * const kDNDonkyNotificationSyncMessageDeleted;
+
+/*!
+ Donky Server notification, use this Notification Subscriber type if you wish to receive inbound Rich Messages.
 
  @since 2.0.1.0
  */
 extern NSString * const kDNDonkyNotificationNewDeviceMessage;
-
-/*!
- Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound Chat Messages.
- 
- @since 2.6.5.4
- */
-extern NSString * const kDNDonkyNotificationChatMessage;
-
-/*!
- Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound Chat Message Delivered notifications.
- 
- @since 2.6.5.4
- */
-extern NSString * const kDNDonkyNotificationChatMessageDelivered;
-
-/*!
- Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound Chat Message Sent notifications.
- 
- @since 2.6.5.4
- */
-extern NSString * const kDNDonkyNotificationChatMessageSent;
-
-/*!
- Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound Chat Messages read notifications.
- 
- @since 2.6.5.4
- */
-extern NSString * const kDNDonkyNotificationChatMessageRead;
-
-/*!
- Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound Chat Message rejected notifications.
- 
- @since 2.6.5.4
- */
-extern NSString * const kDNDonkyNotificationChatMessageRejected;
-
-/*!
- Donky Server notification, use this a Notification Subscriber type if you wish to receive inbound User is typing notifications.
- 
- @since 2.6.5.4
- */
-extern NSString * const kDNDonkyNotificationUserIsTyping;
 
 /*!
  Donky server notificaiton used when requesting the location of another user.
@@ -222,7 +215,7 @@ extern NSString * const kDNDonkyNotificationUserIsTyping;
 extern NSString * const kDNDonkyNotificationLocationRequest;
 
 /*!
- Donly server notification used when a location request has been responded to.
+ Donky server notification used when a location request has been responded to.
  
  @since 2.6.5.5.
  */
@@ -308,14 +301,6 @@ extern NSString * const kDNDonkyEventAppWillEnterForegroundNotification;
  @since 2.2.2.7
  */
 extern NSString * const kDNDonkyEventNotificationLoaded;
-
-/*!
- Subscribe to this event to receive notifications when a remote notification was received and the application was in the 
- background.
- 
- @since 2.2.2.7
- */
-extern NSString * const kDNDonkyEventBackgroundNotificationReceived;
 
 /*!
  Publish this event when you want to cahnge the badge count of your application AND set the

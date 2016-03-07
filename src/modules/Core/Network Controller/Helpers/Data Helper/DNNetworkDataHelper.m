@@ -312,6 +312,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
     [params dnSetObject:[[UIApplication sharedApplication] applicationState] != UIApplicationStateActive ? @"true" : @"false" forKey:@"isBackground"];
 
 
+    DNInfoLog(@"Notifications prepared, proceeding to send...");
     return params;
 }
 
@@ -322,6 +323,12 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 }
 
 + (void)saveClientNotificationsToStore:(NSArray *)array completion:(DNCompletionBlock)completionBlock {
+
+    if (![array count]) {
+        completionBlock(nil);
+        return;
+    }
+
     [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if (![obj isKindOfClass:[DNClientNotification class]]) {
             DNErrorLog(@"WHoops, something has gone wrong with this client notification. Expected class DNClientNotification, got: %@", NSStringFromClass([obj class]));
@@ -333,35 +340,13 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
     }];
 }
 
-+ (NSMutableArray *)sendContentNotifications:(NSArray *)notifications withContext:(NSManagedObjectContext *)context {
-
-    __block NSMutableArray *allNotifications = [[NSMutableArray alloc] init];
-    __block NSMutableArray *brokenNotifications = [[NSMutableArray alloc] init];
-
-    [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (![obj isKindOfClass:[DNContentNotification class]]) {
-            DNErrorLog(@"Whoops, something has gone wrong with this client notification. Expected class DNContentNotification, got: %@", NSStringFromClass([obj class]));
-        }
-        else {
-            DNContentNotification *originalNotification = obj;
-            NSInteger sendTries = [[originalNotification sendTries] integerValue];
-            sendTries++;
-            [originalNotification setSendTries:@(sendTries)];
-            NSMutableDictionary *formattedNotification = [[NSMutableDictionary alloc] init];
-            [formattedNotification dnSetObject:[originalNotification audience] forKey:DNAudience];
-            [formattedNotification dnSetObject:[originalNotification filters] forKey:DNFilters];
-            [formattedNotification dnSetObject:[originalNotification content] forKey:DNContent];
-            [allNotifications addObject:formattedNotification];
-        }
-    }];
-
-    [self deleteNotifications:brokenNotifications completion:^(id data) {
-    }];
-
-    return allNotifications;
-}
-
 + (void)saveContentNotificationsToStore:(NSArray *)notifications completion:(DNCompletionBlock)completionBlock {
+
+    if (![notifications count] && completionBlock) {
+        completionBlock(nil);
+        return;
+    }
+
     [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if (![obj isKindOfClass:[DNContentNotification class]]) {
             DNErrorLog(@"WHoops, something has gone wrong with this client notification. Expected class DNContentNotification, got: %@", NSStringFromClass([obj class]));

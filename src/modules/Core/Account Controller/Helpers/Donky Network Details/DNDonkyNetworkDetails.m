@@ -47,7 +47,7 @@ static NSString *const DNAPNSToken = @"APNSToken";
 }
 
 + (void)saveDeviceID:(NSString *) deviceID {
-    [DNUserDefaultsHelper saveObject:deviceID withKey:DNDeviceID];
+    [DNKeychainHelper saveObjectToKeychain:deviceID withKey:DNDeviceID];
 }
 
 + (void)saveDeviceToken:(NSString *)deviceToken {
@@ -140,7 +140,18 @@ static NSString *const DNAPNSToken = @"APNSToken";
 }
 
 + (NSString *)deviceID {
-    return [DNUserDefaultsHelper objectForKey:DNDeviceID] ? : [DNSystemHelpers generateGUID];
+    
+    //Check old store:
+    if ([DNUserDefaultsHelper objectForKey:DNDeviceID]) {
+        //Get old deviceID:
+        NSString *oldDeviceId = [DNUserDefaultsHelper objectForKey:DNDeviceID];
+        //Save to keychain:
+        [DNDonkyNetworkDetails saveDeviceID:oldDeviceId];
+        //Remove old data:
+        [DNUserDefaultsHelper deleteObjectForKey:DNDeviceID];
+    }
+    
+    return [DNKeychainHelper objectForKey:DNDeviceID] ? : [DNSystemHelpers generateGUID];
 }
 
 + (NSString *)accessToken {

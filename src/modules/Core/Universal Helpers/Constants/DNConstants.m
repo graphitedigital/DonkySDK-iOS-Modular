@@ -15,6 +15,12 @@ NSString * const kDNNetworkHostURL = @"https://client-api.mobiledonky.com/";
 
 NSString * const kDNNetworkRegistration = @"api/registration";
 
+NSString * const kDNNetworkAuthenticationStart = @"api/authentication/start";
+
+NSString * const kDNNetworkAuthenticationRegistration = @"api/authenticatedregistration";
+
+NSString * const kDNNetworkAuthenticationAuthenticate = @"api/authentication/reauthenticate";
+
 NSString * const kDNNetworkRegistrationDeviceUser = @"api/registration/user";
 
 NSString * const kDNNetworkRegistrationPush = @"api/registration/push";
@@ -55,28 +61,16 @@ NSString * const kDNDonkyNotificationTransmitDebugLog = @"TransmitDebugLog";
 NSString * const kDNDonkyNotificationSimplePush = @"SimplePushMessage";
 
 //
+NSString * const kDNDonkyNotificationSyncMessageRead = @"SyncMessageRead";
+
+//
+NSString * const kDNDonkyNotificationSyncMessageDeleted = @"SyncMessageDeleted";
+
+//
 NSString * const kDNDonkyNotificationRichMessage = @"RichMessage";
 
 //
 NSString * const kDNDonkyNotificationNewDeviceMessage = @"NewDeviceAddedToUser";
-
-//
-NSString * const kDNDonkyNotificationChatMessage = @"Message";
-
-//
-NSString * const kDNDonkyNotificationChatMessageDelivered = @"MessageDelivered";
-
-//
-NSString * const kDNDonkyNotificationChatMessageSent = @"MessageSent";
-
-//
-NSString * const kDNDonkyNotificationChatMessageRead = @"MessageRead";
-
-//
-NSString * const kDNDonkyNotificationChatMessageRejected = @"MessageRejected";
-
-//
-NSString * const kDNDonkyNotificationUserIsTyping = @"UserIsTyping";
 
 //
 NSString * const kDNDonkyNotificationLocationRequest = @"LocationRequest";
@@ -113,9 +107,6 @@ NSString * const kDNDonkyEventAppWillEnterForegroundNotification = @"DonkyAppEnt
 
 //
 NSString * const kDNDonkyEventNotificationLoaded = @"DonkyNotificationLoadedEvent";
-
-//
-NSString * const kDNDonkyEventBackgroundNotificationReceived = @"DonkyNotificationReceivedInBackground";
 
 //
 NSString * const kDNDonkySetBadgeCount = @"DonkySetBadgeCountEevnt";
@@ -199,7 +190,7 @@ NSString * const kDNKeychainAccessToken = @"DonkyDeviceUserToken";
 #pragma mark - Misc
 
 //
-NSString * const kDNMiscOperatingSystem = @"iOS"; //@"Web";
+NSString * const kDNMiscOperatingSystem = @"iOS";
 
 //
 NSString * const kDonkyErrorDomain = @"com.dynmark.donkyNetworkSDK";

@@ -25,5 +25,4 @@
     return [DNKeychainItemWrapper objectForKey:key];
 }
 
-
 @end

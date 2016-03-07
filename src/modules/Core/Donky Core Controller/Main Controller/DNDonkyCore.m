@@ -30,9 +30,10 @@
 
 @interface DNDonkyCore ()
 @property (nonatomic, strong) DNNotificationSubscriber *notificationSubscriber;
-@property (nonatomic, getter=isSettingBadgeCount) BOOL settingBadgeCount;
+@property (nonatomic, getter = isSettingBadgeCount) BOOL settingBadgeCount;
 @property (nonatomic, strong) NSMutableArray *pendingBadgeCountUpdates;
 @property (nonatomic, strong) DNRegisteredServices *registeredServices;
+@property (nonatomic, readwrite, getter = isUsingAuth) BOOL usingAuth;
 @property (nonatomic, strong) DNEventSubscriber *eventSubscriber;
 @property (nonatomic, strong) DNOutboundModules *outboundModules;
 @property (nonatomic, strong) NSMutableArray *registeredModules;
@@ -85,69 +86,77 @@
     return self;
 }
 
-- (void)applicationWillEnterForegroundNotification {
-    dispatch_async(donky_logic_processing_queue(), ^{
-        DNLocalEvent *openAppEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppWillEnterForegroundNotification publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:nil];
-        [self publishEvent:openAppEvent];
-
-        //Open signalR connection
-        if ([DNAccountController isRegistered]) {
-            [DNSignalRInterface openConnection];
-        }
-    });
-}
-
-- (void)applicationDidEnterForeground {
-    dispatch_async(donky_logic_processing_queue(), ^{
-        DNLocalEvent *openAppEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppOpen publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:nil];
-        [self publishEvent:openAppEvent];
-        if ([DNAccountController isRegistered]) {
-            [[DNNetworkController sharedInstance] synchroniseSuccess:^(NSURLSessionDataTask *task, id responseData) {
-                [DNNotificationController resetApplicationBadgeCount];
-            } failure:^(NSURLSessionDataTask *task, NSError *error) {
-
-            }];
-        }
-    });
-}
-
-- (void)applicationDidEnterBackground {
-    DNLocalEvent *appCloseEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppClose publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:nil];
-    [self publishEvent:appCloseEvent];
-    if ([DNAccountController isRegistered]) {
-        [DNSignalRInterface closeConnection];
-    }
-}
-
 #pragma mark -
 #pragma mark - Initialisation logic
 
-+ (void)initialiseWithAPIKey:(NSString *)apiKey userDetails:(DNUserDetails *)userDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:apiKey userDetails:userDetails success:successBlock failure:failureBlock];
-}
-
-+ (void)initialiseWithAPIKey:(NSString *)apiKey userDetails:(DNUserDetails *)userDetails deviceDetails:(DNDeviceDetails *)deviceDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:apiKey userDetails:userDetails deviceDetails:deviceDetails success:successBlock failure:failureBlock];
-}
-
-+ (void)initialiseWithAPIKey:(NSString *)apiKey succcess:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:apiKey succcess:successBlock failure:failureBlock];
-}
-
 - (void)initialiseWithAPIKey:(NSString *)apiKey {
-    [self initialiseWithAPIKey:apiKey userDetails:[[DNAccountController registrationDetails] userDetails] deviceDetails:[[DNAccountController registrationDetails] deviceDetails] success:nil failure:nil];
+    [self initialiseWithAPIKey:apiKey
+                   userDetails:[[DNAccountController registrationDetails] userDetails]
+                 deviceDetails:[[DNAccountController registrationDetails] deviceDetails]
+                       success:nil
+                       failure:nil];
 }
 
-+ (void)initialiseWithAPIKey:(NSString *)apiKey {
-    [[DNDonkyCore sharedInstance] initialiseWithAPIKey:apiKey];
+- (void)initialiseWithoutRegistrationAPIKey:(NSString *)apiKey {
+    [self initialiseWithoutRegistrationAPIKey:apiKey succcess:nil failure:nil];
+}
+
+- (void)initialiseWithoutRegistrationAPIKey:(NSString *)apiKey succcess:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
+    __weak __typeof(self) weakSelf = self;
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        if (!apiKey || [apiKey length] == 0) {
+            DNErrorLog(@"---- No API Key supplied - Bailing out of Donky Initialisation, please check input... ----");
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (failureBlock) {
+                    failureBlock(nil, [DNErrorController errorWithCode:DNCoreSDKErrorNoAPIKey]);
+                }
+            });
+            return;
+        }
+
+        //Save the api key:
+        [DNDonkyNetworkDetails saveAPIKey:apiKey];
+
+        if ([DNAccountController isRegistered]) {
+            [self startObservers];
+            
+            [DNAccountController updateClientModules:[weakSelf allRegisteredModules]];
+            [weakSelf addCoreSubscribers];
+
+            [DNNotificationController registerForPushNotifications];
+            [DNSignalRInterface openConnection];
+
+            DNLocalEvent *openAppEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppOpen
+                                                                       publisher:NSStringFromClass([self class])
+                                                                       timeStamp:[NSDate date]
+                                                                            data:nil];
+            [self publishEvent:openAppEvent];
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            DNInfoLog(@"Donky SDK is initialised.");
+            if (successBlock) {
+                successBlock(nil, nil);
+            }
+        });
+    });
 }
 
 - (void)initialiseWithAPIKey:(NSString *)apiKey succcess:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
-    [self initialiseWithAPIKey:apiKey userDetails:[[DNAccountController registrationDetails] userDetails] deviceDetails:[[DNAccountController registrationDetails] deviceDetails]  success:successBlock failure:failureBlock];
+    [self initialiseWithAPIKey:apiKey
+                   userDetails:[[DNAccountController registrationDetails] userDetails]
+                 deviceDetails:[[DNAccountController registrationDetails] deviceDetails]
+                       success:successBlock
+                       failure:failureBlock];
 }
 
 - (void)initialiseWithAPIKey:(NSString *)apiKey userDetails:(DNUserDetails *)userDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
-    [self initialiseWithAPIKey:apiKey userDetails:userDetails deviceDetails:[[DNAccountController registrationDetails] deviceDetails] success:successBlock failure:failureBlock];
+    [self initialiseWithAPIKey:apiKey
+                   userDetails:userDetails
+                 deviceDetails:[[DNAccountController registrationDetails] deviceDetails]
+                       success:successBlock
+                       failure:failureBlock];
 }
 
 - (void)initialiseWithAPIKey:(NSString *)apiKey userDetails:(DNUserDetails *)userDetails deviceDetails:(DNDeviceDetails *)deviceDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
@@ -171,10 +180,8 @@
         //Check if registered:ios moving app to background status
         [DNAccountController initialiseUserDetails:userDetails deviceDetails:deviceDetails success:^(NSURLSessionDataTask *task, id responseData) {
 
-            [[NSNotificationCenter defaultCenter] addObserver:weakSelf selector:@selector(applicationDidEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
-            [[NSNotificationCenter defaultCenter] addObserver:weakSelf selector:@selector(applicationDidEnterForeground) name:UIApplicationDidBecomeActiveNotification object:nil];
-            [[NSNotificationCenter defaultCenter] addObserver:weakSelf selector:@selector(applicationWillEnterForegroundNotification) name:UIApplicationWillEnterForegroundNotification object:nil];
-
+            [self startObservers];
+            
             [DNAccountController updateClientModules:[weakSelf allRegisteredModules]];
 
             [weakSelf addCoreSubscribers];
@@ -187,7 +194,7 @@
             [self publishEvent:openAppEvent];
 
             dispatch_async(dispatch_get_main_queue(), ^{
-                DNInfoLog(@"DonkySDK is initialised. All user data has been saved.");
+                DNInfoLog(@"Donky SDK is initialised. All user data has been saved.");
                 if (successBlock) {
                     successBlock(task, responseData);
                 }
@@ -199,6 +206,80 @@
                 }
             });
         }];
+    });
+}
+
+- (void)authenticatedInitialiseWithAPIKey:(NSString *)apiKey {
+    [self authenticatedInitialiseWithAPIKey:apiKey autoRegister:NO];
+}
+
+- (void)authenticatedInitialiseWithAPIKey:(NSString *)apiKey autoRegister:(BOOL)autoRegister {
+    [self authenticatedInitialiseWithAPIKey:apiKey autoRegister:autoRegister success:nil failure:nil];
+}
+
+- (void)authenticatedInitialiseWithAPIKey:(NSString *)apiKey autoRegister:(BOOL)autoRegister success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
+
+    __weak __typeof(self) weakSelf = self;
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        if (!apiKey || [apiKey length] == 0) {
+            DNErrorLog(@"---- No API Key supplied - Bailing out of Donky Initialisation, please check input... ----");
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (failureBlock) {
+                    failureBlock(nil, [DNErrorController errorWithCode:DNCoreSDKErrorNoAPIKey]);
+                }
+            });
+            return;
+        }
+        
+        [self setUsingAuth:YES];
+
+        //Save the api key:
+        [DNDonkyNetworkDetails saveAPIKey:apiKey];
+
+        if ([DNAccountController isRegistered]) {
+            [self startObservers];
+
+            [DNAccountController updateClientModules:[weakSelf allRegisteredModules]];
+            [weakSelf addCoreSubscribers];
+
+            [DNNotificationController registerForPushNotifications];
+            [DNSignalRInterface openConnection];
+
+            DNLocalEvent *openAppEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppOpen
+                                                                       publisher:NSStringFromClass([self class])
+                                                                       timeStamp:[NSDate date]
+                                                                            data:nil];
+            [self publishEvent:openAppEvent];
+        }
+        else if (autoRegister) {
+            
+             DNAuthenticationCompletion block = ^(NSString *token, DNAuthResponse *authResponse) {
+                 [DNAccountController authenticatedRegistrationForUser:nil device:nil authenticationDetail:authResponse token:token success:^(NSURLSessionDataTask *task, id responseData) {
+                     if (successBlock) {
+                         successBlock(task, responseData);
+                     }
+                 } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                     if (failureBlock) {
+                         failureBlock(task, error   );
+                     }
+                 }];
+             };
+
+            DNAuthenticationObject *authenticationObject = [[DNAuthenticationObject alloc] initWithUserID:[[[DNAccountController registrationDetails] userDetails] userID] nonce:nil];
+            [DNAccountController startAuthenticationWithCompletion:^(DNAuthResponse *authDetails, DNAuthenticationObject *expectedDetails, NSError *error) {
+                if ([self authenticationHandler]) {
+                    [self authenticationHandler](block, authDetails, authenticationObject);
+                }
+            }];
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            DNInfoLog(@"Donky SDK is initialised. All user data has been saved.");
+            if (successBlock) {
+                successBlock(nil, nil);
+            }
+        });
     });
 }
 
@@ -295,16 +376,19 @@
     
     __weak DNDonkyCore *weakSelf = self;
     
-    DNModuleDefinition *moduleDefinition = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:kDNDonkyCoreVersion];
+    DNModuleDefinition *moduleDefinition = [[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class])
+                                                                            version:kDNDonkyCoreVersion];
 
-    DNSubscription *transmitDebugLog = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationTransmitDebugLog batchHandler:^(NSArray *batch) {
+    DNSubscription *transmitDebugLog = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationTransmitDebugLog
+                                                                           batchHandler:^(NSArray *batch) {
         [batch enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             DNServerNotification *serverNotification = obj;
             [DNLoggingController submitLogToDonkyNetwork:[serverNotification serverNotificationID] success:nil failure:nil];
         }];
     }];
 
-    DNSubscription *newDeviceMessage = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationNewDeviceMessage batchHandler:^(NSArray *batch) {
+    DNSubscription *newDeviceMessage = [[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationNewDeviceMessage
+                                                                           batchHandler:^(NSArray *batch) {
         [batch enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             DNServerNotification *serverNotification = obj;
             if ([weakSelf shouldDisplayNewDeviceAlert]) {
@@ -319,12 +403,10 @@
         }];
     }];
 
-    DNSubscription *userUpdatedSubscription = [[DNSubscription alloc] initWithNotificationType:@"UserUpdated" batchHandler:^(NSArray *batch) {
+    DNSubscription *userUpdatedSubscription = [[DNSubscription alloc] initWithNotificationType:@"UserUpdated"
+                                                                                  batchHandler:^(NSArray *batch) {
         [batch enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-
             DNServerNotification *userUpdated = obj;
-
-            NSLog(@"%@", userUpdated);
             DNUserDetails *newUserDetails = [[DNUserDetails alloc] initWithUserID:[userUpdated data][@"newExternalUserId"] ? : [userUpdated data][@"externalUserId"]
                                                                       displayName:[userUpdated data][@"displayName"]
                                                                      emailAddress:[userUpdated data][@"emailAddress"]
@@ -389,6 +471,32 @@
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         [self setSettingBadgeCount:NO];
+    }];
+}
+
+- (void)startObservers {
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        dispatch_async(donky_logic_processing_queue(), ^{
+            DNLocalEvent *appCloseEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppClose publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:nil];
+            [self publishEvent:appCloseEvent];
+            if ([DNAccountController isRegistered]) {
+                [DNSignalRInterface closeConnection];
+            }
+        });
+    }];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        dispatch_async(donky_logic_processing_queue(), ^{
+            DNLocalEvent *openAppEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppWillEnterForegroundNotification
+                                                                       publisher:NSStringFromClass([self class])
+                                                                       timeStamp:[NSDate date]
+                                                                            data:nil];
+            [self publishEvent:openAppEvent];
+            //Open SignalR connection
+            if ([DNAccountController isRegistered]) {
+                [DNSignalRInterface openConnection];
+            }
+        });
     }];
 }
 

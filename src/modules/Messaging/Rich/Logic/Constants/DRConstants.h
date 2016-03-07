@@ -18,6 +18,20 @@
 extern NSString * const kDRichMessageReadEvent;
 
 /*!
+ Once a rich message has been deleted on another device
+ 
+ @since 2.7.1.3
+ */
+extern NSString * const kDRichMessageDeletedEvent;
+
+/*!
+ Once a rich messages has been marked as read on another device:
+ 
+ @since 2.7.1.3
+ */
+extern NSString * const kDRichMessageReadOnAnotherDeviceEvent;
+
+/*!
  Event published when a rich message notification is tapped.
  
  @since 2.2.2.7

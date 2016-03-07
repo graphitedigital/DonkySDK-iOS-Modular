@@ -87,7 +87,6 @@ static NSString *const DNCustomType = @"customType";
 
         [self setRetryHelper:[[DNRetryHelper alloc] init]];
         [self initialisePendingNotifications];
-
     }
     
     return self;
@@ -121,6 +120,13 @@ static NSString *const DNCustomType = @"customType";
 - (void)performSecureDonkyNetworkCall:(BOOL)secure route:(NSString *)route httpMethod:(DonkyNetworkRoute)httpMethod parameters:(id)parameters success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
     
     @try {
+
+        if ([[DNDonkyCore sharedInstance] isUsingAuth] && ![DNAccountController isRegistered] && secure) {
+            if (failureBlock) {
+                failureBlock(nil, [DNErrorController errorCode:DNCoreSDKErrorNotRegistered userInfo:@{@"Reason" : @"Not Registered"}]);
+            }
+            return;
+        }
         
         __weak __typeof(self) weakSelf = self;
 
@@ -204,19 +210,24 @@ static NSString *const DNCustomType = @"customType";
     }
 }
 
-- (void)streamAssetUpload:(NSArray *)assetsToUpload success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
+- (NSProgress *)streamAssetUpload:(NSArray *)assetsToUpload success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
 
+    if (![DNAccountController isRegistered]) {
+        DNErrorLog(@"cannot upload asset, please check user is registered");
+        return nil;
+    }
+    
     NSDictionary *asset = [assetsToUpload firstObject];
     NSError *error2;
     NSData * jsonData = [NSJSONSerialization dataWithJSONObject:@{@"MimeType" : asset[@"mimeType"], @"Type" : asset[@"type"]} options:0 error:&error2];
-    NSString * myString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSString *myString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST"
                                                                                  URLString:[[DNDonkyNetworkDetails secureServiceRootUrl] stringByAppendingString:kDNNetworkUploadAsset]
                                                                                 parameters:@{@"Test" : @"Nil"} error:nil];
 
     [request setValue:myString forHTTPHeaderField:@"AssetMetaData"];
-
+    
     NSInputStream *stream = [NSInputStream inputStreamWithData:asset[@"data"]];
     [request setHTTPBodyStream:stream];
 
@@ -241,8 +252,30 @@ static NSString *const DNCustomType = @"customType";
             }
         }
     }];
-
+    
+    [progress addObserver:self
+               forKeyPath:@"fractionCompleted"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+ 
     [uploadTask resume];
+    
+    return progress;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"fractionCompleted"] && [object isKindOfClass:[NSProgress class]]) {
+        NSProgress *progress = (NSProgress*)object;
+        if ([progress fractionCompleted] == 1) {
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        }
+        else {
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        }
+    }
+    else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 - (void)handleSuccess:(id)responseData forTask:(NSURLSessionDataTask *)task request:(DNRequest *)request {
@@ -255,14 +288,14 @@ static NSString *const DNCustomType = @"customType";
         DNSensitiveLog(@"Request %@ successful, response data = %@", [task taskDescription], responseData ?: @"");
     }
     else {
-        DNInfoLog(@"Request %@ successful, response data = %@", [task taskDescription], responseData ?: @"");
+        DNSensitiveLog(@"Request %@ successful, response data = %@", [task taskDescription], responseData ?: @"");
     }
     
     if ([request successBlock]) {
         [request successBlock](task, responseData);
     }
     else {
-        DNInfoLog(@"No Completion block: %@", [request route]);
+        DNSensitiveLog(@"No Completion block: %@", [request route]);
     }
     
     [self removeTask:task];
@@ -291,7 +324,7 @@ static NSString *const DNCustomType = @"customType";
 
     if (![DNErrorController serviceReturned:400 error:error] && ![DNErrorController serviceReturned:401 error:error] && ![DNErrorController serviceReturned:403 error:error] && ![DNErrorController serviceReturned:404 error:error])
         [[self retryHelper] retryRequest:request task:task];
-    else if ([DNErrorController serviceReturned:401 error:error] && ![[request route] isEqualToString:kDNNetworkAuthentication]) {
+    else if ([DNErrorController serviceReturned:401 error:error] && (![[request route] isEqualToString:kDNNetworkAuthentication] && ![[request route] isEqualToString:kDNNetworkAuthenticationAuthenticate])) {
         //Clear token:
         [DNDonkyNetworkDetails saveTokenExpiry:nil];
         [DNAccountController refreshAccessTokenSuccess:^(NSURLSessionDataTask *task2, id responseData2) {
@@ -359,7 +392,6 @@ static NSString *const DNCustomType = @"customType";
 - (void)synchroniseSuccess:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
     @try {
         dispatch_async(donky_network_processing_queue(), ^{
-
             @synchronized (self) {
                 if (![self synchroniseTimer]) {
                     [self startMinimumTimeForSynchroniseBuffer:0];
@@ -477,6 +509,7 @@ static NSString *const DNCustomType = @"customType";
 
                     } failureBlock:^(NSURLSessionDataTask *task, NSError *error) {
                         //Save data:
+                        DNInfoLog(@"Notification exchange failed %@", [error localizedDescription]);
                         [[self pendingClientNotifications] addObjectsFromArray:sentClientNotifications];
                         [[self pendingContentNotifications] addObjectsFromArray:sentContentNotifications];
 
@@ -502,6 +535,7 @@ static NSString *const DNCustomType = @"customType";
     }
     @catch (NSException *exception) {
         [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
+        DNInfoLog(@"Notification exchange complete");
         dispatch_async(dispatch_get_main_queue(), ^{
             if (failureBlock) {
                 failureBlock(nil, nil);

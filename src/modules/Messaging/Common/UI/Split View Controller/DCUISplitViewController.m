@@ -42,12 +42,18 @@
     return self;
 }
 
-//- (void)setDetailViewController:(UINavigationController *)detailViewController {
-//    if (_detailViewController != detailViewController) {
-//        _detailViewController = detailViewController;
-//        [self setViewControllers:@[[self masterViewController], _detailViewController]];
-//    }
-//}
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    
+    self = [super initWithCoder:aDecoder];
+    
+    if (self) {
+        
+        [self setPreferredDisplayMode:UISplitViewControllerDisplayModeAllVisible];
+
+    }
+    
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

@@ -2,7 +2,7 @@
   <img src="https://avatars2.githubusercontent.com/u/11334935?v=3&s=200" alt="Donky Networks LTD" title="Donky Network SDK">
 </p>
 
-# Donky Modular SDK (V2.7.0.3)
+# Donky Modular SDK (V2.7.1.3)
 
 The Donky iOS SDK is a kit for adding push notifications and rich content services to your application. For detailed documentation, tutorials and guides, visit our online [documentation](http://docs.mobiledonky.com).
 
@@ -54,11 +54,10 @@ We accept pull requests!
 
 # Donky-Core-SDK
 
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-Core-SDK.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-Core-SDK)
 [![Version](https://img.shields.io/cocoapods/v/Donky-Core-SDK.svg?style=flat)](http://cocoapods.org/pods/Donky-Core-SDK)
 [![License](https://img.shields.io/cocoapods/l/Donky-Core-SDK.svg?style=flat)](http://cocoapods.org/pods/Donky-Core-SDK)
 [![Platform](https://img.shields.io/cocoapods/p/Donky-Core-SDK.svg?style=flat)](http://cocoapods.org/pods/Donky-Core-SDK)
-
+[![Docs](https://img.shields.io/cocoapods/metrics/doc-percent/Donky-Core-SDK.svg)](http://cocoapods.org/pods/Donky-Core-SDK)
 ## Usage
 
 Only add this to your 'PodFile' if this is the only part of the SDK you are going to use. Adding this to your ‘Podfile’ is not necessary if using any of the additional optional modules. 
@@ -167,10 +166,10 @@ pod "Donky-Core-SDK"
 
 # Donky-Push
 
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-Push.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-Push)
 [![Version](https://img.shields.io/cocoapods/v/Donky-Push.svg?style=flat)](http://cocoapods.org/pods/Donky-Push)
 [![License](https://img.shields.io/cocoapods/l/Donky-Push.svg?style=flat)](http://cocoapods.org/pods/Donky-Push)
 [![Platform](https://img.shields.io/cocoapods/p/Donky-Push.svg?style=flat)](http://cocoapods.org/pods/Donky-Push)
+[![Docs](https://img.shields.io/cocoapods/metrics/doc-percent/Donky-Push.svg)](http://cocoapods.org/pods/Donky-Push)
 
 ## Usage
 
@@ -259,11 +258,10 @@ Including this in your podfile will automatically pull in the following other mo
 
 # Donky-RichMessage-Logic
 
-
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-RichMessage-Logic.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-RichMessage-Logic)
 [![Version](https://img.shields.io/cocoapods/v/Donky-RichMessage-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Logic)
 [![License](https://img.shields.io/cocoapods/l/Donky-RichMessage-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Logic)
 [![Platform](https://img.shields.io/cocoapods/p/Donky-RichMessage-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Logic)
+[![Docs](https://img.shields.io/cocoapods/metrics/doc-percent/Donky-RichMessage-Logic.svg)](http://cocoapods.org/pods/Donky-RichMessage-Logic)
 
 ## Usage
 
@@ -350,11 +348,10 @@ Including this in your podfile will automatically pull in the following other mo
 
 # Donky-RichMessage-Inbox
 
-
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-RichMessage-Inbox.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-RichMessage-Inbox)
-[![Version](https://img.shields.io/cocoapods/v/Donky-RichMessage-Inbox.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-Inbox)
-[![License](https://img.shields.io/cocoapods/l/Donky-RichMessage-Inbox.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-Inbox)
-[![Platform](https://img.shields.io/cocoapods/p/Donky-RichMessage-Inbox.svg?style=flat)](https://cocoapods.org/pods/Donky-RichMessage-Inbox)
+[![Version](https://img.shields.io/cocoapods/v/Donky-RichMessage-Inbox.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Inbox)
+[![License](https://img.shields.io/cocoapods/l/Donky-RichMessage-Inbox.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Inbox)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-RichMessage-Inbox.svg?style=flat)](http://cocoapods.org/pods/Donky-RichMessage-Inbox)
+[![Docs](https://img.shields.io/cocoapods/metrics/doc-percent/Donky-RichMessage-Inbox.svg)](http://cocoapods.org/pods/Donky-RichMessage-Inbox)
 
 ## Usage
 
@@ -400,11 +397,10 @@ Including this in your podfile will automatically pull in the following other mo
 
 # Donky-Automation-Logic
 
-
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-Automation-Logic.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-Automation-Logic)
-[![Version](https://img.shields.io/cocoapods/v/Donky-Automation-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-Automation-Logic)
-[![License](https://img.shields.io/cocoapods/l/Donky-Automation-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-Automation-Logic)
-[![Platform](https://img.shields.io/cocoapods/p/Donky-Automation-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-Automation-Logic)
+[![Version](https://img.shields.io/cocoapods/v/Donky-Automation-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-Automation-Logic)
+[![License](https://img.shields.io/cocoapods/l/Donky-Automation-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-Automation-Logic)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-Automation-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-Automation-Logic)
+[![Docs](https://img.shields.io/cocoapods/metrics/doc-percent/Donky-Automation-Logic.svg)](http://cocoapods.org/pods/Donky-Automation-Logic)
 
 ## Usage
 
@@ -473,11 +469,10 @@ Including this in your podfile will automatically pull in the following other mo
 
 # Donky-CommonMessaging-Audio
 
-
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-CommonMessaging-Audio.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-CommonMessaging-Audio)
-[![Version](https://img.shields.io/cocoapods/v/Donky-CommonMessaging-Audio.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-Audio)
-[![License](https://img.shields.io/cocoapods/l/Donky-CommonMessaging-Audio.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-Audio)
-[![Platform](https://img.shields.io/cocoapods/p/Donky-CommonMessaging-Audio.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-Audio)
+[![Version](https://img.shields.io/cocoapods/v/Donky-CommonMessaging-Audio.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-Audio)
+[![License](https://img.shields.io/cocoapods/l/Donky-CommonMessaging-Audio.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-Audio)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-CommonMessaging-Audio.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-Audio)
+[![Docs](https://img.shields.io/cocoapods/metrics/doc-percent/Donky-CommonMessaging-Audio.svg)](http://cocoapods.org/pods/Donky-CommonMessaging-Audio)
 
 ## Usage
 
@@ -535,11 +530,10 @@ None
 
 # Donky-Core-Sequencing
 
-
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-Core-Sequencing.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-Core-Sequencing)
-[![Version](https://img.shields.io/cocoapods/v/Donky-Core-Sequencing.svg?style=flat)](https://cocoapods.org/pods/Donky-Core-Sequencing)
-[![License](https://img.shields.io/cocoapods/l/Donky-Core-Sequencing.svg?style=flat)](https://cocoapods.org/pods/Donky-Core-Sequencing)
-[![Platform](https://img.shields.io/cocoapods/p/Donky-Core-Sequencing.svg?style=flat)](https://cocoapods.org/pods/Donky-Core-Sequencing)
+[![Version](https://img.shields.io/cocoapods/v/Donky-Core-Sequencing.svg?style=flat)](http://cocoapods.org/pods/Donky-Core-Sequencing)
+[![License](https://img.shields.io/cocoapods/l/Donky-Core-Sequencing.svg?style=flat)](http://cocoapods.org/pods/Donky-Core-Sequencing)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-Core-Sequencing.svg?style=flat)](http://cocoapods.org/pods/Donky-Core-Sequencing)
+[![Docs](https://img.shields.io/cocoapods/metrics/doc-percent/Donky-Core-Sequencing.svg)](http://cocoapods.org/pods/Donky-Core-Sequencing)
 
 ## Usage
 
@@ -598,10 +592,10 @@ Including this in your podfile will automatically pull in the following other mo
 
 # Donky-CommonMessaging-Logic
 
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-CommonMessaging-Logic.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-CommonMessaging-Logic)
-[![Version](https://img.shields.io/cocoapods/v/Donky-CommonMessaging-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-Logic)
-[![License](https://img.shields.io/cocoapods/l/Donky-CommonMessaging-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-Logic)
-[![Platform](https://img.shields.io/cocoapods/p/Donky-CommonMessaging-Logic.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-Logic)
+[![Version](https://img.shields.io/cocoapods/v/Donky-CommonMessaging-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-Logic)
+[![License](https://img.shields.io/cocoapods/l/Donky-CommonMessaging-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-Logic)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-CommonMessaging-Logic.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-Logic)
+[![Docs](https://img.shields.io/cocoapods/metrics/doc-percent/Donky-CommonMessaging-Logic.svg)](http://cocoapods.org/pods/Donky-CommonMessaging-Logic)
 
 ## Usage
 
@@ -610,11 +604,10 @@ PodFile.
 
 # Donky-CommonMessaging-UI
 
-
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-CommonMessaging-UI.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-CommonMessaging-UI)
-[![Version](https://img.shields.io/cocoapods/v/Donky-CommonMessaging-UI.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-UI)
-[![License](https://img.shields.io/cocoapods/l/Donky-CommonMessaging-UI.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-UI)
-[![Platform](https://img.shields.io/cocoapods/p/Donky-CommonMessaging-UI.svg?style=flat)](https://cocoapods.org/pods/Donky-CommonMessaging-UI)
+[![Version](https://img.shields.io/cocoapods/v/Donky-CommonMessaging-UI.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-UI)
+[![License](https://img.shields.io/cocoapods/l/Donky-CommonMessaging-UI.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-UI)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-CommonMessaging-UI.svg?style=flat)](http://cocoapods.org/pods/Donky-CommonMessaging-UI)
+[![Docs](https://img.shields.io/cocoapods/metrics/doc-percent/Donky-CommonMessaging-UI.svg)](http://cocoapods.org/pods/Donky-CommonMessaging-UI)
 
 ## Usage
 
@@ -623,10 +616,10 @@ PodFile.
 
 # Donky-CoreLocation
 
-[![CI Status](http://img.shields.io/travis/Dynmark LtD/Donky-CoreLocation.svg?style=flat)](https://travis-ci.org/Donky Networks Ltd/Donky-CoreLocation)
-[![Version](https://img.shields.io/cocoapods/v/Donky-CoreLocation.svg?style=flat)](https://cocoapods.org/pods/Donky-CoreLocation)
-[![License](https://img.shields.io/cocoapods/l/Donky-CoreLocation.svg?style=flat)](https://cocoapods.org/pods/Donky-CoreLocation)
-[![Platform](https://img.shields.io/cocoapods/p/Donky-CoreLocation.svg?style=flat)](https://cocoapods.org/pods/Donky-CoreLocation)
+[![Version](https://img.shields.io/cocoapods/v/Donky-CoreLocation.svg?style=flat)](http://cocoapods.org/pods/Donky-CoreLocation)
+[![License](https://img.shields.io/cocoapods/l/Donky-CoreLocation.svg?style=flat)](http://cocoapods.org/pods/Donky-CoreLocation)
+[![Platform](https://img.shields.io/cocoapods/p/Donky-CoreLocation.svg?style=flat)](http://cocoapods.org/pods/Donky-CoreLocation)
+[![Docs](https://img.shields.io/cocoapods/metrics/doc-percent/Donky-CoreLocation.svg)](http://cocoapods.org/pods/Donky-CoreLocation)
 
 ## Usage
 

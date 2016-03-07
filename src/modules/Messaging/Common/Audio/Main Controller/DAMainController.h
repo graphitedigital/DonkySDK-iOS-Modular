@@ -13,8 +13,7 @@ typedef NS_OPTIONS(NSUInteger, DonkyAudioMessageTypes)
     DASimplePushMessage = 1 << 0,
     DARichMessage = 1 << 1,
     DACustomContent = 1 << 2,
-    DAChatMessage = 1 << 3,
-    DAMisc = 1 << 4,
+    DAMisc = 1 << 3,
 };
 
 @interface DAMainController : NSObject
@@ -28,7 +27,7 @@ typedef NS_OPTIONS(NSUInteger, DonkyAudioMessageTypes)
 @property (nonatomic, getter=shouldVibrate) BOOL vibrate;
 
 /*!
- The shared instance that is used ot manage the audio controller.
+ The shared instance that is used to manage the audio controller.
  
  @return the shared instance
  

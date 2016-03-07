@@ -55,7 +55,18 @@ static NSString *const DRMessageTimeStampDescriptor = @"sentTimestamp";
 
 + (void)deleteRichMessage:(DNRichMessage *)richMessage {
     if (richMessage) {
-        [[[DNDataController sharedInstance] mainContext] deleteObject:richMessage];
+        NSManagedObjectContext *context = nil;
+        if ([NSThread currentThread] == [NSThread mainThread]) {
+            context = [[DNDataController sharedInstance] mainContext];
+        }
+        else {
+            context = [DNDataController temporaryContext];
+        }
+
+        [DCMMainController reportMessagesDeleted:@[richMessage]];
+
+        [context deleteObject:richMessage];
+
         [[DNDataController sharedInstance] saveAllData];
     }
 }
@@ -145,6 +156,13 @@ static NSString *const DRMessageTimeStampDescriptor = @"sentTimestamp";
 }
 
 + (void)deleteAllRichMessages:(NSArray *)richMessages {
+    NSManagedObjectContext *context = nil;
+    if ([NSThread currentThread] == [NSThread mainThread]) {
+        context = [[DNDataController sharedInstance] mainContext];
+    }
+    else {
+        context = [DNDataController temporaryContext];
+    }
     __block NSInteger unreadCount = 0;
     [richMessages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         DNRichMessage *message = obj;
@@ -152,15 +170,18 @@ static NSString *const DRMessageTimeStampDescriptor = @"sentTimestamp";
         if (![[message read] boolValue]) {
           unreadCount += 1;
         }
-        [[[DNDataController sharedInstance] mainContext] deleteObject:message];
+        [context deleteObject:message];
     }];
+
+
+    [DCMMainController reportMessagesDeleted:richMessages];
 
     if (unreadCount > 0) {
         DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageBadgeCount publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(unreadCount)];
         [[DNDonkyCore sharedInstance] publishEvent:localEvent];
     }
 
-    [[DNDataController sharedInstance] saveAllData];
+    [[DNDataController sharedInstance] saveContext:context];
 }
 
 + (BOOL)richMessageExistsForID:(NSString *)messageID {

@@ -93,9 +93,6 @@ static NSString *const DAPlayFile = @"DAudioPlayAudioFile";
             audioFile = [self audioFiles][kDNDonkyNotificationCustomDataKey];
             break;
         case 3:
-            audioFile = [self audioFiles][kDNDonkyNotificationChatMessage];
-            break;
-        case 4:
             audioFile = [self audioFiles][DAMiscellaneous];
             break;
     default:break;
@@ -150,9 +147,6 @@ static NSString *const DAPlayFile = @"DAudioPlayAudioFile";
     }
     if (messageType & DACustomContent) {
         [self audioFiles][kDNDonkyNotificationCustomDataKey] = audioFile;
-    }
-    if (messageType & DAChatMessage) {
-        [self audioFiles][kDNDonkyNotificationChatMessage] = audioFile;
     }
     if (messageType & DAMisc) {
         [self audioFiles][DAMiscellaneous] = audioFile;

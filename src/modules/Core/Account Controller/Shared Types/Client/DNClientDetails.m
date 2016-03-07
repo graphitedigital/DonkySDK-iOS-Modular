@@ -22,10 +22,10 @@ static NSString *const DNDeviceAppVersion = @"appVersion";
 static NSString *const DNDeviceSdkVersion = @"sdkVersion";
 
 @interface DNClientDetails ()
-@property(nonatomic, readwrite) NSString *sdkVersion;
-@property(nonatomic, readwrite) NSString *appVersion;
-@property(nonatomic, readwrite) NSString *currentLocalTime;
-@property(nonatomic, readwrite) NSMutableDictionary *moduleVersions;
+@property (nonatomic, readwrite) NSString *sdkVersion;
+@property (nonatomic, readwrite) NSString *appVersion;
+@property (nonatomic, readwrite) NSString *currentLocalTime;
+@property (nonatomic, readwrite) NSMutableDictionary *moduleVersions;
 @end
 
 @implementation DNClientDetails

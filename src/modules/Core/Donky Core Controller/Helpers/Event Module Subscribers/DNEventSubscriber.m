@@ -58,6 +58,7 @@
     if (![[[self eventListeners] allKeys] containsObject:eventType]) {
         ([self eventListeners])[eventType] = [[NSMutableArray alloc] init];
     }
+
     if ([[self eventListeners][eventType] containsObject:handler]) {
         [[self eventListeners][eventType] removeObject:handler];
     }

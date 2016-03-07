@@ -22,8 +22,6 @@
 
 + (void)saveClientNotificationsToStore:(NSArray *)array completion:(DNCompletionBlock)completionBlock;
 
-+ (NSMutableArray *)sendContentNotifications:(NSArray *)notifications withContext:(NSManagedObjectContext *)context;
-
 + (void)saveContentNotificationsToStore:(NSArray *)notifications completion:(DNCompletionBlock)completionBlock;
 
 + (void)deleteNotifications:(NSArray *)notifications completion:(DNCompletionBlock)completionBlock;

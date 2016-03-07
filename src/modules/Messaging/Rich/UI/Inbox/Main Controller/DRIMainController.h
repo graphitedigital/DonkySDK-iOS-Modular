@@ -70,7 +70,7 @@
 - (void)start;
 
 /*!
- Method ot stop the Rich Inbox main controller. This un-registers the
+ Method to stop the Rich Inbox main controller. This un-registers the
  local events and notification subscriptions.
  
  @since 2.2.2.7

@@ -97,7 +97,7 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
         if ([[self delegate] respondsToSelector:@selector(endRefreshingWithSuccess:)]) {
             [[self delegate] endRefreshingWithSuccess:YES];
         }
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    }                                                failure:^(NSURLSessionDataTask *task, NSError *error) {
         if ([[self delegate] respondsToSelector:@selector(endRefreshingWithSuccess:)]) {
             [[self delegate] endRefreshingWithSuccess:NO];
         }
@@ -153,7 +153,7 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
         //We deselect rows:
     [[[[self richLogicFetchedResultsController] fetchedResultsController] fetchedObjects] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];
-        DRITableViewCell *cell = (DRITableViewCell *) [[self tableView] cellForRowAtIndexPath:indexPath];
+        DRITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:indexPath];
         if (!allSelected) {
             [[self tableView] selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
             [cell setSelected:YES];
@@ -172,7 +172,7 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
     [self closeAllCells];
 
     [[[self tableView] indexPathsForSelectedRows] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        DRITableViewCell *cell = (DRITableViewCell *) [[self tableView] cellForRowAtIndexPath:obj];
+        DRITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:obj];
         [cell setSelected:NO];
         [[self tableView] deselectRowAtIndexPath:obj animated:NO];
     }];
@@ -185,7 +185,7 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
 
     if ([DNSystemHelpers isDeviceIPad] || [DNSystemHelpers isDeviceSixPlusLandscape]) {
         if (!enterEditMode) {
-            DRITableViewCell *cell = (DRITableViewCell *) [[self tableView] cellForRowAtIndexPath:[self originalIndexPath]];
+            DRITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[self originalIndexPath]];
             if (cell) {
                 [cell setSelected:YES];
                 [self toggleSelectedCell:cell];
@@ -214,7 +214,7 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
 
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
 
-        DRITableViewCell *cell = (DRITableViewCell *) [[self tableView] cellForRowAtIndexPath:indexPath];
+        DRITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:indexPath];
 
         [self toggleSelectedCell:cell];
     }
@@ -307,7 +307,7 @@ static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    DRITableViewCell *cell = (DRITableViewCell *) [tableView cellForRowAtIndexPath:indexPath];
+    DRITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if ([tableView isEditing]) {
         //We get the rich message:
         if ([[self delegate] respondsToSelector:@selector(messagesSelected:)]) {

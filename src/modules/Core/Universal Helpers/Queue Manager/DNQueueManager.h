@@ -6,15 +6,12 @@
 //  Copyright © 2015 Donky Networks. All rights reserved.
 //
 
-#ifndef DNQueueManager_h
-#define DNQueueManager_h
-
 #import <Foundation/Foundation.h>
 #import <dispatch/queue.h>
 #import <dispatch/once.h>
 #import <dispatch/object.h>
 
-static dispatch_queue_t donky_network_processing_queue() {
+__attribute__((unused)) static const dispatch_queue_t donky_network_processing_queue() {
     static dispatch_once_t queueCreationGuard;
     static dispatch_queue_t queue;
     dispatch_once(&queueCreationGuard, ^{
@@ -23,7 +20,7 @@ static dispatch_queue_t donky_network_processing_queue() {
     return queue;
 }
 
-static dispatch_queue_t donky_network_signal_r_queue() {
+__attribute__((unused)) static const dispatch_queue_t donky_network_signal_r_queue() {
     static dispatch_once_t queueCreationGuard;
     static dispatch_queue_t queue;
     dispatch_once(&queueCreationGuard, ^{
@@ -32,7 +29,7 @@ static dispatch_queue_t donky_network_signal_r_queue() {
     return queue;
 }
 
-static dispatch_queue_t donky_logic_processing_queue() {
+__attribute__((unused)) static const dispatch_queue_t donky_logic_processing_queue() {
     static dispatch_once_t queueCreationGuard;
     static dispatch_queue_t queue;
     dispatch_once(&queueCreationGuard, ^{
@@ -40,5 +37,3 @@ static dispatch_queue_t donky_logic_processing_queue() {
     });
     return queue;
 }
-
-#endif

@@ -58,4 +58,6 @@
  */
 + (void)reportSharingOfRichMessage:(DNMessage *)message sharedUsing:(NSString *)sharedUsing;
 
++ (void)reportMessagesDeleted:(NSArray *)messages;
+
 @end

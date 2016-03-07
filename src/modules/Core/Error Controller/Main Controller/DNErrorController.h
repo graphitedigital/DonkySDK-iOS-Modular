@@ -40,4 +40,6 @@ typedef enum {
 
 + (BOOL)serviceReturnedFailureKey:(NSString *)failureValue error:(NSError *)error;
 
++ (NSString *)errorStringFromErrorUserInfo:(NSError *)error;
+
 @end

@@ -129,7 +129,7 @@ static NSString *const DNResult = @"result";
             [self processNotifications:obj subscribers:subscribers];
         }
         if (!subscribers) {
-            if ([key isEqualToString:kDNDonkyNotificationChatMessage] || [key isEqualToString:kDNDonkyNotificationRichMessage]) {
+            if ([key isEqualToString:kDNDonkyNotificationRichMessage]) {
                 NSInteger count = [[UIApplication sharedApplication] applicationIconBadgeNumber];
                 if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
                     DNInfoLog(@"Artificially increasing badge count by: %lu", (long)[obj count]);

@@ -14,8 +14,10 @@
 
 + (DNSubscriptionBatchHandler)richMessageHandler;
 
-+ (DNLocalEventHandler)notificationLoaded;
-
 + (void)richMessageNotificationReceived:(NSArray *)notifications backgroundNotifications:(NSMutableArray *)backgroundNotifications;
+
++ (DNSubscriptionBatchHandler)richMessageReadHandler;
+
++ (DNSubscriptionBatchHandler)richMessageDeleted;
 
 @end

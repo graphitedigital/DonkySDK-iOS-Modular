@@ -62,15 +62,212 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
     }
     else {
         [DNAccountController updateNetworkDetails];
-
         if (successBlock) {
             successBlock(nil, nil);
         }
     }
 }
 
-+ (void)registerDeviceUser:(DNUserDetails *)userDetails deviceDetails:(DNDeviceDetails *)deviceDetails isUpdate:(BOOL)update success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
++ (DNAccountRegistrationResponse *)registrationResponseWithData:(id)responseData deviceDetails:(DNDeviceDetails *)deviceDetails clientDetails:(DNClientDetails *)clientDetails apiKey:(NSString *)apiKey {
+    DNAccountRegistrationResponse *accountRegistrationResponse = [[DNAccountRegistrationResponse alloc] initWithRegistrationResponse:responseData];
     
+    [DNDonkyNetworkDetails saveAccessToken:[accountRegistrationResponse accessToken]];
+    [DNDonkyNetworkDetails saveSecureServiceRootUrl:[accountRegistrationResponse rootURL]];
+    [DNDonkyNetworkDetails saveDeviceID:[accountRegistrationResponse deviceId]];
+    [DNDonkyNetworkDetails saveNetworkID:[accountRegistrationResponse networkId]];
+    [DNDonkyNetworkDetails saveTokenExpiry:[accountRegistrationResponse tokenExpiry]];
+    [DNDonkyNetworkDetails saveNetworkProfileID:[accountRegistrationResponse networkProfileID]];
+    [DNDonkyNetworkDetails saveDeviceSecret:[deviceDetails deviceSecret]];
+    [DNDonkyNetworkDetails saveSDKVersion:[clientDetails sdkVersion]];
+    [DNDonkyNetworkDetails saveOperatingSystemVersion:[deviceDetails operatingSystem]];
+    [DNDonkyNetworkDetails saveAPIKey:apiKey];
+    [DNDonkyNetworkDetails savePushEnabled:YES];
+    [DNDonkyNetworkDetails saveSignalRURL:[accountRegistrationResponse signalRURL]];
+    
+    return accountRegistrationResponse;
+}
+
++ (void)startAuthenticationWithCompletion:(DNAuthenticationRequestCompletion)completion {
+    [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:NO route:kDNNetworkAuthenticationStart httpMethod:DNGet parameters:nil success:^(NSURLSessionDataTask *task, id responseData) {
+       
+        DNAuthResponse *authenticationResponse = [[DNAuthResponse alloc] initWithAuthenticationStartResponse:responseData];
+        
+        DNAuthenticationObject *authenticationObject = [[DNAuthenticationObject alloc] initWithUserID:[[[DNAccountController registrationDetails] userDetails] userID] nonce:[authenticationResponse nonce]];
+        
+        if (completion) {
+            completion(authenticationResponse, authenticationObject, nil);
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        DNAuthenticationObject *authenticationObject = [[DNAuthenticationObject alloc] initWithUserID:[[[DNAccountController registrationDetails] userDetails] userID] nonce:nil];
+        if (completion) {
+            completion(nil, authenticationObject, error);
+        }
+    }];
+}
+
++ (void)authenticatedRegistrationForUser:(DNUserDetails *)userDetails device:(DNDeviceDetails *)deviceDetails authenticationDetail:(DNAuthResponse *)authDetails token:(NSString *)token success:(DNNetworkSuccessBlock)success failure:(DNNetworkFailureBlock)failure {
+
+    if (!deviceDetails) {
+        deviceDetails = [[DNDeviceDetails alloc] init];
+    }
+    
+    DNClientDetails *clientDetails = [[DNClientDetails alloc] init];
+    
+    NSMutableDictionary *registrationParameters = [[NSMutableDictionary alloc] init];
+    [registrationParameters dnSetObject:[deviceDetails parameters] forKey:DNDeviceParameters];
+    [registrationParameters dnSetObject:[clientDetails parameters] forKey:DNClientParameters];
+    [registrationParameters dnSetObject:[userDetails parameters] forKey:DNUserParameters];
+
+    BOOL reReg = NO;
+
+    if (![DNAccountController isRegistered] || ([DNAccountController isRegistered] && ![[userDetails userID] isEqualToString:[[[DNAccountController registrationDetails] userDetails] userID]])) {
+        reReg = YES;
+    }
+
+    [registrationParameters dnSetObject:reReg ? @"true" : @"false" forKey:@"isReregistration"];
+
+    NSMutableDictionary *authenticationDetails = [[authDetails parameters] mutableCopy];
+    [authenticationDetails dnSetObject:token forKey:@"token"];
+    [registrationParameters dnSetObject:authenticationDetails forKey:@"authenticationDetail"];
+
+    [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:NO route:kDNNetworkAuthenticationRegistration httpMethod:DNPost parameters:registrationParameters success:^(NSURLSessionDataTask *task, id responseData) {
+
+        NSString *apiKey = [DNDonkyNetworkDetails apiKey];
+        [DNUserDefaultsHelper resetUserDefaults];
+        
+        DNAccountRegistrationResponse *accountRegistrationResponse = [DNAccountController registrationResponseWithData:responseData deviceDetails:deviceDetails clientDetails:clientDetails apiKey:apiKey];
+
+        //Store Configuration items:
+        [DNConfigurationController saveConfiguration:[accountRegistrationResponse configuration]];
+        
+        //We have an anonymous reg
+        if ([userDetails isAnonymous]) {
+            DNUserDetails *anonymousDetails = [[DNUserDetails alloc] initWithUserID:[accountRegistrationResponse userId]
+                                                                        displayName:[accountRegistrationResponse userId]
+                                                                       emailAddress:nil
+                                                                       mobileNumber:nil
+                                                                        countryCode:nil
+                                                                          firstName:nil
+                                                                           lastName:nil
+                                                                           avatarID:nil
+                                                                       selectedTags:nil
+                                                               additionalProperties:nil
+                                                                          anonymous:YES];
+            [DNAccountController saveUserDetails:anonymousDetails];
+        }
+        else {
+            if (!userDetails) {
+                DNUserDetails *user = [[DNUserDetails alloc] initWithUserID:[accountRegistrationResponse userId]
+                                                                displayName:[accountRegistrationResponse userId]
+                                                               emailAddress:nil
+                                                               mobileNumber:nil
+                                                                countryCode:nil
+                                                                  firstName:nil
+                                                                   lastName:nil
+                                                                   avatarID:nil
+                                                               selectedTags:nil
+                                                       additionalProperties:nil];
+                [DNAccountController saveUserDetails:user];
+            }
+            else {
+                [DNAccountController saveUserDetails:userDetails];
+            }
+        }
+
+        [DNDeviceDetailsHelper saveAdditionalProperties:[deviceDetails additionalProperties]];
+        [DNDeviceDetailsHelper saveDeviceName:[deviceDetails deviceName]];
+        [DNDeviceDetailsHelper saveDeviceType:[deviceDetails type]];
+
+        DNLocalEvent *registrationEvent = [[DNLocalEvent alloc] initWithEventType:kDNEventRegistration
+                                                                        publisher:NSStringFromClass([self class])
+                                                                        timeStamp:[NSDate date]
+                                                                             data:@{@"IsUpdate" : @(!reReg)}];
+
+        [[DNDonkyCore sharedInstance] publishEvent:registrationEvent];
+
+        DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventTokenRefreshed
+                                                                 publisher:NSStringFromClass([DNAccountController class])
+                                                                 timeStamp:[NSDate date]
+                                                                      data:[accountRegistrationResponse configuration]];
+        [[DNDonkyCore sharedInstance] publishEvent:localEvent];
+
+        if (success) {
+            success(responseData, nil);
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (failure) {
+            failure(nil, error);
+        }
+    }];
+}
+
++ (void)refreshAuthentication:(DNCompletionBlock)completionBlock {
+
+    if ([[DNDonkyCore sharedInstance] authenticationHandler]) {
+        DNAuthenticationCompletion block = ^(NSString *token, DNAuthResponse *authResponse) {
+
+            DNClientDetails *clientDetails = [[DNClientDetails alloc] init];
+            DNDeviceDetails *deviceDetails = [[DNAccountController registrationDetails] deviceDetails];
+
+            NSMutableDictionary *parameters = [[clientDetails parameters] mutableCopy];
+
+            NSMutableDictionary *authenticationDetails = [[authResponse parameters] mutableCopy];
+            [authenticationDetails dnSetObject:token forKey:@"token"];
+            [parameters dnSetObject:authenticationDetails forKey:@"authenticationDetail"];
+            [parameters dnSetObject:[DNDonkyNetworkDetails networkId] forKey:@"networkId"];
+            [parameters dnSetObject:[DNDonkyNetworkDetails deviceSecret] forKey:@"deviceSecret"];
+            [parameters dnSetObject:[deviceDetails operatingSystem] forKey:@"operatingSystem"];
+
+            [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:NO route:kDNNetworkAuthenticationAuthenticate httpMethod:DNPost parameters:parameters success:^(NSURLSessionDataTask *task, id responseData) {
+
+                DNAccountRegistrationResponse *tokenResponse = [[DNAccountRegistrationResponse alloc] initWithRefreshTokenResponse:responseData];
+                
+                //Store Configuration items:
+                [DNDonkyNetworkDetails saveAccessToken:[tokenResponse accessToken]];
+                [DNDonkyNetworkDetails saveTokenExpiry:[tokenResponse tokenExpiry]];
+                [DNDonkyNetworkDetails saveSecureServiceRootUrl:[tokenResponse rootURL]];
+
+                [DNConfigurationController saveConfiguration:[tokenResponse configuration]];
+
+                if (completionBlock) {
+                    completionBlock(nil);
+                }
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                if (completionBlock) {
+                    if ([DNErrorController serviceReturned:401 error:error] || [DNErrorController serviceReturnedFailureKey:@"UserNotFound" error:error]) {
+                         DNAuthenticationCompletion block2 = ^(NSString *token2, DNAuthResponse *authResponse2) {
+                             completionBlock(@{@"token" : token2, @"error" : error, @"authResponse" : authResponse2});
+                         };
+                        [DNAccountController startAuthenticationWithCompletion:^(DNAuthResponse *authDetails, DNAuthenticationObject *expectedDetails,  NSError *error2) {
+                            if ([[DNDonkyCore sharedInstance] authenticationHandler]) {
+                                [[DNDonkyCore sharedInstance] authenticationHandler](block2, authDetails, expectedDetails);
+                            }
+                        }];
+                    }
+                    else {
+                        completionBlock(nil);
+                    }
+                }
+            }];
+        };
+        
+        [DNAccountController startAuthenticationWithCompletion:^(DNAuthResponse *authDetails, DNAuthenticationObject *expectedDetails, NSError *error) {
+            if ([[DNDonkyCore sharedInstance] authenticationHandler]) {
+                [[DNDonkyCore sharedInstance] authenticationHandler](block, authDetails, expectedDetails);
+            }
+        }];
+    }
+}
+
++ (void)registerDeviceUser:(DNUserDetails *)userDetails deviceDetails:(DNDeviceDetails *)deviceDetails isUpdate:(BOOL)update success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
+
+    if ([[DNDonkyCore sharedInstance] isUsingAuth]) {
+        if (successBlock) {
+            successBlock(nil, nil);
+        }
+        return;
+    }
+
     DNClientDetails *clientDetails = [[DNClientDetails alloc] init];
     NSMutableDictionary *registrationParameters = [[NSMutableDictionary alloc] init];
     [registrationParameters dnSetObject:[deviceDetails parameters] forKey:DNDeviceParameters];
@@ -79,29 +276,27 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 
     [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:update route:kDNNetworkRegistration httpMethod:update ? DNPut : DNPost parameters:registrationParameters success:^(NSURLSessionDataTask *task, id responseData) {
         @try {
+
             NSString *apiKey = [DNDonkyNetworkDetails apiKey];
             [DNUserDefaultsHelper resetUserDefaults];
-            DNAccountRegistrationResponse *accountRegistrationResponse = [[DNAccountRegistrationResponse alloc] initWithRegistrationResponse:responseData];
-
-            [DNDonkyNetworkDetails saveAccessToken:[accountRegistrationResponse accessToken]];
-            [DNDonkyNetworkDetails saveSecureServiceRootUrl:[accountRegistrationResponse rootURL]];
-            [DNDonkyNetworkDetails saveDeviceID:[accountRegistrationResponse deviceId]];
-            [DNDonkyNetworkDetails saveNetworkID:[accountRegistrationResponse networkId]];
-            [DNDonkyNetworkDetails saveTokenExpiry:[accountRegistrationResponse tokenExpiry]];
-            [DNDonkyNetworkDetails saveNetworkProfileID:[accountRegistrationResponse networkProfileID]];
-            [DNDonkyNetworkDetails saveDeviceSecret:[deviceDetails deviceSecret]];
-            [DNDonkyNetworkDetails saveSDKVersion:[clientDetails sdkVersion]];
-            [DNDonkyNetworkDetails saveOperatingSystemVersion:[deviceDetails operatingSystem]];
-            [DNDonkyNetworkDetails saveAPIKey:apiKey];
-            [DNDonkyNetworkDetails savePushEnabled:YES];
-            [DNDonkyNetworkDetails saveSignalRURL:[accountRegistrationResponse signalRURL]];
-
+            
+            DNAccountRegistrationResponse *accountRegistrationResponse = [DNAccountController registrationResponseWithData:responseData deviceDetails:deviceDetails clientDetails:clientDetails apiKey:apiKey];
+            
             //Store Configuration items:
             [DNConfigurationController saveConfiguration:[accountRegistrationResponse configuration]];
-
             //We have an anonymous reg
             if ([userDetails isAnonymous]) {
-                DNUserDetails *anonymousDetails = [[DNUserDetails alloc] initWithUserID:[accountRegistrationResponse userId] displayName:[accountRegistrationResponse userId] emailAddress:nil mobileNumber:nil countryCode:nil firstName:nil lastName:nil avatarID:nil selectedTags:nil additionalProperties:nil anonymous:YES];
+                DNUserDetails *anonymousDetails = [[DNUserDetails alloc] initWithUserID:[accountRegistrationResponse userId]
+                                                                            displayName:[accountRegistrationResponse userId]
+                                                                           emailAddress:nil
+                                                                           mobileNumber:nil
+                                                                            countryCode:nil
+                                                                              firstName:nil
+                                                                               lastName:nil
+                                                                               avatarID:nil
+                                                                           selectedTags:nil
+                                                                   additionalProperties:nil
+                                                                              anonymous:YES];
                 [DNAccountController saveUserDetails:anonymousDetails];
             }
             else {
@@ -147,6 +342,50 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 
     if (![DNDonkyNetworkDetails isDeviceRegistered]) {
         failureBlock(nil, [DNErrorController errorCode:9000 userInfo:@{@"Reason" : @"Device isn't registered so cannot refresh token"}]);
+        return;
+    }
+    
+    if ([[DNDonkyCore sharedInstance] isUsingAuth]) {
+        //We close the connection as our token is now invalid:
+        [DNSignalRInterface closeConnection];
+        
+        [DNAccountController refreshAuthentication:^(id data) {
+            if ([data isKindOfClass:[NSDictionary class]]) {
+                NSError *error = data[@"error"];
+                NSString *token = data[@"token"];
+                if ([DNErrorController serviceReturned:401 error:error] || [DNErrorController serviceReturnedFailureKey:@"UserNotFound" error:error]) {
+                    DNErrorLog(@"User is unauthorised for token refresh. User details may have been deleted on the network...\nOR NetworkID is invalid.\nRe-registering user...");
+                    [DNSignalRInterface closeConnection];
+                    [DNDonkyNetworkDetails saveNetworkID:nil];
+                    
+                    DNAuthResponse *authResponse = data[@"authResponse"];
+                    
+                    [DNAccountController authenticatedRegistrationForUser:[[DNAccountController registrationDetails] userDetails]
+                                                                   device:[[DNAccountController registrationDetails] deviceDetails]
+                                                     authenticationDetail:authResponse
+                                                                    token:token
+                                                                  success:successBlock
+                                                                  failure:failureBlock];
+                }
+                else if ([DNErrorController serviceReturned:403 error:error] && [DNAccountController isRegistered]) {
+                    //We are suspended:
+                    [DNAccountController setIsSuspended:YES];
+                    if (failureBlock) {
+                        failureBlock(nil, [DNErrorController errorWithCode:DNCoreSDKSuspendedUser]);
+                    }
+                }
+                else if (error) {
+                    if (failureBlock) {
+                        failureBlock(nil, error);
+                    }
+                }
+            }
+            else if (successBlock) {
+                [DNSignalRInterface openConnection];
+                successBlock(nil, nil);
+            }
+        }];
+
         return;
     }
 
@@ -199,7 +438,7 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             //Specific for this call:
             if ([DNErrorController serviceReturned:401 error:error]) {
-                DNErrorLog(@"User is unauthroised for token refresh. User details may have been deleted on the network...\n OR NetworkID is invalid.\nRe-registering user...");
+                DNErrorLog(@"User is unauthorised for token refresh. User details may have been deleted on the network...\n OR NetworkID is invalid.\nRe-registering user...");
                 [DNSignalRInterface closeConnection];
                 [DNDonkyNetworkDetails saveNetworkID:nil];
                 [DNAccountController registerDeviceUser:[[DNAccountController registrationDetails] userDetails]
@@ -246,6 +485,15 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 }
 
 + (void)updateUserDetails:(DNUserDetails *)userDetails automaticallyHandleUserIDTaken:(BOOL)autoHandleIDTaken success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock) failureBlock {
+    
+    if (![[userDetails userID] isEqualToString:[[[DNAccountController registrationDetails] userDetails] userID]] && [[DNDonkyCore sharedInstance] isUsingAuth]) {
+        DNErrorLog(@"cannot change userID while in authenticated registration...");
+        if (failureBlock) {
+            failureBlock(nil, [DNErrorController errorCode:0000 additionalData:@{@"Reason" : @"Cannot change userID while in authenticated registration..."}]);
+        }
+        return;
+    }
+    
     [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:YES
                                                                   route:kDNNetworkRegistrationDeviceUser
                                                              httpMethod:DNPut
@@ -359,6 +607,16 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 }
 
 + (void)replaceRegistrationDetailsWithUserDetails:(DNUserDetails *)userDetails deviceDetails:(DNDeviceDetails *)deviceDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
+    
+    if ([[DNDonkyCore sharedInstance] isUsingAuth]) {
+//        DNErrorLog(@"cannot replace user while in authenticated...");
+//        if (failureBlock) {
+//            failureBlock(nil, [DNErrorController errorCode:0000 additionalData:@{@"Reason" : @"Cannot replace user while in authenticated..."}]);
+//        }
+
+        [DNAccountController refreshAccessTokenSuccess:successBlock failure:failureBlock];
+        return;
+    }
 
     __block DNUserDetails *blockUserDetails = userDetails;
     __block DNDeviceDetails *blockDeviceDetails = deviceDetails;
@@ -392,8 +650,27 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
     return [[DNRegistrationDetails alloc] initWithDeviceDetails:deviceDetails clientDetails:clientDetails userDetails:userDetails];
 }
 
-+ (DNUserDetails *)userID:(NSString *)userID displayName:(NSString *)displayName emailAddress:(NSString *)email mobileNumber:(NSString *)mobileNumber countryCode:(NSString *)countryCode firstName:(NSString *)firstName lastName:(NSString *)lastName avatarID:(NSString *)avatarID selectedTags:(NSMutableArray *)selectedTags additionalProperties:(NSDictionary *)additionalProperties {
-    return [[DNUserDetails alloc] initWithUserID:userID displayName:displayName emailAddress:email mobileNumber:mobileNumber countryCode:countryCode firstName:firstName lastName:lastName avatarID:avatarID selectedTags:selectedTags additionalProperties:additionalProperties anonymous:displayName == nil];
++ (DNUserDetails *)userID:(NSString *)userID
+              displayName:(NSString *)displayName
+             emailAddress:(NSString *)email
+             mobileNumber:(NSString *)mobileNumber
+              countryCode:(NSString *)countryCode
+                firstName:(NSString *)firstName
+                 lastName:(NSString *)lastName
+                 avatarID:(NSString *)avatarID
+             selectedTags:(NSMutableArray *)selectedTags
+     additionalProperties:(NSDictionary *)additionalProperties {
+    return [[DNUserDetails alloc] initWithUserID:userID
+                                     displayName:displayName
+                                    emailAddress:email
+                                    mobileNumber:mobileNumber
+                                     countryCode:countryCode
+                                       firstName:firstName
+                                        lastName:lastName
+                                        avatarID:avatarID
+                                    selectedTags:selectedTags
+                            additionalProperties:additionalProperties
+                                       anonymous:displayName == nil];
 }
 
 + (BOOL)isRegistered {
@@ -617,5 +894,6 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 
     return device;
 }
+
 
 @end

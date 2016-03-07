@@ -61,7 +61,7 @@ typedef enum {
  
  @since 2.6.5.5
  */
-- (void)streamAssetUpload:(NSArray *)assetsToUpload success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
+- (NSProgress *)streamAssetUpload:(NSArray *)assetsToUpload success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
 
 /*!
  When wishing to send or receive new data from to/from the Donky Network. Manually invoking this method will force a Server Data refresh. All pending client

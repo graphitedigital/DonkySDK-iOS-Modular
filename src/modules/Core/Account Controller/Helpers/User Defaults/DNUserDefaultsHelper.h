@@ -18,4 +18,6 @@
 
 + (void)saveUserDefaults;
 
++ (void)deleteObjectForKey:(NSString *)key;
+
 @end

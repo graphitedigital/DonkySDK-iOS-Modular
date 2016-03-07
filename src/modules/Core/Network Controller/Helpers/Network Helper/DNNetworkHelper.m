@@ -223,6 +223,7 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
         }
         else {
             if (successBlock) {
+                DNInfoLog(@"Notification exchange complete");
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (successBlock) {
                         successBlock(task, nil); //We don't return the response data as the core module handles this.
@@ -233,6 +234,7 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
     }
     @catch (NSException *exception) {
         DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
+        DNInfoLog(@"Notification exchange complete");
         [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
         dispatch_async(dispatch_get_main_queue(), ^{
             if (failureBlock) {

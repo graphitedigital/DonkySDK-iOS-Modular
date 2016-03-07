@@ -50,7 +50,7 @@ static NSString *const DNSDKVersion = @"sdkVersion";
     [params dnSetObject:[DNAppSettingsController sdkVersion] forKey:DNSDKVersion];
 
     return params;
-}
 
+}
 
 @end

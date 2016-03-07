@@ -20,4 +20,8 @@ NSString * const kDRichMessageBadgeCount = @"RichMessageBadgeCount";
 
 NSString * const kDRPendingRichNotifications = @"PendingRichNotifications";
 
+NSString * const kDRichMessageDeletedEvent = @"RichMessageDeletedEvent";
+
+NSString * const kDRichMessageReadOnAnotherDeviceEvent = @"RichMessageReadEvent";
+
 @end

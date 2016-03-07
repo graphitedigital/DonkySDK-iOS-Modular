@@ -30,8 +30,7 @@
 
 @implementation DRIMainController
 
-+(DRIMainController *)sharedInstance
-{
++(DRIMainController *)sharedInstance {
     static dispatch_once_t pred;
     static DRIMainController *sharedInstance = nil;
 
@@ -46,8 +45,7 @@
     return [self initPrivate];
 }
 
--(instancetype)initPrivate
-{
+-(instancetype)initPrivate{
 
     self  = [super init];
 

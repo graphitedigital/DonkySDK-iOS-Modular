@@ -22,6 +22,7 @@
 static NSString *const DCMDelivered = @"delivered";
 static NSString *const DCMResult = @"result";
 static NSString *const DCMMessageReceived = @"MessageReceived";
+static NSString *const DCMMessageDeleted = @"MessageDeleted";
 static NSString *const DCMType = @"type";
 static NSString *const DCMReceivedExpired = @"receivedExpired";
 static NSString *const DCMessageType = @"messageType";
@@ -143,6 +144,21 @@ static NSString *const DCMTimeToReadSeconds = @"timeToReadSeconds";
             [[DNNetworkController sharedInstance] queueClientNotifications:@[messageSharedNotification]];
         }
     });
+}
+
++ (void)reportMessagesDeleted:(NSArray *)messages {
+
+    __block NSMutableArray *clientNotifs = [[NSMutableArray alloc] init];
+    [messages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        DNClientNotification *msgDeleted = [[DNClientNotification alloc] initWithType:DCMMessageDeleted data:@{@"messageId" : [obj messageID]} acknowledgementData:nil];
+        [clientNotifs addObject:msgDeleted];
+    }];
+
+    if ([clientNotifs count]) {
+        [[DNNetworkController sharedInstance] queueClientNotifications:clientNotifs completion:^(id data) {
+            [[DNNetworkController sharedInstance] synchronise];
+        }];
+    }
 }
 
 + (NSString *)shareType:(NSString *)activityType {

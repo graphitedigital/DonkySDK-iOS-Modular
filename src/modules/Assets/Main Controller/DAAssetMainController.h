@@ -28,7 +28,7 @@
  
  @since 2.6.6.5
  */
-+ (void)uploadAssetData:(NSData *)assetData assetName:(NSString *)name mimeType:(NSString *)mimeType success:(DAAssetUploadSuccessBlock)successBlock failure:(DAAssetUploadFailureBlock)failureBlock;
++ (NSProgress *)uploadAssetData:(NSData *)assetData assetName:(NSString *)name mimeType:(NSString *)mimeType success:(DAAssetUploadSuccessBlock)successBlock failure:(DAAssetUploadFailureBlock)failureBlock;
 
 /*!
  Method to upload multiple assets at once. Unlike the +uploadAssesData: api, this method accepts an array of
@@ -57,7 +57,7 @@
  
  @since 2.6.6.5
  */
-+ (void)uploadAvatarImage:(UIImage *)avatarImage success:(DAAssetUploadSuccessBlock)successBlock failure:(DAAssetUploadFailureBlock)failureBlock;
++ (NSProgress *)uploadAvatarImage:(UIImage *)avatarImage success:(DAAssetUploadSuccessBlock)successBlock failure:(DAAssetUploadFailureBlock)failureBlock;
 
 /*!
  Method to retrieve the asset from the network given a specific ID. THis will return the file path to

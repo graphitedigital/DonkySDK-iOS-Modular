@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+
 /*!
  Class used by modules to register for local event alerts.
  

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-
 #import "DNBlockDefinitions.h"
 #import "DNDeviceDetails.h"
 #import "DNServerNotification.h"
@@ -19,15 +18,19 @@
 #import "DNUserDetails.h"
 
 /*!
- Central Donky SDK controller class. This is responsible for initialisation, managing SDK state and maintaining a reference against Notification Modules, Event Modules and outbound notification modules.
+ Central Donky SDK controller class. This is responsible for initialisation, managing SDK state and maintaining a
+ reference against Notification Modules, Event Modules and outbound notification modules.
  */
 @interface DNDonkyCore : NSObject
 
 #pragma mark - Class Properties
 
 /*!
- Optional property, set this to your applications root window. Most of the time it is not necessary to do this and is only necessary if you are using an UI Modules. 
- Some Donky UI modules present UI components, to do this the Donky SDK gets the 'window' property from the [UIApplication sharedApplication] singleton. In the case of Hybrid app development (Seattle Clouds etc...) the window property is never set and sometimes the window property is not declared in the AppDelegate.h. In this event the Donky SDK cannot present these view components. It is recommneded therefore that you set this porperty to the appropriate window.
+ Optional property, set this to your applications root window. Most of the time it is not necessary to do this and is
+ only necessary if you are using an UI Modules. Some Donky UI modules present UI components, to do this the Donky SDK
+ gets the 'window' property from the [UIApplication sharedApplication] singleton. In the case of Hybrid app development
+ (Seattle Clouds etc...) the window property is never set and sometimes the window property is not declared in the AppDelegate.h.
+ In this event the Donky SDK cannot present these view components. It is recommended therefore that you set this property to the appropriate window.
  
  @since 2.0.0.0
  */
@@ -42,12 +45,28 @@
 @property (nonatomic, getter=shouldDisplayNewDeviceAlert) BOOL displayNewDeviceAlert;
 
 /*!
- A boolean to dictate whether the Donky SDK should control the badge count. Please see documentation at http://docs.mobiledonky.com
+ A boolean to dictate whether the Donky SDK should control the badge count. Please see documentation
+ at http://docs.mobiledonky.com
  for more information.
  
  @since 2.4.3.1
  */
 @property (nonatomic, getter=useDonkyBadgeCounts) BOOL donkyBadgeCounts;
+
+/*!
+ The block to be called when the SDK needs to refresh it's authentication token or when it
+ gets an authentication challenge from the network.
+ 
+ @since 2.7.1.3
+ */
+@property (nonatomic, copy) DNAuthenticationHandler authenticationHandler;
+
+/*!
+ A boolean to determine whether the SDK is in an authenticated state.
+ 
+ @since 2.7.1.3
+ */
+@property (nonatomic, readonly, getter=isUsingAuth) BOOL usingAuth;
 
 #pragma mark - Class Methods
 
@@ -56,7 +75,7 @@
  
  @return the current DNDonkyCore instance.
  */
-+ (DNDonkyCore *) sharedInstance;
++ (DNDonkyCore *)sharedInstance;
 
 /*!
  The most basic SDK initialisation method. Use this method for quick, basic initialisation.
@@ -68,20 +87,19 @@
 - (void)initialiseWithAPIKey:(NSString *)apiKey;
 
 /*!
- The most basic SDK initialisation and the recommended path. This is the same as -initialiseWithAPIKey: but is a class
- method instead.
+ Initialisation method to start the SDK and preventing it from registering a new anonymous user (if no valid registration is found).
  
- @param apiKey the API key for the App Space where the device should be registered.
+ @param apiKey the API key for the App Space where this device should be registered.
  
- @since 2.6.5.4
+ @since 2.7.1.3
  */
-+ (void)initialiseWithAPIKey:(NSString *)apiKey;
+- (void)initialiseWithoutRegistrationAPIKey:(NSString *)apiKey;
 
 /*!
  The most basic SDK initialisation and the recommended path but also provides completion handlers.
  
  @param apiKey       the API key for the app space where the device should be registered.
- @param successBlock block that is called when the initialisation is successfull.
+ @param successBlock block that is called when the initialisation is successful.
  @param failureBlock block that is called when the initialisation fails.
  
  @since 2.6.5.4
@@ -89,19 +107,51 @@
 - (void)initialiseWithAPIKey:(NSString *)apiKey succcess:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
 
 /*!
- The most basic SDK inisitalisation and the recommended path. This is the same as -initialiseWithAPIKey:success:failure: but
- is a class method instead.
+  Initialisation method to start the SDK and preventing it from registering a new anonymous user (if no valid registration is found).
  
  @param apiKey       the API key for the app space where the device should be registered.
- @param successBlock block that is called when the initialisation is successfull.
+ @param successBlock block that is called when the initialisation is successful.
  @param failureBlock block that is called when the initialisation fails.
- 
- @since 2.6.5.4
+
+ @since 2.7.1.3
  */
-+ (void)initialiseWithAPIKey:(NSString *)apiKey succcess:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
+- (void)initialiseWithoutRegistrationAPIKey:(NSString *)apiKey succcess:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
 
 /*!
-  SDK Initialisation method that allows a user to be provided for registration. Use this method to create a 'known registration' upon initialisation. It also allows for success and failure call back blocks to be set.
+ The most basic initialisation method used when starting the SDK in an authenticated state.
+ 
+ @param apiKey the API key to initialise with.
+ 
+ @since 2.7.1.3
+ */
+- (void)authenticatedInitialiseWithAPIKey:(NSString *)apiKey;
+
+/*!
+ Initialise the SDK in an authenticated state but also 'autoRegister' if the 'authenticationHandler' on DNDonkyCore.h is set BEFORE
+ initialisation is called.
+ 
+ @param apiKey       the API key for the app space where the device should be registered.
+ @param autoRegister whether the SDK should automatically register.
+ 
+ @since 2.7.1.3
+ */
+- (void)authenticatedInitialiseWithAPIKey:(NSString *)apiKey autoRegister:(BOOL)autoRegister;
+
+/*!
+ Initiliase the SDK in an authenticated state, this API allows you to set a success and failure call back handler.
+ 
+ @param apiKey       the API key for the app space where the device should be registered.
+ @param autoRegister whether the SDK should automatically register.
+ @param successBlock block that is called when the initialisation is successful, registration may NOT have finished at this point.
+ @param failureBlock block that is called when the initialisation fails, registration may NOT have finished at this point.
+ 
+ @since 2.7.1.3
+ */
+- (void)authenticatedInitialiseWithAPIKey:(NSString *)apiKey autoRegister:(BOOL)autoRegister success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
+
+/*!
+  SDK Initialisation method that allows a user to be provided for registration. Use this method to create a 'known registration'
+  upon initialisation. It also allows for success and failure call back blocks to be set.
  
  @param apiKey       the API Key for the app space where this device should be registered.
  @param userDetails  the user details that should be used for a new registration.
@@ -110,28 +160,18 @@
  
  @since 2.0.0.0
  */
-- (void)initialiseWithAPIKey:(NSString *)apiKey userDetails:(DNUserDetails *)userDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
+- (void)initialiseWithAPIKey:(NSString *)apiKey userDetails:(DNUserDetails *)userDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;;
 
 /*!
- SDK initialisation method that allows a user to be provided for registration. Use this method to create a 'known registraiton' upon initialisation. This is the same as -initialiseWithAPIKey:userDetails:sccuess:failure: but is a class method instead.
- 
- @param apiKey       the API key for the app space where the deice should be registered.
- @param userDetails  the user details that should be used for a new registration.
- @param successBlock block that is called when the initialisation is successful.
- @param failureBlock block that is called when the initialisation fails.
- 
- @since 2.6.5.4
- */
-+ (void)initialiseWithAPIKey:(NSString *)apiKey userDetails:(DNUserDetails *)userDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
-
-/*!
- The full initialisation method for the SDK. Allows for a device user and device details object to be provided as part of the initialisation/registration process.
+ The full initialisation method for the SDK. Allows for a device user and device details object to be provided as part
+ of the initialisation/registration process.
  
  @param apiKey        the API key for the App Space where this device should be registered.
  @param userDetails   a DNUserDetails object containing the details of the user that should be registered with this device.
  @param deviceDetails a DNDeviceDetails object containing detailed properties about the device.
  @param successBlock  block that is called when the initialisation is successful.
- @param failureBlock  block that is called when the initialisation fails, a detailed reason for the error will be automatically rendered in the console and saved to the Debug Logs.
+ @param failureBlock  block that is called when the initialisation fails, a detailed reason for the error will be
+                      automatically rendered in the console and saved to the Debug Logs.
  
  @see DNUserDetails
  @see DNDeviceDetails
@@ -139,20 +179,6 @@
  @since 2.0.0.0
  */
 - (void)initialiseWithAPIKey:(NSString *)apiKey userDetails:(DNUserDetails *)userDetails deviceDetails:(DNDeviceDetails *)deviceDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
-
-/*!
- The full initialisation method for the SDK. This is the same as -initialiseWithAPIKey:userDetails:deviceDetails:success:failure: but is a 
- class method instead.
- 
- @param apiKey        the API key for the App Space where the device should be registered.
- @param userDetails   a DNUserDetails object containing the details of the user that should be registered wiht this device.
- @param deviceDetails a DNDeviceDetails object conbtatining detailed properties about the device.
- @param successBlock  a block that is called when the initialisation is successful.
- @param failureBlock  a block that is called when the initialisation has failed.
- 
- @since 2.6.5.4
- */
-+ (void)initialiseWithAPIKey:(NSString *)apiKey userDetails:(DNUserDetails *)userDetails deviceDetails:(DNDeviceDetails *)deviceDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
 
 /*!
  Method to allow a class to register for and receive local events. Events can be published through a different API.
@@ -243,7 +269,8 @@
 - (void)publishOutboundNotification:(NSString *)type data:(id)data;
 
 /*!
- Method used to register a services for use by other modules. NOTE: only one instance of a class can register for a specific service at a time. If another class registers for that service, the previous instance is overwritten.
+ Method used to register a services for use by other modules. NOTE: only one instance of a class can register for a
+ specific service at a time. If another class registers for that service, the previous instance is overwritten.
  
  @param type     the type of service being offered.
  @param instance the instance of the class offering the service.
@@ -253,7 +280,9 @@
 - (void)registerService:(NSString *)type instance:(id)instance;
 
 /*!
- Method to un-register an instance from a service. NOTE: It is crucial to un register instances from services when that object is about to be released from memory. Failure to do so may result in a dangling pointer or runtime exception if another module attempts to invoke the service.
+ Method to un-register an instance from a service. NOTE: It is crucial to un register instances from services when that
+ object is about to be released from memory. Failure to do so may result in a dangling pointer or runtime exception if
+ another module attempts to invoke the service.
  
  @param type the type of service that is being unregistered.
  
@@ -289,7 +318,8 @@
  @param moduleName    the name of the module.
  @param moduleVersion the module version.
  
- @return BOOL indicating whether the supplied module name/version exists. If a module with the provided name exists but has a different version number, this will return false but an error will be output to the console/debug log.
+ @return BOOL indicating whether the supplied module name/version exists. If a module with the provided name exists
+ but has a different version number, this will return false but an error will be output to the console/debug log.
  
  @since 2.0.0.0
  */

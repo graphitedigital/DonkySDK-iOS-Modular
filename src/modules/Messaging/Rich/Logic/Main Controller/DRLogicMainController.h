@@ -102,7 +102,7 @@
  
  @since 2.2.2.7
  */
-- (BOOL)doesRichMessageExistForID:(NSString *)messageID  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+- (BOOL)doesRichMessageExistForID:(NSString *)messageID __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
 
 + (BOOL)doesRichMessageExistForID:(NSString *)messageID;
 
@@ -115,7 +115,7 @@
  
  @since 2.2.2.7
  */
-- (DNRichMessage *)richMessageWithID:(NSString *)messageID  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+- (DNRichMessage *)richMessageWithID:(NSString *)messageID __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
 
 + (DNRichMessage *)richMessageWithID:(NSString *)messageID;
 
@@ -140,7 +140,7 @@
  
  @see DNRichMessage
  */
-- (NSArray *)allRichMessagesAscending:(BOOL)ascending  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+- (NSArray *)allRichMessagesAscending:(BOOL)ascending __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
 
 + (NSArray *)allRichMessagesAscending:(BOOL)ascending;
 
@@ -155,7 +155,7 @@
  
  @since 2.2.2.7
  */
-- (NSArray *)richMessagesWithOffset:(NSUInteger)offset limit:(NSUInteger)limit ascending:(BOOL)ascending  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+- (NSArray *)richMessagesWithOffset:(NSUInteger)offset limit:(NSUInteger)limit ascending:(BOOL)ascending __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
 
 + (NSArray *)richMessagesWithOffset:(NSUInteger)offset limit:(NSUInteger)limit ascending:(BOOL)ascending;
 
@@ -168,7 +168,7 @@
  
  @see DNRichMessage
  */
-- (NSArray *)allUnreadRichMessages  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+- (NSArray *)allUnreadRichMessages __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
 
 + (NSArray *)allUnreadRichMessages;
 
@@ -177,7 +177,7 @@
  
  @since 2.2.2.7
  */
-- (void)deleteAllExpiredMessages  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+- (void)deleteAllExpiredMessages __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
 
 + (void)deleteAllExpiredMessages;
 
@@ -186,7 +186,7 @@
  
  @since 2.5.4.3
  */
-- (void)deleteMaxLifeRichMessages  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
+- (void)deleteMaxLifeRichMessages __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
 
 + (void)deleteMaxLifeRichMessages;
 

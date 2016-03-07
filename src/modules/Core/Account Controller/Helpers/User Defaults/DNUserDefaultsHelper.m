@@ -44,4 +44,9 @@
     [[DNUserDefaultsHelper userDetails] synchronize];
 }
 
++ (void)deleteObjectForKey:(NSString *)key {
+    [[DNUserDefaultsHelper userDetails] removeObjectForKey:key];
+    [DNUserDefaultsHelper saveUserDefaults];
+}
+
 @end

@@ -18,10 +18,13 @@
 #import "DRLogicMainControllerHelper.h"
 
 @interface DRLogicMainController ()
-@property(nonatomic, strong) DNSubscriptionBatchHandler richMessageHandler;
-@property(nonatomic, strong) DNLocalEventHandler notificationLoaded;
+@property(nonatomic, copy) DNSubscriptionBatchHandler richMessageHandler;
+@property(nonatomic, copy) DNSubscriptionBatchHandler richMessageDeletedHandler;
+@property(nonatomic, copy) DNSubscriptionBatchHandler richMessageReadHandler;
 @property(nonatomic, strong) DNModuleDefinition *moduleDefinition;
-@property(nonatomic, strong) DNSubscription *subscription;
+@property(nonatomic, strong) DNSubscription *richMessageSubscription;
+@property(nonatomic, strong) DNSubscription *richMessageDeletedSubscription;
+@property(nonatomic, strong) DNSubscription *richMessageReadSubscription;
 @end
 
 @implementation DRLogicMainController
@@ -60,12 +63,17 @@
 
     [DRLogicMainController deleteMaxLifeRichMessages];
 
-    [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.2.0.0"]];
+    [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.2.1.0"]];
 
-    [self setSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationRichMessage batchHandler:[self richMessageHandler]]];
+    [self setRichMessageSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationRichMessage
+                                                                         batchHandler:[self richMessageHandler]]];
+    [self setRichMessageDeletedSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationSyncMessageDeleted
+                                                                                batchHandler:[self richMessageDeletedHandler]]];
+    [self setRichMessageReadSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationSyncMessageRead
+                                                                             batchHandler:[self richMessageReadHandler]]];
 
-    [[DNDonkyCore sharedInstance] subscribeToDonkyNotifications:[self moduleDefinition] subscriptions:@[[self subscription]]];
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventNotificationLoaded handler:[self notificationLoaded]];
+    [[DNDonkyCore sharedInstance] subscribeToDonkyNotifications:[self moduleDefinition]
+                                                  subscriptions:@[[self richMessageSubscription], [self richMessageReadSubscription], [self richMessageDeletedSubscription]]];
 
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNEventRegistration handler:^(DNLocalEvent *event) {
         BOOL wasUpdate = [[event data][@"IsUpdate"] boolValue];
@@ -80,8 +88,8 @@
 
 - (void)stop {
     if ([self moduleDefinition]) {
-        [[DNDonkyCore sharedInstance] unSubscribeToDonkyNotifications:[self moduleDefinition] subscriptions:@[[self subscription]]];
-        [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventNotificationLoaded handler:[self notificationLoaded]];
+        [[DNDonkyCore sharedInstance] unSubscribeToDonkyNotifications:[self moduleDefinition]
+                                                        subscriptions:@[[self richMessageSubscription], [self richMessageDeletedSubscription], [self richMessageReadSubscription]]];
     }
 }
 
@@ -197,11 +205,18 @@
     return _richMessageHandler;
 }
 
-- (DNLocalEventHandler)notificationLoaded {
-    if (!_notificationLoaded) {
-        _notificationLoaded = [DRLogicMainControllerHelper notificationLoaded];
+- (DNSubscriptionBatchHandler)richMessageDeletedHandler {
+    if (!_richMessageDeletedHandler) {
+        _richMessageDeletedHandler = [DRLogicMainControllerHelper richMessageDeleted];
     }
-    return _notificationLoaded;
+    return _richMessageDeletedHandler;
+}
+
+- (DNSubscriptionBatchHandler)richMessageReadHandler {
+    if (!_richMessageReadHandler) {
+        _richMessageReadHandler = [DRLogicMainControllerHelper richMessageReadHandler];
+    }
+    return _richMessageReadHandler;
 }
 
 #pragma mark -

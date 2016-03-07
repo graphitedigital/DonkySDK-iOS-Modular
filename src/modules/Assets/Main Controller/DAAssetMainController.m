@@ -35,10 +35,13 @@ static NSString *const DAName = @"name";
 
 @implementation DAAssetMainController
 
-+ (void)uploadAssetData:(NSData *)assetData assetName:(NSString *)name mimeType:(NSString *)mimeType success:(DAAssetUploadSuccessBlock)successBlock failure:(DAAssetUploadFailureBlock)failureBlock {
++ (NSProgress *)uploadAssetData:(NSData *)assetData assetName:(NSString *)name mimeType:(NSString *)mimeType success:(DAAssetUploadSuccessBlock)successBlock failure:(DAAssetUploadFailureBlock)failureBlock {
 
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-
+    if (!assetData) {
+        DNErrorLog(@"no asset data provided, please check input...");
+        return nil;
+    }
+    
     NSMutableDictionary *uploadDict = [[NSMutableDictionary alloc] init];
 
     [uploadDict dnSetObject:name ? : [NSString stringWithFormat:@"%@.%@", [DNSystemHelpers generateGUID], [[mimeType componentsSeparatedByString:@"/"] lastObject]] forKey:DAClientReference];
@@ -48,7 +51,7 @@ static NSString *const DAName = @"name";
 
     [uploadDict dnSetObject:@([DNFileHelpers sizeOfData:assetData]) forKey:DAFileSize];
 
-    [[DNNetworkController sharedInstance] streamAssetUpload:@[uploadDict] success:^(NSURLSessionDataTask *task, id responseData) {
+    return [[DNNetworkController sharedInstance] streamAssetUpload:@[uploadDict] success:^(NSURLSessionDataTask *task, id responseData) {
         NSString *assetID = responseData[DAAssetID];
         if (successBlock) {
             DAAsset *asset = [[DAAsset alloc] init];
@@ -58,18 +61,15 @@ static NSString *const DAName = @"name";
             [asset setSizeInBytes:[DNFileHelpers sizeOfData:assetData]];
             successBlock(asset);
         }
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         if (failureBlock) {
             failureBlock(error);
         }
     }];
 }
 
-
 + (void)uploadMultipleFilePathAssets:(NSArray *)assets success:(DAAssetUploadSuccessBlock)successBlock failure:(DAAssetUploadFailureBlock)failureBlock {
-
+    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 
     __block NSMutableArray *assetsToUpload = [[NSMutableArray alloc] init];
@@ -117,7 +117,7 @@ static NSString *const DAName = @"name";
                     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                 }
             }
-        }                                               failure:^(NSURLSessionDataTask *task, NSError *error) {
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
             if (failureBlock) {
                 failureBlock(error);
             }
@@ -126,9 +126,23 @@ static NSString *const DAName = @"name";
     }];
 }
 
-+ (void)uploadAvatarImage:(UIImage *)avatarImage success:(DAAssetUploadSuccessBlock)successBlock failure:(DAAssetUploadFailureBlock)failureBlock {
++ (NSProgress *)uploadAvatarImage:(UIImage *)avatarImage success:(DAAssetUploadSuccessBlock)successBlock failure:(DAAssetUploadFailureBlock)failureBlock {
 
+    if (!avatarImage) {
+        DNErrorLog(@"no image provided, please check input...");
+        return nil;
+    }
+    
     NSData *assetData = UIImagePNGRepresentation(avatarImage);
+    
+    CGSize newSize = CGSizeMake(96, 96);
+
+    UIGraphicsBeginImageContext(newSize);
+    [avatarImage drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    avatarImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    assetData = UIImagePNGRepresentation(avatarImage);
 
     NSMutableDictionary *uploadDict = [[NSMutableDictionary alloc] init];
 
@@ -140,7 +154,7 @@ static NSString *const DAName = @"name";
 
     [uploadDict dnSetObject:DAAccountAvatar forKey:DAType];
 
-    [[DNNetworkController sharedInstance] streamAssetUpload:@[uploadDict] success:^(NSURLSessionDataTask *task, id responseData) {
+    return [[DNNetworkController sharedInstance] streamAssetUpload:@[uploadDict] success:^(NSURLSessionDataTask *task, id responseData) {
         NSString *assetID = responseData[DAAssetID];
         if (successBlock) {
             DAAsset *asset = [[DAAsset alloc] init];
@@ -150,7 +164,7 @@ static NSString *const DAName = @"name";
             [asset setSizeInBytes:[DNFileHelpers sizeOfData:assetData]];
             successBlock(asset);
         }
-    }                                               failure:^(NSURLSessionDataTask *task, NSError *error) {
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failureBlock) {
             failureBlock(error);
         }

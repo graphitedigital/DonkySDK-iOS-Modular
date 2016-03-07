@@ -10,8 +10,8 @@
 
 @interface DNKeychainItemWrapper : NSObject
 
-+ (void)setObject:(id)object forKey:(NSString *)key;
++ (void)setObject:(id)inObject forKey:(id)key;
 
-+ (id)objectForKey:(NSString *)key;
++ (id)objectForKey:(id)key;
 
 @end

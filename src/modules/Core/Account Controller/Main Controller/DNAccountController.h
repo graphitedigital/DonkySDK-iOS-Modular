@@ -51,7 +51,7 @@
 + (void)updateUserDetails:(DNUserDetails *)userDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock) failureBlock __attribute__((deprecated("Please use updateUserDetails:automaticallyHandleUserIDTaken:success:failure - 2.6.5.4")));
 
 /*!
- Method ot update the user details of the current registered user. This API has an additional automatically handle user ID taken error that can be returned from the 
+ Method to update the user details of the current registered user. This API has an additional automatically handle user ID taken error that can be returned from the 
  network if attempting to update to a userID that is already registered on the network. NOTE: This SHOULD NOT be true when allowing users to manually change their ID e.g.
  in a contact/chat style application.
  
@@ -180,6 +180,31 @@
  */
 + (BOOL)isSuspended;
 
+/*!
+ API to start the authentication process, calling this will return all detials needed to create a new authentication token. Authenticated registration can
+ then be called.
+ 
+ @param completion the completion that reurns the required data to register the SDK in an authenticated manner.
+ 
+ @since 2.7.1.3
+ */
++ (void)startAuthenticationWithCompletion:(DNAuthenticationRequestCompletion)completion;
+
+/*!
+ API to register the SDK with a new user in an authenticated manner. User details and Device details are option, authentication details must be supplied as well
+ as the token.
+ 
+ @param userDetails   optional value to register with pre-filled details (userID will be ignored as this is retrieve via the authDetails/token)
+ @param deviceDetails optional value to regiter with pre-filled device details.
+ @param authDetails   the authentication details used to generate the token, provide the same object returned by the 'startAuthenticationWithCompletion:' API.
+ @param token         the token that should be used to verify this user.
+ @param success       block called upon successful completion of the operation.
+ @param failure       block called upon failure to complete the operation.
+ 
+ @since 2.7.1.3
+ */
++ (void)authenticatedRegistrationForUser:(DNUserDetails *)userDetails device:(DNDeviceDetails *)deviceDetails authenticationDetail:(DNAuthResponse *)authDetails token:(NSString *)token success:(DNNetworkSuccessBlock)success failure:(DNNetworkFailureBlock)failure;
+
 #pragma mark -
 #pragma mark - Private... Not for public consumption. Public use of these API's is unsupported. 
 
@@ -196,6 +221,13 @@
   @warning Private, please do not use
  */
 + (void)refreshAccessTokenSuccess:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock;
+
+/*!
+ PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour
+ 
+ @warning Private, please do not use
+ */
++ (void)refreshAuthentication:(DNCompletionBlock)completionBlock;
 
 /*!
  PRIVATE - Please do not use. Use of this API is unsupported and may result in undesired SDK behaviour

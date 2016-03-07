@@ -98,4 +98,8 @@
     return [[error userInfo][@"failureKey"] isEqualToString:failureValue];
 }
 
++ (NSString *)errorStringFromErrorUserInfo:(NSError *)error {
+    return [[NSString alloc] initWithData:[error userInfo][@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding];
+}
+
 @end

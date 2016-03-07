@@ -77,7 +77,7 @@
             [self setDetailViewController:(DRIMessageViewController *) [[[[self splitViewController] viewControllers] lastObject] topViewController]];
         }
         else {
-            [self setDetailViewController:(DRIMessageViewController *) [[[self splitViewController] viewControllers] lastObject]];
+            [self setDetailViewController:[[[self splitViewController] viewControllers] lastObject]];
         }
         [[self detailViewController] setDelegate:self];
         [[self splitViewController] setDelegate:[self detailViewController]];
