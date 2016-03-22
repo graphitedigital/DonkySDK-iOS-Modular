@@ -53,11 +53,12 @@
     
     keychainQuery[(__bridge id) kSecReturnData] = (id) kCFBooleanTrue;
     keychainQuery[(__bridge id) kSecMatchLimit] = (__bridge id) kSecMatchLimitOne;
-    keychainQuery[(__bridge id) kSecAttrAccessible] = (__bridge id) kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly;
 
     CFDataRef keyData = NULL;
     
     OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)keychainQuery, (CFTypeRef *)&keyData);
+    
+    keychainQuery[(__bridge id) kSecAttrAccessible] = (__bridge id) kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly;
 
     if (status == noErr) {
         @try {
