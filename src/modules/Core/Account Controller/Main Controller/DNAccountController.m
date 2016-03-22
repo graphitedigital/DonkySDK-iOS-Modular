@@ -472,7 +472,7 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 
 + (void)updateRegistrationDetails:(DNUserDetails *)userDetails deviceDetails:(DNDeviceDetails *)deviceDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock) failureBlock {
     [DNAccountController registerDeviceUser:userDetails deviceDetails:deviceDetails isUpdate:YES success:^(NSURLSessionDataTask *task, id responseData) {
-        DNLocalEvent *registrationChanged = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventRegistrationChangedDevice publisher:NSStringFromClass([DNAccountController class]) timeStamp:[NSDate date] data:userDetails];
+        DNLocalEvent *registrationChanged = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventRegistrationChangedDevice publisher:NSStringFromClass([DNAccountController class]) timeStamp:[NSDate date] data:deviceDetails];
         [[DNDonkyCore sharedInstance] publishEvent:registrationChanged];
         if (successBlock) {
             successBlock(task, responseData);

@@ -261,15 +261,6 @@ extern NSString * const kDNDonkyEventNetworkStateChanged;
 extern NSString * const kDNEventRegistration;
 
 /*!
- Subscribe to this event to receive notifications when a new registration has occurred.
-
- This notification should contain a Dictionary containing the following values: LogLevel (DonkyLogType enum value), Message (NSString *) in the data property.
- 
- @since 2.0.0.0
- */
-extern NSString * const kDNDonkyLogEvent;
-
-/*!
  Subscribe to this event to receive notifications when the application is opened.
 
   This notification should contain contain a nil data property.

@@ -190,7 +190,10 @@
             [[DNNetworkController sharedInstance] synchronise];
             [DNNotificationController registerForPushNotifications];
 
-            DNLocalEvent *openAppEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppOpen publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:nil];
+            DNLocalEvent *openAppEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventAppOpen
+                                                                       publisher:NSStringFromClass([self class])
+                                                                       timeStamp:[NSDate date]
+                                                                            data:nil];
             [self publishEvent:openAppEvent];
 
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -255,7 +258,11 @@
         else if (autoRegister) {
             
              DNAuthenticationCompletion block = ^(NSString *token, DNAuthResponse *authResponse) {
-                 [DNAccountController authenticatedRegistrationForUser:nil device:nil authenticationDetail:authResponse token:token success:^(NSURLSessionDataTask *task, id responseData) {
+                 [DNAccountController authenticatedRegistrationForUser:nil
+                                                                device:nil
+                                                  authenticationDetail:authResponse
+                                                                 token:token
+                                                               success:^(NSURLSessionDataTask *task, id responseData) {
                      if (successBlock) {
                          successBlock(task, responseData);
                      }
@@ -266,7 +273,8 @@
                  }];
              };
 
-            DNAuthenticationObject *authenticationObject = [[DNAuthenticationObject alloc] initWithUserID:[[[DNAccountController registrationDetails] userDetails] userID] nonce:nil];
+            DNAuthenticationObject *authenticationObject = [[DNAuthenticationObject alloc] initWithUserID:[[[DNAccountController registrationDetails] userDetails] userID]
+                                                                                                    nonce:nil];
             [DNAccountController startAuthenticationWithCompletion:^(DNAuthResponse *authDetails, DNAuthenticationObject *expectedDetails, NSError *error) {
                 if ([self authenticationHandler]) {
                     [self authenticationHandler](block, authDetails, authenticationObject);

@@ -79,10 +79,6 @@
                 });
             }
         }];
-
-        if (![events count] && ![[event eventType] isEqualToString:kDNDonkyLogEvent]) { // We don't want to log out Log events otherwise we will get stuck in an infinite loop
-            DNInfoLog(@"No listeners for event: %@", [event eventType]);
-        }
     });
 }
 

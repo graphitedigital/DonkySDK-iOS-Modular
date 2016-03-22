@@ -94,9 +94,6 @@ NSString * const kDNDonkyEventNetworkStateChanged = @"DonkyNetworkStateEvent";
 NSString * const kDNEventRegistration = @"DonkyRegistrationEvent";
 
 //
-NSString * const kDNDonkyLogEvent = @"DonkyLogEvent";
-
-//
 NSString * const kDNDonkyEventAppOpen = @"DonkyAppOpen";
 
 //
