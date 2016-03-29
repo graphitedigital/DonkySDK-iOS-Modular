@@ -569,7 +569,9 @@ static NSString *const DNCustomType = @"customType";
 }
 
 - (void)queueClientNotifications:(NSArray *)notifications completion:(DNCompletionBlock)completionBlock {
-    [DNNetworkHelper queueClientNotifications:notifications pendingNotifications:[self pendingClientNotifications] completion:completionBlock];
+    @synchronized ([self pendingClientNotifications]) {
+        [DNNetworkHelper queueClientNotifications:notifications pendingNotifications:[self pendingClientNotifications] completion:completionBlock];
+    }
 }
 
 - (NSError *)queueContentNotifications:(NSArray *)notifications {

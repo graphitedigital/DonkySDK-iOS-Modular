@@ -20,32 +20,28 @@
 
 - (NSString *)donkyDateForServer {
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setLocale:[NSLocale currentLocale]];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
+    [dateFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZZ"];
     return [dateFormatter stringFromDate:self];
 }
 
 - (NSString *)donkyDateForServerWithoutZone {
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setLocale:[NSLocale currentLocale]];
+    [dateFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
     return [dateFormatter stringFromDate:self];
 }
 
 + (NSDate *)donkyDateFromServer:(NSString *)date {
-
     if (date) {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setLocale:[NSLocale currentLocale]];
         [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
-
         return [dateFormatter dateFromString:date];
     }
-
     return nil;
 }
-
 - (NSString *)donkyDateForDebugLog {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:kDNLoggingDateFormat];
@@ -85,15 +81,6 @@
     }
     
     return NO;
-}
-
-
-- (NSString *)donkyChatMessageDate {
-
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"HH:mm"];
-
-    return [dateFormatter stringFromDate:self];
 }
 
 - (BOOL)isDateOlderThan24Hours {

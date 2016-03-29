@@ -58,6 +58,13 @@
  */
 + (void)reportSharingOfRichMessage:(DNMessage *)message sharedUsing:(NSString *)sharedUsing;
 
+/*!
+ Helper method to report that a message(s) has been deleted.
+ 
+ @param messages the messages that should be marked as deleted.
+ 
+ @since 2.7.1.3
+ */
 + (void)reportMessagesDeleted:(NSArray *)messages;
 
 @end

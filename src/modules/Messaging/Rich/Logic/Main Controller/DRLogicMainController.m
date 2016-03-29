@@ -63,7 +63,7 @@
 
     [DRLogicMainController deleteMaxLifeRichMessages];
 
-    [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.2.1.0"]];
+    [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.2.1.1"]];
 
     [self setRichMessageSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationRichMessage
                                                                          batchHandler:[self richMessageHandler]]];

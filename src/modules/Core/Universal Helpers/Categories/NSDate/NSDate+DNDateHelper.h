@@ -24,6 +24,13 @@
  */
 - (NSString *)donkyDateForServer;
 
+/*!
+ Format the date object to be sent to the network (omiting the zone) and return it as an NSString.
+ 
+ @return a string containing the date formatted for the network.
+ 
+ @since 2.0.0.0
+ */
 - (NSString *)donkyDateForServerWithoutZone;
 
 /*!
@@ -74,15 +81,6 @@
  @since 2.0.0.0
  */
 - (BOOL)isDateBeforeDate:(NSDate *)secondDate;
-
-/*!
- Helper method to return the date in the format of HH:MM
- 
- @return a new string formatted from the date.
- 
- @since 2.6.5.4
- */
-- (NSString *)donkyChatMessageDate;
 
 /*!
  Helper method to determine if the date is older than 24 hours. This is primarily used

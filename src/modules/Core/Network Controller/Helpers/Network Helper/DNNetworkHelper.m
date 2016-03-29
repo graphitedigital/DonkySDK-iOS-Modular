@@ -116,28 +116,28 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
 
 + (void)queueClientNotifications:(NSArray *)notifications pendingNotifications:(NSMutableArray *)pendingNotifications completion:(DNCompletionBlock)completionBlock {
     //Enumerate through the array:
-    @synchronized(notifications) {
-        [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if (![obj isKindOfClass:[DNClientNotification class]]) {
-                DNErrorLog(@"Whoops, something has gone wrong, expected class DNClientNotification. Got %@", NSStringFromClass([obj class]));
-            }
-            else {
-                @synchronized (pendingNotifications) {
+    @try {
+        @synchronized (pendingNotifications) {
+            [notifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                if (![obj isKindOfClass:[DNClientNotification class]]) {
+                    DNErrorLog(@"Whoops, something has gone wrong, expected class DNClientNotification. Got %@", NSStringFromClass([obj class]));
+                }
+                else {
                     if (![pendingNotifications containsObject:obj]) {
                         [pendingNotifications addObject:obj];
                     }
                 }
-            }
-        }];
+            }];
+        }
         [DNNetworkDataHelper saveClientNotificationsToStore:notifications completion:completionBlock];
+    } @catch (NSException *exception) {
+        DNErrorLog(@"Fatal exception (%@) when adding client notifications Retying ...", [exception description]);
+        [DNNetworkHelper queueClientNotifications:notifications pendingNotifications:pendingNotifications completion:completionBlock];
     }
 }
 
 + (NSError *)queueContentNotifications:(NSArray *)notifications pendingNotifications:(NSMutableArray *)pendingNotifications{
-
-
     [DNNetworkHelper queueContentNotifications:notifications pendingNotifications:pendingNotifications completon:nil];
-
     return nil;
 }
 

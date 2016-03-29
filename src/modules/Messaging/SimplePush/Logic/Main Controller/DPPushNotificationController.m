@@ -20,7 +20,6 @@
 #import "DCMMainController.h"
 #import "DCAConstants.h"
 
-static NSString *const DNPendingPushNotifications = @"PendingPushNotifications";
 static NSString *const DNInteractionResult = @"InteractionResult";
 
 @interface DPPushNotificationController ()
@@ -55,7 +54,7 @@ static NSString *const DNInteractionResult = @"InteractionResult";
     
     if (self) {
         
-        [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.2.0.0"]];
+        [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.2.0.1"]];
         
         [self setSeenNotifications:[[NSMutableArray alloc] init]];
     }
@@ -80,7 +79,6 @@ static NSString *const DNInteractionResult = @"InteractionResult";
             [[weakSelf seenNotifications] enumerateObjectsUsingBlock:^(id obj2, NSUInteger idx2, BOOL * stop2) {
                 DNServerNotification *server = obj2;
                 if ([[original serverNotificationID] isEqualToString:[server serverNotificationID]]) {
-
                     seen = YES;
                     *stop2 = YES;
                 }
@@ -128,7 +126,8 @@ static NSString *const DNInteractionResult = @"InteractionResult";
     NSString *pushNotificationId = [NSString stringWithFormat:@"com.donky.push.%@", [notification serverNotificationID]];
     NSString *notificationID = [[NSUserDefaults standardUserDefaults] objectForKey:pushNotificationId];
     if (notificationID) {
-        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:pushNotificationId];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:pushNotificationId];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         DNLocalEvent *pushOpenEvent = [[DNLocalEvent alloc] initWithEventType:kDAEventInfluencedAppOpen
                                                                     publisher:NSStringFromClass([self class])
                                                                     timeStamp:[NSDate date]
@@ -136,18 +135,15 @@ static NSString *const DNInteractionResult = @"InteractionResult";
         [[DNDonkyCore sharedInstance] publishEvent:pushOpenEvent];
     }
 
-    else {
-        //Publish event:
-        NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
-        [data dnSetObject:[notification serverNotificationID] forKey:DNPendingPushNotifications];
-        [data dnSetObject:notification forKey:kDNDonkyNotificationSimplePush];
+    //Publish event:
+    NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
+    [data dnSetObject:notification forKey:kDNDonkyNotificationSimplePush];
 
-        DNLocalEvent *pushEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyNotificationSimplePush
-                                                                publisher:NSStringFromClass([self class])
-                                                                timeStamp:[NSDate date]
-                                                                     data:data];
-        [[DNDonkyCore sharedInstance] publishEvent:pushEvent];
-    }
+    DNLocalEvent *pushEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyNotificationSimplePush
+                                                            publisher:NSStringFromClass([self class])
+                                                            timeStamp:[NSDate date]
+                                                                 data:data];
+    [[DNDonkyCore sharedInstance] publishEvent:pushEvent];
 }
 
 @end
