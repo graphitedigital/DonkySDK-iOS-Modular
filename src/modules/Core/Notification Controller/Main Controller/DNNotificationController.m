@@ -174,10 +174,17 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
                 handler(url);
             }
         }
-
+        
+    
         NSString *notificationID = userInfo[DPPushNotificationID];
-
+        
+        if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
+            NSString *pushNotificationId = [NSString stringWithFormat:@"com.donky.push.%@", notificationID];
+            [[NSUserDefaults standardUserDefaults] setObject:notificationID forKey:pushNotificationId];
+        }
+        
         [[DNNetworkController sharedInstance] serverNotificationForId:notificationID success:^(NSURLSessionDataTask *task, id responseData) {
+            
             if (identifier) {
                 DNLocalEvent *interactionResult = [[DNLocalEvent alloc] initWithEventType:DNInteractionResult
                                                                                 publisher:NSStringFromClass([self class])

@@ -32,13 +32,6 @@ extern NSString * const kDRichMessageDeletedEvent;
 extern NSString * const kDRichMessageReadOnAnotherDeviceEvent;
 
 /*!
- Event published when a rich message notification is tapped.
- 
- @since 2.2.2.7
- */
-extern NSString * const kDRichMessageNotificationTapped;
-
-/*!
  Event published when a rich message notification is received from the 
  network.
  

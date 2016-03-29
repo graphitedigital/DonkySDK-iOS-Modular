@@ -12,8 +12,6 @@
 
 NSString * const kDRichMessageReadEvent = @"DonkyRichMessageReadEvent";
 
-NSString * const kDRichMessageNotificationTapped = @"DonkyRichMessageNotificationTapped";
-
 NSString * const kDRichMessageNotificationEvent = @"DonkyRichMessageNotificationEvent";
 
 NSString * const kDRichMessageBadgeCount = @"RichMessageBadgeCount";

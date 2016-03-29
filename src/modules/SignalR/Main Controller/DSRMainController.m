@@ -58,35 +58,36 @@
 }
 
 - (void)start {
-
-    if (![self deviceConnectivity]) {
-        [self setDeviceConnectivity:[[DNDeviceConnectivityController alloc] init]];
-    }
-
-    if ([[self deviceConnectivity] hasValidConnection]) {
-
-        DNModuleDefinition *signalRModule = [[DNModuleDefinition alloc] initWithName:@"MobileSignalR" version:@"1.0.0.0"];
-
-        [[DNDonkyCore sharedInstance] registerModule:signalRModule];
-        [[DNDonkyCore sharedInstance] registerService:@"DonkySignalRService" instance:self];
-
-        if (![self hubConnection] && [DNDonkyNetworkDetails signalRURL] && [DNDonkyNetworkDetails accessToken]) {
-            [self setHubConnection:[[SRHubConnection alloc] initWithURLString:[DNDonkyNetworkDetails signalRURL] queryString:@{@"access_token" : [DNDonkyNetworkDetails accessToken]} useDefault:NO]];
-            [[self hubConnection] setDelegate:self];
-
-            [self setSignalRHubProxy:[[self hubConnection] createHubProxy:@"NetworkHub"]];
-            [[self signalRHubProxy] on:@"push" perform:self selector:@selector(serverNotificationsReceived:)];
-
-            [[self hubConnection] start];
+    dispatch_async(donky_network_signal_r_queue(), ^{
+        if (![self deviceConnectivity]) {
+            [self setDeviceConnectivity:[[DNDeviceConnectivityController alloc] init]];
         }
 
-        else if (![DNDonkyNetworkDetails signalRURL]) {
-            DNErrorLog(@"Cannot start signalR. Don't have the URL.");
+        if ([[self deviceConnectivity] hasValidConnection]) {
+
+            DNModuleDefinition *signalRModule = [[DNModuleDefinition alloc] initWithName:@"MobileSignalR" version:@"1.0.0.0"];
+
+            [[DNDonkyCore sharedInstance] registerModule:signalRModule];
+            [[DNDonkyCore sharedInstance] registerService:@"DonkySignalRService" instance:self];
+
+            if (![self hubConnection] && [DNDonkyNetworkDetails signalRURL] && [DNDonkyNetworkDetails accessToken]) {
+                [self setHubConnection:[[SRHubConnection alloc] initWithURLString:[DNDonkyNetworkDetails signalRURL] queryString:@{@"access_token" : [DNDonkyNetworkDetails accessToken]} useDefault:NO]];
+                [[self hubConnection] setDelegate:self];
+
+                [self setSignalRHubProxy:[[self hubConnection] createHubProxy:@"NetworkHub"]];
+                [[self signalRHubProxy] on:@"push" perform:self selector:@selector(serverNotificationsReceived:)];
+
+                [[self hubConnection] start];
+            }
+
+            else if (![DNDonkyNetworkDetails signalRURL]) {
+                DNErrorLog(@"Cannot start signalR. Don't have the URL.");
+            }
+            else {
+                DNInfoLog(@"SignalR is already running...");
+            }
         }
-        else {
-            DNInfoLog(@"SignalR is already running...");
-        }
-    }
+    });
 }
 
 - (void)serverNotificationsReceived:(id)serverNotifications {
