@@ -133,8 +133,6 @@ static NSString *const DAName = @"name";
         return nil;
     }
     
-    NSData *assetData = UIImagePNGRepresentation(avatarImage);
-    
     CGSize newSize = CGSizeMake(96, 96);
 
     UIGraphicsBeginImageContext(newSize);
@@ -142,7 +140,7 @@ static NSString *const DAName = @"name";
     avatarImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    assetData = UIImagePNGRepresentation(avatarImage);
+    NSData *assetData = UIImagePNGRepresentation(avatarImage);
 
     NSMutableDictionary *uploadDict = [[NSMutableDictionary alloc] init];
 

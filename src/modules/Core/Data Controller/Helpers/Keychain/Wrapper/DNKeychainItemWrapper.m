@@ -22,8 +22,8 @@
 
 + (void)setObject:(id)inObject forKey:(id)key {
     
-    if (!inObject || !key) {
-        DNErrorLog(@"can't save an item with no inObject or no Key");
+    if (!key) {
+        DNErrorLog(@"Can't save an item with no Key");
         return;
     }
 
@@ -79,7 +79,7 @@
     return ret;
 }
 
-+ (void)keyChainDeleteKey:(NSString *)key {
++ (void)deleteKeychainItem:(NSString *)key {
     NSMutableDictionary *keychainQuery = [self getKeychainQuery:key];
     OSStatus status = SecItemDelete((__bridge CFDictionaryRef)keychainQuery);
     if (status != noErr) {

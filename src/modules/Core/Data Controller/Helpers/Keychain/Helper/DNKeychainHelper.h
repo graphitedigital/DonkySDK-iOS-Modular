@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #import <Security/Security.h>
 
 @interface DNKeychainHelper : NSObject
@@ -15,5 +14,7 @@
 + (void)saveObjectToKeychain:(id)object withKey:(NSString *)key;
 
 + (id)objectForKey:(NSString *)key;
+
++ (void)deleteObjectForKey:(NSString *)key;
 
 @end

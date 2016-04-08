@@ -570,7 +570,9 @@ static NSString *const DNCustomType = @"customType";
 
 - (void)queueClientNotifications:(NSArray *)notifications completion:(DNCompletionBlock)completionBlock {
     @synchronized ([self pendingClientNotifications]) {
-        [DNNetworkHelper queueClientNotifications:notifications pendingNotifications:[self pendingClientNotifications] completion:completionBlock];
+//        dispatch_async(donky_network_processing_queue(), ^{
+            [DNNetworkHelper queueClientNotifications:notifications pendingNotifications:[self pendingClientNotifications] completion:completionBlock];
+//        });
     }
 }
 

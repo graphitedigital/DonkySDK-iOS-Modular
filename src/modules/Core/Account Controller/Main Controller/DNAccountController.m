@@ -609,11 +609,6 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 + (void)replaceRegistrationDetailsWithUserDetails:(DNUserDetails *)userDetails deviceDetails:(DNDeviceDetails *)deviceDetails success:(DNNetworkSuccessBlock)successBlock failure:(DNNetworkFailureBlock)failureBlock {
     
     if ([[DNDonkyCore sharedInstance] isUsingAuth]) {
-//        DNErrorLog(@"cannot replace user while in authenticated...");
-//        if (failureBlock) {
-//            failureBlock(nil, [DNErrorController errorCode:0000 additionalData:@{@"Reason" : @"Cannot replace user while in authenticated..."}]);
-//        }
-
         [DNAccountController refreshAccessTokenSuccess:successBlock failure:failureBlock];
         return;
     }
@@ -869,6 +864,7 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
             [deviceUser setUserID:[details userID]];
             [deviceUser setSelectedTags:[details selectedTags]];
             [deviceUser setAdditionalProperties:[details additionalProperties]];
+            [deviceUser setNetworkProfileID:[DNDonkyNetworkDetails networkProfileID]];
 
             [deviceUser setLastUpdated:[NSDate date]];
             [[DNDataController sharedInstance] saveContext:context];

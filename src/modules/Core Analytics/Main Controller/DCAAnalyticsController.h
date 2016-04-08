@@ -18,6 +18,13 @@
 @interface DCAAnalyticsController : NSObject
 
 /*!
+ Sets whether this current launch was an influenced launch or not.
+
+ @since 2.0.0.0
+ */
+@property(nonatomic, getter=wasInfluenced) BOOL influenced;
+
+/*!
  The shared instance.
  
  @return the shared instance.
