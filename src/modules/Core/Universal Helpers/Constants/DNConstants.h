@@ -279,13 +279,6 @@ extern NSString * const kDNDonkyEventAppOpen;
 extern NSString * const kDNDonkyEventAppClose;
 
 /*!
- Subscribe to this event to receive notifications when the application is entering the foreground.
- 
- @since 2.2.2.7
- */
-extern NSString * const kDNDonkyEventAppWillEnterForegroundNotification;
-
-/*!
  Subscribe to this event to receive notifications when a remote notification has been tapped to load the application. 
  NOTE: This is only applicable to notifications with the 'content' flag set i.e. Rich Messages.
  

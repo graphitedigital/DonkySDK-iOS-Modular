@@ -297,7 +297,7 @@ static NSString *const DRTableCellEditControlClass = @"UITableViewCellEditContro
 #pragma mark - Expiration Handling
 
 - (void)calculateExpiryDate {
-   self.expiryTimer = [DRITableViewCellExpirationHelper expiryTimerForMessage:[self richMessage] target:self];
+    [self setExpiryTimer:[DRITableViewCellExpirationHelper expiryTimerForMessage:[self richMessage] target:self]];
 }
 
 - (void)setTableViewEditing:(BOOL)tableViewEditing {

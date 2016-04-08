@@ -141,7 +141,7 @@ static NSString *const DLSTargetUserKey = @"TargetUser";
         [DLSMainController sendLocationUpdateToUser:nil completionBlock:nil];
     }];
 
-    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppWillEnterForegroundNotification handler:[self appOpenEvent]];
+    [[DNDonkyCore sharedInstance] subscribeToLocalEvent:kDNDonkyEventAppOpen handler:[self appOpenEvent]];
 
     [self setLocationRequestSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationLocationRequest batchHandler:[self requestForLocationHandler]]];
     [self setLocationReceivedSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationLocationReceived batchHandler:[self userLocationReceived]]];
@@ -262,7 +262,9 @@ static NSString *const DLSTargetUserKey = @"TargetUser";
                 if (block) {
                     block(manager, locationUpdate);
                 }
-                [usedBlocks addObject:obj];
+                if (obj) {
+                    [usedBlocks addObject:obj];
+                }
             }];
             [[self nextLocationUpdateBlocks] removeObjectsInArray:usedBlocks];
         }

@@ -41,8 +41,6 @@
 
 + (void)saveNetworkProfileID:(NSString *)networkProfileID;
 
-+ (void)saveMaximumNumberOfSavedChatMessages:(NSInteger)maximumNumberOfSavedChatMessages;
-
 + (NSString *)deviceSecret;
 
 + (NSString *)deviceID;
@@ -66,8 +64,6 @@
 + (NSString *)apnsAudio;
 
 + (NSString *)networkProfileID;
-
-+ (NSInteger)maximumNumberOfSavedChatMessages;
 
 + (NSString *)signalRURL;
 

@@ -19,6 +19,7 @@
 #import "DNNetworkController.h"
 #import "DCMMainController.h"
 #import "DCAConstants.h"
+#import "DNNotificationController.h"
 
 static NSString *const DNInteractionResult = @"InteractionResult";
 
@@ -54,7 +55,7 @@ static NSString *const DNInteractionResult = @"InteractionResult";
     
     if (self) {
         
-        [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.2.0.1"]];
+        [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.2.0.2"]];
         
         [self setSeenNotifications:[[NSMutableArray alloc] init]];
     }
@@ -90,6 +91,7 @@ static NSString *const DNInteractionResult = @"InteractionResult";
             }
         }];
 
+        [DNNotificationController resetApplicationBadgeCount];
         [DCMMainController markAllMessagesAsReceived:batchNotifications];
     }];
         
@@ -125,6 +127,7 @@ static NSString *const DNInteractionResult = @"InteractionResult";
 
     NSString *pushNotificationId = [NSString stringWithFormat:@"com.donky.push.%@", [notification serverNotificationID]];
     NSString *notificationID = [[NSUserDefaults standardUserDefaults] objectForKey:pushNotificationId];
+    
     if (notificationID) {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:pushNotificationId];
         [[NSUserDefaults standardUserDefaults] synchronize];

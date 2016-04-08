@@ -210,7 +210,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
     [clientNotifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if (![obj isKindOfClass:[DNClientNotification class]]) {
-            DNErrorLog(@"WHoops, something has gone wrong with this client notification. Expected class DNClientNotification, got: %@", NSStringFromClass([obj class]));
+            DNErrorLog(@"Whoops, something has gone wrong with this client notification. Expected class DNClientNotification, got: %@", NSStringFromClass([obj class]));
         }
         else {
             DNClientNotification *originalNotification = obj;
@@ -312,7 +312,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
     [params dnSetObject:[[UIApplication sharedApplication] applicationState] != UIApplicationStateActive ? @"true" : @"false" forKey:@"isBackground"];
 
 
-    DNInfoLog(@"Notifications prepared, proceeding to send...");
+    DNInfoLog(@"Notifications prepared, proceeding to send... %@", params);
     return params;
 }
 

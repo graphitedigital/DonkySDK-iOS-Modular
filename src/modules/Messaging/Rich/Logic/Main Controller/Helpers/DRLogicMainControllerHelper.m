@@ -62,6 +62,12 @@
                     NSString *notificationID = [[NSUserDefaults standardUserDefaults] objectForKey:pushNotificationId];
                     if (notificationID) {
                         [[NSUserDefaults standardUserDefaults] removeObjectForKey:pushNotificationId];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                        DNLocalEvent *pushOpenEvent = [[DNLocalEvent alloc] initWithEventType:kDAEventInfluencedAppOpen
+                                                                                    publisher:NSStringFromClass([self class])
+                                                                                    timeStamp:[NSDate date]
+                                                                                         data:[notification serverNotificationID]];
+                        [[DNDonkyCore sharedInstance] publishEvent:pushOpenEvent];
                     }
                 }
             }];
@@ -74,7 +80,7 @@
 
             [DRLogicMainController richMessageNotificationsReceived:newNotifications];
             
-            if ([batch count] > 1) {
+            if ([batch count]) {
                 DNLocalEvent *event = [[DNLocalEvent alloc] initWithEventType:@"DAudioPlayAudioFile"
                                                                     publisher:NSStringFromClass([self class])
                                                                     timeStamp:[NSDate date]

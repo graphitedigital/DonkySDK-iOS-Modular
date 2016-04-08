@@ -37,7 +37,6 @@ static NSString *const DNDeviceToken = @"DeviceToken";
 static NSString *const DNAPNSAudio = @"APNSAudio";
 static NSString *const DNNetworkProfileID = @"networkProfileID";
 static NSString *const DNSignalRURL = @"DNSignalRURL";
-static NSString *const DNMaximumNumberOfSavedChatMessages = @"MaximumNumberOfSavedChatMessages";
 static NSString *const DNAPNSToken = @"APNSToken";
 
 @implementation DNDonkyNetworkDetails
@@ -55,7 +54,12 @@ static NSString *const DNAPNSToken = @"APNSToken";
 }
 
 + (void)saveAccessToken:(NSString *)accessToken {
-    [DNKeychainHelper saveObjectToKeychain:accessToken withKey:kDNKeychainAccessToken];
+    if (!accessToken) {
+        [DNKeychainHelper deleteObjectForKey:kDNKeychainAccessToken];
+    }
+    else {
+        [DNKeychainHelper saveObjectToKeychain:accessToken withKey:kDNKeychainAccessToken];
+    }
 }
 
 + (void)saveSecureServiceRootUrl:(NSString *)secureServiceRootUrl {
@@ -100,10 +104,6 @@ static NSString *const DNAPNSToken = @"APNSToken";
 
 + (void)saveNetworkProfileID:(NSString *)networkProfileID {
     [DNUserDefaultsHelper saveObject:networkProfileID withKey:DNNetworkProfileID];
-}
-
-+ (void)saveMaximumNumberOfSavedChatMessages:(NSInteger)maximumNumberOfSavedChatMessages {
-    [DNUserDefaultsHelper saveObject:@(maximumNumberOfSavedChatMessages) withKey:DNMaximumNumberOfSavedChatMessages];
 }
 
 + (NSString *)signalRURL {
@@ -192,10 +192,6 @@ static NSString *const DNAPNSToken = @"APNSToken";
 
 + (NSString *)networkProfileID {
     return [DNUserDefaultsHelper objectForKey:DNNetworkProfileID];
-}
-
-+ (NSInteger)maximumNumberOfSavedChatMessages {
-    return [[DNUserDefaultsHelper objectForKey:DNMaximumNumberOfSavedChatMessages] integerValue] ? : kDonkyMaxNumberOfSavedChatMessages;
 }
 
 @end

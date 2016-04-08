@@ -23,10 +23,7 @@
 #import "DNConfigurationController.h"
 #import "NSDate+DNDateHelper.h"
 #import "NSMutableDictionary+DNDictionary.h"
-#import "DNErrorController.h"
-#import "DNDonkyNetworkDetails.h"
-#import "DNDataController.h"
-#import "UIViewController+DNRootViewController.h"
+#import "DCAAnalyticsController.h"
 
 static NSString *const DNEventInteractivePushData = @"DonkyEventInteractivePushData";
 static NSString *const DPPushNotificationID = @"notificationId";
@@ -99,31 +96,33 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
 #else
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSMutableString *hexString = nil;
-        if (token && [DNDonkyNetworkDetails isPushEnabled]) {
-            const unsigned char *dataBuffer = (const unsigned char *) [token bytes];
+        if ([DNAccountController isRegistered]) {
+            if (token && [DNDonkyNetworkDetails isPushEnabled]) {
+                const unsigned char *dataBuffer = (const unsigned char *) [token bytes];
 
-            NSUInteger dataLength = [token length];
-            hexString = [NSMutableString stringWithCapacity:(dataLength * 2)];
+                NSUInteger dataLength = [token length];
+                hexString = [NSMutableString stringWithCapacity:(dataLength * 2)];
 
-            for (int i = 0; i < dataLength; ++i) {
-                [hexString appendString:[NSString stringWithFormat:@"%02lx", (unsigned long) dataBuffer[i]]];
+                for (int i = 0; i < dataLength; ++i) {
+                    [hexString appendString:[NSString stringWithFormat:@"%02lx", (unsigned long) dataBuffer[i]]];
+                }
+
+                DNInfoLog(@"Uploading device Token: %@...", [NSString stringWithString:hexString]);
             }
 
-            DNSensitiveLog(@"Uploading device Token: %@...", [NSString stringWithString:hexString]);
+            DNPushNotificationUpdate *update = [[DNPushNotificationUpdate alloc] initWithMessageAlertSound:soundFileName ?: [DNDonkyNetworkDetails apnsAudio] deviceToken:hexString ? [NSString stringWithString:hexString] : @""];
+
+            [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:YES route:kDNNetworkRegistrationPush httpMethod:hexString ? DNPut : DNDelete parameters:[update parameters] success:^(NSURLSessionDataTask *task, id networkData) {
+                DNInfoLog(@"Registering device token succeeded.");
+                [DNDonkyNetworkDetails saveDeviceToken:hexString ? [NSString stringWithString:hexString] : @""];
+                [DNDonkyNetworkDetails saveAPNSAudio:soundFileName];
+            }                                                           failure:^(NSURLSessionDataTask *task, NSError *error) {
+                DNErrorLog(@"Registering device token failed: %@", [error localizedDescription]);
+                if ([token length]) {
+                    [DNNotificationController registerDeviceToken:token];
+                }
+            }];
         }
-
-        DNPushNotificationUpdate *update = [[DNPushNotificationUpdate alloc] initWithMessageAlertSound:soundFileName ? : [DNDonkyNetworkDetails apnsAudio] deviceToken:hexString ? [NSString stringWithString:hexString] : @""];
-
-        [[DNNetworkController sharedInstance] performSecureDonkyNetworkCall:YES route:kDNNetworkRegistrationPush httpMethod:hexString ? DNPut : DNDelete parameters:[update parameters] success:^(NSURLSessionDataTask *task, id networkData) {
-            DNInfoLog(@"Registering device token succeeded.");
-            [DNDonkyNetworkDetails saveDeviceToken:hexString ? [NSString stringWithString:hexString] : @""];
-            [DNDonkyNetworkDetails saveAPNSAudio:soundFileName];
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            DNErrorLog(@"Registering device token failed: %@", [error localizedDescription]);
-            if ([token length]) {
-                [DNNotificationController registerDeviceToken:token];
-            }
-        }];
     });
 #endif
 }
@@ -156,6 +155,15 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
 
 + (void)didReceiveNotification:(NSDictionary *)userInfo handleActionIdentifier:(NSString *)identifier completionHandler:(void (^)(NSString *))handler {
 
+    NSString *notificationID = userInfo[DPPushNotificationID];
+
+    if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
+        [[DCAAnalyticsController sharedInstance] setInfluenced:YES];
+        NSString *pushNotificationId = [NSString stringWithFormat:@"com.donky.push.%@", notificationID];
+        [[NSUserDefaults standardUserDefaults] setObject:notificationID forKey:pushNotificationId];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         if (![[DNDonkyCore sharedInstance] serviceForType:DNEventInteractivePushData]) {
             [[DNDonkyCore sharedInstance] subscribeToLocalEvent:DNEventInteractivePushData handler:^(DNLocalEvent *event) {
@@ -168,37 +176,33 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
             [[DNDonkyCore sharedInstance] registerService:DNEventInteractivePushData instance:self];
         }
 
-        if (identifier) {
-            NSString *url = [userInfo[@"lbl1"] isEqualToString:identifier] ? userInfo[@"link1"] : userInfo[@"link2"];
+        NSString *identifierCopy = identifier;
+        if (!identifierCopy ) {
+            identifierCopy = [userInfo[@"inttype"] isEqualToString:@"OneButton"] ? userInfo[@"lbl1"] : nil;
+        }
+
+        if (identifierCopy && ![identifierCopy isKindOfClass:[NSNull class]]) {
+            NSString *url = [userInfo[@"lbl1"] isEqualToString:identifierCopy ] ? userInfo[@"link1"] : userInfo[@"link2"];
             if (handler) {
                 handler(url);
             }
         }
-        
-    
-        NSString *notificationID = userInfo[DPPushNotificationID];
-        
-        if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
-            NSString *pushNotificationId = [NSString stringWithFormat:@"com.donky.push.%@", notificationID];
-            [[NSUserDefaults standardUserDefaults] setObject:notificationID forKey:pushNotificationId];
-        }
-        
+
         [[DNNetworkController sharedInstance] serverNotificationForId:notificationID success:^(NSURLSessionDataTask *task, id responseData) {
             
-            if (identifier) {
+            if (identifierCopy) {
                 DNLocalEvent *interactionResult = [[DNLocalEvent alloc] initWithEventType:DNInteractionResult
                                                                                 publisher:NSStringFromClass([self class])
                                                                                 timeStamp:[NSDate date]
-                                                                                     data:[DNNotificationController reportButtonInteraction:identifier
+                                                                                     data:[DNNotificationController reportButtonInteraction:identifierCopy
                                                                                                                                    userInfo:responseData]];
                 [[DNDonkyCore sharedInstance] publishEvent:interactionResult];
             }
-
-            if (handler) {
+            else if (handler) {
                 handler(nil);
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            if (handler) {
+            if (handler && !identifierCopy) {
                 handler(nil);
             }
         }];

@@ -100,9 +100,6 @@ NSString * const kDNDonkyEventAppOpen = @"DonkyAppOpen";
 NSString * const kDNDonkyEventAppClose = @"DonkyAppClose";
 
 //
-NSString * const kDNDonkyEventAppWillEnterForegroundNotification = @"DonkyAppEnteringForegroundNotification";
-
-//
 NSString * const kDNDonkyEventNotificationLoaded = @"DonkyNotificationLoadedEvent";
 
 //
