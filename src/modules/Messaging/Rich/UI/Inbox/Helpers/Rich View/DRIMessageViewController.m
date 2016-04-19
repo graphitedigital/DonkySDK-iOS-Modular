@@ -267,7 +267,7 @@
         }
     }
 
-    [DRLogicMainController markMessageAsRead:[self richMessage]];
+    [DRLogicMainController markMessagesAsRead:@[[self richMessage]] completion:nil];
 }
 
 #pragma mark -

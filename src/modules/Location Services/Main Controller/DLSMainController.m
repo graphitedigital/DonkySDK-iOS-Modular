@@ -180,7 +180,7 @@ static NSString *const DLSTargetUserKey = @"TargetUser";
     [self setUsageOnly:NO];
 
     [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.0.0.0"]];
-    [[DNDonkyCore sharedInstance] registerModule:self.moduleDefinition];
+    [[DNDonkyCore sharedInstance] registerModule:[self moduleDefinition]];
 
     if ([DNSystemHelpers systemVersionAtLeast:8.0]) {
         //We check for the required keys:
@@ -191,10 +191,14 @@ static NSString *const DLSTargetUserKey = @"TargetUser";
         assert(locationAlwaysUsageKey);
     }
 
+    [self startLocationTrackingServices];
     [[self locationManager] startUpdatingLocation];
 }
 
 - (void)stopLocationUpdates {
+
+    [self stopLocationTrackingServices];
+
     [[self locationManager] stopUpdatingLocation];
     [[self locationManager] setDelegate:nil];
 }

@@ -195,7 +195,7 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
                                                                                 publisher:NSStringFromClass([self class])
                                                                                 timeStamp:[NSDate date]
                                                                                      data:[DNNotificationController reportButtonInteraction:identifierCopy
-                                                                                                                                   userInfo:responseData]];
+                                                                                 userInfo:responseData]];
                 [[DNDonkyCore sharedInstance] publishEvent:interactionResult];
             }
             else if (handler) {

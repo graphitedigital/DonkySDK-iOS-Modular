@@ -66,7 +66,7 @@
         if ([[operation identifier] isEqualToString:@"Synchronise"] && [operation isExecuting]) {
             DNDebugLog(@"Operation started at: %@", [operation timeStarted]);
             //Compare time:
-            if ((![operation isFinished] && ![operation isExecuting]) || ([[operation timeStarted] timeIntervalSinceDate:[NSDate date]] * -1 < 20 && [self operationCount] > 1)) {
+            if ((![operation isFinished] && ![operation isExecuting]) || ([[operation timeStarted] timeIntervalSinceDate:[NSDate date]] * -1 > 20)) {
                 [operation cancel];
             }
             else {

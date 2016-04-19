@@ -77,6 +77,7 @@ static NSString *const DAPlayFile = @"DAudioPlayAudioFile";
 
 - (void)stop {
     [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:DAPlayFile handler:[self audioFileHandler]];
+    [[DNDonkyCore sharedInstance] unRegisterService:NSStringFromClass([self class])];
 }
 
 - (void)playAudioFileForMessage:(NSInteger)messageType {

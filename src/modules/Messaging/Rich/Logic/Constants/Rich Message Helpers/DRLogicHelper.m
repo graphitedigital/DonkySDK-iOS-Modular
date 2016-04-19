@@ -155,6 +155,15 @@ static NSString *const DRMessageTimeStampDescriptor = @"sentTimestamp";
     }
 }
 
++ (void)markAllRichMessagesAsRead:(DNCompletionBlock)completion {
+    NSArray *allRichMessages = [DRLogicHelper allUnreadRichMessages];
+    [DRLogicHelper markMessagesAsRead:allRichMessages completion:completion];
+}
+
++ (void)markMessagesAsRead:(NSArray *)messages completion:(DNCompletionBlock)completion {
+    [DCMMainController markAllMessagesAsRead:messages completion:completion];
+}
+
 + (void)deleteAllRichMessages:(NSArray *)richMessages {
     NSManagedObjectContext *context = nil;
     if ([NSThread currentThread] == [NSThread mainThread]) {

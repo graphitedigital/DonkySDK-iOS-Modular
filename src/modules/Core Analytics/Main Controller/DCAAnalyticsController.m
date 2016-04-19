@@ -35,9 +35,9 @@ static NSString *const DCANoneSession = @"None";
 static NSString *const DCANotificationSession = @"Notification";
 
 @interface DCAAnalyticsController ()
-@property(nonatomic, copy) void (^appOpenEvent)(DNLocalEvent *);
-@property(nonatomic, copy) void (^appCloseEvent)(DNLocalEvent *);
-@property(nonatomic, copy) void (^appInfluenceEvent)(DNLocalEvent *);
+@property (nonatomic, copy) void (^appOpenEvent)(DNLocalEvent *);
+@property (nonatomic, copy) void (^appCloseEvent)(DNLocalEvent *);
+@property (nonatomic, copy) void (^appInfluenceEvent)(DNLocalEvent *);
 @end
 
 @implementation DCAAnalyticsController

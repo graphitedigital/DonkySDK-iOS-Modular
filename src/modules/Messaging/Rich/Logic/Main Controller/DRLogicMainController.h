@@ -11,6 +11,7 @@
 #import "DNSubscription.h"
 #import "DNRichMessage.h"
 #import "DNLocalEvent.h"
+#import "DNBlockDefinitions.h"
 
 @interface DRLogicMainController : NSObject
 
@@ -77,6 +78,25 @@
 - (void)markMessageAsRead:(DNRichMessage *)message  __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));
 
 + (void)markMessageAsRead:(DNRichMessage *)message;
+
+/*!
+ Helper method to mark an array of Rich Message as read. NOTE: this must be called by the integrator when NOT using the UI. This ensures that statistics around Rich Messages is recorded and that they are not displayed more than once.
+
+ @param messages array of rich message objects
+ @param completion the completion block called when they have been read and the read stats have been sent
+
+ @since 2.7.1.6
+ */
++ (void)markMessagesAsRead:(NSArray *)messages completion:(DNCompletionBlock)completion;
+
+/*!
+ Helper method to mark all unread rich messages as read.
+
+ @param completion the completion block called when they have been read and the read stats have been sent
+
+ @since 2.7.1.6
+ */
++ (void)markAllRichMessagesAsRead:(DNCompletionBlock)completion;
 
 /*!
  Helper method to get all rich messages who's description contains the supplied string.
