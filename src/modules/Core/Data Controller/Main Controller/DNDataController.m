@@ -101,13 +101,11 @@
 // Returns the managed object context for the application.
 // If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
 -(NSManagedObjectContext *)mainContext {
-    @synchronized (self) {
-        if (!_mainContext) {
-            _mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-            [_mainContext setPersistentStoreCoordinator:[self persistentStoreCoordinator]];
-        }
-        return _mainContext;
+    if (!_mainContext) {
+        _mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+        [_mainContext setPersistentStoreCoordinator:[self persistentStoreCoordinator]];
     }
+    return _mainContext;
 }
 
 + (NSManagedObjectContext *)temporaryContext {
