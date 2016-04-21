@@ -63,24 +63,9 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
         return;
     }
 
-    NSSet *existingCategories = [[[UIApplication sharedApplication] currentUserNotificationSettings] categories];
-
-    NSMutableSet *newCategories = [[NSMutableSet alloc] initWithSet:existingCategories];
-    
-    [categories enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
-        [existingCategories enumerateObjectsUsingBlock:^(id  _Nonnull obj2, BOOL * _Nonnull stop2) {
-            UIMutableUserNotificationCategory *existingCategory = obj2;
-            if ([[existingCategory identifier] isEqualToString:[obj identifier]]) {
-                *stop2 = YES;
-                [newCategories removeObject:obj];
-            }
-        }];
-        [newCategories addObject:obj];
-    }];
-
     [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings
                                                                          settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge)
-                                                                         categories:newCategories]];
+                                                                         categories:categories]];
     [[UIApplication sharedApplication] registerForRemoteNotifications];
     
 }
@@ -153,6 +138,23 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
     [DNNotificationController registerForPushNotifications];
 }
 
++ (void)didReceiveNotification:(NSDictionary *)userInfo handleActionIdentifier:(NSString *)identifier autoOpenDeepLinks:(BOOL)autoOpen completionHandler:(void (^)(NSString *))handler {
+    [DNNotificationController didReceiveNotification:userInfo handleActionIdentifier:identifier completionHandler:^(NSString *string) {
+        if (string && autoOpen) {
+            NSURL *url = [NSURL URLWithString:string];
+            if ([[UIApplication sharedApplication] canOpenURL:url]) {
+                [[UIApplication sharedApplication] openURL:url];
+            }
+            else {
+                DNErrorLog(@"Cannot open URL: %@ from string: %@", url, string);
+            }
+        }
+        if (handler) {
+            handler(string);
+        }
+    }];
+}
+
 + (void)didReceiveNotification:(NSDictionary *)userInfo handleActionIdentifier:(NSString *)identifier completionHandler:(void (^)(NSString *))handler {
 
     NSString *notificationID = userInfo[DPPushNotificationID];
@@ -183,7 +185,7 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
 
         if (identifierCopy && ![identifierCopy isKindOfClass:[NSNull class]]) {
             NSString *url = [userInfo[@"lbl1"] isEqualToString:identifierCopy ] ? userInfo[@"link1"] : userInfo[@"link2"];
-            if (handler) {
+            if (handler && ![url isKindOfClass:[NSNull class]]) {
                 handler(url);
             }
         }
@@ -194,8 +196,7 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
                 DNLocalEvent *interactionResult = [[DNLocalEvent alloc] initWithEventType:DNInteractionResult
                                                                                 publisher:NSStringFromClass([self class])
                                                                                 timeStamp:[NSDate date]
-                                                                                     data:[DNNotificationController reportButtonInteraction:identifierCopy
-                                                                                 userInfo:responseData]];
+                                                                                     data:[DNNotificationController reportButtonInteraction:identifierCopy userInfo:responseData]];
                 [[DNDonkyCore sharedInstance] publishEvent:interactionResult];
             }
             else if (handler) {
@@ -241,7 +242,6 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
     }
     
     [params dnSetObject:@(timeToInteract) forKey:@"timeToInteractionSeconds"];
-    [params dnSetObject:[buttonSetAction count] == 2 ? @"twoButton" : @"oneButton" forKey:@"interactionType"];
 
     [params dnSetObject:[notification data][@"contextItems"] forKey:@"contextItems"];
 

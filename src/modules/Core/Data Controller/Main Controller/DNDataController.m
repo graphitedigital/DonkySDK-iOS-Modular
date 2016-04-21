@@ -80,7 +80,8 @@
 }
 
 - (void)mergeChanges:(NSNotification *)notification {
-    
+    DNInfoLog(@"Merging changes into main context: %@", notification);
+
     NSManagedObjectContext *mainContext = [self mainContext];
     
     // Merge changes into the main context on the main thread
@@ -176,22 +177,29 @@
 }
 
 - (void)saveContext:(NSManagedObjectContext *)context completion:(DNCompletionBlock)completion {
-
     if (![context persistentStoreCoordinator]) {
         DNErrorLog(@"Fatal, no persistent store coordinator found in context: %@\nThread: %@", context, [NSThread currentThread]);
         return;
     }
 
     @synchronized (self) {
-        if (completion) {
-            [[self completionBlocks] setObject:completion forKey:[context description]];
+        DNInfoLog(@"Saving to DB, has changes: %d", [context hasChanges]);
+        if (![context hasChanges]) {
+            if (completion){
+                completion(nil);
+            }
+        }
+        else {
+            if (completion) {
+                [[self completionBlocks] setObject:completion forKey:[context description]];
+            }
+            [context saveIfHasChanges:nil];
         }
     }
-
-    [context saveIfHasChanges:nil];
 }
 
 - (void)invokeSaveBlock:(NSNotification *)notification {
+    DNInfoLog(@"Invoking save block");
     //This needs refinement:
     dispatch_async(donky_logic_processing_queue(), ^{
         DNCompletionBlock completionBlock = [self completionBlocks][[[notification object] description]];

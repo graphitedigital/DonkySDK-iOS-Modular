@@ -66,7 +66,8 @@
         if ([[operation identifier] isEqualToString:@"Synchronise"] && [operation isExecuting]) {
             DNDebugLog(@"Operation started at: %@", [operation timeStarted]);
             //Compare time:
-            if ((![operation isFinished] && ![operation isExecuting]) || ([[operation timeStarted] timeIntervalSinceDate:[NSDate date]] * -1 > 20)) {
+            if ((![operation isFinished] && ![operation isExecuting]) || ([[operation timeStarted] timeIntervalSinceDate:[NSDate date]] * -1 > 60)) {
+                DNDebugLog(@"Operation (%@) cancelled at: %@", operation, [operation timeStarted]);
                 [operation cancel];
             }
             else {
@@ -82,7 +83,7 @@
         return isSyncRunning;
     }
     
-    DNNetworkOperation *operation = [[DNNetworkOperation alloc] initWithSyncParams:params successBlock:success failureBlock:failure];
+    DNNetworkOperation *operation = [[DNNetworkOperation alloc] initWithSyncParams:params successBlock:[success copy] failureBlock:[failure copy]];
     [operation setIdentifier:@"Synchronise"];
     [self addOperation:operation];
     

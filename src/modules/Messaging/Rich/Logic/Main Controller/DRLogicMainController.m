@@ -67,10 +67,15 @@
 
     [self setRichMessageSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationRichMessage
                                                                          batchHandler:[self richMessageHandler]]];
+    [[self richMessageSubscription] setAutoAcknowledge:NO];
+
     [self setRichMessageDeletedSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationSyncMessageDeleted
                                                                                 batchHandler:[self richMessageDeletedHandler]]];
+    [[self richMessageDeletedSubscription] setAutoAcknowledge:NO];
+
     [self setRichMessageReadSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationSyncMessageRead
                                                                              batchHandler:[self richMessageReadHandler]]];
+    [[self richMessageReadSubscription] setAutoAcknowledge:NO];
 
     [[DNDonkyCore sharedInstance] subscribeToDonkyNotifications:[self moduleDefinition]
                                                   subscriptions:@[[self richMessageSubscription], [self richMessageReadSubscription], [self richMessageDeletedSubscription]]];

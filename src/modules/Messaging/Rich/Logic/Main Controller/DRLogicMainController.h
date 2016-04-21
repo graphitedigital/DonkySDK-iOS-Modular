@@ -85,7 +85,7 @@
  @param messages array of rich message objects
  @param completion the completion block called when they have been read and the read stats have been sent
 
- @since 2.7.1.6
+ @since 2.8.0.0
  */
 + (void)markMessagesAsRead:(NSArray *)messages completion:(DNCompletionBlock)completion;
 
@@ -94,7 +94,7 @@
 
  @param completion the completion block called when they have been read and the read stats have been sent
 
- @since 2.7.1.6
+ @since 2.8.0.0
  */
 + (void)markAllRichMessagesAsRead:(DNCompletionBlock)completion;
 
@@ -142,9 +142,9 @@
 /*!
  Helper method to process all the rich messages that have been received from APNS.
  This accepts an array of messages so that batch processing can be achieved.
- 
+
  @param notifications an array of DNServerNotifications.
- 
+
  @since 2.2.2.7
  */
 - (void)richMessageNotificationsReceived:(NSArray *)notifications __attribute__((deprecated("Please use class method of same signature - 2.7.0.0")));

@@ -266,12 +266,7 @@ static NSString *const DNCustomType = @"customType";
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"fractionCompleted"] && [object isKindOfClass:[NSProgress class]]) {
         NSProgress *progress = (NSProgress*)object;
-        if ([progress fractionCompleted] == 1) {
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        }
-        else {
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-        }
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:[progress fractionCompleted] != 1];
     }
     else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -283,19 +278,14 @@ static NSString *const DNCustomType = @"customType";
     if ([request isSecure] && [DNAccountController isSuspended]) {
         [DNAccountController setIsSuspended:NO];
     }
-    
-    if ([DNNetworkHelper isPerformingBlockingTask:[@[task] mutableCopy]]) {
-        DNSensitiveLog(@"Request %@ successful, response data = %@", [task taskDescription], responseData ?: @"");
-    }
-    else {
-        DNSensitiveLog(@"Request %@ successful, response data = %@", [task taskDescription], responseData ?: @"");
-    }
+
+    DNInfoLog(@"Request %@ successful, response data = %@", [task taskDescription], responseData ? : @"");
     
     if ([request successBlock]) {
         [request successBlock](task, responseData);
     }
     else {
-        DNSensitiveLog(@"No Completion block: %@", [request route]);
+        DNInfoLog(@"No Completion block: %@", [request route]);
     }
     
     [self removeTask:task];
@@ -570,7 +560,9 @@ static NSString *const DNCustomType = @"customType";
 
 - (void)queueClientNotifications:(NSArray *)notifications completion:(DNCompletionBlock)completionBlock {
     @synchronized ([self pendingClientNotifications]) {
-        [DNNetworkHelper queueClientNotifications:notifications pendingNotifications:[self pendingClientNotifications] completion:completionBlock];
+        dispatch_async(donky_network_processing_queue(), ^{
+            [DNNetworkHelper queueClientNotifications:notifications pendingNotifications:[self pendingClientNotifications] completion:completionBlock];
+        });
     }
 }
 

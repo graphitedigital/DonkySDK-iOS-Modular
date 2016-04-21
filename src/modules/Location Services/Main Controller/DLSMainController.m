@@ -152,7 +152,10 @@ static NSString *const DLSTargetUserKey = @"TargetUser";
 
 - (void)stopLocationTrackingServices {
     [[DNDonkyCore sharedInstance] unSubscribeToLocalEvent:kDNDonkyEventAppOpen handler:[self appOpenEvent]];
-    [[DNDonkyCore sharedInstance] unSubscribeToDonkyNotifications:[self moduleDefinition] subscriptions:@[[self locationRequestSubscription], [self locationReceivedSubscription]]];
+    
+    if ([self locationRequestSubscription] && [self locationRequestSubscription]) {
+        [[DNDonkyCore sharedInstance] unSubscribeToDonkyNotifications:[self moduleDefinition] subscriptions:@[[self locationRequestSubscription], [self locationReceivedSubscription]]];
+    }
 
     [[self locationUpdateTimer] invalidate];
     [self setLocationUpdateTimer:nil];

@@ -266,8 +266,10 @@
             [[self webView] setUserInteractionEnabled:NO];
         }
     }
-
-    [DRLogicMainController markMessagesAsRead:@[[self richMessage]] completion:nil];
+    
+    if ([self richMessage]) {
+        [DRLogicMainController markMessagesAsRead:@[[self richMessage]] completion:nil];
+    }
 }
 
 #pragma mark -

@@ -54,10 +54,6 @@
                             DNErrorLog(@"Could not create rich message from server notification: %@", obj);
                         }
                     }
-                    else {
-                        DNInfoLog(@"This is a duplicate message, do nothing...");
-                    }
-                    
                     NSString *pushNotificationId = [NSString stringWithFormat:@"com.donky.push.%@", [notification serverNotificationID]];
                     NSString *notificationID = [[NSUserDefaults standardUserDefaults] objectForKey:pushNotificationId];
                     if (notificationID) {
@@ -70,29 +66,33 @@
                         [[DNDonkyCore sharedInstance] publishEvent:pushOpenEvent];
                     }
                 }
+                else {
+                    DNInfoLog(@"This is a duplicate message, do nothing...");
+                }
             }];
             
             [[NSUserDefaults standardUserDefaults] synchronize];
 
-            [DCMMainController markAllMessagesAsReceived:allRichMessages];
+            [[DNDataController sharedInstance] saveContext:temp completion:^(id data) {
 
-            [[DNDataController sharedInstance] saveContext:temp];
+                [DCMMainController markAllMessagesAsReceived:allRichMessages];
 
-            [DRLogicMainController richMessageNotificationsReceived:newNotifications];
-            
-            if ([batch count]) {
-                DNLocalEvent *event = [[DNLocalEvent alloc] initWithEventType:@"DAudioPlayAudioFile"
-                                                                    publisher:NSStringFromClass([self class])
-                                                                    timeStamp:[NSDate date]
-                                                                         data:@(1)];
-                [[DNDonkyCore sharedInstance] publishEvent:event];
-            }
+                [DRLogicMainController richMessageNotificationsReceived:newNotifications];
 
-            DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageNotificationEvent
-                                                                     publisher:NSStringFromClass([DRLogicMainControllerHelper class])
-                                                                     timeStamp:[NSDate date]
-                                                                          data:allRichMessages];
-            [[DNDonkyCore sharedInstance] publishEvent:localEvent];
+                if ([batch count]) {
+                    DNLocalEvent *event = [[DNLocalEvent alloc] initWithEventType:@"DAudioPlayAudioFile"
+                                                                        publisher:NSStringFromClass([self class])
+                                                                        timeStamp:[NSDate date]
+                                                                             data:@(1)];
+                    [[DNDonkyCore sharedInstance] publishEvent:event];
+                }
+
+                DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageNotificationEvent
+                                                                         publisher:NSStringFromClass([DRLogicMainControllerHelper class])
+                                                                         timeStamp:[NSDate date]
+                                                                              data:allRichMessages];
+                [[DNDonkyCore sharedInstance] publishEvent:localEvent];
+            }];
         }];
     };
 }

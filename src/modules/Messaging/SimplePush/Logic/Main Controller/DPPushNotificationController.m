@@ -103,10 +103,12 @@ static NSString *const DNInteractionResult = @"InteractionResult";
                                                   subscriptions:@[[self simplePushMessage]]];
 
     [self setInteractionEvent:^(DNLocalEvent *event) {
-        DNClientNotification *interactionResult = [[DNClientNotification alloc] initWithType:DNInteractionResult
-                                                                                        data:[event data]
-                                                                         acknowledgementData:nil];
-        [[DNNetworkController sharedInstance] queueClientNotifications:@[interactionResult]];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            DNClientNotification *interactionResult = [[DNClientNotification alloc] initWithType:DNInteractionResult
+                                                                                            data:[event data]
+                                                                             acknowledgementData:nil];
+            [[DNNetworkController sharedInstance] queueClientNotifications:@[interactionResult]];
+        });
     }];
 
     [[DNDonkyCore sharedInstance] subscribeToLocalEvent:DNInteractionResult handler:[self interactionEvent]];

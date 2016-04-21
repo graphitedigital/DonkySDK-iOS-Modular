@@ -186,7 +186,10 @@ static NSString *const DRMessageTimeStampDescriptor = @"sentTimestamp";
     [DCMMainController reportMessagesDeleted:richMessages];
 
     if (unreadCount > 0) {
-        DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageBadgeCount publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(unreadCount)];
+        DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageBadgeCount
+                                                                 publisher:NSStringFromClass([self class])
+                                                                 timeStamp:[NSDate date]
+                                                                      data:@(unreadCount)];
         [[DNDonkyCore sharedInstance] publishEvent:localEvent];
     }
 
