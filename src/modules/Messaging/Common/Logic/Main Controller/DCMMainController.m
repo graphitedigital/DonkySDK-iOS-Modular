@@ -101,12 +101,47 @@ static NSString *const DCMTimeToReadSeconds = @"timeToReadSeconds";
             }
         }];
 
-        [[DNDataController sharedInstance] saveContext:tempContext];
-        [[DNNetworkController sharedInstance] queueClientNotifications:clientNotifications completion:^(id data) {
-            [[DNNetworkController sharedInstance] synchronise];
+        [[DNDataController sharedInstance] saveContext:tempContext completion:^(id data) {
+            [[DNNetworkController sharedInstance] queueClientNotifications:clientNotifications completion:^(id data) {
+                [[DNNetworkController sharedInstance] synchronise];
+            }];
         }];
     }];
 }
+
++ (void)markAllMessagesAsRead:(NSArray *)messages completion:(DNCompletionBlock)completion {
+    NSMutableArray *clientNotifications = [[NSMutableArray alloc] init];
+    NSManagedObjectContext *tempContext = [DNDataController temporaryContext];
+    [tempContext performBlock:^{
+        [messages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            DNMessage *message = obj;
+            NSManagedObjectID *objectID = [message objectID];
+            if (objectID) {
+                DNMessage *fetchedMessage = [tempContext existingObjectWithID:objectID error:nil];
+                if (![[fetchedMessage read] boolValue]) {
+                    [fetchedMessage setRead:@(YES)];
+                    DNClientNotification *messageReadNotification = [[DNClientNotification alloc] initWithType:DCMessageRead data:[DCMMainController messageRead:fetchedMessage] acknowledgementData:nil];
+                    [clientNotifications addObject:messageReadNotification];
+                }
+            }
+        }];
+
+        [[DNDataController sharedInstance] saveContext:tempContext completion:^(id data) {
+            [[DNNetworkController sharedInstance] queueClientNotifications:clientNotifications completion:^(id data) {
+                [[DNNetworkController sharedInstance] synchroniseSuccess:^(NSURLSessionDataTask *task, id responseData) {
+                    if (completion) {
+                        completion(responseData);
+                    }
+                } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                    if (completion) {
+                        completion(error);
+                    }
+                }];
+            }];
+        }];
+    }];
+}
+
 
 + (NSDictionary *)messageRead:(DNMessage *)message {
 

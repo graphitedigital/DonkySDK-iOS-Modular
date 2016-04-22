@@ -56,8 +56,7 @@
     return self;
 }
 
-- (instancetype)init
-{
+- (instancetype)init {
     self = [super init];
     if (self) {
         [self setFinished:NO];
@@ -66,8 +65,7 @@
     return self;
 }
 
-- (void)start
-{
+- (void)start {
     if ([self isCancelled]) {
         [self setFinished:YES];
         return;
@@ -80,9 +78,7 @@
     [self main];
 }
 
-- (void)completeOperation
-{
-    
+- (void)completeOperation {
     [self setExecuting:NO];
     [self setFinished:YES];
 }
@@ -90,15 +86,7 @@
 - (void)main {
     if ([self completion]) {
         [DNSignalRInterface sendData:[self params] completion:^(id response, NSError *error) {
-            if ([[NSThread currentThread] isMainThread]) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                    [self executeSignalRCompletion:response withError:error];                    
-                });
-            }
-            else {
-                [self executeSignalRCompletion:response withError:error];
-            }
-
+            [self executeSignalRCompletion:response withError:error];
         }];
     }
     else {
@@ -112,14 +100,7 @@
 
 - (void)executeSignalRCompletion:(id)response withError:(NSError *) error {
     if ([self completion]) {
-        if ([[NSThread currentThread] isMainThread]) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                [self completion](response, error);
-            });
-        }
-        else {
-            [self completion](response, error);
-        }
+        [self completion](response, error);
     }
     [self completeOperation];
 }

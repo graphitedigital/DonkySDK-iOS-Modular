@@ -38,6 +38,14 @@
 - (void)stop;
 
 /*!
+ Fully terminate and unregister signalR, this will stop the Core components from being able to
+ auto start/stop SignalR on app closes. You will need to call start again to recover.
+ 
+ @since 2.5.4.3
+ */
+- (void)terminate;
+
+/*!
  Method to determine if the SignalR connection is open and ready.
  
  @return BOOL representing the readiness of the SignalR connection.

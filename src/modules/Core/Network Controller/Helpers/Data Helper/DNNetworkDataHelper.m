@@ -324,7 +324,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
 
 + (void)saveClientNotificationsToStore:(NSArray *)array completion:(DNCompletionBlock)completionBlock {
 
-    if (![array count]) {
+    if (![array count] && completionBlock) {
         completionBlock(nil);
         return;
     }

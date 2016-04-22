@@ -80,7 +80,8 @@
 }
 
 - (void)mergeChanges:(NSNotification *)notification {
-    
+    DNInfoLog(@"Merging changes into main context: %@", notification);
+
     NSManagedObjectContext *mainContext = [self mainContext];
     
     // Merge changes into the main context on the main thread
@@ -100,7 +101,7 @@
 // Returns the managed object context for the application.
 // If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
 -(NSManagedObjectContext *)mainContext {
-    @synchronized (self) {
+    @synchronized (_mainContext) {
         if (!_mainContext) {
             _mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
             [_mainContext setPersistentStoreCoordinator:[self persistentStoreCoordinator]];
@@ -136,7 +137,7 @@
         return _persistentStoreCoordinator;
     }
 
-    @synchronized (self) {
+    @synchronized (_persistentStoreCoordinator) {
         NSURL *applicationDocumentsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 
         NSURL *storeURL = [applicationDocumentsDirectory URLByAppendingPathComponent:@"DNDonkyDataModel.sqlite"];
@@ -176,28 +177,35 @@
 }
 
 - (void)saveContext:(NSManagedObjectContext *)context completion:(DNCompletionBlock)completion {
-
     if (![context persistentStoreCoordinator]) {
         DNErrorLog(@"Fatal, no persistent store coordinator found in context: %@\nThread: %@", context, [NSThread currentThread]);
         return;
     }
 
     @synchronized (self) {
-        if (completion) {
-            [[self completionBlocks] setObject:completion forKey:[context description]];
+        DNInfoLog(@"Saving to DB, has changes: %d", [context hasChanges]);
+        if (![context hasChanges]) {
+            if (completion){
+                completion(nil);
+            }
+        }
+        else {
+            if (completion) {
+                [[self completionBlocks] setObject:completion forKey:[context description]];
+            }
+            [context saveIfHasChanges:nil];
         }
     }
-
-    [context saveIfHasChanges:nil];
 }
 
 - (void)invokeSaveBlock:(NSNotification *)notification {
+    DNInfoLog(@"Invoking save block");
     //This needs refinement:
     dispatch_async(donky_logic_processing_queue(), ^{
         DNCompletionBlock completionBlock = [self completionBlocks][[[notification object] description]];
         if (completionBlock) {
             completionBlock(notification);
-            @synchronized (self) {
+            @synchronized ([self completionBlocks]) {
                 [[self completionBlocks] removeObjectForKey:[[notification object] description]];
             }
         }

@@ -10,6 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "DNServerNotification.h"
 #import "DNRichMessage.h"
+#import "DNBlockDefinitions.h"
 
 @interface DRLogicHelper : NSObject
 
@@ -39,4 +40,7 @@
 
 + (void)deleteMaxLifeRichMessages;
 
++ (void)markMessagesAsRead:(NSArray *)messages completion:(DNCompletionBlock)completion;
+
++ (void)markAllRichMessagesAsRead:(DNCompletionBlock)completion;
 @end
