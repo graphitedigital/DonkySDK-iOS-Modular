@@ -12,6 +12,7 @@
 #endif
 
 #import "DCUISplitViewController.h"
+#import "DNSystemHelpers.h"
 
 @interface DCUISplitViewController ()
 
@@ -47,9 +48,10 @@
     self = [super initWithCoder:aDecoder];
     
     if (self) {
-        
-        [self setPreferredDisplayMode:UISplitViewControllerDisplayModeAllVisible];
 
+        if ([DNSystemHelpers systemVersionAtLeast:8.0]) {
+            [self setPreferredDisplayMode:UISplitViewControllerDisplayModeAllVisible];
+        }
     }
     
     return self;

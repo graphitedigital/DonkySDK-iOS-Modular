@@ -15,12 +15,10 @@
 #import "DNLoggingController.h"
 #import "DNDonkyNetworkDetails.h"
 #import "DNDonkyCore.h"
-#import "SRHubConnection.h"
-#import "SRHubProxy.h"
 #import "DNDeviceConnectivityController.h"
-#import "DNQueueManager.h"
 
 @interface DSRMainController ()
+@property (nonatomic, strong) dispatch_queue_t donkySignalRProcessingQueue;
 @property (nonatomic, strong) DNDeviceConnectivityController *deviceConnectivity;
 @property (nonatomic, getter=isConnectionOpen) BOOL connectionOpen;
 @property (nonatomic, strong) SRHubConnection *hubConnection;
@@ -36,6 +34,8 @@
 
     dispatch_once(&onceToken, ^{
         sharedInstance = [[DSRMainController alloc] initPrivate];
+
+        sharedInstance->_donkySignalRProcessingQueue = dispatch_queue_create("com.donkySDK.SignalRProcessing", DISPATCH_QUEUE_CONCURRENT);
     });
 
     return sharedInstance;
@@ -58,7 +58,7 @@
 }
 
 - (void)start {
-    dispatch_async(donky_network_signal_r_queue(), ^{
+    dispatch_async([self donkySignalRProcessingQueue], ^{
         if (![self deviceConnectivity]) {
             [self setDeviceConnectivity:[[DNDeviceConnectivityController alloc] init]];
         }
@@ -93,7 +93,7 @@
 - (void)serverNotificationsReceived:(id)serverNotifications {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 
-    dispatch_async(donky_network_signal_r_queue(), ^{
+    dispatch_sync([self donkySignalRProcessingQueue], ^{
         __block NSMutableDictionary *responseBatches = [[NSMutableDictionary alloc] init];
         [serverNotifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             DNServerNotification *serverNotification = [[DNServerNotification alloc] initWithNotification:obj];
@@ -128,11 +128,17 @@
     }
 }
 
+- (void)terminate {
+    [self stop];
+    
+    [[DNDonkyCore sharedInstance] unRegisterService:@"DonkySignalRService"];
+}
+
 - (void)sendData:(id)data completion:(DNSignalRCompletionBlock)completionBlock {
     if ([self isConnectionOpen]) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 
-        dispatch_async(donky_network_signal_r_queue(), ^{
+        dispatch_sync([self donkySignalRProcessingQueue], ^{
             NSMutableArray *combined = [[NSMutableArray alloc] init];
 
             if (data[@"clientNotifications"]) {

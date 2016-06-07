@@ -12,19 +12,8 @@
 #endif
 
 #import "DRIMainControllerHelper.h"
-#import "DNSystemHelpers.h"
-#import "UIViewController+DNRootViewController.h"
 #import "DNConstants.h"
-#import "DRConstants.h"
 #import "DNDonkyCore.h"
-#import "NSDate+DNDateHelper.h"
-#import "DNDataController.h"
-#import "DNLoggingController.h"
-#import "DNQueueManager.h"
-
-static NSString *const DRIExpiryTimeStamp = @"expiryTimeStamp";
-static NSString *const DRIType = @"type";
-static NSString *const DRIMessageID = @"messageID";
 
 @implementation DRIMainControllerHelper
 

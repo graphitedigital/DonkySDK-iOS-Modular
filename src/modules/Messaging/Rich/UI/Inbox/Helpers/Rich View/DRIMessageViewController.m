@@ -62,7 +62,6 @@
 
     if (self) {
 
-        
     }
 
     return self;
@@ -145,6 +144,16 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
     DNErrorLog(@"Rich message error: %@", [error localizedDescription]);
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+
+    if ([[UIApplication sharedApplication] canOpenURL:[request URL]] && navigationType == UIWebViewNavigationTypeLinkClicked) {
+        [[UIApplication sharedApplication] openURL:[request URL]];
+        return NO;
+    }
+
+    return YES;
 }
 
 #pragma mark -
@@ -266,8 +275,10 @@
             [[self webView] setUserInteractionEnabled:NO];
         }
     }
-
-    [DRLogicMainController markMessageAsRead:[self richMessage]];
+    
+    if ([self richMessage]) {
+        [DRLogicMainController markMessagesAsRead:@[[self richMessage]] completion:nil];
+    }
 }
 
 #pragma mark -

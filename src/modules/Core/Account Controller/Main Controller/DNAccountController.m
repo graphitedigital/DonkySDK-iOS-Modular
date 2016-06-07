@@ -644,7 +644,7 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
     DNDeviceDetails *deviceDetails = [[DNDeviceDetails alloc] init];
     return [[DNRegistrationDetails alloc] initWithDeviceDetails:deviceDetails clientDetails:clientDetails userDetails:userDetails];
 }
-
+ 
 + (DNUserDetails *)userID:(NSString *)userID
               displayName:(NSString *)displayName
              emailAddress:(NSString *)email
@@ -825,8 +825,8 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 }
 
 + (DNUserDetails *)currentDeviceUser {
-    NSManagedObjectContext *context = [[DNDataController sharedInstance] mainContext];
-
+    NSManagedObjectContext *context = [DNDataController temporaryContext];
+    
     DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"]
                                                                 withContext:context
                                                      includesPendingChanges:NO];

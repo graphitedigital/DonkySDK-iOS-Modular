@@ -14,15 +14,11 @@
 #import "DRIMainController.h"
 #import "DNSystemHelpers.h"
 #import "DNDonkyCore.h"
-#import "DNConstants.h"
-#import "DCMConstants.h"
 #import "DRConstants.h"
 #import "DCUILocalization+Localization.h"
 #import "DRIMainControllerHelper.h"
-#import "DRichMessage+Localization.h"
 #import "DCUIThemeController.h"
 #import "DRUIThemeConstants.h"
-#import "DNQueueManager.h"
 
 @interface DRIMainController ()
 @property (nonatomic, strong) DNLocalEventHandler richMessageBadgeCount;

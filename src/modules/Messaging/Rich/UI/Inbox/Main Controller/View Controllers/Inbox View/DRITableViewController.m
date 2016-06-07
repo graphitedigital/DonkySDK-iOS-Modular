@@ -81,10 +81,11 @@
         }
         [[self detailViewController] setDelegate:self];
         [[self splitViewController] setDelegate:[self detailViewController]];
-    }   
-
+    }
     //Get the theme:
     [self setTheme:(DRUITheme *) [[DCUIThemeController sharedInstance] themeForName:kDRUIThemeName]];
+
+    [[self tabBarItem] setImage:[[self theme] imageForKey:kDRUIInboxIconImage]];
 
     [[self view] setBackgroundColor:[[self theme] themeColours][kDRUIInboxCellBackgroundColour]];
 
@@ -497,13 +498,17 @@
         }
     }];
 
-    NSNumber *unreadCount = [[self richInboxDataController] unreadRichMessageCount];
-    if ([unreadCount integerValue] > 0) {
-        [tab setBadgeValue:[unreadCount stringValue]];
-    }
-    else {
-        [tab setBadgeValue:nil];
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSNumber *unreadCount = [[self richInboxDataController] unreadRichMessageCount];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([unreadCount integerValue] > 0) {
+                [tab setBadgeValue:[unreadCount stringValue]];
+            }
+            else {
+                [tab setBadgeValue:nil];
+            }
+        });
+    });
 }
 
 #pragma mark -

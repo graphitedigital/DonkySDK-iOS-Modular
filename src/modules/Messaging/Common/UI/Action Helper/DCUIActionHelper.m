@@ -21,10 +21,18 @@
 + (UIViewController *)presentShareActionSheet:(UIViewController *)viewController messageURL:(NSString *)messageURL presentFromPopOver:(BOOL)presentFromPopOver message:(DNMessage *)message {
     NSString *url = [NSString stringWithFormat:DCUILocalizedString(@"share_url_message"), messageURL];
     UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
-    [controller setCompletionHandler:^(NSString *activityType, BOOL completed) {
-        //Report sharing:
-        [DCMMainController reportSharingOfRichMessage:message sharedUsing:activityType];
-    }];
+    
+    if ([DNSystemHelpers systemVersionAtLeast:8.0]) {
+        [controller setCompletionWithItemsHandler:^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+            [DCMMainController reportSharingOfRichMessage:message sharedUsing:activityType];
+        }];
+    }
+    else {
+        [controller setCompletionHandler:^(NSString *activityType, BOOL completed) {
+            //Report sharing:
+            [DCMMainController reportSharingOfRichMessage:message sharedUsing:activityType];
+        }];
+    }
 
     if ([DNSystemHelpers isDeviceIPad] && presentFromPopOver) {
         return controller;

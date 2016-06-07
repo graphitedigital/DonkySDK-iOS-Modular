@@ -71,7 +71,6 @@
         components = [calendar components:(NSDayCalendarUnit) fromDate:self toDate:[NSDate date] options:0];
     }
 
-
     return ([components day] > [DNConfigurationController richMessageAvailabilityDays]);
 }
 

@@ -359,7 +359,6 @@ static NSString *const DNDeviceNotFound = @"DeviceNotFound";
 
 + (NSArray *)clientNotifications:(NSMutableArray *)clientNotifications {
     NSMutableArray *workingNotifications = [[NSMutableArray alloc] init];
-
     [clientNotifications enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         DNClientNotification *notification = obj;
         if ([notification notificationID]) {

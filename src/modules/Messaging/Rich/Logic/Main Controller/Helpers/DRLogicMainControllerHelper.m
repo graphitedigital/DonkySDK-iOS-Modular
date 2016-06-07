@@ -24,6 +24,8 @@
 #import "DRLogicMainController.h"
 #import "NSManagedObject+DNHelper.h"
 #import "DCAConstants.h"
+#import "DNClientNotification.h"
+#import "DNNetworkController.h"
 
 @implementation DRLogicMainControllerHelper
 
@@ -54,10 +56,6 @@
                             DNErrorLog(@"Could not create rich message from server notification: %@", obj);
                         }
                     }
-                    else {
-                        DNInfoLog(@"This is a duplicate message, do nothing...");
-                    }
-                    
                     NSString *pushNotificationId = [NSString stringWithFormat:@"com.donky.push.%@", [notification serverNotificationID]];
                     NSString *notificationID = [[NSUserDefaults standardUserDefaults] objectForKey:pushNotificationId];
                     if (notificationID) {
@@ -70,29 +68,33 @@
                         [[DNDonkyCore sharedInstance] publishEvent:pushOpenEvent];
                     }
                 }
+                else {
+                    DNInfoLog(@"This is a duplicate message, do nothing...");
+                }
             }];
             
             [[NSUserDefaults standardUserDefaults] synchronize];
 
-            [DCMMainController markAllMessagesAsReceived:allRichMessages];
+            [[DNDataController sharedInstance] saveContext:temp completion:^(id data) {
 
-            [[DNDataController sharedInstance] saveContext:temp];
+                [DCMMainController markAllMessagesAsReceived:allRichMessages];
 
-            [DRLogicMainController richMessageNotificationsReceived:newNotifications];
-            
-            if ([batch count]) {
-                DNLocalEvent *event = [[DNLocalEvent alloc] initWithEventType:@"DAudioPlayAudioFile"
-                                                                    publisher:NSStringFromClass([self class])
-                                                                    timeStamp:[NSDate date]
-                                                                         data:@(1)];
-                [[DNDonkyCore sharedInstance] publishEvent:event];
-            }
+                [DRLogicMainController richMessageNotificationsReceived:newNotifications];
 
-            DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageNotificationEvent
-                                                                     publisher:NSStringFromClass([DRLogicMainControllerHelper class])
-                                                                     timeStamp:[NSDate date]
-                                                                          data:allRichMessages];
-            [[DNDonkyCore sharedInstance] publishEvent:localEvent];
+                if ([batch count]) {
+                    DNLocalEvent *event = [[DNLocalEvent alloc] initWithEventType:@"DAudioPlayAudioFile"
+                                                                        publisher:NSStringFromClass([self class])
+                                                                        timeStamp:[NSDate date]
+                                                                             data:@(1)];
+                    [[DNDonkyCore sharedInstance] publishEvent:event];
+                }
+
+                DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageNotificationEvent
+                                                                         publisher:NSStringFromClass([DRLogicMainControllerHelper class])
+                                                                         timeStamp:[NSDate date]
+                                                                              data:allRichMessages];
+                [[DNDonkyCore sharedInstance] publishEvent:localEvent];
+            }];
         }];
     };
 }
@@ -100,6 +102,7 @@
 + (DNSubscriptionBatchHandler)richMessageReadHandler {
     return ^(NSArray *batch) {
         NSManagedObjectContext *tempContext = [DNDataController temporaryContext];
+        NSMutableArray *notificationAcks = [[NSMutableArray alloc] init];
         [tempContext performBlock:^{
             [batch enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 DNServerNotification *serverNotification = obj;
@@ -111,8 +114,17 @@
                 if (richMessage) {
                     [DRLogicMainController markMessageAsRead:richMessage];
                 }
+
+                DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithAcknowledgementNotification:serverNotification];
+                [[clientNotification acknowledgementDetails] dnSetObject:@"delivered" forKey:@"result"];
+                [notificationAcks addObject:clientNotification];
             }];
-            [[DNDataController sharedInstance] saveContext:tempContext];
+
+            [[DNDataController sharedInstance] saveContext:tempContext completion:^(id data) {
+                if ([notificationAcks count]) {
+                    [[DNNetworkController sharedInstance] queueClientNotifications:notificationAcks completion:nil];
+                }
+            }];
         }];
         
         DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageReadOnAnotherDeviceEvent
@@ -126,6 +138,7 @@
 + (DNSubscriptionBatchHandler)richMessageDeleted {
     return ^(NSArray *batch) {
         NSManagedObjectContext *tempContext = [DNDataController temporaryContext];
+        NSMutableArray *notificationAcks = [[NSMutableArray alloc] init];
         [tempContext performBlock:^{
             [batch enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 DNServerNotification *serverNotification = obj;
@@ -137,8 +150,17 @@
                 if (richMessage) {
                     [tempContext deleteObject:richMessage];
                 }
+
+                DNClientNotification *clientNotification = [[DNClientNotification alloc] initWithAcknowledgementNotification:serverNotification];
+                [[clientNotification acknowledgementDetails] dnSetObject:@"delivered" forKey:@"result"];
+                [notificationAcks addObject:clientNotification];
             }];
-            [[DNDataController sharedInstance] saveContext:tempContext];
+
+            [[DNDataController sharedInstance] saveContext:tempContext completion:^(id data) {
+                if ([notificationAcks count]) {
+                    [[DNNetworkController sharedInstance] queueClientNotifications:notificationAcks completion:nil];
+                }
+            }];
         }];
         
         DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageDeletedEvent

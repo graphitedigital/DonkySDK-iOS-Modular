@@ -26,7 +26,6 @@
 #import "DNDonkyCoreFunctionalHelper.h"
 #import "DNClientNotification.h"
 #import "DNSignalRInterface.h"
-#import "DNQueueManager.h"
 
 @interface DNDonkyCore ()
 @property (nonatomic, strong) DNNotificationSubscriber *notificationSubscriber;
@@ -369,8 +368,10 @@
 #pragma mark - Modules
 
 - (void)registerModule:(DNModuleDefinition *)moduleDefinition {
-    [[self registeredModules] addObject:moduleDefinition];
-    [DNAccountController updateClientModules:@[moduleDefinition]];
+    if (![self isModuleRegistered:[moduleDefinition name] moduleVersion:[moduleDefinition version]]) {
+        [[self registeredModules] addObject:moduleDefinition];
+        [DNAccountController updateClientModules:@[moduleDefinition]];
+    }
 }
 
 - (BOOL)isModuleRegistered:(NSString *)moduleName moduleVersion:(NSString *)moduleVersion {
@@ -493,6 +494,7 @@
                                                                     timeStamp:[NSDate date]
                                                                          data:nil];
         [self publishEvent:appCloseEvent];
+        
         if ([DNAccountController isRegistered]) {
             [DNSignalRInterface closeConnection];
         }
@@ -505,8 +507,14 @@
                                                                        timeStamp:[NSDate date]
                                                                             data:nil];
             [self publishEvent:openAppEvent];
+            
             if ([DNAccountController isRegistered]) {
                 [DNSignalRInterface openConnection];
+                [[DNNetworkController sharedInstance] synchroniseSuccess:^(NSURLSessionDataTask *task, id responseData) {
+                   [DNNotificationController resetApplicationBadgeCount];
+                } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                    
+                }];
             }
         });
     }];
