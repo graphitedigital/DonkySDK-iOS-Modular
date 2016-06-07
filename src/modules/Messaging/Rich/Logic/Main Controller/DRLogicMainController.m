@@ -18,13 +18,13 @@
 #import "DRLogicMainControllerHelper.h"
 
 @interface DRLogicMainController ()
-@property (nonatomic, copy) DNSubscriptionBatchHandler richMessageHandler;
-@property (nonatomic, copy) DNSubscriptionBatchHandler richMessageDeletedHandler;
-@property (nonatomic, copy) DNSubscriptionBatchHandler richMessageReadHandler;
-@property (nonatomic, strong) DNModuleDefinition *moduleDefinition;
-@property (nonatomic, strong) DNSubscription *richMessageSubscription;
-@property (nonatomic, strong) DNSubscription *richMessageDeletedSubscription;
-@property (nonatomic, strong) DNSubscription *richMessageReadSubscription;
+@property(nonatomic, copy) DNSubscriptionBatchHandler richMessageHandler;
+@property(nonatomic, copy) DNSubscriptionBatchHandler richMessageDeletedHandler;
+@property(nonatomic, copy) DNSubscriptionBatchHandler richMessageReadHandler;
+@property(nonatomic, strong) DNModuleDefinition *moduleDefinition;
+@property(nonatomic, strong) DNSubscription *richMessageSubscription;
+@property(nonatomic, strong) DNSubscription *richMessageDeletedSubscription;
+@property(nonatomic, strong) DNSubscription *richMessageReadSubscription;
 @end
 
 @implementation DRLogicMainController
@@ -63,19 +63,14 @@
 
     [DRLogicMainController deleteMaxLifeRichMessages];
 
-    [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.2.1.2"]];
+    [self setModuleDefinition:[[DNModuleDefinition alloc] initWithName:NSStringFromClass([self class]) version:@"1.2.1.1"]];
 
     [self setRichMessageSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationRichMessage
                                                                          batchHandler:[self richMessageHandler]]];
-    [[self richMessageSubscription] setAutoAcknowledge:NO];
-
     [self setRichMessageDeletedSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationSyncMessageDeleted
                                                                                 batchHandler:[self richMessageDeletedHandler]]];
-    [[self richMessageDeletedSubscription] setAutoAcknowledge:NO];
-
     [self setRichMessageReadSubscription:[[DNSubscription alloc] initWithNotificationType:kDNDonkyNotificationSyncMessageRead
                                                                              batchHandler:[self richMessageReadHandler]]];
-    [[self richMessageReadSubscription] setAutoAcknowledge:NO];
 
     [[DNDonkyCore sharedInstance] subscribeToDonkyNotifications:[self moduleDefinition]
                                                   subscriptions:@[[self richMessageSubscription], [self richMessageReadSubscription], [self richMessageDeletedSubscription]]];
@@ -96,8 +91,6 @@
         [[DNDonkyCore sharedInstance] unSubscribeToDonkyNotifications:[self moduleDefinition]
                                                         subscriptions:@[[self richMessageSubscription], [self richMessageDeletedSubscription], [self richMessageReadSubscription]]];
     }
-    
-    [[DNDonkyCore sharedInstance] unRegisterService:NSStringFromClass([self class])];
 }
 
 #pragma mark -
@@ -180,14 +173,6 @@
 
 + (void)markMessageAsRead:(DNRichMessage *)message {
     [DRLogicHelper markMessageAsRead:message];
-}
-
-+ (void)markMessagesAsRead:(NSArray *)messages completion:(DNCompletionBlock)completion {
-    [DRLogicHelper markMessagesAsRead:messages completion:completion];
-}
-
-+ (void)markAllRichMessagesAsRead:(DNCompletionBlock)completion {
-    [DRLogicHelper markAllRichMessagesAsRead:completion];
 }
 
 + (NSArray *)filterRichMessages:(NSString *)filter ascending:(BOOL)ascending {

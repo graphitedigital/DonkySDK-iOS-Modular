@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "DNServerNotification.h"
 #import "DNMessage.h"
-#import "DNBlockDefinitions.h"
 
 @interface DCMMainController : NSObject
 
@@ -48,17 +47,6 @@
  @since 2.6.5.4
  */
 + (void)markAllMessagesAsRead:(NSArray *)messages;
-
-/*!
- Class method to mark more than one conversation as read at the same time with a completion call back
- as this is performed on a background thread.
-
- @param messages the messages that should be marked as read.
- @param completion the completion block called when completed.
-
- @since 2.7.1.6
- */
-+ (void)markAllMessagesAsRead:(NSArray *)messages completion:(DNCompletionBlock)completion;
 
 /*!
  Helper method to report the fact that a rich message has been shared via the share sheet.

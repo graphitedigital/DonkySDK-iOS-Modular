@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "DNBlockDefinitions.h"
-#import "DNServerNotification.h"
 
 /*!
  Helper class to register/unRegister a devices push notification token with the network. As well as other 
@@ -67,29 +66,6 @@
  @since 2.0.0.0
  */
 + (void)didReceiveNotification:(NSDictionary *)userInfo handleActionIdentifier:(NSString *)identifier completionHandler:(void (^)(NSString *))handler;
-
-/*!
- Method to handle all incoming remote notifications. Use this method for the following application delegate callbacks:
- application:didReceiveRemoteNotification:, application:didReceiveRemoteNotification:, application:handleActionWithIdentifier:forRemoteNotification:.
- 
- @param userInfo   the user info dictionary containing the remote notification payload.
- @param identifier identifier of the button pressed to launch the application. NOTE: only used for interactive remote notifications. iOS 8.0 + only.
- @param autoOpen   whether the SDK should automatically open the deep link string as an NSURL
- @param handler    a completion handler, this is used internally by the SDK to return any deep links/data embedded in a button action of notification.
- 
- @since 2.8.0.0
- */
-+ (void)didReceiveNotification:(NSDictionary *)userInfo handleActionIdentifier:(NSString *)identifier autoOpenDeepLinks:(BOOL)autoOpen completionHandler:(void (^)(NSString *))handler;
-
-/*!
- Method to report interactions with interactive notifications. Use this when implementing your own UI.
- 
- @param identifier         the label of the button that the user tapped.
- @param serverNotification the notification that was used to display the push notification.
- 
- @since 2.8.0.0
- */
-+ (NSMutableDictionary *)reportButtonInteraction:(NSString *)identifier userInfo:(DNServerNotification *)notification;
 
 /*!
   Method to disable remote notifications. Remote notifications are set to enable by default upon registration. Thereafter, calling this method with false will trigger the SDK to remove the token from the network and this device will no longer be sent remote notifications. Calling it again with true will trigger the device token to be sent to the network again.

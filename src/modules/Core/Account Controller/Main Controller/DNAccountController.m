@@ -825,8 +825,8 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
 }
 
 + (DNUserDetails *)currentDeviceUser {
-    NSManagedObjectContext *context = [DNDataController temporaryContext];
-    
+    NSManagedObjectContext *context = [[DNDataController sharedInstance] mainContext];
+
     DNDeviceUser *deviceUser = [DNDeviceUser fetchSingleObjectWithPredicate:[NSPredicate predicateWithFormat:@"isDeviceUser == YES"]
                                                                 withContext:context
                                                      includesPendingChanges:NO];

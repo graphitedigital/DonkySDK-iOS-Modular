@@ -497,17 +497,13 @@
         }
     }];
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSNumber *unreadCount = [[self richInboxDataController] unreadRichMessageCount];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([unreadCount integerValue] > 0) {
-                [tab setBadgeValue:[unreadCount stringValue]];
-            }
-            else {
-                [tab setBadgeValue:nil];
-            }
-        });
-    });
+    NSNumber *unreadCount = [[self richInboxDataController] unreadRichMessageCount];
+    if ([unreadCount integerValue] > 0) {
+        [tab setBadgeValue:[unreadCount stringValue]];
+    }
+    else {
+        [tab setBadgeValue:nil];
+    }
 }
 
 #pragma mark -

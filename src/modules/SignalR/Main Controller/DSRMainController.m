@@ -128,12 +128,6 @@
     }
 }
 
-- (void)terminate {
-    [self stop];
-    
-    [[DNDonkyCore sharedInstance] unRegisterService:@"DonkySignalRService"];
-}
-
 - (void)sendData:(id)data completion:(DNSignalRCompletionBlock)completionBlock {
     if ([self isConnectionOpen]) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];

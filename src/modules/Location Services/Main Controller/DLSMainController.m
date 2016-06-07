@@ -21,6 +21,7 @@
 #import "DNConstants.h"
 #import "NSDate+DNDateHelper.h"
 #import "DNConfigurationController.h"
+#import "DNSystemHelpers.h"
 
 static NSString *const DLSLocationUpdateInterval = @"LocationUpdateIntervalSeconds";
 static NSString *const DLSNetworkSendProfileID = @"sendToNetworkProfileId";
@@ -83,7 +84,7 @@ static NSString *const DLSTargetUserKey = @"TargetUser";
         if (![self locationManager]) {
             [self setLocationManager:[[CLLocationManager alloc] init]];
         }
-
+        
         [[self locationManager] setDelegate:self];
 
     }
@@ -192,6 +193,10 @@ static NSString *const DLSTargetUserKey = @"TargetUser";
             DNErrorLog(@"Error - you must include the 'NSLocationAlwaysUsageDescription' key in your applications 'Info.plist' in order to use Location Services on iOS 8+\nPlease add and try again...");
         }
         assert(locationAlwaysUsageKey);
+    }
+    
+    if ([DNSystemHelpers systemVersionAtLeast:9.0]) {
+        [[self locationManager] setAllowsBackgroundLocationUpdates:YES];
     }
 
     [self startLocationTrackingServices];

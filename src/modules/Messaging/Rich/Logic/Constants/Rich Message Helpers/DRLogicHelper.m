@@ -155,15 +155,6 @@ static NSString *const DRMessageTimeStampDescriptor = @"sentTimestamp";
     }
 }
 
-+ (void)markAllRichMessagesAsRead:(DNCompletionBlock)completion {
-    NSArray *allRichMessages = [DRLogicHelper allUnreadRichMessages];
-    [DRLogicHelper markMessagesAsRead:allRichMessages completion:completion];
-}
-
-+ (void)markMessagesAsRead:(NSArray *)messages completion:(DNCompletionBlock)completion {
-    [DCMMainController markAllMessagesAsRead:messages completion:completion];
-}
-
 + (void)deleteAllRichMessages:(NSArray *)richMessages {
     NSManagedObjectContext *context = nil;
     if ([NSThread currentThread] == [NSThread mainThread]) {
@@ -186,10 +177,7 @@ static NSString *const DRMessageTimeStampDescriptor = @"sentTimestamp";
     [DCMMainController reportMessagesDeleted:richMessages];
 
     if (unreadCount > 0) {
-        DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageBadgeCount
-                                                                 publisher:NSStringFromClass([self class])
-                                                                 timeStamp:[NSDate date]
-                                                                      data:@(unreadCount)];
+        DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageBadgeCount publisher:NSStringFromClass([self class]) timeStamp:[NSDate date] data:@(unreadCount)];
         [[DNDonkyCore sharedInstance] publishEvent:localEvent];
     }
 

@@ -29,14 +29,6 @@
 
 @property (nonatomic, readonly) NSString *senderInternalUserID;
 
-@property (nonatomic, readonly) NSString *firstButtonLabel;
-
-@property (nonatomic, readonly) NSString *secondButtonLabel;
-
-@property (nonatomic, readonly) NSString *firstButtonLink;
-
-@property (nonatomic, readonly) NSString *secondButtonLink;
-
 - (instancetype)initWithServerNotification:(DNServerNotification *)serverNotification;
 
 - (instancetype)initWithRemoteNotification:(NSDictionary *)userInfo;

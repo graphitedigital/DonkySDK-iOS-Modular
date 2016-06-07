@@ -24,10 +24,6 @@
 @property (nonatomic, readwrite) NSString *senderMessageID;
 @property (nonatomic, readwrite) NSDate *sentTimeStamp;
 @property (nonatomic, readwrite) NSString *senderInternalUserID;
-@property (nonatomic, readwrite) NSString *firstButtonLabel;
-@property (nonatomic, readwrite) NSString *secondButtonLabel;
-@property (nonatomic, readwrite) NSString *firstButtonLink;
-@property (nonatomic, readwrite) NSString *secondButtonLink;
 @end
 
 @implementation DPPushNotification
@@ -49,17 +45,7 @@
         [self setSenderMessageID:pushMessage[DCMSenderMessageID]];
         [self setSentTimeStamp:[NSDate donkyDateFromServer:pushMessage[DCMSentTimestamp]]];
         [self setSenderInternalUserID:pushMessage[DCMSenderInternalUserID]];
-        
-        NSDictionary *firstButton = [[[self interactiveButtonSets] firstObject][@"buttonSetActions"] firstObject];
-        
-        [self setFirstButtonLabel:firstButton[@"label"]];
-        [self setFirstButtonLink:firstButton[@"data"]];
-        
-        NSDictionary *secondItem = [[[self interactiveButtonSets] firstObject][@"buttonSetActions"] lastObject];
-        
-        [self setSecondButtonLabel:secondItem[@"label"]];
-        [self setSecondButtonLink:secondItem[@"data"]];
-        
+
     }
     
     return self;
@@ -75,22 +61,7 @@
 
         [self setBody:[arguments lastObject]];
         [self setSenderDisplayName:[arguments firstObject]];
-        
-        [self setFirstButtonLabel:userInfo[@"lbl1"]];
-        [self setSecondButtonLabel:userInfo[@"lbl2"]];
-        
-        [self setMessageID:userInfo[@"msgid"]];
-        
-        NSString *link1 = userInfo[@"link1"];
-        if (![link1 isKindOfClass:[NSNull class]] && link1) {
-            [self setFirstButtonLink:userInfo[@"link1"]];
-        }
-        
-        NSString *link2 = userInfo[@"link2"];
-        if (![link2 isKindOfClass:[NSNull class]] && link2) {
-            [self setSecondButtonLink:userInfo[@"link2"]];
-        }
-        
+
     }
 
     return self;

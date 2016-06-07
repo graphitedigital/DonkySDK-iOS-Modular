@@ -29,7 +29,9 @@
     self = [super init];
     
     if (self) {
+        
         [self setTableView:tableView];
+        
     }
 
     return self;
@@ -70,7 +72,7 @@
     switch(type) {
 
         case NSFetchedResultsChangeInsert: {
-            [[self tableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+            [[self tableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             if ([[self delegate] respondsToSelector:@selector(insertRowsAtIndexPaths:)]) {
                 [[self delegate] insertRowsAtIndexPaths:@[newIndexPath]];
             }
@@ -92,12 +94,15 @@
                 [[self delegate] reloadRowsAtIndexPaths:@[indexPath]];
             }
 
-            [[self tableView] reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            [[self tableView] reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
             break;
 
         case NSFetchedResultsChangeMove:
-            [[self tableView] moveRowAtIndexPath:indexPath toIndexPath:newIndexPath];
+            if (indexPath != newIndexPath) {
+                [[self tableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [[self tableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            }
             break;
     }
 }
