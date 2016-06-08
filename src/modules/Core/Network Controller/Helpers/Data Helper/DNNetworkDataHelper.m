@@ -203,7 +203,7 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
     return formattedArray;
 }
 
-+ (NSMutableDictionary *)networkClientNotifications:(NSMutableArray *)clientNotifications networkContentNotifications:(NSMutableArray *)contentNotifications tempContext:(BOOL)temp {
++ (NSMutableDictionary *)networkClientNotifications:(NSMutableArray *)clientNotifications networkContentNotifications:(NSMutableArray *)contentNotifications {
     DNInfoLog(@"Preparing Notifications for network");
     __block NSMutableArray *allNotifications = [[NSMutableArray alloc] init];
     __block NSMutableArray *brokenNotifications = [[NSMutableArray alloc] init];
@@ -375,13 +375,13 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
             if ([obj isKindOfClass:[DNClientNotification class]]) {
                 NSManagedObjectID *objectID = [DNNetworkDataHelper notificationWithID:[clientNotification notificationID] context:context];
                 if (objectID) {
-                    notification = (DNNotification *) [context existingObjectWithID:objectID error:nil];
+                    notification = [context existingObjectWithID:objectID error:nil];
                 }
             }
             else {
                NSManagedObjectID *objectID = [DNNetworkDataHelper notificationWithID:[clientNotification notificationID] context:context];
                if (objectID) {
-                   notification = (DNNotification *) [context existingObjectWithID:objectID error:nil];
+                   notification = [context existingObjectWithID:objectID error:nil];
                }
             }
 

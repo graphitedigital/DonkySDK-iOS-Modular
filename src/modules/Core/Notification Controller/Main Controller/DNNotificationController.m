@@ -101,7 +101,7 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
                 DNInfoLog(@"Registering device token succeeded.");
                 [DNDonkyNetworkDetails saveDeviceToken:hexString ? [NSString stringWithString:hexString] : @""];
                 [DNDonkyNetworkDetails saveAPNSAudio:soundFileName];
-            }                                                           failure:^(NSURLSessionDataTask *task, NSError *error) {
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 DNErrorLog(@"Registering device token failed: %@", [error localizedDescription]);
                 if ([token length]) {
                     [DNNotificationController registerDeviceToken:token];

@@ -21,6 +21,7 @@
 #import "DNConstants.h"
 #import "NSDate+DNDateHelper.h"
 #import "DNConfigurationController.h"
+#import "DNSystemHelpers.h"
 
 static NSString *const DLSLocationUpdateInterval = @"LocationUpdateIntervalSeconds";
 static NSString *const DLSNetworkSendProfileID = @"sendToNetworkProfileId";
@@ -194,6 +195,11 @@ static NSString *const DLSTargetUserKey = @"TargetUser";
         assert(locationAlwaysUsageKey);
     }
 
+    
+    if ([DNSystemHelpers systemVersionAtLeast:9.0]) {
+        [[self locationManager] setAllowsBackgroundLocationUpdates:YES];
+    }
+    
     [self startLocationTrackingServices];
     [[self locationManager] startUpdatingLocation];
 }

@@ -18,7 +18,7 @@
 
 + (NSArray *)contentNotificationsWithContext:(NSManagedObjectContext *)context;
 
-+ (NSMutableDictionary *)networkClientNotifications:(NSMutableArray *)clientNotifications networkContentNotifications:(NSMutableArray *)contentNotifications tempContext:(BOOL)temp;
++ (NSMutableDictionary *)networkClientNotifications:(NSMutableArray *)clientNotifications networkContentNotifications:(NSMutableArray *)contentNotifications;
 
 + (void)saveClientNotificationsToStore:(NSArray *)array completion:(DNCompletionBlock)completionBlock;
 

@@ -62,7 +62,6 @@
 
     if (self) {
 
-        
     }
 
     return self;
@@ -145,6 +144,16 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
     DNErrorLog(@"Rich message error: %@", [error localizedDescription]);
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+
+    if ([[UIApplication sharedApplication] canOpenURL:[request URL]] && navigationType == UIWebViewNavigationTypeLinkClicked) {
+        [[UIApplication sharedApplication] openURL:[request URL]];
+        return NO;
+    }
+
+    return YES;
 }
 
 #pragma mark -

@@ -644,7 +644,7 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
     DNDeviceDetails *deviceDetails = [[DNDeviceDetails alloc] init];
     return [[DNRegistrationDetails alloc] initWithDeviceDetails:deviceDetails clientDetails:clientDetails userDetails:userDetails];
 }
-
+ 
 + (DNUserDetails *)userID:(NSString *)userID
               displayName:(NSString *)displayName
              emailAddress:(NSString *)email

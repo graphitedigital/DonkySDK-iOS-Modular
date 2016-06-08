@@ -15,9 +15,9 @@
 #import "NSManagedObjectContext+DNHelpers.h"
 #import "DNLoggingController.h"
 #import "DNSystemHelpers.h"
-#import "DNQueueManager.h"
 
 @interface DNDataController ()
+@property (nonatomic, strong) dispatch_queue_t donkyCoreDataProcessingQueue;
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *mainContext;
 @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, strong) NSMutableDictionary *completionBlocks;
@@ -34,6 +34,8 @@
 
     dispatch_once(&onceToken, ^{
         sharedInstance = [[DNDataController alloc] initPrivate];
+
+        sharedInstance->_donkyCoreDataProcessingQueue = dispatch_queue_create("com.donkySDK.CoreDataProcessing", DISPATCH_QUEUE_CONCURRENT);
     });
 
     return sharedInstance;
@@ -101,13 +103,17 @@
 // Returns the managed object context for the application.
 // If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
 -(NSManagedObjectContext *)mainContext {
-    @synchronized (_mainContext) {
-        if (!_mainContext) {
-            _mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-            [_mainContext setPersistentStoreCoordinator:[self persistentStoreCoordinator]];
-        }
-        return _mainContext;
-    }
+    dispatch_sync([self donkyCoreDataProcessingQueue], ^{
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            if (!_mainContext) {
+                _mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+                [_mainContext setPersistentStoreCoordinator:[self persistentStoreCoordinator]];
+            }
+        });
+    });
+
+    return _mainContext;
 }
 
 + (NSManagedObjectContext *)temporaryContext {
@@ -137,7 +143,7 @@
         return _persistentStoreCoordinator;
     }
 
-    @synchronized (_persistentStoreCoordinator) {
+    dispatch_sync([self donkyCoreDataProcessingQueue], ^{
         NSURL *applicationDocumentsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 
         NSURL *storeURL = [applicationDocumentsDirectory URLByAppendingPathComponent:@"DNDonkyDataModel.sqlite"];
@@ -159,11 +165,14 @@
             }
             [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
             _persistentStoreCoordinator = nil;
-            return [self persistentStoreCoordinator];
         }
+    });
 
-        return _persistentStoreCoordinator;
+    if (!_persistentStoreCoordinator) {
+        return [self persistentStoreCoordinator];
     }
+
+    return _persistentStoreCoordinator;
 }
 
 - (void)saveContext:(NSManagedObjectContext *)context {
@@ -182,30 +191,33 @@
         return;
     }
 
-    @synchronized (self) {
+    dispatch_async([self donkyCoreDataProcessingQueue], ^{
         DNInfoLog(@"Saving to DB, has changes: %d", [context hasChanges]);
         if (![context hasChanges]) {
-            if (completion){
+            if (completion) {
                 completion(nil);
             }
         }
         else {
-            if (completion) {
-                [[self completionBlocks] setObject:completion forKey:[context description]];
+            @synchronized ([self completionBlocks]) {
+                if (completion) {
+                    [[self completionBlocks] setObject:completion forKey:[context description]];
+                }
+                
+                [context saveIfHasChanges:nil];
             }
-            [context saveIfHasChanges:nil];
         }
-    }
+    });
 }
 
 - (void)invokeSaveBlock:(NSNotification *)notification {
     DNInfoLog(@"Invoking save block");
     //This needs refinement:
-    dispatch_async(donky_logic_processing_queue(), ^{
+    dispatch_async([self donkyCoreDataProcessingQueue], ^{
         DNCompletionBlock completionBlock = [self completionBlocks][[[notification object] description]];
-        if (completionBlock) {
-            completionBlock(notification);
-            @synchronized ([self completionBlocks]) {
+        @synchronized ([self completionBlocks]) {
+            if (completionBlock) {
+                completionBlock(notification);
                 [[self completionBlocks] removeObjectForKey:[[notification object] description]];
             }
         }

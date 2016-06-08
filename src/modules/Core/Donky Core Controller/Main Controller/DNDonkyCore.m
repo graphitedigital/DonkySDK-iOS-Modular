@@ -26,7 +26,6 @@
 #import "DNDonkyCoreFunctionalHelper.h"
 #import "DNClientNotification.h"
 #import "DNSignalRInterface.h"
-#import "DNQueueManager.h"
 
 @interface DNDonkyCore ()
 @property (nonatomic, strong) DNNotificationSubscriber *notificationSubscriber;

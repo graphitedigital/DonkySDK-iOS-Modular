@@ -12,7 +12,6 @@
 #endif
 
 #import "DCAAnalyticsController.h"
-#import "DNLocalEvent.h"
 #import "DNConstants.h"
 #import "DNDonkyCore.h"
 #import "DNClientNotification.h"
@@ -21,7 +20,6 @@
 #import "DNNetworkController.h"
 #import "DNLoggingController.h"
 #import "DCAConstants.h"
-#import "DNQueueManager.h"
 
 static NSString *const DALaunchTimeUTC = @"launchTimeUtc";
 static NSString *const DASessionTrigger = @"sessionTrigger";
@@ -35,6 +33,7 @@ static NSString *const DCANoneSession = @"None";
 static NSString *const DCANotificationSession = @"Notification";
 
 @interface DCAAnalyticsController ()
+@property (nonatomic, strong) dispatch_queue_t donkyAnalyticsProcessingQueue;
 @property (nonatomic, copy) void (^appOpenEvent)(DNLocalEvent *);
 @property (nonatomic, copy) void (^appCloseEvent)(DNLocalEvent *);
 @property (nonatomic, copy) void (^appInfluenceEvent)(DNLocalEvent *);
@@ -48,6 +47,8 @@ static NSString *const DCANotificationSession = @"Notification";
 
     dispatch_once(&pred, ^{
         sharedInstance = [[DCAAnalyticsController alloc] initPrivate];
+
+        sharedInstance->_donkyAnalyticsProcessingQueue = dispatch_queue_create("com.donkySDK.AnalyticsProcessing", DISPATCH_QUEUE_CONCURRENT);
     });
     return sharedInstance;
 }
@@ -107,7 +108,7 @@ static NSString *const DCANotificationSession = @"Notification";
 
 - (void)recordInfluencedAppOpen:(BOOL)influenced {
     DNInfoLog(@"Recording app open. Was influenced == %d", influenced);
-    dispatch_async(donky_logic_processing_queue(), ^{
+    dispatch_async([self donkyAnalyticsProcessingQueue], ^{
         NSMutableDictionary *appLaunch = [[NSMutableDictionary alloc] init];
 
         [appLaunch dnSetObject:[[NSDate date] donkyDateForServer] forKey:DALaunchTimeUTC];
@@ -126,7 +127,7 @@ static NSString *const DCANotificationSession = @"Notification";
 
 - (void)recordAppClose {
     DNInfoLog(@"Recording app close.");
-    dispatch_async(donky_logic_processing_queue(), ^{
+    dispatch_async([self donkyAnalyticsProcessingQueue], ^{
         NSDate *startTime = [[NSUserDefaults standardUserDefaults] objectForKey:DAAppLaunchDefaults];
         if (startTime) {
             NSMutableDictionary *appLaunch = [[NSMutableDictionary alloc] init];

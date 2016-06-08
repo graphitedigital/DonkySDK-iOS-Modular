@@ -81,10 +81,11 @@
         }
         [[self detailViewController] setDelegate:self];
         [[self splitViewController] setDelegate:[self detailViewController]];
-    }   
-
+    }
     //Get the theme:
     [self setTheme:(DRUITheme *) [[DCUIThemeController sharedInstance] themeForName:kDRUIThemeName]];
+
+    [[self tabBarItem] setImage:[[self theme] imageForKey:kDRUIInboxIconImage]];
 
     [[self view] setBackgroundColor:[[self theme] themeColours][kDRUIInboxCellBackgroundColour]];
 
