@@ -526,30 +526,26 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if ([DNErrorController serviceReturnedFailureKey:@"UserIdAlreadyTaken" error:error] && autoHandleIDTaken) {
             DNDebugLog(@"User ID already taken... automatically recovering...");
-            [[DNNetworkController sharedInstance] synchroniseSuccess:^(NSURLSessionDataTask *task1, id responseData1) {
-                [DNAccountController replaceRegistrationDetailsWithUserDetails:userDetails deviceDetails:[[DNAccountController registrationDetails] deviceDetails] success:^(NSURLSessionDataTask *task2, id responseData) {
-                    @try {
-
-                        [DNAccountController saveUserDetails:userDetails];
-
-                        if (successBlock) {
-                            successBlock(task, responseData);
-                        }
-
-                        DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventRegistrationChangedUser
+            [DNAccountController replaceRegistrationDetailsWithUserDetails:userDetails deviceDetails:[[DNAccountController registrationDetails] deviceDetails] success:^(NSURLSessionDataTask *task2, id responseData) {
+                @try {
+                    [DNAccountController saveUserDetails:userDetails];
+                    if (successBlock) {
+                        successBlock(task, responseData);
+                    }
+                    
+                    DNLocalEvent *localEvent = [[DNLocalEvent alloc] initWithEventType:kDNDonkyEventRegistrationChangedUser
                                                                                  publisher:NSStringFromClass([DNAccountController class])
                                                                                  timeStamp:[NSDate date]
                                                                                       data:userDetails];
-                        [[DNDonkyCore sharedInstance] publishEvent:localEvent];
+                    [[DNDonkyCore sharedInstance] publishEvent:localEvent];
+                }
+                @catch (NSException *exception) {
+                    DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
+                    [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
+                    if (failureBlock) {
+                        failureBlock(task, [DNErrorController errorCode:DNCoreSDKFatalException userInfo:@{@"Exception: " : [exception description]}]);
                     }
-                    @catch (NSException *exception) {
-                        DNErrorLog(@"Fatal exception (%@) when processing network response.... Reporting & Continuing", [exception description]);
-                        [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil]; //Immediately submit to network
-                        if (failureBlock) {
-                            failureBlock(task, [DNErrorController errorCode:DNCoreSDKFatalException userInfo:@{@"Exception: " : [exception description]}]);
-                        }
-                    }
-                } failure:failureBlock];
+                }
             } failure:failureBlock];
         }
         else if (failureBlock) {
@@ -616,6 +612,9 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
     __block DNUserDetails *blockUserDetails = userDetails;
     __block DNDeviceDetails *blockDeviceDetails = deviceDetails;
 
+    __block NSObject *retryLock = [[NSObject alloc] init];
+    __block BOOL retryRequested = NO;
+    
     //Do a sync
     [[DNNetworkController sharedInstance] synchroniseSuccess:^(NSURLSessionDataTask *task, id responseData) {
         //Clear user details:
@@ -629,8 +628,21 @@ static NSString *const DNMissingNetworkID = @"MissingNetworkId";
         [DNAccountController registerDeviceUser:blockUserDetails deviceDetails:blockDeviceDetails isUpdate:NO success:successBlock failure:failureBlock];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if ([error code] == DNCoreSDKErrorDuplicateSynchronise) {
-            DNInfoLog(@"replace registration is retrying ...");
-            [DNAccountController replaceRegistrationDetailsWithUserDetails:userDetails deviceDetails:deviceDetails success:successBlock failure:failureBlock];
+
+            // Ensure we only retry this operation once, regardless of how many times the failure block is called.
+            if(!retryRequested){
+                @synchronized (retryLock) {
+                    if(!retryRequested){
+                        retryRequested = YES;
+                        DNInfoLog(@"Synchronise in progress, replace registration will retry...");
+                        
+                        // Delay this for a short period to allow the previous sync time to complete.
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [DNAccountController replaceRegistrationDetailsWithUserDetails:userDetails deviceDetails:deviceDetails success:successBlock failure:failureBlock];
+                        });
+                    }
+                }
+            }
         }
         else if (failureBlock) {
             failureBlock(task, error);
