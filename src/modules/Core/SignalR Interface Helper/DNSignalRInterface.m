@@ -31,7 +31,7 @@ static NSString *const DNSignalRService = @"DonkySignalRService";
     id serviceInstance = [[DNDonkyCore sharedInstance] serviceForType:DNSignalRService];
     if (serviceInstance) {
         SEL closeConnection = NSSelectorFromString(@"stop");
-        ((void (*)(id, SEL))[serviceInstance methodForSelector:closeConnection])(serviceInstance, openConnection);
+        ((void (*)(id, SEL))[serviceInstance methodForSelector:closeConnection])(serviceInstance, closeConnection);
     }
 }
 
