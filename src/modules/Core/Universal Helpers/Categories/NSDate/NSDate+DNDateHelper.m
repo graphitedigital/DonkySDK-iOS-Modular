@@ -35,7 +35,7 @@
 + (NSDate *)donkyDateFromServer:(NSString *)date {
     if (date) {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setLocale:[NSLocale currentLocale]];
+        [dateFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
         [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
         return [dateFormatter dateFromString:date];
