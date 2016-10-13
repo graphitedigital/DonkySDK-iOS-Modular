@@ -26,6 +26,7 @@
 #import "DCAConstants.h"
 #import "DNClientNotification.h"
 #import "DNNetworkController.h"
+#import "NSManagedObjectContext+GlobalSerialPerformBlock.h"
 
 @implementation DRLogicMainControllerHelper
 
@@ -35,7 +36,7 @@
         NSMutableArray *newNotifications = [[NSMutableArray alloc] init];
         NSArray *allRichMessages = batch;
         NSManagedObjectContext *temp = [DNDataController temporaryContext];
-        [temp performBlock:^{
+        [temp dr_performBlockUsingManagedObjectContextsGlobalSerialQueue:^{
             [allRichMessages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 DNServerNotification *notification = obj;
                 if (![DRLogicMainController doesRichMessageExistForID:[notification serverNotificationID]]) {
