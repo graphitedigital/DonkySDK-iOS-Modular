@@ -20,7 +20,9 @@
         managedObjectContextGlobalQueue = dispatch_queue_create_recursive_serial(queueName);
     });
     
-    dispatch_sync_recursive(managedObjectContextGlobalQueue, block);
+    dispatch_sync_recursive(managedObjectContextGlobalQueue, ^{
+        [self performBlockAndWait:block];
+    });
 }
 
 @end
