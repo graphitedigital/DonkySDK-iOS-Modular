@@ -21,7 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 dispatch_recursive_queue_t dispatch_queue_create_recursive_serial(const char * name);
 
-
 /**
  Performs dispatch_sync on a queue, but allows it to be called reentrantly without deadlocking.
  
