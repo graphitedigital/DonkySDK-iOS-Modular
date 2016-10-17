@@ -31,7 +31,15 @@
 
 + (DNSubscriptionBatchHandler)richMessageHandler {
 
+    static NSLock *lock;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        lock = [NSLock new];
+    });
+    
     return ^(NSArray *batch) {
+        [lock lock];
+        
         NSMutableArray *newNotifications = [[NSMutableArray alloc] init];
         NSArray *allRichMessages = batch;
         NSManagedObjectContext *temp = [DNDataController temporaryContext];
@@ -94,6 +102,8 @@
                                                                          timeStamp:[NSDate date]
                                                                               data:allRichMessages];
                 [[DNDonkyCore sharedInstance] publishEvent:localEvent];
+                
+                [lock unlock];
             }];
         }];
     };
