@@ -26,17 +26,24 @@
 #import "DCAConstants.h"
 #import "DNClientNotification.h"
 #import "DNNetworkController.h"
-#import "NSManagedObjectContext+GlobalSerialPerformBlock.h"
 
 @implementation DRLogicMainControllerHelper
 
 + (DNSubscriptionBatchHandler)richMessageHandler {
 
+    static NSLock *lock;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        lock = [NSLock new];
+    });
+    
     return ^(NSArray *batch) {
+        [lock lock];
+        
         NSMutableArray *newNotifications = [[NSMutableArray alloc] init];
         NSArray *allRichMessages = batch;
         NSManagedObjectContext *temp = [DNDataController temporaryContext];
-        [temp dr_performBlockUsingManagedObjectContextsGlobalSerialQueue:^{
+        [temp performBlock:^{
             [allRichMessages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 DNServerNotification *notification = obj;
                 if (![DRLogicMainController doesRichMessageExistForID:[notification serverNotificationID]]) {
@@ -95,6 +102,8 @@
                                                                          timeStamp:[NSDate date]
                                                                               data:allRichMessages];
                 [[DNDonkyCore sharedInstance] publishEvent:localEvent];
+                
+                [lock unlock];
             }];
         }];
     };
