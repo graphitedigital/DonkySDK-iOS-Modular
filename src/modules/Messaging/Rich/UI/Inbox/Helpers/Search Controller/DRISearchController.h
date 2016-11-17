@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "DRIDataController.h"
-#import "DRLogicMainController.h"
+#import <Donky_RichMessage_Logic/DRLogicMainController.h>
 
 @interface DRISearchController : NSObject <UISearchDisplayDelegate, UISearchBarDelegate>
 

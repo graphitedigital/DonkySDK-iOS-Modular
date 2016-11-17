@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "DCUINewBannerView.h"
+#import <Donky_CommonMessaging_UI/DCUINewBannerView.h>
 #import "DRUITheme.h"
 #import "DRUIThemeConstants.h"
 

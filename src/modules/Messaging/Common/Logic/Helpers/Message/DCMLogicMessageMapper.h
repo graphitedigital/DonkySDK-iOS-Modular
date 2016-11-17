@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DNServerNotification.h"
+#import <Donky_Core_SDK/DNServerNotification.h>
 #import "DNMessage.h"
 
 @interface DCMLogicMessageMapper : NSObject

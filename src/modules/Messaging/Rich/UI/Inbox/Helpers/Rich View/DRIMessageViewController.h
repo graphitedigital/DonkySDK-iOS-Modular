@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "DNRichMessage.h"
-#import "DCMConstants.h"
+#import <Donky_RichMessage_Logic/DNRichMessage.h>
+#import <Donky_CommonMessaging_Logic/DCMConstants.h>
 
 /*!
  The delegate used to alert delegates when the rich message view was closed. Use to perform additional logic once the user has closed the current rich message.

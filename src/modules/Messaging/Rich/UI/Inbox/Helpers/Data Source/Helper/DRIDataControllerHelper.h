@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "DNRichMessage.h"
+#import <Donky_RichMessage_Logic/DNRichMessage.h>
 #import "DRIDataController.h"
 
 @interface DRIDataControllerHelper : NSObject

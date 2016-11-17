@@ -10,11 +10,11 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "DRITableViewCell.h"
-#import "DNRichMessage.h"
-#import "DRLogicMainController.h"
-#import "DNLocalEvent.h"
+#import <Donky_RichMessage_Logic/DNRichMessage.h>
+#import <Donky_RichMessage_Logic/DRLogicMainController.h>
+#import <Donky_Core_SDK/DNLocalEvent.h>
 #import "DRUITheme.h"
-#import "DRLFetchedResultsController.h"
+#import <Donky_RichMessage_Logic/DRLFetchedResultsController.h>
 
 @class DRLFetchedResultsController;
 

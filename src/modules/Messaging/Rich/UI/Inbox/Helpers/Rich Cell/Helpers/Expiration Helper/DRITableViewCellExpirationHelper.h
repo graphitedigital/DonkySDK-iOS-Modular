@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DNRichMessage.h"
+#import <Donky_RichMessage_Logic/DNRichMessage.h>
 #import "DRITableViewCell.h"
 
 @interface DRITableViewCellExpirationHelper : NSObject

@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
-#import "DNRichMessage.h"
-#import "DNBlockDefinitions.h"
+#import <Donky_RichMessage_Logic/DNRichMessage.h>
+#import <Donky_Core_SDK/DNBlockDefinitions.h>
 #import "DRIMainController.h"
 
 @interface DRIMainControllerHelper : DNRichMessage

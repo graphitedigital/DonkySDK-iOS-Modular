@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "DNServerNotification.h"
+#import <Donky_Core_SDK/DNServerNotification.h>
 #import "DNRichMessage.h"
-#import "DNBlockDefinitions.h"
+#import <Donky_Core_SDK/DNBlockDefinitions.h>
 
 @interface DRLogicHelper : NSObject
 

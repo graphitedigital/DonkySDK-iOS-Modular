@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DNSubscription.h"
-#import "DNBlockDefinitions.h"
+#import <Donky_Core_SDK/DNSubscription.h>
+#import <Donky_Core_SDK/DNBlockDefinitions.h>
 
 @interface DRLogicMainControllerHelper : NSObject
 

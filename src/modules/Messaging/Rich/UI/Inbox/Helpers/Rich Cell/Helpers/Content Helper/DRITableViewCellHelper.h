@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "DNRichMessage.h"
+#import <Donky_RichMessage_Logic/DNRichMessage.h>
 #import "DRUITheme.h"
-#import "DCUINewBannerView.h"
+#import <Donky_CommonMessaging_UI/DCUINewBannerView.h>
 
 @interface DRITableViewCellHelper : NSObject
 

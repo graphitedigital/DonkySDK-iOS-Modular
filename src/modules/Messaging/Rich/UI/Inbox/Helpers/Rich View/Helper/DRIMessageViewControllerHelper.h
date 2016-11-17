@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "DCUITheme.h"
+#import <Donky_CommonMessaging_UI/DCUITheme.h>
 #import "DRIMessageViewController.h"
 
 @interface DRIMessageViewControllerHelper : NSObject

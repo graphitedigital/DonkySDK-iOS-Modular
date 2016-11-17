@@ -7,4 +7,8 @@
 //
 
 #import "DNNetwork+Localization.h"
+#import "DNTag.h"
 
+NSString *DNNetworkLocalizedString(NSString *key) {
+  return NSLocalizedStringWithDefaultValue(key, @"DNLocalization", [NSBundle bundleForClass:[DNTag class]], nil, nil);
+}

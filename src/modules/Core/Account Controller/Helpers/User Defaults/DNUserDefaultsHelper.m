@@ -16,9 +16,12 @@
 
 @implementation DNUserDefaultsHelper
 
++ (NSString *)domainName {
+  return [[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@"com.dynmark.donkyuserdefaults"];
+}
+
 + (NSUserDefaults *)userDetails {
-     NSString *domainName = [[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@"com.dynmark.donkyuserdefaults"];
-    return [[NSUserDefaults alloc] initWithSuiteName:domainName];
+    return [[NSUserDefaults alloc] initWithSuiteName:[self domainName]];
 }
 
 + (void)saveObject:(id)object withKey:(NSString *) key {
@@ -36,8 +39,7 @@
 }
 
 + (void)resetUserDefaults {
-    NSString *domainName = [[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@"com.dynmark.donkyuserdefaults"];
-    [[DNUserDefaultsHelper userDetails] removeSuiteNamed:domainName];
+    [[DNUserDefaultsHelper userDetails] removeSuiteNamed:[self domainName]];
 }
 
 + (void)saveUserDefaults {

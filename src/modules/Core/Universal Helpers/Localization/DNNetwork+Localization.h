@@ -9,8 +9,4 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-static inline NSString * DNNetworkLocalizedString(NSString *key) {
-    return NSLocalizedStringWithDefaultValue(key, @"DNLocalization", [NSBundle mainBundle], nil, nil);
-}
-
-
+NSString *DNNetworkLocalizedString(NSString *key);

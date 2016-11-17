@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "DNMessage.h"
+#import <Donky_CommonMessaging_Logic/DNMessage.h>
 
 
 @interface DNRichMessage : DNMessage

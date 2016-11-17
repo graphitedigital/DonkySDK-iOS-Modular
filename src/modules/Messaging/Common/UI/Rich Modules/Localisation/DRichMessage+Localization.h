@@ -9,8 +9,4 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-static inline NSString * DRichMessageLocalizedString(NSString *key) {
-    return NSLocalizedStringWithDefaultValue(key, @"DRLocalization", [NSBundle mainBundle], nil, nil);
-}
-
-
+NSString *DRichMessageLocalizedString(NSString *key);

@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DNServerNotification.h"
+#import <Donky_Core_SDK/DNServerNotification.h>
 #import "DNMessage.h"
-#import "DNBlockDefinitions.h"
+#import <Donky_Core_SDK/DNBlockDefinitions.h>
 
 @interface DCMMainController : NSObject
 

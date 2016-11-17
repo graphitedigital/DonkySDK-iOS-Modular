@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DCUITheme.h"
+#import <Donky_CommonMessaging_UI/DCUITheme.h>
 
 @interface DRUITheme : DCUITheme
 

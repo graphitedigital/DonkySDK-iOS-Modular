@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DNModuleDefinition.h"
-#import "DNSubscription.h"
+#import <Donky_Core_SDK/DNModuleDefinition.h>
+#import <Donky_Core_SDK/DNSubscription.h>
 #import "DNRichMessage.h"
-#import "DNLocalEvent.h"
-#import "DNBlockDefinitions.h"
+#import <Donky_Core_SDK/DNLocalEvent.h>
+#import <Donky_Core_SDK/DNBlockDefinitions.h>
 
 @interface DRLogicMainController : NSObject
 

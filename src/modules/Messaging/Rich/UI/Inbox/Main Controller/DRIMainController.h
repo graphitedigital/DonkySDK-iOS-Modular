@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "DRLogicMainController.h"
-#import "DCUISplitViewController.h"
+#import <Donky_RichMessage_Logic/DRLogicMainController.h>
+#import <Donky_CommonMessaging_UI/DCUISplitViewController.h>
 #import "DRITableViewController.h"
 
 @interface DRIMainController : NSObject
