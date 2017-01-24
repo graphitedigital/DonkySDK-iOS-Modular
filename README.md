@@ -2,17 +2,17 @@
   <img src="https://avatars2.githubusercontent.com/u/11334935?v=3&s=200" alt="Donky Networks LTD" title="Donky Network SDK">
 </p>
 
-# Donky Modular SDK (V2.8.3.1)
+# Donky Modular SDK (V2.8.4.1)
 
 The Donky iOS SDK is a kit for adding push notifications and rich content services to your application. For detailed documentation, tutorials and guides, visit our online [documentation](http://docs.mobiledonky.com).
 
 ##Requirements
 
-The minimal technical requirements for the Donky Module SDK are:
+The minimal technical requirements for the Donky Modular SDK are:
 
 <ul>
-<li>Xcode 5.0+</li>
-<li>iOS 7.0+</li>
+<li>Xcode 6.0+</li>
+<li>iOS 8.0+</li>
 <li>Arc must be enabled.</li>
 </ul>
 
@@ -233,7 +233,7 @@ The sample project can be found:
 ## Requirements
 
 <ul>
-<li>iOS 7.0+</li>
+<li>iOS 8.0+</li>
 <li>Arc must be enabled.</li>
 <li>For Interactive notifications iOS 8.0+ is required.</li>
 </ul>
@@ -325,7 +325,7 @@ The sample project can be found:
 ## Requirements
 
 <ul>
-<li>iOS 7.0+</li>
+<li>iOS 8.0+</li>
 <li>Arc must be enabled.</li>
 </ul>
 
@@ -371,7 +371,7 @@ The sample project can be found:
 ## Requirements
 
 <ul>
-<li>iOS 7.0+</li>
+<li>iOS 8.0+</li>
 <li>Arc must be enabled.</li>
 </ul>
 
@@ -446,7 +446,7 @@ The sample project can be found:
 ## Requirements
 
 <ul>
-<li>iOS 7.0+</li>
+<li>iOS 8.0+</li>
 <li>Arc must be enabled.</li>
 </ul>
 
@@ -511,7 +511,7 @@ To play a sound file:
 ## Requirements
 
 <ul>
-<li>iOS 7.0+</li>
+<li>iOS 8.0+</li>
 <li>Arc must be enabled.</li>
 </ul>
 
@@ -569,7 +569,7 @@ DNSequencingAccountController
 ## Requirements
 
 <ul>
-<li>iOS 7.0+</li>
+<li>iOS 8.0+</li>
 <li>Arc must be enabled.</li>
 </ul>
 

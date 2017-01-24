@@ -86,16 +86,14 @@
 
     NSManagedObjectContext *mainContext = [self mainContext];
     
-    // Merge changes into the main context on the main thread
-    [mainContext performSelectorOnMainThread:@selector(mergeChangesFromContextDidSaveNotification:)
-                                  withObject:notification
-                               waitUntilDone:YES];
-
-    [mainContext performSelectorOnMainThread:@selector(saveIfHasChanges:)
-                                  withObject:notification
-                               waitUntilDone:YES];
-
-    [self invokeSaveBlock:notification];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [mainContext mergeChangesFromContextDidSaveNotification:notification];
+        NSError *error = nil;
+        [mainContext saveIfHasChanges:&error];
+        dispatch_async([self donkyCoreDataProcessingQueue], ^{
+            [self invokeSaveBlock:notification];
+        });
+    });
 }
 
 #pragma mark - Core Data methods

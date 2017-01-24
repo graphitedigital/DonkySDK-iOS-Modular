@@ -73,14 +73,14 @@ static NSString *const DNPascalAlwaysSubmitErrors = @"alwaysSubmitErrors";
 }
 
 + (void)addLogToFile:(NSString *)log {
-    //Get the file:
+    
     NSString *filePath = [DNFileHelpers pathForFile:kDNLoggingFileName inDirectory:kDNLoggingDirectoryName];
-    //Turn the data into a string:
-    NSString *stringData = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-    log = [[[NSDate date] donkyDateForDebugLog] stringByAppendingString:[NSString stringWithFormat:@" %@\n", log]];
-    stringData = [stringData stringByAppendingString:log];
-    NSData *data = [stringData dataUsingEncoding:NSUTF8StringEncoding];
-    [DNFileHelpers saveData:data toPath:filePath];
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:filePath];
+    [fileHandle seekToEndOfFile];
+    
+    NSString *toWrite = [[[NSDate date] donkyDateForDebugLog] stringByAppendingString:[NSString stringWithFormat:@" %@\n", log]];
+    [fileHandle writeData:[toWrite dataUsingEncoding:NSUTF8StringEncoding]];
+    [fileHandle closeFile];
 
     //Get log file size:
     if ([DNFileHelpers sizeForFile:filePath] > kDonkyLogFileSizeLimit) {
