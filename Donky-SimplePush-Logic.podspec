@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'src/modules/Messaging/SimplePush/Logic/**/*.{h,m}'
  
-  s.deprecated_in_favour_of = "Donky-Push"
+  s.deprecated_in_favor_of = "Donky-Push"
   s.frameworks = 'UIKit', 'Foundation'
   s.dependency "Donky-CommonMessaging-Logic"
   
