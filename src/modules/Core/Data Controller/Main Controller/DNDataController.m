@@ -21,6 +21,7 @@
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *mainContext;
 @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, strong) NSMutableDictionary *completionBlocks;
+@property (atomic, strong) NSMutableSet<NSManagedObjectContext*> *privateContexts;
 @end
 
 @implementation DNDataController
@@ -55,6 +56,7 @@
         [notificationCenter addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
         [notificationCenter addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
 
+        _privateContexts = [NSMutableSet set];
         [self setCompletionBlocks:[[NSMutableDictionary alloc] init]];
     }
     return self;
@@ -93,6 +95,22 @@
             [self invokeSaveBlock:notification];
         });
     });
+
+
+    if (![DNSystemHelpers systemVersionAtLeast:10.0]) {
+
+        dispatch_async([self donkyCoreDataProcessingQueue], ^{
+            @synchronized (self.privateContexts) {
+                DNInfoLog(@"Updating all of the other child contexts with the changes");
+                //we need to operate on copy, as the set can be updated on the other threads
+                for(NSManagedObjectContext *context in self.privateContexts){
+                    if(![context isEqual:notification.object]){
+                        [context mergeChangesFromContextDidSaveNotification:notification];
+                    }
+                }
+            }
+        });
+    }
 }
 
 #pragma mark - Core Data methods
@@ -119,6 +137,10 @@
     @try {
         privateContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         [privateContext setParentContext:[[DNDataController sharedInstance] mainContext]];
+        if ([DNSystemHelpers systemVersionAtLeast:10.0]) {
+            //with iOS < 10 the merging is handled manually in the -mergeChanges: selector
+            privateContext.automaticallyMergesChangesFromParent = YES;
+        }
 
         [[NSNotificationCenter defaultCenter] addObserver:[DNDataController sharedInstance]
                                                  selector:@selector(mergeChanges:)
@@ -130,6 +152,11 @@
         DNErrorLog(@"Fatal exception (%@) when getting managed contexts.... Reporting & Continuing", [exception description]);
     }
     @finally {
+         if (![DNSystemHelpers systemVersionAtLeast:10.0]) {
+            @synchronized ([DNDataController sharedInstance].privateContexts) {
+                [[DNDataController sharedInstance].privateContexts addObject:privateContext];
+            }
+         }
         return privateContext;
     }
 }
@@ -218,6 +245,12 @@
             if (completionBlock) {
                 completionBlock(notification);
                 [[self completionBlocks] removeObjectForKey:[[notification object] description]];
+
+                 if (![DNSystemHelpers systemVersionAtLeast:10.0]) {
+                    @synchronized (self.privateContexts) {
+                        [self.privateContexts removeObject:notification.object];
+                    }
+                 }
             }
         }
     });
