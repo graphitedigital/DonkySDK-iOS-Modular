@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-CommonMessaging-Logic"
-  s.version          = "4.8.5.0"
+  s.version          = "4.8.6.0"
   s.summary          = "The shared messaging logic"
   s.description      = <<-DESC
                        Only manually import this Pod if you wish to create your own completely Bespoke messaging UI. This contains central logic around changing the state of internal messages and reporting these back to the Donky Network. 

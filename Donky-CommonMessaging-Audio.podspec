@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-CommonMessaging-Audio"
-  s.version          = "4.8.5.0"
+  s.version          = "4.8.6.0"
   s.summary          = "The shared messaging Audio"
   s.description      = <<-DESC
                        Only manually import this Pod if you wish Donky to use audio, this includes vibrations.

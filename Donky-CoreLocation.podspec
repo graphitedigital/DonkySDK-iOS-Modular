@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-CoreLocation"
-  s.version          = "4.8.5.0"
+  s.version          = "4.8.6.0"
   s.summary          = "The location services module"
   s.description      = <<-DESC
                        This module allows you to access the location services with the Donky Network.

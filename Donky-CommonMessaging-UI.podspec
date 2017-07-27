@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-CommonMessaging-UI"
-  s.version          = "4.8.5.0"
+  s.version          = "4.8.6.0"
   s.summary          = "The shared messaging UI"
   s.description      = <<-DESC
                        This contains all shared UI Logic for Socail/Messaging funtiocnality. Including the internal banner view, localization files and shared controllers around obtaining Rich Message view controllers.

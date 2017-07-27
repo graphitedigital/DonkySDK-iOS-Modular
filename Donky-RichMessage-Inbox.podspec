@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-RichMessage-Inbox"
-  s.version          = "4.8.5.0"
+  s.version          = "4.8.6.0"
   s.summary          = "The base logic layer required to handle incoming Remote notifications and also Simple Push messages stored on the server."
   s.description      = <<-DESC
                        This is the Rich Message inbox, it includes everything to receive rich messages and display them to your users.

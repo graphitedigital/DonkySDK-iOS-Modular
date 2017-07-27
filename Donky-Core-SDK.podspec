@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-Core-SDK"
-  s.version          = "4.8.5.0"
+  s.version          = "4.8.6.0"
   s.summary          = "The core component to the Donky SDK."
   s.description      = <<-DESC
                        This is required by all other modules (is automatically imported through dependecny management) 

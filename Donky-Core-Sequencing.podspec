@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-Core-Sequencing"
-  s.version          = "4.8.5.0"
+  s.version          = "4.8.6.0"
   s.summary          = "The core sequencing module"
   s.description      = <<-DESC
                        This module allows you to perform multiple calls to some account controller methods without needing to implement call backs or worry about sequencing when

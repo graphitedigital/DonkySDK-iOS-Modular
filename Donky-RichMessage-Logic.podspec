@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-RichMessage-Logic"
-  s.version          = "4.8.5.0"
+  s.version          = "4.8.6.0"
   s.summary          = "The base logic layer required to handle incoming Rich Messages."
   s.description      = <<-DESC
                        This is the Rich Message logic, it contains all the logic necessary to receive and process inbound rich messages, saving them into the Database and recording analytics around delivery.
