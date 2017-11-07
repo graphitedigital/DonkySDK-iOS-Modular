@@ -198,14 +198,17 @@
             }
         }];
     }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
+            //We need to increment the badge count here as the badge count is not incremented automatically when
+            //the app is open and a notification is received.
+            NSInteger count = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+            count += [notificationsToKeep count] - [backgroundNotificationsToKeep count];
 
-    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-        //We need to increment the badge count here as the badge count is not incremented automatically when
-        //the app is open and a notification is received.
-        NSInteger count = [[UIApplication sharedApplication] applicationIconBadgeNumber];
-        count += [notificationsToKeep count] - [backgroundNotificationsToKeep count];
-        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:count];
-    }
+                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:count];
+
+        }
+    });
 }
 
 @end
