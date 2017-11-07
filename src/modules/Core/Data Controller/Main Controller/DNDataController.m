@@ -174,7 +174,8 @@
 
         // The managed object model for the application.
         // If the model doesn't already exist, it is created from the application's model.
-        NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+        NSBundle *bundle =[NSBundle bundleForClass:[self class]];
+        NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL: [bundle URLForResource:@"DNDonkyDataModel" withExtension:@"momd"] ];
 
         NSError *error = nil;
         _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
