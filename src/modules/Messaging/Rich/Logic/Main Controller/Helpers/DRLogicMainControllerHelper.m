@@ -205,7 +205,7 @@
             NSInteger count = [[UIApplication sharedApplication] applicationIconBadgeNumber];
             count += [notificationsToKeep count] - [backgroundNotificationsToKeep count];
 
-                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:count];
+            [[UIApplication sharedApplication] setApplicationIconBadgeNumber:count];
 
         }
     });
