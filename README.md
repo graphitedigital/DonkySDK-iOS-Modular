@@ -2,7 +2,7 @@
   <img src="https://avatars2.githubusercontent.com/u/11334935?v=3&s=200" alt="Donky Networks LTD" title="Donky Network SDK">
 </p>
 
-# Donky Modular SDK (V2.8.5.0)
+# Donky Modular SDK (V2.8.6.0)
 
 The Donky iOS SDK is a kit for adding push notifications and rich content services to your application. For detailed documentation, tutorials and guides, visit our online [documentation](http://docs.mobiledonky.com).
 
@@ -14,8 +14,14 @@ The minimal technical requirements for the Donky Modular SDK are:
 <li>Xcode 6.0+</li>
 <li>iOS 8.0+</li>
 <li>Arc must be enabled.</li>
+<li>Library should be included as Cocoa Touch Framework when integrated via CocoaPods</li>
 </ul>
 
+### Importing via CocoaPods
+
+If using Cocoapods, please include `use_frameworks!` in your `Podfile`.
+Due to the way the library is constructe, importing some of its resources which is used internally cannot be achieved when SDK is used as Static Library.
+Frameworks are modern way for including external libraries in the projects, as well it is requirement for Swift support, so please use this way to integrate Donky SDK.
 
 Read our complete documentation [here](http://docs.mobiledonky.com)
 
@@ -34,12 +40,12 @@ To install please use one of the following methods:
 
 Cloning the Git Repo:
 
-	git clone git@github.com:Donky-Network/DonkySDK-iOS-Modular.git 
-	
+	git clone git@github.com:Donky-Network/DonkySDK-iOS-Modular.git
+
 Using [CocoaPods](https://cocoapods.org)
 
 	Please see below for all the information specific to the CocoaPods
-	
+
 ##Support
 
 Please contact sdk@mobiledonky.com if you have any issues with integrating or using this SDK.
@@ -60,7 +66,7 @@ We accept pull requests!
 [![Docs](https://img.shields.io/cocoapods/metrics/doc-percent/Donky-Core-SDK.svg)](http://cocoapods.org/pods/Donky-Core-SDK)
 ## Usage
 
-Only add this to your 'PodFile' if this is the only part of the SDK you are going to use. Adding this to your ‘Podfile’ is not necessary if using any of the additional optional modules. 
+Only add this to your 'PodFile' if this is the only part of the SDK you are going to use. Adding this to your âPodfileâ is not necessary if using any of the additional optional modules.
 
 ## Initialise anonymously
 
@@ -81,20 +87,20 @@ Only add this to your 'PodFile' if this is the only part of the SDK you are goin
 	//Start analytics (optional)
     [[DCAAnalyticsController sharedInstance] start];
 
-    //Create a new user and populate with details. Country code is optional is NO mobile number is provided. If a 
+    //Create a new user and populate with details. Country code is optional is NO mobile number is provided. If a
     //mobile number is provided then a country code is mandatory. Failing to provide a country code that matches the
-    //mobile number will result in a server validation error. 
-    DNUserDetails *userDetails = [[DNUserDetails alloc] initWithUserID:@"" 
+    //mobile number will result in a server validation error.
+    DNUserDetails *userDetails = [[DNUserDetails alloc] initWithUserID:@""
                                                            displayName:@""
-                                                          emailAddress:@"" 
-                                                          mobileNumber:@"" 
-                                                           countryCode:@"" 
-                                                             firstName:@"" 
-                                                              lastName:@"" 
-                                                              avatarID:@"" 
-                                                          selectedTags:@[] 
+                                                          emailAddress:@""
+                                                          mobileNumber:@""
+                                                           countryCode:@""
+                                                             firstName:@""
+                                                              lastName:@""
+                                                              avatarID:@""
+                                                          selectedTags:@[]
                                                   additionalProperties:@{}];
-    
+
     //Initialise Donky with API key.
     [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"API-KEY" userDetails:userDetails success:^(NSURLSessionDataTask *task, id responseData) {
         NSLog(@"Successfully Initialised with user...");
@@ -136,12 +142,12 @@ To handle interactive notifications (iOS 8+ only)
 The sample project can be found:
 
 ```
-│
-├───src
-	├───workspaces
-		├───Donky Core SDK Demo
+â
+ââââsrc
+	ââââworkspaces
+		ââââDonky Core SDK Demo
 ```
-	
+
 ## Requirements
 
 <ul>
@@ -183,10 +189,10 @@ Use the Simple Push module to enable your application to receive Simple Push mes
 
     //Start push logic:
     [[DPPushNotificationController sharedInstance] start];
-    
+
     //Initialise Donky
     [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"API-KEY"];
-	
+
 	return YES;
 }
 ```
@@ -223,13 +229,13 @@ To handle interactive notifications (iOS 8+ only)
 The sample project can be found:
 
 ```
-│
-├───src
-	├───workspaces
-		├───Donky Simple Push Logic Demo
+â
+ââââsrc
+	ââââworkspaces
+		ââââDonky Simple Push Logic Demo
 ```
-	
-	
+
+
 ## Requirements
 
 <ul>
@@ -265,22 +271,22 @@ Including this in your podfile will automatically pull in the following other mo
 
 ## Usage
 
-Use the Rich Message module to enable your application to receive Rich Messages from the netowrk and save them to Donky's local database. You can then retrieve and delete messages 
+Use the Rich Message module to enable your application to receive Rich Messages from the netowrk and save them to Donky's local database. You can then retrieve and delete messages
 through the APIs provided in the ```objective-c DRLogicMainController```.
 
 ```objective-c
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
+
     //Start analytics controller (optional)
     [[DCAAnalyticsController sharedInstance] start];
-    
+
     //Start the Rich Logic
     [[DRLogicMainController sharedInstance] start];
-    
+
     //Initialise Donky
     [[DNDonkyCore sharedInstance] initialiseWithAPIKey:@"API-Key"];
-    
+
     return YES;
 }
 ```
@@ -316,10 +322,10 @@ To handle interactive notifications (iOS 8+ only)
 The sample project can be found:
 
 ```
-│
-├───src
-	├───workspaces
-		├───Donky Rich Message Logic Demo
+â
+ââââsrc
+	ââââworkspaces
+		ââââDonky Rich Message Logic Demo
 ```
 
 ## Requirements
@@ -363,10 +369,10 @@ Use the Rich Message module to enable your application to receive and display ri
 The sample project can be found:
 
 ```
-│
-├───src
-	├───workspaces
-		├───Donky Rich Message Inbox Demo
+â
+ââââsrc
+	ââââworkspaces
+		ââââDonky Rich Message Inbox Demo
 ```
 ## Requirements
 
@@ -406,7 +412,7 @@ Including this in your podfile will automatically pull in the following other mo
 
 Use the Automation module to enable to trigger campaigns setup on Campaign Builder/Donky Control   [here](http://docs.mobiledonky.com).
 
-Start the Donky SDK and analytics controller as normal. 
+Start the Donky SDK and analytics controller as normal.
 
 ```objective-c
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -437,10 +443,10 @@ To fire a trigger use either of the following methods:
 The sample project can be found:
 
 ```
-│
-├───src
-	├───workspaces
-		├───Donky Automation Demo
+â
+ââââsrc
+	ââââworkspaces
+		ââââDonky Automation Demo
 ```
 
 ## Requirements
@@ -482,9 +488,9 @@ Start the controller:
 ```objective-c
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
+
 	[[DAMainController sharedInstance] start];
-    
+
 	//Other donky modules or custom code:
 
     return YES;
@@ -502,10 +508,10 @@ To play a sound file:
 ##Samples
 
 ```
-│
-├───src
-	├───workspaces
-		├───Donky Audio
+â
+ââââsrc
+	ââââworkspaces
+		ââââDonky Audio
 ```
 
 ## Requirements
@@ -599,7 +605,7 @@ Including this in your podfile will automatically pull in the following other mo
 
 ## Usage
 
-You will never need to manually add the common logic module into your application, it is a PodSpec dependency and therefore isn't required to be manually added to your 
+You will never need to manually add the common logic module into your application, it is a PodSpec dependency and therefore isn't required to be manually added to your
 PodFile.
 
 # Donky-CommonMessaging-UI
@@ -611,7 +617,7 @@ PodFile.
 
 ## Usage
 
-You will never need to manually add the common UI module into your application, it is a PodSpec dependency and therefore isn't required to be manually added to your 
+You will never need to manually add the common UI module into your application, it is a PodSpec dependency and therefore isn't required to be manually added to your
 PodFile.
 
 # Donky-CoreLocation
@@ -624,4 +630,3 @@ PodFile.
 ## Usage
 
 Adding this will allow you to use Donkys location and reporting, please see [here](http://docs.mobiledonky.com/v1.4/docs/core-location-ios)
-
