@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/Donky-Network/DonkySDK-iOS-Modular.git", :tag => 'v4.8.6.0' }
   s.social_media_url = 'https://twitter.com/mobiledonky'
 
-  s.platform     = :ios, '7.0'
+  s.platform     = :ios, '8.0'
   s.requires_arc = true
 
   s.source_files = 'src/modules/Messaging/Rich/Logic/**/*.{h,m}'
