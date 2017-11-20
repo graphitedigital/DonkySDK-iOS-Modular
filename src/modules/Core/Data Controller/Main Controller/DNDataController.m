@@ -157,6 +157,7 @@
                 [[DNDataController sharedInstance].privateContexts addObject:privateContext];
             }
          }
+
         return privateContext;
     }
 }
