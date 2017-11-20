@@ -306,10 +306,17 @@ static NSString *const DNAcknowledgementDetails = @"acknowledgementDetail";
         }];
     }
 
+    __block BOOL appInBackground = NO;
+
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        appInBackground = [[UIApplication sharedApplication] applicationState] != UIApplicationStateActive;
+    });
+
+
     //Prepare return:
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
     [params dnSetObject:allNotifications forKey:@"clientNotifications"];
-    [params dnSetObject:[[UIApplication sharedApplication] applicationState] != UIApplicationStateActive ? @"true" : @"false" forKey:@"isBackground"];
+    [params dnSetObject: appInBackground ? @"true" : @"false" forKey:@"isBackground"];
 
 
     DNInfoLog(@"Notifications prepared, proceeding to send... %@", params);

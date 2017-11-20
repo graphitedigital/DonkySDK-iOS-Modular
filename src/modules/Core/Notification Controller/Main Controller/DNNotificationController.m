@@ -63,10 +63,13 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
         return;
     }
 
-    [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings
-                                                                         settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge)
-                                                                         categories:categories]];
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings
+                                                                             settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge)
+                                                                             categories:categories]];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    });
+
     
 }
 

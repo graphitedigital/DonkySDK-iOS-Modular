@@ -157,8 +157,10 @@ static NSString *const DNCustomType = @"customType";
                 }
                 
                 else if (![DNNetworkHelper isPerformingBlockingTask:[weakSelf exchangeRequests]]) {
-                    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+                    });
+
                     //Create a new session manager:
                     DNSessionManager *sessionManager = [[DNSessionManager alloc] initWithSecureURl:secure];
                     
@@ -589,7 +591,9 @@ static NSString *const DNCustomType = @"customType";
 #pragma mark - Network Task Manager
 
 - (void)removeTask:(NSURLSessionTask *)task {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    });
     if ([task state] == NSURLSessionTaskStateCompleted) {
         DNInfoLog(@"Clearing completed task: %@", [task taskDescription]);
         @synchronized ([self exchangeRequests]) {
