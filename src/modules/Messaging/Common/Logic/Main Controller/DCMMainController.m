@@ -18,8 +18,6 @@
 #import "NSDate+DNDateHelper.h"
 #import "DNDataController.h"
 #import "DCMConstants.h"
-#import "DRConstants.h"
-#import "DNDonkyCore.h"
 
 static NSString *const DCMDelivered = @"delivered";
 static NSString *const DCMResult = @"result";
@@ -99,12 +97,6 @@ static NSString *const DCMTimeToReadSeconds = @"timeToReadSeconds";
                     [fetchedMessage setRead:@(YES)];
                     DNClientNotification *messageReadNotification = [[DNClientNotification alloc] initWithType:DCMessageRead data:[DCMMainController messageRead:fetchedMessage] acknowledgementData:nil];
                     [clientNotifications addObject:messageReadNotification];
-
-                    DNLocalEvent *changeBadgeEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageBadgeCount
-                                                                                   publisher:NSStringFromClass([self class])
-                                                                                   timeStamp:[NSDate date]
-                                                                                        data:@(1)];
-                    [[DNDonkyCore sharedInstance] publishEvent:changeBadgeEvent];
                 }
             }
         }];
@@ -130,12 +122,6 @@ static NSString *const DCMTimeToReadSeconds = @"timeToReadSeconds";
                     [fetchedMessage setRead:@(YES)];
                     DNClientNotification *messageReadNotification = [[DNClientNotification alloc] initWithType:DCMessageRead data:[DCMMainController messageRead:fetchedMessage] acknowledgementData:nil];
                     [clientNotifications addObject:messageReadNotification];
-                    DNLocalEvent *changeBadgeEvent = [[DNLocalEvent alloc] initWithEventType:kDRichMessageBadgeCount
-                                                                                   publisher:NSStringFromClass([self class])
-                                                                                   timeStamp:[NSDate date]
-                                                                                        data:@(1)];
-                    [[DNDonkyCore sharedInstance] publishEvent:changeBadgeEvent];
-
                 }
             }
         }];
