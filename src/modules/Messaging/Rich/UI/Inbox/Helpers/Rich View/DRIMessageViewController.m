@@ -277,7 +277,7 @@
     }
     
     if ([self richMessage]) {
-        [DRLogicMainController markMessagesAsRead:@[[self richMessage]] completion:nil];
+        [DRLogicMainController markMessageAsRead:[self richMessage]];
     }
 }
 
