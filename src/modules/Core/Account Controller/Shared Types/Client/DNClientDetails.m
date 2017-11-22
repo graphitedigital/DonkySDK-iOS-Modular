@@ -37,7 +37,7 @@ static NSString *const DNDeviceSdkVersion = @"sdkVersion";
     if (self) {
 
         [self setSdkVersion:[DNClientDetailsHelper sdkVersion]];
-        [self setAppVersion:[[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey]];
+        [self setAppVersion:[[NSBundle bundleForClass:[self class]] infoDictionary][(NSString *)kCFBundleVersionKey]];
         [self setCurrentLocalTime:[[NSDate date] donkyDateForServer]];
         [self setModuleVersions:[DNClientDetailsHelper moduleVersions] ? : [[NSMutableDictionary alloc] init]];
     }
