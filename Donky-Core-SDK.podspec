@@ -1,6 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-Core-SDK"
   s.version          = "4.8.6.2"
+
   s.summary          = "The core component to the Donky SDK."
   s.description      = <<-DESC
                        This is required by all other modules (is automatically imported through dependecny management) 
@@ -12,6 +13,7 @@ Pod::Spec.new do |s|
   s.author           = { "Donky Networks Ltd" => "sdk@mobiledonky.com" }
   s.source           =  { :git => "https://github.com/Donky-Network/DonkySDK-iOS-Modular.git", 
                           :tag => "v4.8.6.2"}
+
 
   s.social_media_url = 'https://twitter.com/mobiledonky'
 
