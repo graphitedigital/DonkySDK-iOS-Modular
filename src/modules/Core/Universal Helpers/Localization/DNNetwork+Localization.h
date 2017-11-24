@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import "DNDonkyCore.h"
 
 static inline NSString * DNNetworkLocalizedString(NSString *key) {
-    return NSLocalizedStringWithDefaultValue(key, @"DNLocalization", [NSBundle mainBundle], nil, nil);
+    return NSLocalizedStringWithDefaultValue(key, @"DNLocalization", [NSBundle bundleForClass:[DNDonkyCore class]], nil, nil);
 }
 
 
