@@ -22,6 +22,7 @@ Pod::Spec.new do |s|
   
   s.frameworks = 'UIKit', 'Foundation'
   s.dependency "Donky-RichMessage-Logic"
+  s.dependency "Donky-CommonMessaging-UI"
 
   
 end
