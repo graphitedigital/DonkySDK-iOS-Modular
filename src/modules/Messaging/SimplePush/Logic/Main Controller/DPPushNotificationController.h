@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "DNModuleDefinition.h"
-#import "DNLocalEvent.h"
-#import "DNSubscription.h"
+#import <Donky_Core_SDK/DNModuleDefinition.h>
+#import <Donky_Core_SDK/DNLocalEvent.h>
+#import <Donky_Core_SDK/DNSubscription.h>
 
 /*!
  The main controller responsible for processing incoming notifications.

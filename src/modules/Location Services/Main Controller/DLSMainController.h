@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "DLSConstants.h"
-#import "DNModuleDefinition.h"
-#import "DNSubscription.h"
+#import <Donky_Core_SDK/DNModuleDefinition.h>
+#import <Donky_Core_SDK/DNSubscription.h>
 #import "DLSTargetUser.h"
-#import "DNBlockDefinitions.h"
+#import <Donky_Core_SDK/DNBlockDefinitions.h>
 
 /*!
  DLSMainController is responsible for all activities concerning device location measurement. Use this class to obtain and monitor for location updates via the location manager (CLLocationManager). This class also allows you to start and stop the measurement of location by the location manager.

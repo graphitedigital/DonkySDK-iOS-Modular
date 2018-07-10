@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "DNServerNotification.h"
-#import "DNBlockDefinitions.h"
+#import <Donky_Core_SDK/DNServerNotification.h>
+#import <Donky_Core_SDK/DNBlockDefinitions.h>
 
 @interface DPPushNotification : NSObject
 

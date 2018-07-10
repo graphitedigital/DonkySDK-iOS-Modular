@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DNBlockDefinitions.h"
-#import "DNUserDetails.h"
-#import "DNDeviceDetails.h"
+#import <Donky_Core_SDK/DNBlockDefinitions.h>
+#import <Donky_Core_SDK/DNUserDetails.h>
+#import <Donky_Core_SDK/DNDeviceDetails.h>
 
 @interface DSOperation : NSOperation
 

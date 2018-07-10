@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Donky Networks. All rights reserved.
 //
 
-#import "DNAccountController.h"
+#import <Donky_Core_SDK/DNAccountController.h>
 
 @interface DSSequenceController : NSOperationQueue
 

@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DNBlockDefinitions.h"
-#import "SRConnection.h"
-#import "SRHubConnection.h"
-#import "SRHubProxy.h"
+#import <Donky_Core_SDK/DNBlockDefinitions.h>
+#import <SignalR_ObjC/SRConnection.h>
+#import <SignalR_ObjC/SRHubConnection.h>
+#import <SignalR_ObjC/SRHubProxy.h>
 
 @interface DSRMainController : NSObject <SRConnectionDelegate>
 

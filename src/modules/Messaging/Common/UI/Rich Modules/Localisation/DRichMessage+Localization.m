@@ -9,7 +9,7 @@
 #import "DRichMessage+Localization.h"
 #import "DCUIMainController.h"
 
-NSString *DRichMessageLocalizedString(NSString *key) {
-  NSBundle *bundle = [NSBundle bundleForClass:[DCUIMainController class]];
-  return NSLocalizedStringWithDefaultValue(key, @"DRLocalization", bundle, nil, nil);
-}
+//NSString *DRichMessageLocalizedString(NSString *key) {
+//  NSBundle *bundle = [NSBundle bundleForClass:[DCUIMainController class]];
+//  return NSLocalizedStringWithDefaultValue(key, @"DRLocalization", bundle, nil, nil);
+//}

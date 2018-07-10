@@ -21,6 +21,7 @@ Pod::Spec.new do |s|
   s.resources = ["src/modules/Messaging/Rich/UI/Inbox/Assets/**/*.png"]
   
   s.frameworks = 'UIKit', 'Foundation'
+  s.dependency "Donky-CommonMessaging-UI"
   s.dependency "Donky-RichMessage-Logic"
   
 end

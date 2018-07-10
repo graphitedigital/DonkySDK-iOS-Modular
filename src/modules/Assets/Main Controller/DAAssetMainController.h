@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <MobileCoreServices/MobileCoreServices.h>
-#import "DNBlockDefinitions.h"
+#import <Donky_Core_SDK/DNBlockDefinitions.h>
 
 @interface DAAssetMainController : NSObject
 
