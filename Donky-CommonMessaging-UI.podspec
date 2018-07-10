@@ -1,6 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-CommonMessaging-UI"
-  s.version          = "4.8.3.1"
+  s.version          = "4.8.6.2"
+
   s.summary          = "The shared messaging UI"
   s.description      = <<-DESC
                        This contains all shared UI Logic for Socail/Messaging funtiocnality. Including the internal banner view, localization files and shared controllers around obtaining Rich Message view controllers.
@@ -8,10 +9,12 @@ Pod::Spec.new do |s|
   s.homepage         = "https://github.com/Donky-Network/DonkySDK-iOS-Modular"
   s.license          = 'MIT'
   s.author           = { "Donky Networks Ltd" => "sdk@mobiledonky.com" }
-  s.source           = { :git => "https://github.com/Donky-Network/DonkySDK-iOS-Modular.git", :tag => 'v4.8.3.1' }
+  s.source           = { :git => "https://github.com/Donky-Network/DonkySDK-iOS-Modular.git", :tag => 'v4.8.6.2' }
+
+
   s.social_media_url = 'https://twitter.com/mobiledonky'
 
-  s.platform     = :ios, '7.0'
+  s.platform     = :ios, '8.0'
   s.requires_arc = true
 
   s.source_files = 'src/modules/Messaging/Common/UI/**/*.{h,m}'

@@ -447,7 +447,9 @@
                     badgeCount = 0;
                 }
 
-                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeCount];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeCount];
+                });
 
                 DNInfoLog(@"Setting local and network badge count to: %ld", (long) badgeCount);
 

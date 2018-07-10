@@ -8,5 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import "DCUIMainController.h"
 
-NSString *DRichMessageLocalizedString(NSString *key);
+static inline NSString * DRichMessageLocalizedString(NSString *key) {
+    return NSLocalizedStringWithDefaultValue(key, @"DRLocalization", [NSBundle bundleForClass:[DCUIMainController class]], nil, nil);
+}

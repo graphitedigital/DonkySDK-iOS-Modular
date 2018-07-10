@@ -1,6 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-CommonMessaging-Audio"
-  s.version          = "4.8.3.1"
+  s.version          = "4.8.6.2"
+
   s.summary          = "The shared messaging Audio"
   s.description      = <<-DESC
                        Only manually import this Pod if you wish Donky to use audio, this includes vibrations.
@@ -9,10 +10,12 @@ Pod::Spec.new do |s|
   s.license          = 'MIT'
   s.author           = { "Donky Networks Ltd" => "sdk@mobiledonky.com" }
   s.source           = { :git => "https://github.com/Donky-Network/DonkySDK-iOS-Modular.git", 
-                         :tag => 'v4.8.3.1' }
+                         :tag => 'v4.8.6.2' }
+
+
   s.social_media_url = 'https://twitter.com/mobiledonky'
 
-  s.platform     = :ios, '7.0'
+  s.platform     = :ios, '8.0'
   s.requires_arc = true
 
   s.source_files = 'src/modules/Messaging/Common/Audio/**/*.{h,m}'

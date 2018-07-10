@@ -18,8 +18,7 @@
 @implementation DNAppSettingsController
 
 + (NSDictionary *)donkyConfigurationPlist {
-    NSBundle *bundle = [NSBundle bundleForClass:[DNAppSettingsController class]];
-    return [[NSDictionary alloc] initWithContentsOfFile:[bundle pathForResource:kDNConfigPlistFileName ofType:@"plist"]];
+    return [[NSDictionary alloc] initWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:kDNConfigPlistFileName ofType:@"plist"]];
 }
 
 + (NSString *)sdkVersion {

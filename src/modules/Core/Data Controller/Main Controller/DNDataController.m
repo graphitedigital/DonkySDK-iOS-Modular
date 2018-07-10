@@ -21,6 +21,7 @@
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *mainContext;
 @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, strong) NSMutableDictionary *completionBlocks;
+@property (atomic, strong) NSMutableSet<NSManagedObjectContext*> *privateContexts;
 @end
 
 @implementation DNDataController
@@ -55,6 +56,7 @@
         [notificationCenter addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
         [notificationCenter addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
 
+        _privateContexts = [NSMutableSet set];
         [self setCompletionBlocks:[[NSMutableDictionary alloc] init]];
     }
     return self;
@@ -70,7 +72,7 @@
 #pragma mark - Application lifecycle methods
 
 -(void)applicationDidEnterBackground:(NSNotification *)aNotification {
-   [self saveAllData];
+    [self saveAllData];
 }
 
 -(void)applicationWillTerminate:(NSNotification *)aNotification {
@@ -85,17 +87,30 @@
     DNInfoLog(@"Merging changes into main context: %@", notification);
 
     NSManagedObjectContext *mainContext = [self mainContext];
-    
-    // Merge changes into the main context on the main thread
-    [mainContext performSelectorOnMainThread:@selector(mergeChangesFromContextDidSaveNotification:)
-                                  withObject:notification
-                               waitUntilDone:YES];
 
-    [mainContext performSelectorOnMainThread:@selector(saveIfHasChanges:)
-                                  withObject:notification
-                               waitUntilDone:YES];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        NSError *error = nil;
+        [mainContext saveIfHasChanges:&error];
+        dispatch_async([self donkyCoreDataProcessingQueue], ^{
+            [self invokeSaveBlock:notification];
+        });
+    });
 
-    [self invokeSaveBlock:notification];
+
+    if (![DNSystemHelpers systemVersionAtLeast:10.0]) {
+
+        dispatch_async([self donkyCoreDataProcessingQueue], ^{
+            @synchronized (self.privateContexts) {
+                DNInfoLog(@"Updating all of the other child contexts with the changes");
+                //we need to operate on copy, as the set can be updated on the other threads
+                for(NSManagedObjectContext *context in self.privateContexts){
+                    if(![context isEqual:notification.object]){
+                        [context mergeChangesFromContextDidSaveNotification:notification];
+                    }
+                }
+            }
+        });
+    }
 }
 
 #pragma mark - Core Data methods
@@ -117,12 +132,16 @@
 }
 
 + (NSManagedObjectContext *)temporaryContext {
-        
+
     NSManagedObjectContext *privateContext = nil;
     @try {
         privateContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         [privateContext setParentContext:[[DNDataController sharedInstance] mainContext]];
-        
+        if ([DNSystemHelpers systemVersionAtLeast:10.0]) {
+            //with iOS < 10 the merging is handled manually in the -mergeChanges: selector
+            privateContext.automaticallyMergesChangesFromParent = YES;
+        }
+
         [[NSNotificationCenter defaultCenter] addObserver:[DNDataController sharedInstance]
                                                  selector:@selector(mergeChanges:)
                                                      name:NSManagedObjectContextDidSaveNotification
@@ -130,16 +149,22 @@
 
     }
     @catch (NSException *exception) {
-         DNErrorLog(@"Fatal exception (%@) when getting managed contexts.... Reporting & Continuing", [exception description]);
+        DNErrorLog(@"Fatal exception (%@) when getting managed contexts.... Reporting & Continuing", [exception description]);
     }
     @finally {
-       return privateContext;
+         if (![DNSystemHelpers systemVersionAtLeast:10.0]) {
+            @synchronized ([DNDataController sharedInstance].privateContexts) {
+                [[DNDataController sharedInstance].privateContexts addObject:privateContext];
+            }
+         }
+
+        return privateContext;
     }
 }
 
 -(NSPersistentStoreCoordinator *)persistentStoreCoordinator
 {
-   if (_persistentStoreCoordinator) {
+    if (_persistentStoreCoordinator) {
         return _persistentStoreCoordinator;
     }
 
@@ -150,13 +175,14 @@
 
         // The managed object model for the application.
         // If the model doesn't already exist, it is created from the application's model.
-        NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle bundleForClass:[self class]]]];
+        NSBundle *bundle =[NSBundle bundleForClass:[self class]];
+        NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL: [bundle URLForResource:@"DNDonkyDataModel" withExtension:@"momd"] ];
 
         NSError *error = nil;
         _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
 
         NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES,
-                NSInferMappingModelAutomaticallyOption : @YES};
+                                  NSInferMappingModelAutomaticallyOption : @YES};
 
         if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
             DNErrorLog(@"Fatal, could not load persistent store coordinator. Deleting existing store and creating a new one...");
@@ -176,7 +202,7 @@
 }
 
 - (void)saveContext:(NSManagedObjectContext *)context {
-    
+
     if (![context persistentStoreCoordinator]) {
         DNErrorLog(@"Fatal, no persistent store coordinator found in context: %@\nThread: %@", context, [NSThread currentThread]);
         return;
@@ -201,9 +227,9 @@
         else {
             @synchronized ([self completionBlocks]) {
                 if (completion) {
-                    [[self completionBlocks] setObject:completion forKey:[context description]];
+                    [[self completionBlocks] setObject:[completion copy] forKey:[context description]];
                 }
-                
+
                 [context saveIfHasChanges:nil];
             }
         }
@@ -214,11 +240,19 @@
     DNInfoLog(@"Invoking save block");
     //This needs refinement:
     dispatch_async([self donkyCoreDataProcessingQueue], ^{
-        DNCompletionBlock completionBlock = [self completionBlocks][[[notification object] description]];
+
         @synchronized ([self completionBlocks]) {
+            DNCompletionBlock completionBlock = [self completionBlocks][[[notification object] description]];
+
             if (completionBlock) {
                 completionBlock(notification);
                 [[self completionBlocks] removeObjectForKey:[[notification object] description]];
+
+                 if (![DNSystemHelpers systemVersionAtLeast:10.0]) {
+                    @synchronized (self.privateContexts) {
+                        [self.privateContexts removeObject:notification.object];
+                    }
+                 }
             }
         }
     });

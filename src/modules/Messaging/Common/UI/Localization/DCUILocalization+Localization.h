@@ -8,5 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import "DCUIMainController.h"
 
-NSString *DCUILocalizedString(NSString *key);
+static inline NSString *DCUILocalizedString(NSString *key) {
+    return NSLocalizedStringWithDefaultValue(key, @"DCUILocalization", [NSBundle bundleForClass:[DCUIMainController class]], nil, comment);
+}
