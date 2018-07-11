@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-RichMessage-Inbox"
-  s.version          = "4.8.6.2"
+  s.version          = "4.8.6.3"
 
   s.summary          = "The base logic layer required to handle incoming Remote notifications and also Simple Push messages stored on the server."
   s.description      = <<-DESC
@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.homepage         = "https://github.com/Donky-Network/DonkySDK-iOS-Modular"
   s.license          = 'MIT'
   s.author           = { "Donky Networks Ltd" => "sdk@mobiledonky.com" } 
-  s.source           = { :git => "https://github.com/Donky-Network/DonkySDK-iOS-Modular.git", :tag => 'v4.8.6.2'  }
+  s.source           = { :git => "https://github.com/Donky-Network/DonkySDK-iOS-Modular.git", :branch => 'swift/4.8.6.2'  }
 
 
   s.social_media_url = 'https://twitter.com/mobiledonky'
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.resources = ["src/modules/Messaging/Rich/UI/Inbox/Assets/**/*.png"]
   
   s.frameworks = 'UIKit', 'Foundation'
-  s.dependency "Donky-CommonMessaging-UI"
-  s.dependency "Donky-RichMessage-Logic"
+  s.dependency "Donky-CommonMessaging-UI", '~> 4.8.6.3'
+  s.dependency "Donky-RichMessage-Logic", '~> 4.8.6.3'
   
 end

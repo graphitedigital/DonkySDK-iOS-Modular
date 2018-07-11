@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-Push"
-  s.version          = "4.8.6.2"
+  s.version          = "4.8.6.3"
 
   s.summary          = "This is the Donky Push module , it contains all the logic necessary to receive and process remote notificaitons. As well as receive and process notifications via the Donky Backup channel"
   s.description      = <<-DESC
@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.homepage         = "https://github.com/Donky-Network/DonkySDK-iOS-Modular"
   s.license          = 'MIT'
   s.author           = { "Donky Networks Ltd" => "sdk@mobiledonky.com" }
-  s.source           = { :git => "https://github.com/Donky-Network/DonkySDK-iOS-Modular.git", :tag => 'v4.8.6.2'  }
+  s.source           = { :git => "https://github.com/Donky-Network/DonkySDK-iOS-Modular.git", :branch => 'swift/4.8.6.2'  }
 
 
   s.social_media_url = 'https://twitter.com/mobiledonky'
@@ -20,6 +20,6 @@ Pod::Spec.new do |s|
   s.source_files = 'src/modules/Messaging/SimplePush/Logic/**/*.{h,m}'
  
   s.frameworks = 'UIKit', 'Foundation'
-  s.dependency "Donky-CommonMessaging-Logic"
+  s.dependency "Donky-CommonMessaging-Logic", '~> 4.8.6.3'
   
 end

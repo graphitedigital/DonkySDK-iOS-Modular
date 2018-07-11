@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-CommonMessaging-Logic"
-  s.version          = "4.8.6.2"
+  s.version          = "4.8.6.3"
 
   s.summary          = "The shared messaging logic"
   s.description      = <<-DESC
@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.license          = 'MIT'
   s.author           = { "Donky Networks Ltd" => "sdk@mobiledonky.com" }
   s.source           = { :git => "https://github.com/Donky-Network/DonkySDK-iOS-Modular.git", 
-                         :tag => 'v4.8.6.2' }
+                         :branch => 'swift/4.8.6.2' }
 
 
   s.social_media_url = 'https://twitter.com/mobiledonky'
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.source_files = 'src/modules/Messaging/Common/Logic/**/*.{h,m}'
   s.frameworks = 'UIKit', 'Foundation'
   
-  s.dependency "Donky-Core-SDK"
-  s.dependency "Donky-CommonMessaging-Logic"
+  s.dependency "Donky-Core-SDK", '~> 4.8.6.3'
+  s.dependency "Donky-CommonMessaging-Logic", '~> 4.8.6.3'
   
 end
