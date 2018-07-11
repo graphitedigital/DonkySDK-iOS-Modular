@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-CommonMessaging-Audio"
-  s.version          = "4.8.6.3"
+  s.version          = "4.8.6.2"
 
   s.summary          = "The shared messaging Audio"
   s.description      = <<-DESC
@@ -24,6 +24,6 @@ Pod::Spec.new do |s|
 
   s.frameworks = 'UIKit', 'Foundation', 'AVFoundation'
   
-  s.dependency "Donky-Core-SDK", '~> 4.8.6.3'
+  s.dependency "Donky-Core-SDK"
     
 end

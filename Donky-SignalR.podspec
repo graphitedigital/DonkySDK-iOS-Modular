@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-SignalR"
-  s.version          = "4.8.6.3"
+  s.version          = "4.8.6.2"
   s.summary          = "The SignalR wrapper for the Donky SDK"
   s.description      = <<-DESC
                        The SignalR wrapper for the Donky SDK.
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.source_files = 'src/modules/SignalR/**/*.{h,m}'
  
   s.frameworks = 'UIKit', 'Foundation'
-  s.dependency 'SignalR-ObjC', '~> 4.8.6.3'
-  s.dependency "Donky-Core-SDK" , '~> 4.8.6.3'
+  s.dependency 'SignalR-ObjC'
+  s.dependency "Donky-Core-SDK"
   
 end

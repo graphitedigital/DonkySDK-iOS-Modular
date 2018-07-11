@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-RichMessage-Logic"
-  s.version          = "4.8.6.3"
+  s.version          = "4.8.6.2"
 
   s.summary          = "The base logic layer required to handle incoming Rich Messages."
   s.description      = <<-DESC
@@ -20,6 +20,6 @@ Pod::Spec.new do |s|
   s.source_files = 'src/modules/Messaging/Rich/Logic/**/*.{h,m}'
   
   s.frameworks = 'UIKit', 'Foundation'
-  s.dependency "Donky-CommonMessaging-Logic", '~> 4.8.6.3'
+  s.dependency "Donky-CommonMessaging-Logic"
   
 end

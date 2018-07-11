@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-CoreLocation"
-  s.version          = "4.8.6.3"
+  s.version          = "4.8.6.2"
 
   s.summary          = "The location services module"
   s.description      = <<-DESC
@@ -20,6 +20,6 @@ Pod::Spec.new do |s|
   s.source_files = 'src/modules/Location Services/**/*.{h,m}'
 
   s.frameworks = 'UIKit', 'Foundation'
-  s.dependency "Donky-Core-SDK", '~> 4.8.6.3'
+  s.dependency "Donky-Core-SDK"
   
 end

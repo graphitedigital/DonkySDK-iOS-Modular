@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-CommonMessaging-UI"
-  s.version          = "4.8.6.3"
+  s.version          = "4.8.6.2"
 
   s.summary          = "The shared messaging UI"
   s.description      = <<-DESC
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.resources = ["src/modules/Messaging/Common/UI/Rich\ Modules/Localisation/DRLocalization.strings", "src/modules/Messaging/Common/UI/Localization/DCUILocalization.strings", "src/modules/Messaging/Common/UI/Donky\ Banner\ View/Assets/common_messaging_default_avatar.png", "src/modules/Messaging/Common/UI/Donky\ Banner\ View/Assets/common_messaging_default_avatar@2x.png"]
   s.frameworks = 'UIKit', 'Foundation'
   
-  s.dependency "Donky-CommonMessaging-Logic", '~> 4.8.6.3'
+  s.dependency "Donky-CommonMessaging-Logic"
   s.dependency 'UIView-Autolayout', '~> 0.2'  
   
 end

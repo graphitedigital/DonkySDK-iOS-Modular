@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-RichMessage-PopUp"
-  s.version          = "4.8.6.3"
+  s.version          = "4.8.6.2"
   s.summary          = "The complete Simple Push Module"
   s.description      = <<-DESC
                        This is the Rich Message PopUp, it includes everything to receive rich messages and display them to your users. Once the user closes the 'pop up' window, the messages are then destroyed (this can be toggled via the API).
@@ -18,6 +18,6 @@ Pod::Spec.new do |s|
   s.source_files = 'src/modules/Messaging/Rich/Logic/**/*.{h,m}'
 
   s.frameworks = 'UIKit', 'Foundation'
-  s.dependency "Donky-CommonMessaging-Logic", '~> 4.8.6.3'
+  s.dependency "Donky-CommonMessaging-Logic"
   
 end
