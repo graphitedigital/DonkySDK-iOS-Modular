@@ -10,6 +10,6 @@
 
 @interface NSManagedObjectContext (DNHelpers)
 
-- (BOOL)saveIfHasChanges:(NSError *__autoreleasing*)error;
+- (void)saveIfHasChangesWithCompletion:(void(^)(BOOL, NSError *))completion;
 
 @end
