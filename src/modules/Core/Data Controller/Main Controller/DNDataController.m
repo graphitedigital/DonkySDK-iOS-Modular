@@ -87,25 +87,22 @@
     DNInfoLog(@"Merging changes into main context: %@", notification);
 
     NSManagedObjectContext *mainContext = [self mainContext];
-
     dispatch_async(dispatch_get_main_queue(), ^(){
-        NSError *error = nil;
-        [mainContext saveIfHasChanges:&error];
-        dispatch_async([self donkyCoreDataProcessingQueue], ^{
+        [mainContext saveIfHasChangesWithCompletion:^(BOOL success, NSError * error) {
             [self invokeSaveBlock:notification];
-        });
+        }];
     });
 
 
     if (![DNSystemHelpers systemVersionAtLeast:10.0]) {
-
         dispatch_async([self donkyCoreDataProcessingQueue], ^{
             @synchronized (self.privateContexts) {
                 DNInfoLog(@"Updating all of the other child contexts with the changes");
-                //we need to operate on copy, as the set can be updated on the other threads
                 for(NSManagedObjectContext *context in self.privateContexts){
                     if(![context isEqual:notification.object]){
-                        [context mergeChangesFromContextDidSaveNotification:notification];
+                        [context performBlock:^{
+                            [context mergeChangesFromContextDidSaveNotification:notification];
+                        }];
                     }
                 }
             }
@@ -121,9 +118,9 @@
     dispatch_sync([self donkyCoreDataProcessingQueue], ^{
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            if (!_mainContext) {
-                _mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-                [_mainContext setPersistentStoreCoordinator:[self persistentStoreCoordinator]];
+            if (!self->_mainContext) {
+                self->_mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+                [self->_mainContext setPersistentStoreCoordinator:[self persistentStoreCoordinator]];
             }
         });
     });
@@ -179,15 +176,15 @@
         NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL: [bundle URLForResource:@"DNDonkyDataModel" withExtension:@"momd"] ];
 
         NSError *error = nil;
-        _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
+        self->_persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
 
         NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES,
                                   NSInferMappingModelAutomaticallyOption : @YES};
 
-        if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
+        if (![self->_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
             DNErrorLog(@"Fatal, could not load persistent store coordinator. Deleting existing store and creating a new one...");
             if ([DNSystemHelpers systemVersionAtLeast:9.0]) {
-                [_persistentStoreCoordinator destroyPersistentStoreAtURL:storeURL withType:NSSQLiteStoreType options:options error:&error];
+                [self->_persistentStoreCoordinator destroyPersistentStoreAtURL:storeURL withType:NSSQLiteStoreType options:options error:&error];
             }
             [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
             _persistentStoreCoordinator = nil;
@@ -208,7 +205,7 @@
         return;
     }
 
-    [context saveIfHasChanges:nil];
+    [context saveIfHasChangesWithCompletion:nil];
 }
 
 - (void)saveContext:(NSManagedObjectContext *)context completion:(DNCompletionBlock)completion {
@@ -230,7 +227,7 @@
                     [[self completionBlocks] setObject:[completion copy] forKey:[context description]];
                 }
 
-                [context saveIfHasChanges:nil];
+                [context saveIfHasChangesWithCompletion:nil];
             }
         }
     });
@@ -238,21 +235,19 @@
 
 - (void)invokeSaveBlock:(NSNotification *)notification {
     DNInfoLog(@"Invoking save block");
-    //This needs refinement:
     dispatch_async([self donkyCoreDataProcessingQueue], ^{
-
+        if (![DNSystemHelpers systemVersionAtLeast:10.0]) {
+            @synchronized (self.privateContexts) {
+                [self.privateContexts removeObject:notification.object];
+            }
+        }
+        
         @synchronized ([self completionBlocks]) {
             DNCompletionBlock completionBlock = [self completionBlocks][[[notification object] description]];
 
             if (completionBlock) {
                 completionBlock(notification);
                 [[self completionBlocks] removeObjectForKey:[[notification object] description]];
-
-                 if (![DNSystemHelpers systemVersionAtLeast:10.0]) {
-                    @synchronized (self.privateContexts) {
-                        [self.privateContexts removeObject:notification.object];
-                    }
-                 }
             }
         }
     });
