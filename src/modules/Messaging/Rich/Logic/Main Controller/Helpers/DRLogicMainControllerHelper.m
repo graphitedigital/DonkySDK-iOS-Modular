@@ -12,20 +12,20 @@
 #endif
 
 #import "DRLogicMainControllerHelper.h"
-#import "DNServerNotification.h"
+#import <Donky_Core_SDK/DNServerNotification.h>
 #import "DRLogicHelper.h"
-#import "DNConstants.h"
-#import "DNDonkyCore.h"
-#import "DCMMainController.h"
-#import "DNLoggingController.h"
-#import "DNDataController.h"
+#import <Donky_Core_SDK/DNConstants.h>
+#import <Donky_Core_SDK/DNDonkyCore.h>
+#import <Donky_CommonMessaging_Logic/DCMMainController.h>
+#import <Donky_Core_SDK/DNLoggingController.h>
+#import <Donky_Core_SDK/DNDataController.h>
 #import "DRConstants.h"
-#import "NSMutableDictionary+DNDictionary.h"
+#import <Donky_Core_SDK/NSMutableDictionary+DNDictionary.h>
 #import "DRLogicMainController.h"
-#import "NSManagedObject+DNHelper.h"
-#import "DCAConstants.h"
-#import "DNClientNotification.h"
-#import "DNNetworkController.h"
+#import <Donky_Core_SDK/NSManagedObject+DNHelper.h>
+#import <Donky_Core_SDK/DCAConstants.h>
+#import <Donky_Core_SDK/DNClientNotification.h>
+#import <Donky_Core_SDK/DNNetworkController.h>
 
 @implementation DRLogicMainControllerHelper
 

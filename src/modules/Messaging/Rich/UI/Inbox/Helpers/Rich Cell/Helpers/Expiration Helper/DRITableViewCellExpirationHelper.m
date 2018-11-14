@@ -12,7 +12,7 @@
 #endif
 
 #import "DRITableViewCellExpirationHelper.h"
-#import "DNConfigurationController.h"
+#import <Donky_Core_SDK/DNConfigurationController.h>
 
 @implementation DRITableViewCellExpirationHelper
 

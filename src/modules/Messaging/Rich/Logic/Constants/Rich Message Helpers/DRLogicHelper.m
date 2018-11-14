@@ -12,15 +12,15 @@
 #endif
 
 #import "DRLogicHelper.h"
-#import "DNDataController.h"
-#import "DNLoggingController.h"
-#import "DCMConstants.h"
-#import "NSManagedObject+DNHelper.h"
-#import "DCMMainController.h"
-#import "DNDonkyCore.h"
-#import "DRConstants.h"
-#import "DNRichMessage+DNRichMessageHelper.h"
-#import "DCMLogicMessageMapper.h"
+#import <Donky_Core_SDK/DNDataController.h>
+#import <Donky_Core_SDK/DNLoggingController.h>
+#import <Donky_CommonMessaging_Logic/DCMConstants.h>
+#import <Donky_Core_SDK/NSManagedObject+DNHelper.h>
+#import <Donky_CommonMessaging_Logic/DCMMainController.h>
+#import <Donky_Core_SDK/DNDonkyCore.h>
+#import <Donky_RichMessage_Logic/DRConstants.h>
+#import <Donky_RichMessage_Logic/DNRichMessage+DNRichMessageHelper.h>
+#import <Donky_CommonMessaging_Logic/DCMLogicMessageMapper.h>
 
 static NSString *const DRMessageIDSortDescriptor = @"messageID";
 

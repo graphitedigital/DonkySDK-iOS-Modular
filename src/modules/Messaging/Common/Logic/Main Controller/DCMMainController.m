@@ -12,11 +12,11 @@
 #endif
 
 #import "DCMMainController.h"
-#import "DNClientNotification.h"
-#import "DNNetworkController.h"
-#import "NSMutableDictionary+DNDictionary.h"
-#import "NSDate+DNDateHelper.h"
-#import "DNDataController.h"
+#import <Donky_Core_SDK/DNClientNotification.h>
+#import <Donky_Core_SDK/DNNetworkController.h>
+#import <Donky_Core_SDK/NSMutableDictionary+DNDictionary.h>
+#import <Donky_Core_SDK/NSDate+DNDateHelper.h>
+#import <Donky_Core_SDK/DNDataController.h>
 #import "DCMConstants.h"
 
 static NSString *const DCMDelivered = @"delivered";

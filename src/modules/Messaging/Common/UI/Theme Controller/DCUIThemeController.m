@@ -12,7 +12,7 @@
 #endif
 
 #import "DCUIThemeController.h"
-#import "NSMutableDictionary+DNDictionary.h"
+#import <Donky_Core_SDK/NSMutableDictionary+DNDictionary.h>
 
 @interface DCUIThemeController ()
 @property(nonatomic, strong) NSMutableDictionary *themes;

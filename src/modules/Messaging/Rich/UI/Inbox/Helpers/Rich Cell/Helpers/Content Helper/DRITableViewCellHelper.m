@@ -12,13 +12,13 @@
 #endif
 
 #import "DRITableViewCellHelper.h"
-#import "DCUIAvatarImageView.h"
+#import <Donky_CommonMessaging_UI/DCUIAvatarImageView.h>
 #import "UIView+AutoLayout.h"
-#import "NSDate+DCMDate.h"
+#import <Donky_CommonMessaging_UI/NSDate+DCMDate.h>
 #import "DRUIThemeConstants.h"
-#import "DCUILocalization+Localization.h"
-#import "DCUIMainController.h"
-#import "DCUIConstants.h"
+#import <Donky_CommonMessaging_UI/DCUILocalization+Localization.h>
+#import <Donky_CommonMessaging_UI/DCUIMainController.h>
+#import <Donky_CommonMessaging_UI/DCUIConstants.h>
 
 @implementation DRITableViewCellHelper
 

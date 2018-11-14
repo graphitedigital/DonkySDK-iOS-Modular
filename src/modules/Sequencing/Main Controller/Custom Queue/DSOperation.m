@@ -12,7 +12,7 @@
 #endif
 
 #import "DSOperation.h"
-#import "DNAccountController.h"
+#import <Donky_Core_SDK/DNAccountController.h>
 
 typedef enum {
     DSAdditionalProperties = 0,

@@ -12,10 +12,10 @@
 #endif
 
 #import "DCMLogicMessageMapper.h"
-#import "DNServerNotification.h"
+#import <Donky_Core_SDK/DNServerNotification.h>
 #import "DNMessage.h"
 #import "DCMConstants.h"
-#import "NSDate+DNDateHelper.h"
+#import <Donky_Core_SDK/NSDate+DNDateHelper.h>
 
 @implementation DCMLogicMessageMapper
 

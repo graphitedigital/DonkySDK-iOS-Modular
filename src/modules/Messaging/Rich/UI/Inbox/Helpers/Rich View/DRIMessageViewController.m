@@ -13,18 +13,18 @@
 
 #import "DRIMessageViewController.h"
 #import "UIView+AutoLayout.h"
-#import "NSDate+DNDateHelper.h"
-#import "DCUIThemeController.h"
+#import <Donky_Core_SDK/NSDate+DNDateHelper.h>
+#import <Donky_CommonMessaging_UI/DCUIThemeController.h>
 #import "DRUIThemeConstants.h"
-#import "DCUIActionHelper.h"
-#import "DRLogicHelper.h"
-#import "DNSystemHelpers.h"
-#import "DCUILocalization+Localization.h"
+#import <Donky_CommonMessaging_UI/DCUIActionHelper.h>
+#import <Donky_RichMessage_Logic/DRLogicHelper.h>
+#import <Donky_Core_SDK/DNSystemHelpers.h>
+#import <Donky_CommonMessaging_UI/DCUILocalization+Localization.h>
 #import "DRIMessageViewControllerHelper.h"
 #import "DRUITheme.h"
-#import "DRLogicMainController.h"
-#import "DNRichMessage+DNRichMessageHelper.h"
-#import "DNLoggingController.h"
+#import <Donky_RichMessage_Logic/DRLogicMainController.h>
+#import <Donky_RichMessage_Logic/DNRichMessage+DNRichMessageHelper.h>
+#import <Donky_Core_SDK/DNLoggingController.h>
 
 @interface DRIMessageViewController ()
 @property(nonatomic, readwrite, getter=shouldHideViewController) BOOL hideViewController;

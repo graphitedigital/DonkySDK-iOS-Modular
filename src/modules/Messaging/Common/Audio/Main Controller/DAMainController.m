@@ -13,9 +13,9 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import "DAMainController.h"
-#import "DNConstants.h"
-#import "DNLoggingController.h"
-#import "DNDonkyCore.h"
+#import <Donky_Core_SDK/DNConstants.h>
+#import <Donky_Core_SDK/DNLoggingController.h>
+#import <Donky_Core_SDK/DNDonkyCore.h>
 
 static NSString *const DAMiscellaneous = @"DAMisc";
 static NSString *const DAPlayFile = @"DAudioPlayAudioFile";

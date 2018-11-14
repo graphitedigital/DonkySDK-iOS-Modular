@@ -12,7 +12,7 @@
 #endif
 
 #import "DCUISplitViewController.h"
-#import "DNSystemHelpers.h"
+#import <Donky_Core_SDK/DNSystemHelpers.h>
 
 @interface DCUISplitViewController ()
 

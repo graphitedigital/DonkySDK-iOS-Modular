@@ -12,7 +12,7 @@
 #endif
 
 #import "DNRichMessage+DNRichMessageHelper.h"
-#import "NSDate+DNDateHelper.h"
+#import <Donky_Core_SDK/NSDate+DNDateHelper.h>
 
 @implementation DNRichMessage (DNRichMessageHelper)
 

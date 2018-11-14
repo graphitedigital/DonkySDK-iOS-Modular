@@ -12,7 +12,7 @@
 #endif
 
 #import "DNSequencingAccountController.h"
-#import "DNLoggingController.h"
+#import <Donky_Core_SDK/DNLoggingController.h>
 #import "DSSequenceController.h"
 
 @implementation DNSequencingAccountController

@@ -12,14 +12,14 @@
 #endif
 
 #import "DPPushNotificationController.h"
-#import "DNDonkyCore.h"
-#import "NSMutableDictionary+DNDictionary.h"
-#import "DNConstants.h"
-#import "DNClientNotification.h"
-#import "DNNetworkController.h"
-#import "DCMMainController.h"
-#import "DCAConstants.h"
-#import "DNNotificationController.h"
+#import <Donky_Core_SDK/DNDonkyCore.h>
+#import <Donky_Core_SDK/NSMutableDictionary+DNDictionary.h>
+#import <Donky_Core_SDK/DNConstants.h>
+#import <Donky_Core_SDK/DNClientNotification.h>
+#import <Donky_Core_SDK/DNNetworkController.h>
+#import <Donky_CommonMessaging_Logic/DCMMainController.h>
+#import <Donky_Core_SDK/DCAConstants.h>
+#import <Donky_Core_SDK/DNNotificationController.h>
 
 static NSString *const DNInteractionResult = @"InteractionResult";
 

@@ -12,10 +12,10 @@
 #endif
 
 #import "DSRMainController.h"
-#import "DNLoggingController.h"
-#import "DNDonkyNetworkDetails.h"
-#import "DNDonkyCore.h"
-#import "DNDeviceConnectivityController.h"
+#import <Donky_Core_SDK/DNLoggingController.h>
+#import <Donky_Core_SDK/DNDonkyNetworkDetails.h>
+#import <Donky_Core_SDK/DNDonkyCore.h>
+#import <Donky_Core_SDK/DNDeviceConnectivityController.h>
 
 @interface DSRMainController ()
 @property (nonatomic, strong) dispatch_queue_t donkySignalRProcessingQueue;

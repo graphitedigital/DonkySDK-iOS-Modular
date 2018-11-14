@@ -12,16 +12,16 @@
 #endif
 
 #import "DLSMainController.h"
-#import "DNDonkyCore.h"
-#import "DNSystemHelpers.h"
-#import "DNLoggingController.h"
-#import "DNClientNotification.h"
-#import "DNNetworkController.h"
-#import "NSMutableDictionary+DNDictionary.h"
-#import "DNConstants.h"
-#import "NSDate+DNDateHelper.h"
-#import "DNConfigurationController.h"
-#import "DNSystemHelpers.h"
+#import <Donky_Core_SDK/DNDonkyCore.h>
+#import <Donky_Core_SDK/DNSystemHelpers.h>
+#import <Donky_Core_SDK/DNLoggingController.h>
+#import <Donky_Core_SDK/DNClientNotification.h>
+#import <Donky_Core_SDK/DNNetworkController.h>
+#import <Donky_Core_SDK/NSMutableDictionary+DNDictionary.h>
+#import <Donky_Core_SDK/DNConstants.h>
+#import <Donky_Core_SDK/NSDate+DNDateHelper.h>
+#import <Donky_Core_SDK/DNConfigurationController.h>
+#import <Donky_Core_SDK/DNSystemHelpers.h>
 
 static NSString *const DLSLocationUpdateInterval = @"LocationUpdateIntervalSeconds";
 static NSString *const DLSNetworkSendProfileID = @"sendToNetworkProfileId";

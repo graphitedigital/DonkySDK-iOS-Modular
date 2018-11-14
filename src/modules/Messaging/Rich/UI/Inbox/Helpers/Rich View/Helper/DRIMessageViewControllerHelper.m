@@ -14,7 +14,7 @@
 #import "DRIMessageViewControllerHelper.h"
 #import "UIView+AutoLayout.h"
 #import "DRUIThemeConstants.h"
-#import "DRichMessage+Localization.h"
+#import <Donky_CommonMessaging_UI/DRichMessage+Localization.h>
 
 @implementation DRIMessageViewControllerHelper
 

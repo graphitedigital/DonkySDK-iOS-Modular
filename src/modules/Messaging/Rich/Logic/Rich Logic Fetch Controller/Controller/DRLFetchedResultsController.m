@@ -13,10 +13,10 @@
 
 #import "DRLFetchedResultsController.h"
 #import "DNRichMessage.h"
-#import "DNDataController.h"
-#import "NSManagedObject+DNHelper.h"
-#import "DNSystemHelpers.h"
-#import "DNLoggingController.h"
+#import <Donky_Core_SDK/DNDataController.h>
+#import <Donky_Core_SDK/NSManagedObject+DNHelper.h>
+#import <Donky_Core_SDK/DNSystemHelpers.h>
+#import <Donky_Core_SDK/DNLoggingController.h>
 
 @interface DRLFetchedResultsController ()
 @property(nonatomic, strong) UITableView *tableView;

@@ -12,7 +12,7 @@
 #endif
 
 #import "DCUIAlertHelper.h"
-#import "DNSystemHelpers.h"
+#import <Donky_Core_SDK/DNSystemHelpers.h>
 #import "DCUILocalization+Localization.h"
 
 @implementation DCUIAlertHelper

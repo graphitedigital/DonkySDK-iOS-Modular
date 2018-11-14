@@ -13,10 +13,10 @@
 
 #import "DRIViewHelper.h"
 #import "UIView+AutoLayout.h"
-#import "DNSystemHelpers.h"
-#import "DRichMessage+Localization.h"
-#import "DCUILocalization+Localization.h"
-#import "DNRichMessage+DNRichMessageHelper.h"
+#import <Donky_Core_SDK/DNSystemHelpers.h>
+#import <Donky_CommonMessaging_UI/DRichMessage+Localization.h>
+#import <Donky_CommonMessaging_UI/DCUILocalization+Localization.h>
+#import <Donky_RichMessage_Logic/DNRichMessage+DNRichMessageHelper.h>
 
 @implementation DRIViewHelper
 

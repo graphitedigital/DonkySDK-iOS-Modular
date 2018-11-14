@@ -12,18 +12,18 @@
 #endif
 
 #import "DRIDataController.h"
-#import "DNSystemHelpers.h"
-#import "DNLoggingController.h"
-#import "DNNetworkController.h"
-#import "DNDonkyCore.h"
-#import "DRConstants.h"
+#import <Donky_Core_SDK/DNSystemHelpers.h>
+#import <Donky_Core_SDK/DNLoggingController.h>
+#import <Donky_Core_SDK/DNNetworkController.h>
+#import <Donky_Core_SDK/DNDonkyCore.h>
+#import <Donky_RichMessage_Logic/DRConstants.h>
 #import "DRUIThemeConstants.h"
-#import "DNDataController.h"
-#import "NSManagedObject+DNHelper.h"
-#import "DNAssetController.h"
+#import <Donky_Core_SDK/DNDataController.h>
+#import <Donky_Core_SDK/NSManagedObject+DNHelper.h>
+#import <Donky_Core_SDK/DNAssetController.h>
 #import "DRIDataControllerHelper.h"
-#import "DRLFetchedResultsController.h"
-#import "DNAccountController.h"
+#import <Donky_RichMessage_Logic/DRLFetchedResultsController.h>
+#import <Donky_Core_SDK/DNAccountController.h>
 
 static NSString *const DRICellIdentifier = @"RichInboxCellIdentifier";
 

@@ -13,7 +13,7 @@
 
 #import "NSDate+DCMDate.h"
 #import "DCUILocalization+Localization.h"
-#import "DNSystemHelpers.h"
+#import <Donky_Core_SDK/DNSystemHelpers.h>
 
 @implementation NSDate (DCMDate)
 

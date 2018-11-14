@@ -13,10 +13,10 @@
 
 #import "UIView+AutoLayout.h"
 #import "DRIOptionsView.h"
-#import "DCUILocalization+Localization.h"
+#import <Donky_CommonMessaging_UI/DCUILocalization+Localization.h>
 #import "DRUITheme.h"
 #import "DRUIThemeConstants.h"
-#import "DCUIThemeController.h"
+#import <Donky_CommonMessaging_UI/DCUIThemeController.h>
 
 @interface DRIOptionsView ()
 @property(nonatomic, strong) UIButton *deleteButton;

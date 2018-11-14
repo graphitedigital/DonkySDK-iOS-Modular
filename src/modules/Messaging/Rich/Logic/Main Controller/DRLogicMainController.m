@@ -12,8 +12,8 @@
 #endif
 
 #import "DRLogicMainController.h"
-#import "DNDonkyCore.h"
-#import "DNConstants.h"
+#import <Donky_Core_SDK/DNDonkyCore.h>
+#import <Donky_Core_SDK/DNConstants.h>
 #import "DRLogicHelper.h"
 #import "DRLogicMainControllerHelper.h"
 

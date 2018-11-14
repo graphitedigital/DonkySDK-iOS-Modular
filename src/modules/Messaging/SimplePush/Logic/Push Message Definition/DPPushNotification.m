@@ -7,13 +7,13 @@
 //
 
 #import "DPPushNotification.h"
-#import "DNAssetController.h"
-#import "DNErrorController.h"
-#import "DNLoggingController.h"
-#import "NSDate+DNDateHelper.h"
-#import "DCMConstants.h"
-#import "DNAccountController.h"
-#import "DNNetworkController.h"
+#import <Donky_Core_SDK/DNAssetController.h>
+#import <Donky_Core_SDK/DNErrorController.h>
+#import <Donky_Core_SDK/DNLoggingController.h>
+#import <Donky_Core_SDK/NSDate+DNDateHelper.h>
+#import <Donky_CommonMessaging_Logic/DCMConstants.h>
+#import <Donky_Core_SDK/DNAccountController.h>
+#import <Donky_Core_SDK/DNNetworkController.h>
 
 @interface DPPushNotification ()
 @property (nonatomic, readwrite) NSString *body;

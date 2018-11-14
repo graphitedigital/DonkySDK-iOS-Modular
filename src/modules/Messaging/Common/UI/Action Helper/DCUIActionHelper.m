@@ -11,9 +11,9 @@
 // You can turn on ARC for only Donky Class files by adding -fobjc-arc to the build phase for each of its files.
 #endif
 
-#import "DCMMainController.h"
+#import <Donky_CommonMessaging_Logic/DCMMainController.h>
 #import "DCUILocalization+Localization.h"
-#import "DNSystemHelpers.h"
+#import <Donky_Core_SDK/DNSystemHelpers.h>
 #import "DCUIActionHelper.h"
 
 @implementation DCUIActionHelper

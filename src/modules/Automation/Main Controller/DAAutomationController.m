@@ -12,11 +12,11 @@
 #endif
 
 #import "DAAutomationController.h"
-#import "DNNetworkController.h"
-#import "DNClientNotification.h"
-#import "NSMutableDictionary+DNDictionary.h"
-#import "NSDate+DNDateHelper.h"
-#import "DNDonkyCore.h"
+#import <Donky_Core_SDK/DNNetworkController.h>
+#import <Donky_Core_SDK/DNClientNotification.h>
+#import <Donky_Core_SDK/NSMutableDictionary+DNDictionary.h>
+#import <Donky_Core_SDK/NSDate+DNDateHelper.h>
+#import <Donky_Core_SDK/DNDonkyCore.h>
 
 @implementation DAAutomationController
 

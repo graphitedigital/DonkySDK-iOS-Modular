@@ -12,11 +12,11 @@
 #endif
 
 #import "DRIDataControllerHelper.h"
-#import "DNSystemHelpers.h"
-#import "DNRichMessage+DNRichMessageHelper.h"
-#import "DCUIMainController.h"
+#import <Donky_Core_SDK/DNSystemHelpers.h>
+#import <Donky_RichMessage_Logic/DNRichMessage+DNRichMessageHelper.h>
+#import <Donky_CommonMessaging_UI/DCUIMainController.h>
 #import "DRUIThemeConstants.h"
-#import "DCUIConstants.h"
+#import <Donky_CommonMessaging_UI/DCUIConstants.h>
 
 @implementation DRIDataControllerHelper
 

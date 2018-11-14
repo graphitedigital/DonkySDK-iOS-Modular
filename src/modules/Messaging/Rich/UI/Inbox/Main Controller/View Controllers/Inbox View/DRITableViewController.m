@@ -19,7 +19,7 @@
 #import "DCUILocalization+Localization.h"
 #import "DRIViewHelper.h"
 #import "DRichMessage+Localization.h"
-#import "DNRichMessage+DNRichMessageHelper.h"
+#import <Donky_RichMessage_Logic/DNRichMessage+DNRichMessageHelper.h>
 #import "DCUIActionHelper.h"
 #import "DNLoggingController.h"
 #import "DNDonkyCore.h"

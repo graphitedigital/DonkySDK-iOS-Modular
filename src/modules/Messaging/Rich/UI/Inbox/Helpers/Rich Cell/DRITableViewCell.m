@@ -13,14 +13,14 @@
 
 #import "UIView+AutoLayout.h"
 #import "DRITableViewCell.h"
-#import "DNAssetController.h"
+#import <Donky_Core_SDK/DNAssetController.h>
 #import "DRITableViewCellHelper.h"
 #import "DRUIThemeConstants.h"
-#import "NSDate+DCMDate.h"
-#import "DCUIMainController.h"
-#import "DNRichMessage+DNRichMessageHelper.h"
-#import "DRichMessage+Localization.h"
-#import "DCUIConstants.h"
+#import <Donky_CommonMessaging_UI/NSDate+DCMDate.h>
+#import <Donky_CommonMessaging_UI/DCUIMainController.h>
+#import <Donky_RichMessage_Logic/DNRichMessage+DNRichMessageHelper.h>
+#import <Donky_CommonMessaging_UI/DRichMessage+Localization.h>
+#import <Donky_CommonMessaging_UI/DCUIConstants.h>
 #import "DRIAppearanceHelper.h"
 #import "DRITableViewCellExpirationHelper.h"
 
