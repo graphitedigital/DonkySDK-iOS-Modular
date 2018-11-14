@@ -16,21 +16,25 @@
 
 @implementation NSManagedObjectContext (DNHelpers)
 
--(BOOL)saveIfHasChanges:(NSError *__autoreleasing*)error {
-        @synchronized (self) {
-            @try {
+- (void)saveIfHasChangesWithCompletion:(void(^)(BOOL, NSError *))completion {
+    [self performBlock:^{
+        @try {
+            NSError *error;
             if ([self hasChanges]) {
-                return [self save:error];
+                [self save:&error];
+                if (completion) {
+                    completion(YES, error);
+                }
+            } else {
+                if (completion) {
+                    completion(NO, error);
+                }
             }
-            return YES;
-        }
-        @catch (NSException * exception)
-        {
+        } @catch (NSException * exception) {
             DNErrorLog(@"Fatal exception caught: %@", [exception description]);
             [DNLoggingController submitLogToDonkyNetwork:nil success:nil failure:nil];
         }
-    }
-    return NO;
+    }];
 }
 
 @end

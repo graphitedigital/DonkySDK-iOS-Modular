@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-Core-SDK"
-  s.version          = "4.9.0.0"
+  s.version          = "4.9.0.1"
 
   s.summary          = "The core component to the Donky SDK."
   s.description      = <<-DESC

@@ -1,6 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-Automation-Logic"
-  s.version          = "4.9.0.0"
+  s.version          = "4.9.0.1"
+
   s.summary          = "The Automation logic"
   s.description      = <<-DESC
                        Use this module to trigger autoatmed events within the Donky Network from your client applications.

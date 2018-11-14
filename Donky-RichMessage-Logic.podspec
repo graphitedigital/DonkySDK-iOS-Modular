@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-RichMessage-Logic"
-  s.version          = "4.9.0.0"
+  s.version          = "4.9.0.1"
 
   s.summary          = "The base logic layer required to handle incoming Rich Messages."
   s.description      = <<-DESC

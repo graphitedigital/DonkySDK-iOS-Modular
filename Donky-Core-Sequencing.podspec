@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-Core-Sequencing"
-  s.version          = "4.9.0.0"
+  s.version          = "4.9.0.1"
 
   s.summary          = "The core sequencing module"
   s.description      = <<-DESC

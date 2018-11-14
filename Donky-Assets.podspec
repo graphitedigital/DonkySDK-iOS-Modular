@@ -1,6 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-Assets"
-  s.version          = "4.9.0.0"
+  s.version          = "4.9.0.1"
+
   s.summary          = "The base code of interacting with assets on the Donky network"
   s.description      = <<-DESC
                       Used when uploading and downloading assets.
