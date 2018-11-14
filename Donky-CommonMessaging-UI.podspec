@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-CommonMessaging-UI"
-  s.version          = "4.8.6.3"
+  s.version          = "4.9.0.1"
 
   s.summary          = "The shared messaging UI"
   s.description      = <<-DESC
@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.homepage         = "https://github.com/Donky-Network/DonkySDK-iOS-Modular"
   s.license          = 'MIT'
   s.author           = { "Donky Networks Ltd" => "sdk@mobiledonky.com" }
-  s.source           = { :git => "https://github.com/Donky-Network/DonkySDK-iOS-Modular.git", :tag => 'v4.8.6.3' }
+  s.source           = { :git => "https://github.com/Donky-Network/DonkySDK-iOS-Modular.git", :tag => 'v4.9.0.1' }
 
 
   s.social_media_url = 'https://twitter.com/mobiledonky'

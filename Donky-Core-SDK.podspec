@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-Core-SDK"
-  s.version          = "4.8.6.3"
+  s.version          = "4.9.0.1"
 
   s.summary          = "The core component to the Donky SDK."
   s.description      = <<-DESC
@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.license          = 'MIT'
   s.author           = { "Donky Networks Ltd" => "sdk@mobiledonky.com" }
   s.source           =  { :git => "https://github.com/Donky-Network/DonkySDK-iOS-Modular.git", 
-                          :tag => "v4.8.6.3"}
+                          :tag => "v4.9.0.1"}
 
 
   s.social_media_url = 'https://twitter.com/mobiledonky'
