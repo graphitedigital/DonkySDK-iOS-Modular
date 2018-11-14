@@ -17,11 +17,10 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '8.0'
   s.requires_arc = true
 
-  s.source_files = 'src/modules/Messaging/SimplePush/Logic/**/*.{h,m}', 'src/modules/Core/**/*.{h,m}', 'src/modules/Core\ Analytics/**/*.{h,m}'
+  s.source_files = 'src/modules/Messaging/SimplePush/Logic/**/*.{h,m}'
  
-  s.resources = ["src/modules/Core/App\ Settings\ Controller/Resources/DNConfiguration.plist", "src/modules/Core/Data\ Controller/Resources/DNDonkyDataModel.xcdatamodeld", "src/modules/Core/Universal\ Helpers/Localization/DNLocalization.strings"]
-
   s.frameworks = 'UIKit', 'Foundation'
-  #s.dependency "Donky-CommonMessaging-Logic"
+  
+  s.dependency "Donky-CommonMessaging-Logic"
   
 end
