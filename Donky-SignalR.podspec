@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Donky-SignalR"
-  s.version          = "4.9.0.0"
+  s.version          = "4.9.0.1"
   s.summary          = "The SignalR wrapper for the Donky SDK"
   s.description      = <<-DESC
                        The SignalR wrapper for the Donky SDK.
