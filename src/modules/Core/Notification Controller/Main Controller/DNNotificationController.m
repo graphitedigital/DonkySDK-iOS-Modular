@@ -62,15 +62,21 @@ static NSString *const DNNotificationRichController = @"DRLogicMainController";
         DNErrorLog(@"Can only add categories in iOS 8.0 and above...");
         return;
     }
+    if ([NSThread isMainThread]) {
+        [self registerNotificationsHelperMethod:categories];
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self registerNotificationsHelperMethod:categories];
+        });
+    }
+}
 
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings
-                                                                             settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge)
-                                                                             categories:categories]];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-    });
++ (void)registerNotificationsHelperMethod:(NSMutableSet *)categories {
+    [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings
+                                                                         settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge)
+                                                                         categories:categories]];
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
 
-    
 }
 
 + (void)registerDeviceToken:(NSData *)token {
